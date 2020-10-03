@@ -2,19 +2,19 @@ extern crate assemblylift_core_iomod;
 
 use std::collections::HashMap;
 
-use capnp::capability::Promise;
+use assemblylift_core_iomod::iomod_capnp::*;
 use capnp::{Error, ErrorKind};
-use capnp_rpc::{rpc_twoparty_capnp, twoparty, RpcSystem};
-use futures::future::BoxFuture;
+use capnp::capability::Promise;
+use capnp_rpc::{rpc_twoparty_capnp, RpcSystem, twoparty};
 use futures::{AsyncReadExt, FutureExt};
+use futures::future::BoxFuture;
 use futures_util::TryFutureExt;
 use once_cell::sync::Lazy;
+use paste::paste;
 use rusoto_core::Region;
-use rusoto_dynamodb::DynamoDbClient;
+use rusoto_dynamodb::{DynamoDbClient, DynamoDb};
 use tokio::net::TcpStream;
 use tokio::sync::mpsc;
-
-use assemblylift_core_iomod::iomod_capnp::*;
 
 static IOMOD_COORDS: &str = "akkoro.aws.dynamodb";
 static DYNAMODB: Lazy<DynamoDbClient> = Lazy::new(|| DynamoDbClient::new(Region::UsEast1));
@@ -127,6 +127,18 @@ async fn main() {
     call_map
         .map
         .insert("list_tables", CallPtr::new(aws_dynamodb_list_tables));
+    call_map
+        .map
+        .insert("put_item", CallPtr::new(aws_dynamodb_put_item));
+    call_map
+        .map
+        .insert("get_item", CallPtr::new(aws_dynamodb_get_item));
+    call_map
+        .map
+        .insert("delete_item", CallPtr::new(aws_dynamodb_delete_item));
+    call_map
+        .map
+        .insert("update_item", CallPtr::new(aws_dynamodb_update_item));
 
     let mut call_channel: CallChannel = mpsc::channel(100);
 
@@ -150,7 +162,6 @@ async fn main() {
         .run_until(async move {
             let rpc_task = tokio::task::spawn_local(Box::pin(rpc_system.map(|_| ())));
 
-            println!("IOMOD: registering dynamodb IOmod");
             let mut register = registry.register_request();
             register
                 .get()
@@ -158,7 +169,6 @@ async fn main() {
             register.get().set_coordinates(IOMOD_COORDS);
             register.send().promise.await.unwrap();
 
-            println!("IOMOD: spawning call receiver");
             let call_task = tokio::task::spawn_local(async move {
                 while let Some(mut call) = call_channel.1.recv().await {
                     let coords = call.coords.as_str();
@@ -184,12 +194,23 @@ async fn main() {
         .await;
 }
 
-fn aws_dynamodb_list_tables(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
-    Box::pin(async move {
-        use rusoto_dynamodb::*;
-
-        let deserialized = serde_json::from_slice(input.as_slice()).unwrap();
-        let result = DYNAMODB.list_tables(deserialized).await.unwrap();
-        serde_json::to_vec(&result).unwrap()
-    })
+macro_rules! dynamodb {
+    ($call:ident) => {
+        paste! {
+            fn [<aws_dynamodb_ $call>] (input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
+                Box::pin(async move {
+                    use rusoto_dynamodb::*;
+                    let deserialized = serde_json::from_slice(input.as_slice()).unwrap();
+                    let result = DYNAMODB.$call(deserialized).await.unwrap();
+                    serde_json::to_vec(&result).unwrap()
+                })
+            }
+        }
+    }
 }
+
+dynamodb!(list_tables);
+dynamodb!(put_item);
+dynamodb!(get_item);
+dynamodb!(delete_item);
+dynamodb!(update_item);
