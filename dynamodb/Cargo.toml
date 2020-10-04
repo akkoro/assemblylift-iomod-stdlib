@@ -26,11 +26,10 @@ rusoto_dynamodb = { version = "0.43.0", features = ["serialize_structs", "deseri
 
 assemblylift_core = { version = "0.2.0", package = "assemblylift-core" }
 assemblylift_core_io = { version = "0.2.0", package = "assemblylift-core-io" }
-assemblylift_core_iomod = { version = "0.1.0", package = "assemblylift-core-iomod", path = "../../assemblylift/core/iomod" }
+assemblylift_core_iomod = { version = "0.2.0", package = "assemblylift-core-iomod" }
 
 wasmer_runtime_core = { version = "0.1.1", package = "wasmer-runtime-core-asml-fork" }
 
 once_cell = "1.4.1"
-serde_json = "1.0.57"
-crossbeam-utils = "0.7.2"
+serde_json = "1.0.58"
 paste = "1.0.1"

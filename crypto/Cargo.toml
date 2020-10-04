@@ -19,4 +19,4 @@ tokio-util = { version = "0.3.1", features = ["compat"] }
 futures = "0.3.5"
 futures-util = "0.3.5"
 
-assemblylift_core_iomod = { version = "0.1.0", package = "assemblylift-core-iomod", path = "../../assemblylift/core/iomod" }
+assemblylift_core_iomod = { version = "0.2.0", package = "assemblylift-core-iomod" }

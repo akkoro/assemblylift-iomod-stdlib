@@ -9,13 +9,13 @@ on:
 jobs:
 
   build:
-    name: 'AWS Lambda Runtime'
+    name: 'IOmod Standard Library'
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
     - name: 'build'
-      run: docker build . --file Dockerfile_aws-lambda --tag assemblylift-iomod-stdlib:$GITHUB_SHA
+      run: docker build . --file Dockerfile --tag assemblylift-iomod-stdlib:$GITHUB_SHA
     - name: 'copy iomods to HOME'
       run: for filename in *-*-*; do docker run --rm --entrypoint cat assemblylift-iomod-stdlib:$GITHUB_SHA /usr/src/assemblylift-iomod-stdlib/target/release/$filename > $HOME/$filename done
     - name: 'set artifact permissions'
