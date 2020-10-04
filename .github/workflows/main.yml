@@ -17,9 +17,7 @@ jobs:
     - name: 'build'
       run: docker build . --file Dockerfile --tag assemblylift-iomod-stdlib:$GITHUB_SHA
     - name: 'copy iomods to HOME'
-      run: cd /usr/src/assemblylift-iomod-stdlib/target/release/ && docker run --rm --entrypoint for filename in ./*-*-*; do cat assemblylift-iomod-stdlib:$GITHUB_SHA ./$filename > $HOME/$filename; done
-    - name: 'set artifact permissions'
-      run: for filename in *-*-*; do chmod 777 $HOME/$filename; done
+      run: sh ./copy.sh
     - name: 'upload artifact'
       uses: actions/upload-artifact@v2
       with:
