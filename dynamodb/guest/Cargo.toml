@@ -15,4 +15,4 @@ bytes = "0.5.4"
 base64 = "0.12.1"
 
 assemblylift_core_io_guest = { version = "0.1.0", package = "assemblylift-core-io-guest" }
-assemblylift_core_iomod_guest = { version = "0.1.0", package = "assemblylift-core-iomod-guest" }
+assemblylift_core_iomod_guest = { version = "0.1.0", package = "assemblylift-core-iomod-guest", path = "../../../assemblylift/core/iomod/guest" }

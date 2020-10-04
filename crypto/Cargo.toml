@@ -1,0 +1,18 @@
+[package]
+name = "assemblylift-iomod-crypto"
+version = "0.1.0"
+authors = ["xlem <xlem@akkoro.io>"]
+edition = "2018"
+
+[dependencies]
+uuid = { version = "0.8", features = ["serde", "v4"] }
+
+capnp = "0.13.3"
+capnp-rpc = "0.13.1"
+
+tokio = { version = "0.2.22", features = ["full"] }
+tokio-util = { version = "0.3.1", features = ["compat"] }
+futures = "0.3.5"
+futures-util = "0.3.5"
+
+assemblylift_core_iomod = { version = "0.1.0", package = "assemblylift-core-iomod", path = "../../assemblylift/core/iomod" }
