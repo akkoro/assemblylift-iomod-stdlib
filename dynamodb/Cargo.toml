@@ -9,7 +9,7 @@ repository = "https://github.com/akkoro/assemblylift-iomod-stdlib"
 readme = "README.md"
 
 [[bin]]
-name = "dynamodb"
+name = "akkoro-aws-dynamodb"
 path = "src/main.rs"
 
 [dependencies]

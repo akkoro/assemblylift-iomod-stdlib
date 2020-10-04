@@ -4,6 +4,10 @@ version = "0.1.0"
 authors = ["xlem <xlem@akkoro.io>"]
 edition = "2018"
 
+[[bin]]
+name = "akkoro-std-crypto"
+path = "src/main.rs"
+
 [dependencies]
 uuid = { version = "0.8", features = ["serde", "v4"] }
 
