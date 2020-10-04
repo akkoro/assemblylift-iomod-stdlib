@@ -17,7 +17,7 @@ jobs:
     - name: 'build'
       run: docker build . --file Dockerfile --tag assemblylift-iomod-stdlib:$GITHUB_SHA
     - name: 'copy iomods to HOME'
-      run: sh ./copy.sh
+      run: sh ./scripts/copy.sh
     - name: 'upload artifact'
       uses: actions/upload-artifact@v2
       with:
