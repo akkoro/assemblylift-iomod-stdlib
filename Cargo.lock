@@ -146,6 +146,8 @@ dependencies = [
  "capnp-rpc",
  "futures",
  "futures-util",
+ "serde",
+ "serde_json",
  "tokio",
  "tokio-util",
  "uuid",
