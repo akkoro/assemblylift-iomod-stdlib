@@ -1,0 +1,25 @@
+name: AssemblyLift CI
+
+on:
+  push:
+    branches: [ mainline ]
+  pull_request:
+    branches: [ mainline ]
+
+jobs:
+
+  build:
+    name: 'IOmod Standard Library'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: 'build'
+      run: docker build . --file Dockerfile --tag assemblylift-iomod-stdlib:$GITHUB_SHA
+    - name: 'copy iomods to HOME'
+      run: bash ./scripts/copy.sh
+    - name: 'upload artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: iomod-stdlib
+        path: ~/*-*-*

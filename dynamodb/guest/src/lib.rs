@@ -5,8 +5,6 @@ export_iomod_guest!(akkoro, aws, dynamodb);
 
 use serde_json;
 
-use assemblylift_core_io_guest::Io;
-
 use crate::structs::{
     DeleteItemInput, DeleteItemOutput, GetItemInput, GetItemOutput, ListTablesInput,
     ListTablesOutput, PutItemInput, PutItemOutput, UpdateItemInput, UpdateItemOutput,

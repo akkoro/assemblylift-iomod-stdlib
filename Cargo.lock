@@ -34,7 +34,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e5e23fee230c5270d85837bcff2f9481d3b88bfd734b4294e5c779deef4e9ad3"
 dependencies = [
  "assemblylift-core-io-common",
- "assemblylift-core-iomod",
+ "assemblylift-core-iomod 0.1.0",
  "crossbeam-utils",
  "lazy_static",
  "once_cell",
@@ -107,10 +107,61 @@ dependencies = [
 ]
 
 [[package]]
-name = "assemblylift-core-iomod-guest"
-version = "0.1.0"
+name = "assemblylift-core-iomod"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "25d9676cbdc6ef1033a9fd83f2d03bbf6a86b0f936716bab8e8712bda5e30f15"
+checksum = "26148e4038bdd3358a9dfa8ef4f39961bff5c8819826f6e861dec13aca19b3f0"
+dependencies = [
+ "assemblylift-core-io-common",
+ "capnp",
+ "capnp-rpc",
+ "capnpc",
+ "crossbeam-utils",
+ "futures",
+ "futures-util",
+ "lazy_static",
+ "libloading",
+ "once_cell",
+ "paste 0.1.18",
+ "rustc_version",
+ "serde",
+ "tokio",
+ "tokio-util",
+ "wasmer-runtime-asml-fork",
+ "wasmer-runtime-core-asml-fork",
+]
+
+[[package]]
+name = "assemblylift-core-iomod-guest"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "63e743cfd0978c79067008117b1de642660f8ba809acb9648d6a078c09c7b723"
+
+[[package]]
+name = "assemblylift-iomod-crypto"
+version = "0.1.0"
+dependencies = [
+ "assemblylift-core-iomod 0.2.0",
+ "capnp",
+ "capnp-rpc",
+ "futures",
+ "futures-util",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tokio-util",
+ "uuid",
+]
+
+[[package]]
+name = "assemblylift-iomod-crypto-guest"
+version = "0.1.0"
+dependencies = [
+ "assemblylift-core-io-guest",
+ "assemblylift-core-iomod-guest",
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "assemblylift-iomod-dynamodb"
@@ -118,10 +169,9 @@ version = "0.1.1"
 dependencies = [
  "assemblylift-core",
  "assemblylift-core-io",
- "assemblylift-core-iomod",
+ "assemblylift-core-iomod 0.2.0",
  "capnp",
  "capnp-rpc",
- "crossbeam-utils",
  "futures",
  "futures-util",
  "once_cell",
@@ -2019,6 +2069,16 @@ name = "unicode-xid"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f7fe0bb3479651439c9112f72b6c505038574c9fbb575ed1bf3b797fa39dd564"
+
+[[package]]
+name = "uuid"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9fde2f6a4bea1d6e007c4ad38c6839fa71cbb63b6dbf5b595aa38dc9b1093c11"
+dependencies = [
+ "rand",
+ "serde",
+]
 
 [[package]]
 name = "vcpkg"
