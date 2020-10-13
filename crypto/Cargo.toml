@@ -1,8 +1,12 @@
 [package]
 name = "assemblylift-iomod-crypto"
 version = "0.1.0"
-authors = ["xlem <xlem@akkoro.io>"]
+description = "AssemblyLift Crypto IOmod (host)"
+authors = ["Akkoro and the AssemblyLift contributors <assemblylift@akkoro.io>"]
 edition = "2018"
+license-file = "../LICENSE.md"
+repository = "https://github.com/akkoro/assemblylift-iomod-stdlib"
+readme = "README.md"
 
 [[bin]]
 name = "akkoro-std-crypto"
