@@ -1,6 +1,5 @@
 use std::fmt;
 
-use assemblylift_core_io_guest::Io;
 use assemblylift_core_iomod_guest::{call, export_iomod_guest};
 use serde::export::Formatter;
 use serde::{Deserialize, Serialize};
