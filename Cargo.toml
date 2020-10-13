@@ -1,3 +1,5 @@
 [workspace]
-members = ["dynamodb", "dynamodb/guest"]
-
+members = [
+    "crypto", "crypto/guest",
+    "dynamodb", "dynamodb/guest",
+]
