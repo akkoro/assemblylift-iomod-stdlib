@@ -1,25 +1,36 @@
-#[macro_use]
-extern crate assemblylift_core_iomod_guest;
-
-export_iomod_guest!(akkoro, aws, dynamodb);
-
-use serde_json;
+use std::fmt;
 
 use assemblylift_core_io_guest::Io;
+use assemblylift_core_iomod_guest::{call, export_iomod_guest};
+use serde::export::Formatter;
+use serde::{Deserialize, Serialize};
 
 use crate::structs::{
     DeleteItemInput, DeleteItemOutput, GetItemInput, GetItemOutput, ListTablesInput,
     ListTablesOutput, PutItemInput, PutItemOutput, UpdateItemInput, UpdateItemOutput,
 };
 
+export_iomod_guest!(akkoro, aws, dynamodb);
+
 mod serialization;
 pub mod structs;
 
-call!(list_tables, ListTablesInput => ListTablesOutput);
-call!(put_item, PutItemInput => PutItemOutput);
-call!(get_item, GetItemInput => GetItemOutput);
-call!(delete_item, DeleteItemInput => DeleteItemOutput);
-call!(update_item, UpdateItemInput => UpdateItemOutput);
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Error {
+    pub why: String,
+}
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.why)
+    }
+}
+impl std::error::Error for Error {}
+
+call!(list_tables, ListTablesInput => Result<ListTablesOutput, Error>);
+call!(put_item,    PutItemInput    => Result<PutItemOutput, Error>);
+call!(get_item,    GetItemInput    => Result<GetItemOutput, Error>);
+call!(delete_item, DeleteItemInput => Result<DeleteItemOutput, Error>);
+call!(update_item, UpdateItemInput => Result<UpdateItemOutput, Error>);
 
 #[macro_export]
 macro_rules! val {
