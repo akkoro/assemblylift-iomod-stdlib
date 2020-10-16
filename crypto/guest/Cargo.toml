@@ -1,6 +1,6 @@
 [package]
 name = "assemblylift-iomod-crypto-guest"
-version = "0.1.0"
+version = "0.1.1"
 description = "AssemblyLift Crypto IOmod (guest)"
 authors = ["Akkoro and the AssemblyLift contributors <assemblylift@akkoro.io>"]
 edition = "2018"
@@ -11,7 +11,7 @@ readme = "README.md"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-assemblylift_core_io_guest = { version = "0.1.0", package = "assemblylift-core-io-guest" }
+assemblylift_core_io_guest = { version = "0.2.1", package = "assemblylift-core-io-guest" }
 assemblylift_core_iomod_guest = { version = "0.2.0", package = "assemblylift-core-iomod-guest" }
 
 serde = "1.0.116"

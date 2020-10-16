@@ -13,7 +13,7 @@ name = "akkoro-aws-dynamodb"
 path = "src/main.rs"
 
 [dependencies]
-guest = { package = "assemblylift-iomod-dynamodb-guest", version = "0.1.1", path = "./guest" }
+guest = { package = "assemblylift-iomod-dynamodb-guest", version = "0.1.2", path = "./guest" }
 
 capnp = "0.13.3"
 capnp-rpc = "0.13.1"
@@ -26,9 +26,9 @@ futures-util = "0.3.5"
 rusoto_core = { version = "0.43.0" }
 rusoto_dynamodb = { version = "0.43.0", features = ["serialize_structs", "deserialize_structs"] }
 
-assemblylift_core = { version = "0.2.0", package = "assemblylift-core" }
+assemblylift_core = { version = "0.2.2", package = "assemblylift-core" }
 assemblylift_core_io = { version = "0.2.0", package = "assemblylift-core-io" }
-assemblylift_core_iomod = { version = "0.2.0", package = "assemblylift-core-iomod" }
+assemblylift_core_iomod = { version = "0.2.1", package = "assemblylift-core-iomod" }
 
 wasmer_runtime_core = { version = "0.1.1", package = "wasmer-runtime-core-asml-fork" }
 
