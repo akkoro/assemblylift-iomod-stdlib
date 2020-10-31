@@ -1,6 +1,6 @@
 [package]
 name = "assemblylift-iomod-dynamodb-guest"
-version = "0.1.2"
+version = "0.1.3"
 description = "AssemblyLift DynamoDB IOmod (guest)"
 authors = ["Akkoro and the AssemblyLift contributors <assemblylift@akkoro.io>"]
 edition = "2018"

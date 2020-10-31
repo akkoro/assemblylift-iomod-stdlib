@@ -141,7 +141,7 @@ dependencies = [
 
 [[package]]
 name = "assemblylift-iomod-dynamodb"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "assemblylift-core",
  "assemblylift-core-io",
@@ -165,7 +165,7 @@ dependencies = [
 
 [[package]]
 name = "assemblylift-iomod-dynamodb-guest"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "assemblylift-core-io-guest",
  "assemblylift-core-iomod-guest",
