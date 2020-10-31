@@ -1,6 +1,6 @@
 [package]
 name = "assemblylift-iomod-dynamodb"
-version = "0.1.3"
+version = "0.1.4"
 description = "AssemblyLift DynamoDB IOmod (host)"
 authors = ["Akkoro and the AssemblyLift contributors <assemblylift@akkoro.io>"]
 edition = "2018"
@@ -13,7 +13,7 @@ name = "akkoro-aws-dynamodb"
 path = "src/main.rs"
 
 [dependencies]
-guest = { package = "assemblylift-iomod-dynamodb-guest", version = "0.1.3", path = "./guest" }
+guest = { package = "assemblylift-iomod-dynamodb-guest", version = "0.1.4", path = "./guest" }
 
 capnp = "0.13.3"
 capnp-rpc = "0.13.1"
