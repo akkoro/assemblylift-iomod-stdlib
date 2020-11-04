@@ -13,7 +13,7 @@ name = "akkoro-aws-dynamodb"
 path = "src/main.rs"
 
 [dependencies]
-guest = { package = "assemblylift-iomod-dynamodb-guest", version = "0.1.4", path = "./guest" }
+guest = { package = "assemblylift-iomod-dynamodb-guest", version = "0.1.4", path = "guest" }
 
 capnp = "0.13.3"
 capnp-rpc = "0.13.1"

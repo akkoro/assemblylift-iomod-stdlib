@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "crypto", "crypto/guest",
-    "dynamodb", "dynamodb/guest",
+    "modules/crypto", "modules/crypto/guest",
+    "modules/dynamodb", "modules/dynamodb/guest",
 ]
