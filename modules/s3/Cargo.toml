@@ -1,0 +1,15 @@
+[package]
+name = "assemblylift-iomod-s3"
+version = "0.1.0"
+description = "AssemblyLift S3 IOmod (host)"
+authors = ["Akkoro and the AssemblyLift contributors <assemblylift@akkoro.io>"]
+edition = "2018"
+license-file = "../LICENSE.md"
+repository = "https://github.com/akkoro/assemblylift-iomod-stdlib"
+readme = "README.md"
+
+[[bin]]
+name = "akkoro-aws-s3"
+path = "src/main.rs"
+
+[dependencies]

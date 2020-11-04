@@ -1,0 +1,13 @@
+[package]
+name = "assemblylift-iomod-s3-guest"
+version = "0.1.0"
+description = "AssemblyLift S3 IOmod (guest)"
+authors = ["Akkoro and the AssemblyLift contributors <assemblylift@akkoro.io>"]
+edition = "2018"
+license-file = "../../LICENSE.md"
+repository = "https://github.com/akkoro/assemblylift-iomod-stdlib"
+readme = "README.md"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
