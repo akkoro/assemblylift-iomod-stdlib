@@ -13,3 +13,21 @@ name = "akkoro-aws-s3"
 path = "src/main.rs"
 
 [dependencies]
+guest = { package = "assemblylift-iomod-s3-guest", version = "0.1.0", path = "guest" }
+
+tokio = { version = "0.2.22", features = ["full"] }
+tokio-util = { version = "0.3.1", features = ["compat"] }
+futures = "0.3.5"
+futures-util = "0.3.5"
+
+rusoto_core = "0.45.0"
+rusoto_s3 = { version = "0.45.0", features = ["serialize_structs", "deserialize_structs"] }
+
+capnp = "0.13.3"
+capnp-rpc = "0.13.1"
+
+assemblylift_core_iomod = { version = "0.2.1", package = "assemblylift-core-iomod" }
+
+once_cell = "1.4.1"
+serde = "1.0.116"
+serde_json = "1.0.58"

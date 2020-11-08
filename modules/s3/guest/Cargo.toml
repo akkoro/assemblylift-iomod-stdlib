@@ -11,3 +11,8 @@ readme = "README.md"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+assemblylift_core_io_guest = { version = "0.2.1", package = "assemblylift-core-io-guest" }
+assemblylift_core_iomod_guest = { version = "0.2.0", package = "assemblylift-core-iomod-guest" }
+
+serde = "1.0.106"
+serde_json = "1.0.53"
