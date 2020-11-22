@@ -10,20 +10,10 @@ use http::header::{HeaderName, HeaderValue, HeaderMap};
 use hyper;
 use hyper_tls::HttpsConnector;
 use once_cell::sync::Lazy;
-use rusoto_s3::{S3Client, *};
 use rusoto_signature::{Region, SignedRequest};
 use rusoto_signature::credential::AwsCredentials;
 
 mod macros;
-
-static S3: Lazy<S3Client> = Lazy::new(|| {
-    S3Client::new(
-        std::env::var("AWS_REGION")
-            .unwrap_or(String::from("us-east-1"))
-            .parse()
-            .unwrap(),
-    )
-});
 
 #[tokio::main]
 async fn main() {
@@ -32,6 +22,32 @@ async fn main() {
         .build::<_, hyper::Body>(https);
     let mut req = SignedRequest::new("GET", "s3", &Region::UsEast1, "/");
     req.sign(&AwsCredentials::default());
+
+    let mut headers = HeaderMap::new();
+    for h in req.headers().iter() {
+        let name = h.0.parse::<HeaderName>().unwrap();
+        for v in h.1.iter() {
+            let value = HeaderValue::from_bytes(v).unwrap();
+            headers.append(&name, value);
+        }
+    }
+    headers.insert("user-agent", HeaderValue::from_str("AssemblyLift").unwrap());
+
+    let mut final_uri = format!(
+        "{}://{}{}",
+        req.scheme(),
+        req.hostname(),
+        req.canonical_path()
+    );
+    if !req.canonical_query_string().is_empty() {
+        final_uri = final_uri + &format!("?{}", req.canonical_query_string());
+    }
+
+    let mut http_req = hyper::Request::builder().method("GET").uri(final_uri);
+    *http_req.headers_mut().unwrap() = headers;
+
+    let out = client.request(http_req.body(hyper::Body::empty()).unwrap()).await;
+    println!("{:?}", out.unwrap());
 
     // iomod!(akkoro.aws.s3 => {
     //     abort_multipart_upload => abort_multipart_upload,
