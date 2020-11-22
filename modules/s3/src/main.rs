@@ -1,18 +1,19 @@
 use assemblylift_core_iomod::iomod;
 use assemblylift_core_iomod::iomod_capnp::*;
-use capnp::capability::Promise;
 use capnp::{Error, ErrorKind};
-use capnp_rpc::{rpc_twoparty_capnp, twoparty, RpcSystem};
-use futures::future::BoxFuture;
+use capnp::capability::Promise;
+use capnp_rpc::{rpc_twoparty_capnp, RpcSystem, twoparty};
 use futures::{AsyncReadExt, FutureExt};
+use futures::future::BoxFuture;
 use futures_util::TryFutureExt;
-use http::header::{HeaderName, HeaderValue, HeaderMap};
+use http::header::{HeaderMap, HeaderName, HeaderValue};
 use hyper;
 use hyper_tls::HttpsConnector;
 use once_cell::sync::Lazy;
 use rusoto_signature::{Region, SignedRequest};
 use rusoto_signature::credential::AwsCredentials;
 
+mod client;
 mod macros;
 
 #[tokio::main]
@@ -21,7 +22,7 @@ async fn main() {
     let client = hyper::Client::builder()
         .build::<_, hyper::Body>(https);
     let mut req = SignedRequest::new("GET", "s3", &Region::UsEast1, "/");
-    req.sign(&AwsCredentials::default());
+    req.sign(&AwsCredentials::new("", "", None, None));
 
     let mut headers = HeaderMap::new();
     for h in req.headers().iter() {
@@ -46,8 +47,9 @@ async fn main() {
     let mut http_req = hyper::Request::builder().method("GET").uri(final_uri);
     *http_req.headers_mut().unwrap() = headers;
 
-    let out = client.request(http_req.body(hyper::Body::empty()).unwrap()).await;
-    println!("{:?}", out.unwrap());
+    let resp = client.request(http_req.body(hyper::Body::empty()).unwrap()).await.unwrap();
+    let body = hyper::body::to_bytes(resp.into_body()).await;
+    println!("{:?}", std::str::from_utf8(&*body.unwrap()));
 
     // iomod!(akkoro.aws.s3 => {
     //     abort_multipart_upload => abort_multipart_upload,
