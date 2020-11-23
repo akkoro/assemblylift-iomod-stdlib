@@ -193,6 +193,7 @@ dependencies = [
  "rusoto_s3",
  "rusoto_signature 0.45.0",
  "serde",
+ "serde-xml-rs",
  "serde_json",
  "tokio",
  "tokio-util",
@@ -1846,6 +1847,18 @@ checksum = "d733da87e79faaac25616e33d26299a41143fd4cd42746cbb0e91d8feea243fd"
 dependencies = [
  "byteorder",
  "serde",
+]
+
+[[package]]
+name = "serde-xml-rs"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "efe415925cf3d0bbb2fc47d09b56ce03eef51c5d56846468a39bcc293c7a846c"
+dependencies = [
+ "log",
+ "serde",
+ "thiserror",
+ "xml-rs",
 ]
 
 [[package]]

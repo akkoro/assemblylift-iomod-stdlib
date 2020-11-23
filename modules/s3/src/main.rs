@@ -6,51 +6,28 @@ use capnp_rpc::{rpc_twoparty_capnp, RpcSystem, twoparty};
 use futures::{AsyncReadExt, FutureExt};
 use futures::future::BoxFuture;
 use futures_util::TryFutureExt;
-use http::header::{HeaderMap, HeaderName, HeaderValue};
-use hyper;
-use hyper_tls::HttpsConnector;
 use once_cell::sync::Lazy;
-use rusoto_signature::{Region, SignedRequest};
-use rusoto_signature::credential::AwsCredentials;
 
 mod client;
 mod macros;
 
+use guest::structs::*;
+
+static CLIENT: Lazy<client::Client> = Lazy::new(|| {
+    use std::env;
+    let mut c = client::Client::new(
+        String::from("s3"), 
+        env::var("AWS_REGION").unwrap_or(String::from("us-east-1")),
+    );
+    c.set_credentials(
+        env::var("AWS_ACCESS_KEY_ID").unwrap(), 
+        env::var("AWS_SECRET_ACCESS_KEY").unwrap()
+    );
+    c
+});
+
 #[tokio::main]
 async fn main() {
-    let https = HttpsConnector::new();
-    let client = hyper::Client::builder()
-        .build::<_, hyper::Body>(https);
-    let mut req = SignedRequest::new("GET", "s3", &Region::UsEast1, "/");
-    req.sign(&AwsCredentials::new("", "", None, None));
-
-    let mut headers = HeaderMap::new();
-    for h in req.headers().iter() {
-        let name = h.0.parse::<HeaderName>().unwrap();
-        for v in h.1.iter() {
-            let value = HeaderValue::from_bytes(v).unwrap();
-            headers.append(&name, value);
-        }
-    }
-    headers.insert("user-agent", HeaderValue::from_str("AssemblyLift").unwrap());
-
-    let mut final_uri = format!(
-        "{}://{}{}",
-        req.scheme(),
-        req.hostname(),
-        req.canonical_path()
-    );
-    if !req.canonical_query_string().is_empty() {
-        final_uri = final_uri + &format!("?{}", req.canonical_query_string());
-    }
-
-    let mut http_req = hyper::Request::builder().method("GET").uri(final_uri);
-    *http_req.headers_mut().unwrap() = headers;
-
-    let resp = client.request(http_req.body(hyper::Body::empty()).unwrap()).await.unwrap();
-    let body = hyper::body::to_bytes(resp.into_body()).await;
-    println!("{:?}", std::str::from_utf8(&*body.unwrap()));
-
     // iomod!(akkoro.aws.s3 => {
     //     abort_multipart_upload => abort_multipart_upload,
     //     complete_multipart_upload => complete_multipart_upload,
