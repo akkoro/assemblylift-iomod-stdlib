@@ -154,7 +154,7 @@ dependencies = [
  "futures-util",
  "once_cell",
  "paste 1.0.1",
- "rusoto_core 0.43.0",
+ "rusoto_core",
  "rusoto_dynamodb",
  "serde",
  "serde_json",
@@ -189,8 +189,7 @@ dependencies = [
  "hyper",
  "hyper-tls",
  "once_cell",
- "rusoto_core 0.45.0",
- "rusoto_s3",
+ "paste 1.0.1",
  "rusoto_signature 0.45.0",
  "serde",
  "serde-xml-rs",
@@ -530,15 +529,6 @@ dependencies = [
  "cranelift-codegen",
  "raw-cpuid",
  "target-lexicon 0.10.0",
-]
-
-[[package]]
-name = "crc32fast"
-version = "1.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81156fece84ab6a9f2afdb109ce3ae577e42b1228441eded99bd77f627953b1a"
-dependencies = [
- "cfg-if 1.0.0",
 ]
 
 [[package]]
@@ -1603,34 +1593,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rusoto_core"
-version = "0.45.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e977941ee0658df96fca7291ecc6fc9a754600b21ad84b959eb1dbbc9d5abcc7"
-dependencies = [
- "async-trait",
- "base64",
- "bytes",
- "crc32fast",
- "futures",
- "http",
- "hyper",
- "hyper-tls",
- "lazy_static",
- "log",
- "md5",
- "percent-encoding",
- "pin-project 0.4.25",
- "rusoto_credential 0.45.0",
- "rusoto_signature 0.45.0",
- "rustc_version",
- "serde",
- "serde_json",
- "tokio",
- "xml-rs",
-]
-
-[[package]]
 name = "rusoto_credential"
 version = "0.43.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1679,24 +1641,9 @@ dependencies = [
  "async-trait",
  "bytes",
  "futures",
- "rusoto_core 0.43.0",
+ "rusoto_core",
  "serde",
  "serde_json",
-]
-
-[[package]]
-name = "rusoto_s3"
-version = "0.45.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1146e37a7c1df56471ea67825fe09bbbd37984b5f6e201d8b2e0be4ee15643d8"
-dependencies = [
- "async-trait",
- "bytes",
- "futures",
- "rusoto_core 0.45.0",
- "serde",
- "serde_derive",
- "xml-rs",
 ]
 
 [[package]]

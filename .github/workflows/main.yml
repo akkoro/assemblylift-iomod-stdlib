@@ -2,7 +2,7 @@ name: AssemblyLift CI
 
 on:
   push:
-    branches: [ mainline ]
+    branches: [ mainline, s3-module ]
   pull_request:
     branches: [ mainline ]
 

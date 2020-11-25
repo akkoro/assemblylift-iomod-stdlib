@@ -26,8 +26,7 @@ pub struct Client {
     service: String,
     region: String,
     client: HyperClient,
-    aws_key_id: Option<String>,
-    aws_key: Option<String>,
+    aws_key: Option<(String, String)>,
 }
 
 impl Client {
@@ -40,27 +39,25 @@ impl Client {
             service,
             region,
             client,
-            aws_key_id: None,
             aws_key: None,
         }
     }
 
     pub fn set_credentials(&mut self, id: String, key: String) {
-        self.aws_key_id = Some(id);
-        self.aws_key = Some(key);
+        self.aws_key = Some((id, key));
     }
 
-    pub async fn call(&self, method: &str, path: &str) -> Result<Vec<u8>, ClientError> {
+    pub async fn call<T: Serialize>(&self, method: &str, path: &str, input: T) -> Result<Vec<u8>, ClientError> {
         let mut aws_req = SignedRequest::new(
             method, 
             &self.service, 
             &Region::from_str(&self.region).unwrap_or(Region::UsEast1), 
-            path
+            path,
         );
-        if self.aws_key_id.is_some() && self.aws_key.is_some() {
+        if let Some(key) = &self.aws_key {
             aws_req.sign(&AwsCredentials::new(
-                self.aws_key_id.as_ref().unwrap(), 
-                self.aws_key.as_ref().unwrap(), 
+                &key.0, 
+                &key.1, 
                 None, 
                 None,
             ));
