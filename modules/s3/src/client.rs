@@ -47,7 +47,7 @@ impl Client {
         self.aws_key = Some((id, key));
     }
 
-    pub async fn call<T: Serialize>(&self, method: &str, path: &str, input: T) -> Result<Vec<u8>, ClientError> {
+    pub async fn call<T: Serialize>(&self, method: &str, path: &str, protocol: &str, input: T) -> Result<Vec<u8>, ClientError> {
         let mut aws_req = SignedRequest::new(
             method, 
             &self.service, 
@@ -86,8 +86,17 @@ impl Client {
         let mut http_req = hyper::Request::builder().method(method).uri(final_uri);
         *http_req.headers_mut().unwrap() = headers;
 
-        // TODO nonempty body
-        match self.client.request(http_req.body(hyper::Body::empty()).unwrap()).await {
+        let body = match protocol {
+            "json" => {
+                serde_json::to_string(&input).unwrap()
+            },
+            "rest-xml" => {
+                serde_xml_rs::to_string(&input).unwrap()
+            },
+            _ => panic!("unknown client protocol"),
+        };
+
+        match self.client.request(http_req.body(hyper::Body::from(body)).unwrap()).await {
             Ok(resp) => {
                 let b = hyper::body::to_bytes(resp.into_body()).await.unwrap();
                 Ok(Vec::from(&*b))

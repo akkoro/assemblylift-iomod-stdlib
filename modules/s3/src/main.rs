@@ -137,7 +137,7 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -166,7 +166,7 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, input).await {
+        match crate::CLIENT.call("POST", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -195,7 +195,7 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -220,7 +220,7 @@ fn __create_bucket(input: CreateBucketRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -249,7 +249,7 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, input).await {
+        match crate::CLIENT.call("POST", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -274,7 +274,7 @@ fn __delete_bucket(input: DeleteBucketRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -299,7 +299,7 @@ fn __delete_bucket_analytics_configuration(input: DeleteBucketAnalyticsConfigura
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -324,7 +324,7 @@ fn __delete_bucket_cors(input: DeleteBucketCorsRequest) -> BoxFuture<'static, Ve
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -349,7 +349,7 @@ fn __delete_bucket_encryption(input: DeleteBucketEncryptionRequest) -> BoxFuture
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -374,7 +374,7 @@ fn __delete_bucket_intelligent_tiering_configuration(input: DeleteBucketIntellig
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -399,7 +399,7 @@ fn __delete_bucket_inventory_configuration(input: DeleteBucketInventoryConfigura
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -424,7 +424,7 @@ fn __delete_bucket_lifecycle(input: DeleteBucketLifecycleRequest) -> BoxFuture<'
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -449,7 +449,7 @@ fn __delete_bucket_metrics_configuration(input: DeleteBucketMetricsConfiguration
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -474,7 +474,7 @@ fn __delete_bucket_ownership_controls(input: DeleteBucketOwnershipControlsReques
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -499,7 +499,7 @@ fn __delete_bucket_policy(input: DeleteBucketPolicyRequest) -> BoxFuture<'static
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -524,7 +524,7 @@ fn __delete_bucket_replication(input: DeleteBucketReplicationRequest) -> BoxFutu
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -549,7 +549,7 @@ fn __delete_bucket_tagging(input: DeleteBucketTaggingRequest) -> BoxFuture<'stat
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -574,7 +574,7 @@ fn __delete_bucket_website(input: DeleteBucketWebsiteRequest) -> BoxFuture<'stat
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -603,7 +603,7 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -632,7 +632,7 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -657,7 +657,7 @@ fn __delete_objects(input: DeleteObjectsRequest) -> BoxFuture<'static, Vec<u8>> 
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, input).await {
+        match crate::CLIENT.call("POST", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -682,7 +682,7 @@ fn __delete_public_access_block(input: DeletePublicAccessBlockRequest) -> BoxFut
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, input).await {
+        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -707,7 +707,7 @@ fn __get_bucket_accelerate_configuration(input: GetBucketAccelerateConfiguration
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -732,7 +732,7 @@ fn __get_bucket_acl(input: GetBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -757,7 +757,7 @@ fn __get_bucket_analytics_configuration(input: GetBucketAnalyticsConfigurationRe
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -782,7 +782,7 @@ fn __get_bucket_cors(input: GetBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -807,7 +807,7 @@ fn __get_bucket_encryption(input: GetBucketEncryptionRequest) -> BoxFuture<'stat
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -832,7 +832,7 @@ fn __get_bucket_intelligent_tiering_configuration(input: GetBucketIntelligentTie
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -857,7 +857,7 @@ fn __get_bucket_inventory_configuration(input: GetBucketInventoryConfigurationRe
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -882,7 +882,7 @@ fn __get_bucket_lifecycle(input: GetBucketLifecycleRequest) -> BoxFuture<'static
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -907,7 +907,7 @@ fn __get_bucket_lifecycle_configuration(input: GetBucketLifecycleConfigurationRe
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -932,7 +932,7 @@ fn __get_bucket_location(input: GetBucketLocationRequest) -> BoxFuture<'static, 
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -957,7 +957,7 @@ fn __get_bucket_logging(input: GetBucketLoggingRequest) -> BoxFuture<'static, Ve
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -982,7 +982,7 @@ fn __get_bucket_metrics_configuration(input: GetBucketMetricsConfigurationReques
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1007,7 +1007,7 @@ fn __get_bucket_notification(input: GetBucketNotificationConfigurationRequest) -
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1032,7 +1032,7 @@ fn __get_bucket_notification_configuration(input: GetBucketNotificationConfigura
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1057,7 +1057,7 @@ fn __get_bucket_ownership_controls(input: GetBucketOwnershipControlsRequest) -> 
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1082,7 +1082,7 @@ fn __get_bucket_policy(input: GetBucketPolicyRequest) -> BoxFuture<'static, Vec<
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1107,7 +1107,7 @@ fn __get_bucket_policy_status(input: GetBucketPolicyStatusRequest) -> BoxFuture<
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1132,7 +1132,7 @@ fn __get_bucket_replication(input: GetBucketReplicationRequest) -> BoxFuture<'st
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1157,7 +1157,7 @@ fn __get_bucket_request_payment(input: GetBucketRequestPaymentRequest) -> BoxFut
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1182,7 +1182,7 @@ fn __get_bucket_tagging(input: GetBucketTaggingRequest) -> BoxFuture<'static, Ve
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1207,7 +1207,7 @@ fn __get_bucket_versioning(input: GetBucketVersioningRequest) -> BoxFuture<'stat
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1232,7 +1232,7 @@ fn __get_bucket_website(input: GetBucketWebsiteRequest) -> BoxFuture<'static, Ve
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1261,7 +1261,7 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1290,7 +1290,7 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1319,7 +1319,7 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1344,7 +1344,7 @@ fn __get_object_lock_configuration(input: GetObjectLockConfigurationRequest) -> 
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1373,7 +1373,7 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1402,7 +1402,7 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1431,7 +1431,7 @@ fn __get_object_torrent(input: GetObjectTorrentRequest) -> BoxFuture<'static, Ve
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1456,7 +1456,7 @@ fn __get_public_access_block(input: GetPublicAccessBlockRequest) -> BoxFuture<'s
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1481,7 +1481,7 @@ fn __head_bucket(input: HeadBucketRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("HEAD", &path, input).await {
+        match crate::CLIENT.call("HEAD", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1510,7 +1510,7 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("HEAD", &path, input).await {
+        match crate::CLIENT.call("HEAD", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1535,7 +1535,7 @@ fn __list_bucket_analytics_configurations(input: ListBucketAnalyticsConfiguratio
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1560,7 +1560,7 @@ fn __list_bucket_intelligent_tiering_configurations(input: ListBucketIntelligent
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1585,7 +1585,7 @@ fn __list_bucket_inventory_configurations(input: ListBucketInventoryConfiguratio
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1610,7 +1610,7 @@ fn __list_bucket_metrics_configurations(input: ListBucketMetricsConfigurationsRe
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1631,7 +1631,7 @@ fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
     let path = "/";
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1656,7 +1656,7 @@ fn __list_multipart_uploads(input: ListMultipartUploadsRequest) -> BoxFuture<'st
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1681,7 +1681,7 @@ fn __list_object_versions(input: ListObjectVersionsRequest) -> BoxFuture<'static
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1706,7 +1706,7 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1731,7 +1731,7 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1760,7 +1760,7 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, input).await {
+        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1785,7 +1785,7 @@ fn __put_bucket_accelerate_configuration(input: PutBucketAccelerateConfiguration
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1810,7 +1810,7 @@ fn __put_bucket_acl(input: PutBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1835,7 +1835,7 @@ fn __put_bucket_analytics_configuration(input: PutBucketAnalyticsConfigurationRe
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1860,7 +1860,7 @@ fn __put_bucket_cors(input: PutBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1885,7 +1885,7 @@ fn __put_bucket_encryption(input: PutBucketEncryptionRequest) -> BoxFuture<'stat
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1910,7 +1910,7 @@ fn __put_bucket_intelligent_tiering_configuration(input: PutBucketIntelligentTie
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1935,7 +1935,7 @@ fn __put_bucket_inventory_configuration(input: PutBucketInventoryConfigurationRe
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1960,7 +1960,7 @@ fn __put_bucket_lifecycle(input: PutBucketLifecycleRequest) -> BoxFuture<'static
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -1985,7 +1985,7 @@ fn __put_bucket_lifecycle_configuration(input: PutBucketLifecycleConfigurationRe
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2010,7 +2010,7 @@ fn __put_bucket_logging(input: PutBucketLoggingRequest) -> BoxFuture<'static, Ve
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2035,7 +2035,7 @@ fn __put_bucket_metrics_configuration(input: PutBucketMetricsConfigurationReques
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2060,7 +2060,7 @@ fn __put_bucket_notification(input: PutBucketNotificationRequest) -> BoxFuture<'
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2085,7 +2085,7 @@ fn __put_bucket_notification_configuration(input: PutBucketNotificationConfigura
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2110,7 +2110,7 @@ fn __put_bucket_ownership_controls(input: PutBucketOwnershipControlsRequest) -> 
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2135,7 +2135,7 @@ fn __put_bucket_policy(input: PutBucketPolicyRequest) -> BoxFuture<'static, Vec<
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2160,7 +2160,7 @@ fn __put_bucket_replication(input: PutBucketReplicationRequest) -> BoxFuture<'st
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2185,7 +2185,7 @@ fn __put_bucket_request_payment(input: PutBucketRequestPaymentRequest) -> BoxFut
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2210,7 +2210,7 @@ fn __put_bucket_tagging(input: PutBucketTaggingRequest) -> BoxFuture<'static, Ve
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2235,7 +2235,7 @@ fn __put_bucket_versioning(input: PutBucketVersioningRequest) -> BoxFuture<'stat
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2260,7 +2260,7 @@ fn __put_bucket_website(input: PutBucketWebsiteRequest) -> BoxFuture<'static, Ve
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2289,7 +2289,7 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2318,7 +2318,7 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2347,7 +2347,7 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2372,7 +2372,7 @@ fn __put_object_lock_configuration(input: PutObjectLockConfigurationRequest) -> 
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2401,7 +2401,7 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2430,7 +2430,7 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2455,7 +2455,7 @@ fn __put_public_access_block(input: PutPublicAccessBlockRequest) -> BoxFuture<'s
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2484,7 +2484,7 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, input).await {
+        match crate::CLIENT.call("POST", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2513,7 +2513,7 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, input).await {
+        match crate::CLIENT.call("POST", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2542,7 +2542,7 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
@@ -2571,7 +2571,7 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, input).await {
+        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
             Ok(response) => serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Ok(response)).unwrap(),
             Err(why) => {
                 serde_json::to_vec(&Result::<Vec<u8>, guest::Error>::Err(guest::Error {
