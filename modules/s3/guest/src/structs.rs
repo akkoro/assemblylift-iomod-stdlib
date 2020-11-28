@@ -351,7 +351,7 @@ pub struct AnalyticsS3BucketDestination {
     pub prefix: Prefix,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Bucket {
     #[serde(rename = "Name")]
     pub name: Option<BucketName>,
@@ -2031,7 +2031,7 @@ pub struct ListBucketMetricsConfigurationsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListBucketsOutput {
     #[serde(rename = "Buckets")]
     pub buckets: Option<Buckets>,
@@ -2497,7 +2497,7 @@ pub struct OutputSerialization {
     pub json: Option<JSONOutput>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Owner {
     #[serde(rename = "DisplayName")]
     pub display_name: Option<DisplayName>,

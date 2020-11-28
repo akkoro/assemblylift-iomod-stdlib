@@ -1808,6 +1808,7 @@ fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => {
                 let response = serde_xml_rs::from_reader(response.as_slice()).unwrap();
+                println!("DEBUG: got {:?}", response);
                 serde_json::to_vec(&Result::<ListBucketsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
