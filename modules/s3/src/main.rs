@@ -1807,6 +1807,7 @@ fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
     Box::pin(async move {
         match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
             Ok(response) => {
+                // FIXME this should be serde_xml_rs::from_slice -- converted to json by to_vec
                 let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<ListBucketsOutput, guest::Error>::Ok(response)).unwrap()
             },
