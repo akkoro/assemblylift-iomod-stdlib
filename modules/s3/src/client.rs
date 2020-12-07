@@ -105,6 +105,7 @@ impl Client {
 
         match self.__call(http_req.body(hyper::Body::from(body)).unwrap()).await {
             Ok(resp) => {
+                println!("DEBUG: string {}", std::str::from_utf8(resp.as_slice()).unwrap());
                 let response = match protocol {
                     "json" => serde_json::from_slice(resp.as_slice()).unwrap(),
                     "rest-xml" => serde_xml_rs::from_reader(resp.as_slice()).unwrap(),

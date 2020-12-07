@@ -2909,6 +2909,7 @@ fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
     Box::pin(async move {
         match crate::CLIENT.call::<ListBucketsOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
+                println!("DEBUG: struct {:?}", response);
                 serde_json::to_vec(&Result::<ListBucketsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
