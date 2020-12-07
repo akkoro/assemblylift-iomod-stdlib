@@ -2890,16 +2890,9 @@ pub fn list_buckets(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 
 fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
     let path = "/";
-    let path = match path.find('?') {
-        Some(_) => path.to_string(),
-        None => format!("{}?", path),
-    };
 
     let mut body = std::collections::HashMap::new();
     let mut headers = std::collections::HashMap::new();
-
-
-
 
     let client_input = client::ClientInput {
         body,

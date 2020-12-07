@@ -4,6 +4,7 @@ use std::str::FromStr;
 
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use hyper;
+use hyper::StatusCode;
 use hyper_tls::HttpsConnector;
 use serde::{Deserialize, Serialize};
 use serde::de::DeserializeOwned;
@@ -121,7 +122,12 @@ impl Client {
 
     async fn __call(&self, request: hyper::Request<hyper::Body>) -> Result<Vec<u8>, ClientError> {
         match self.client.request(request).await {
-            Ok(resp) => Ok(Vec::from(&*hyper::body::to_bytes(resp.into_body()).await.unwrap())),
+            Ok(resp) => {
+                match resp.status() {
+                    StatusCode::OK => Ok(Vec::from(&*hyper::body::to_bytes(resp.into_body()).await.unwrap())),
+                    status => Err(ClientError { why: String::from(status.canonical_reason().unwrap()) }),
+                }
+            },
             Err(err) => Err(ClientError { why: err.to_string() })
         }
     }
