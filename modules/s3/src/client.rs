@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::fmt;
 use std::str::FromStr;
 
@@ -5,6 +6,7 @@ use http::header::{HeaderMap, HeaderName, HeaderValue};
 use hyper;
 use hyper_tls::HttpsConnector;
 use serde::{Deserialize, Serialize};
+use serde::de::DeserializeOwned;
 use serde::export::Formatter;
 use rusoto_signature::{Region, SignedRequest};
 use rusoto_signature::credential::AwsCredentials;
@@ -29,6 +31,11 @@ pub struct Client {
     aws_key: Option<(String, String)>,
 }
 
+pub struct ClientInput {
+    pub body: HashMap<&'static str, String>,
+    pub headers: HashMap<&'static str, String>,
+}
+
 impl Client {
     pub fn new(service: String, region: String) -> Self {
         let https = HttpsConnector::new();
@@ -47,7 +54,7 @@ impl Client {
         self.aws_key = Some((id, key));
     }
 
-    pub async fn call<T: Serialize>(&self, method: &str, path: &str, protocol: &str, input: T) -> Result<Vec<u8>, ClientError> {
+    pub async fn call<'a, T: DeserializeOwned>(&self, method: &str, path: &str, protocol: &str, input: ClientInput) -> Result<T, ClientError> {
         let mut aws_req = SignedRequest::new(
             method, 
             &self.service, 
@@ -88,21 +95,33 @@ impl Client {
 
         let body = match protocol {
             "json" => {
-                serde_json::to_string(&input).unwrap()
+                serde_json::to_string(&input.body).unwrap()
             },
             "rest-xml" => {
-                serde_xml_rs::to_string(&input).unwrap()
+                serde_xml_rs::to_string(&input.body).unwrap()
             },
             _ => panic!("unknown client protocol"),
         };
 
-        match self.client.request(http_req.body(hyper::Body::from(body)).unwrap()).await {
+        match self.__call(http_req.body(hyper::Body::from(body)).unwrap()).await {
             Ok(resp) => {
-                let b = hyper::body::to_bytes(resp.into_body()).await.unwrap();
-                Ok(Vec::from(&*b))
+                let response = match protocol {
+                    "json" => serde_json::from_slice(resp.as_slice()).unwrap(),
+                    "rest-xml" => serde_xml_rs::from_reader(resp.as_slice()).unwrap(),
+                    _ => panic!("unknown client protocol"),
+                };
+
+                Ok(response)
             },
-            Err(err) => Err(ClientError { why: err.to_string() })
+            Err(err) => Err(err)
         }
         
+    }
+
+    async fn __call(&self, request: hyper::Request<hyper::Body>) -> Result<Vec<u8>, ClientError> {
+        match self.client.request(request).await {
+            Ok(resp) => Ok(Vec::from(&*hyper::body::to_bytes(resp.into_body()).await.unwrap())),
+            Err(err) => Err(ClientError { why: err.to_string() })
+        }
     }
 }

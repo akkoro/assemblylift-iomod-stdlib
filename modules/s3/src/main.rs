@@ -9,11 +9,11 @@ use guest::structs::*;
 static CLIENT: Lazy<client::Client> = Lazy::new(|| {
     use std::env;
     let mut c = client::Client::new(
-        String::from("s3"),
+        String::from("s3"), 
         env::var("AWS_REGION").unwrap_or(String::from("us-east-1")),
     );
     c.set_credentials(
-        env::var("AWS_ACCESS_KEY_ID").unwrap(),
+        env::var("AWS_ACCESS_KEY_ID").unwrap(), 
         env::var("AWS_SECRET_ACCESS_KEY").unwrap()
     );
     c
@@ -135,18 +135,38 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap()),
+        false => format!("{}&{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<AbortMultipartUploadOutput>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<AbortMultipartUploadOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<AbortMultipartUploadOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -167,18 +187,39 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("MultipartUpload", serde_xml_rs::to_string(&input.multipart_upload).unwrap());
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap()),
+        false => format!("{}&{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<CompleteMultipartUploadOutput>("POST", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<CompleteMultipartUploadOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<CompleteMultipartUploadOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -199,18 +240,69 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-acl", serde_json::to_string(&input.acl).unwrap());
+    headers.insert("Cache-Control", serde_json::to_string(&input.cache_control).unwrap());
+    headers.insert("Content-Disposition", serde_json::to_string(&input.content_disposition).unwrap());
+    headers.insert("Content-Encoding", serde_json::to_string(&input.content_encoding).unwrap());
+    headers.insert("Content-Language", serde_json::to_string(&input.content_language).unwrap());
+    headers.insert("Content-Type", serde_json::to_string(&input.content_type).unwrap());
+    headers.insert("x-amz-copy-source", serde_json::to_string(&input.copy_source).unwrap());
+    headers.insert("x-amz-copy-source-if-match", serde_json::to_string(&input.copy_source_if_match).unwrap());
+    headers.insert("x-amz-copy-source-if-modified-since", serde_json::to_string(&input.copy_source_if_modified_since).unwrap());
+    headers.insert("x-amz-copy-source-if-none-match", serde_json::to_string(&input.copy_source_if_none_match).unwrap());
+    headers.insert("x-amz-copy-source-if-unmodified-since", serde_json::to_string(&input.copy_source_if_unmodified_since).unwrap());
+    headers.insert("Expires", serde_json::to_string(&input.expires).unwrap());
+    headers.insert("x-amz-grant-full-control", serde_json::to_string(&input.grant_full_control).unwrap());
+    headers.insert("x-amz-grant-read", serde_json::to_string(&input.grant_read).unwrap());
+    headers.insert("x-amz-grant-read-acp", serde_json::to_string(&input.grant_read_acp).unwrap());
+    headers.insert("x-amz-grant-write-acp", serde_json::to_string(&input.grant_write_acp).unwrap());
+    headers.insert("x-amz-metadata-directive", serde_json::to_string(&input.metadata_directive).unwrap());
+    headers.insert("x-amz-tagging-directive", serde_json::to_string(&input.tagging_directive).unwrap());
+    headers.insert("x-amz-server-side-encryption", serde_json::to_string(&input.server_side_encryption).unwrap());
+    headers.insert("x-amz-storage-class", serde_json::to_string(&input.storage_class).unwrap());
+    headers.insert("x-amz-website-redirect-location", serde_json::to_string(&input.website_redirect_location).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&input.sse_customer_algorithm).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&input.sse_customer_key).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&input.sse_customer_key_md5).unwrap());
+    headers.insert("x-amz-server-side-encryption-aws-kms-key-id", serde_json::to_string(&input.ssekms_key_id).unwrap());
+    headers.insert("x-amz-server-side-encryption-context", serde_json::to_string(&input.ssekms_encryption_context).unwrap());
+    headers.insert("x-amz-server-side-encryption-bucket-key-enabled", serde_json::to_string(&input.bucket_key_enabled).unwrap());
+    headers.insert("x-amz-copy-source-server-side-encryption-customer-algorithm", serde_json::to_string(&input.copy_source_sse_customer_algorithm).unwrap());
+    headers.insert("x-amz-copy-source-server-side-encryption-customer-key", serde_json::to_string(&input.copy_source_sse_customer_key).unwrap());
+    headers.insert("x-amz-copy-source-server-side-encryption-customer-key-MD5", serde_json::to_string(&input.copy_source_sse_customer_key_md5).unwrap());
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-tagging", serde_json::to_string(&input.tagging).unwrap());
+    headers.insert("x-amz-object-lock-mode", serde_json::to_string(&input.object_lock_mode).unwrap());
+    headers.insert("x-amz-object-lock-retain-until-date", serde_json::to_string(&input.object_lock_retain_until_date).unwrap());
+    headers.insert("x-amz-object-lock-legal-hold", serde_json::to_string(&input.object_lock_legal_hold_status).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+    headers.insert("x-amz-source-expected-bucket-owner", serde_json::to_string(&input.expected_source_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<CopyObjectOutput>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<CopyObjectOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<CopyObjectOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -227,18 +319,40 @@ fn __create_bucket(input: CreateBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("CreateBucketConfiguration", serde_xml_rs::to_string(&input.create_bucket_configuration).unwrap());
+
+    headers.insert("x-amz-acl", serde_json::to_string(&input.acl).unwrap());
+    headers.insert("x-amz-grant-full-control", serde_json::to_string(&input.grant_full_control).unwrap());
+    headers.insert("x-amz-grant-read", serde_json::to_string(&input.grant_read).unwrap());
+    headers.insert("x-amz-grant-read-acp", serde_json::to_string(&input.grant_read_acp).unwrap());
+    headers.insert("x-amz-grant-write", serde_json::to_string(&input.grant_write).unwrap());
+    headers.insert("x-amz-grant-write-acp", serde_json::to_string(&input.grant_write_acp).unwrap());
+    headers.insert("x-amz-bucket-object-lock-enabled", serde_json::to_string(&input.object_lock_enabled_for_bucket).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<CreateBucketOutput>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<CreateBucketOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<CreateBucketOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -259,18 +373,58 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-acl", serde_json::to_string(&input.acl).unwrap());
+    headers.insert("Cache-Control", serde_json::to_string(&input.cache_control).unwrap());
+    headers.insert("Content-Disposition", serde_json::to_string(&input.content_disposition).unwrap());
+    headers.insert("Content-Encoding", serde_json::to_string(&input.content_encoding).unwrap());
+    headers.insert("Content-Language", serde_json::to_string(&input.content_language).unwrap());
+    headers.insert("Content-Type", serde_json::to_string(&input.content_type).unwrap());
+    headers.insert("Expires", serde_json::to_string(&input.expires).unwrap());
+    headers.insert("x-amz-grant-full-control", serde_json::to_string(&input.grant_full_control).unwrap());
+    headers.insert("x-amz-grant-read", serde_json::to_string(&input.grant_read).unwrap());
+    headers.insert("x-amz-grant-read-acp", serde_json::to_string(&input.grant_read_acp).unwrap());
+    headers.insert("x-amz-grant-write-acp", serde_json::to_string(&input.grant_write_acp).unwrap());
+    headers.insert("x-amz-server-side-encryption", serde_json::to_string(&input.server_side_encryption).unwrap());
+    headers.insert("x-amz-storage-class", serde_json::to_string(&input.storage_class).unwrap());
+    headers.insert("x-amz-website-redirect-location", serde_json::to_string(&input.website_redirect_location).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&input.sse_customer_algorithm).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&input.sse_customer_key).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&input.sse_customer_key_md5).unwrap());
+    headers.insert("x-amz-server-side-encryption-aws-kms-key-id", serde_json::to_string(&input.ssekms_key_id).unwrap());
+    headers.insert("x-amz-server-side-encryption-context", serde_json::to_string(&input.ssekms_encryption_context).unwrap());
+    headers.insert("x-amz-server-side-encryption-bucket-key-enabled", serde_json::to_string(&input.bucket_key_enabled).unwrap());
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-tagging", serde_json::to_string(&input.tagging).unwrap());
+    headers.insert("x-amz-object-lock-mode", serde_json::to_string(&input.object_lock_mode).unwrap());
+    headers.insert("x-amz-object-lock-retain-until-date", serde_json::to_string(&input.object_lock_retain_until_date).unwrap());
+    headers.insert("x-amz-object-lock-legal-hold", serde_json::to_string(&input.object_lock_legal_hold_status).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<CreateMultipartUploadOutput>("POST", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<CreateMultipartUploadOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<CreateMultipartUploadOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -287,18 +441,33 @@ fn __delete_bucket(input: DeleteBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -315,18 +484,37 @@ fn __delete_bucket_analytics_configuration(input: DeleteBucketAnalyticsConfigura
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "id", serde_json::to_string(&input.id).unwrap()),
+        false => format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -343,18 +531,33 @@ fn __delete_bucket_cors(input: DeleteBucketCorsRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -371,18 +574,33 @@ fn __delete_bucket_encryption(input: DeleteBucketEncryptionRequest) -> BoxFuture
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -399,18 +617,36 @@ fn __delete_bucket_intelligent_tiering_configuration(input: DeleteBucketIntellig
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "id", serde_json::to_string(&input.id).unwrap()),
+        false => format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -427,18 +663,37 @@ fn __delete_bucket_inventory_configuration(input: DeleteBucketInventoryConfigura
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "id", serde_json::to_string(&input.id).unwrap()),
+        false => format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -455,18 +710,33 @@ fn __delete_bucket_lifecycle(input: DeleteBucketLifecycleRequest) -> BoxFuture<'
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -483,18 +753,37 @@ fn __delete_bucket_metrics_configuration(input: DeleteBucketMetricsConfiguration
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "id", serde_json::to_string(&input.id).unwrap()),
+        false => format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -511,18 +800,33 @@ fn __delete_bucket_ownership_controls(input: DeleteBucketOwnershipControlsReques
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -539,18 +843,33 @@ fn __delete_bucket_policy(input: DeleteBucketPolicyRequest) -> BoxFuture<'static
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -567,18 +886,33 @@ fn __delete_bucket_replication(input: DeleteBucketReplicationRequest) -> BoxFutu
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -595,18 +929,33 @@ fn __delete_bucket_tagging(input: DeleteBucketTaggingRequest) -> BoxFuture<'stat
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -623,18 +972,33 @@ fn __delete_bucket_website(input: DeleteBucketWebsiteRequest) -> BoxFuture<'stat
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -655,18 +1019,40 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-mfa", serde_json::to_string(&input.mfa).unwrap());
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-bypass-governance-retention", serde_json::to_string(&input.bypass_governance_retention).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<DeleteObjectOutput>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<DeleteObjectOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<DeleteObjectOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -687,18 +1073,37 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<DeleteObjectTaggingOutput>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<DeleteObjectTaggingOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<DeleteObjectTaggingOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -715,18 +1120,37 @@ fn __delete_objects(input: DeleteObjectsRequest) -> BoxFuture<'static, Vec<u8>> 
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("Delete", serde_xml_rs::to_string(&input.delete).unwrap());
+
+    headers.insert("x-amz-mfa", serde_json::to_string(&input.mfa).unwrap());
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-bypass-governance-retention", serde_json::to_string(&input.bypass_governance_retention).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<DeleteObjectsOutput>("POST", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<DeleteObjectsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<DeleteObjectsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -743,18 +1167,33 @@ fn __delete_public_access_block(input: DeletePublicAccessBlockRequest) -> BoxFut
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("DELETE", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -771,18 +1210,33 @@ fn __get_bucket_accelerate_configuration(input: GetBucketAccelerateConfiguration
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketAccelerateConfigurationOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketAccelerateConfigurationOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketAccelerateConfigurationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -799,18 +1253,33 @@ fn __get_bucket_acl(input: GetBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketAclOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketAclOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketAclOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -827,18 +1296,37 @@ fn __get_bucket_analytics_configuration(input: GetBucketAnalyticsConfigurationRe
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "id", serde_json::to_string(&input.id).unwrap()),
+        false => format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketAnalyticsConfigurationOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketAnalyticsConfigurationOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketAnalyticsConfigurationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -855,18 +1343,33 @@ fn __get_bucket_cors(input: GetBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketCorsOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketCorsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketCorsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -883,18 +1386,33 @@ fn __get_bucket_encryption(input: GetBucketEncryptionRequest) -> BoxFuture<'stat
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketEncryptionOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketEncryptionOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketEncryptionOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -911,18 +1429,36 @@ fn __get_bucket_intelligent_tiering_configuration(input: GetBucketIntelligentTie
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "id", serde_json::to_string(&input.id).unwrap()),
+        false => format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketIntelligentTieringConfigurationOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketIntelligentTieringConfigurationOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketIntelligentTieringConfigurationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -939,18 +1475,37 @@ fn __get_bucket_inventory_configuration(input: GetBucketInventoryConfigurationRe
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "id", serde_json::to_string(&input.id).unwrap()),
+        false => format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketInventoryConfigurationOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketInventoryConfigurationOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketInventoryConfigurationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -967,18 +1522,33 @@ fn __get_bucket_lifecycle(input: GetBucketLifecycleRequest) -> BoxFuture<'static
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketLifecycleOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketLifecycleOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketLifecycleOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -995,18 +1565,33 @@ fn __get_bucket_lifecycle_configuration(input: GetBucketLifecycleConfigurationRe
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketLifecycleConfigurationOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketLifecycleConfigurationOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketLifecycleConfigurationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1023,18 +1608,33 @@ fn __get_bucket_location(input: GetBucketLocationRequest) -> BoxFuture<'static, 
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketLocationOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketLocationOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketLocationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1051,18 +1651,33 @@ fn __get_bucket_logging(input: GetBucketLoggingRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketLoggingOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketLoggingOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketLoggingOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1079,18 +1694,37 @@ fn __get_bucket_metrics_configuration(input: GetBucketMetricsConfigurationReques
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "id", serde_json::to_string(&input.id).unwrap()),
+        false => format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketMetricsConfigurationOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketMetricsConfigurationOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketMetricsConfigurationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1107,18 +1741,33 @@ fn __get_bucket_notification(input: GetBucketNotificationConfigurationRequest) -
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<NotificationConfigurationDeprecated>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<NotificationConfigurationDeprecated, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<NotificationConfigurationDeprecated, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1135,18 +1784,33 @@ fn __get_bucket_notification_configuration(input: GetBucketNotificationConfigura
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<NotificationConfiguration>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<NotificationConfiguration, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<NotificationConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1163,18 +1827,33 @@ fn __get_bucket_ownership_controls(input: GetBucketOwnershipControlsRequest) -> 
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketOwnershipControlsOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketOwnershipControlsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketOwnershipControlsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1191,18 +1870,33 @@ fn __get_bucket_policy(input: GetBucketPolicyRequest) -> BoxFuture<'static, Vec<
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketPolicyOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketPolicyOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketPolicyOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1219,18 +1913,33 @@ fn __get_bucket_policy_status(input: GetBucketPolicyStatusRequest) -> BoxFuture<
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketPolicyStatusOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketPolicyStatusOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketPolicyStatusOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1247,18 +1956,33 @@ fn __get_bucket_replication(input: GetBucketReplicationRequest) -> BoxFuture<'st
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketReplicationOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketReplicationOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketReplicationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1275,18 +1999,33 @@ fn __get_bucket_request_payment(input: GetBucketRequestPaymentRequest) -> BoxFut
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketRequestPaymentOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketRequestPaymentOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketRequestPaymentOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1303,18 +2042,33 @@ fn __get_bucket_tagging(input: GetBucketTaggingRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketTaggingOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketTaggingOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketTaggingOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1331,18 +2085,33 @@ fn __get_bucket_versioning(input: GetBucketVersioningRequest) -> BoxFuture<'stat
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketVersioningOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketVersioningOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketVersioningOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1359,18 +2128,33 @@ fn __get_bucket_website(input: GetBucketWebsiteRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetBucketWebsiteOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetBucketWebsiteOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetBucketWebsiteOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1391,18 +2175,74 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("If-Match", serde_json::to_string(&input.if_match).unwrap());
+    headers.insert("If-Modified-Since", serde_json::to_string(&input.if_modified_since).unwrap());
+    headers.insert("If-None-Match", serde_json::to_string(&input.if_none_match).unwrap());
+    headers.insert("If-Unmodified-Since", serde_json::to_string(&input.if_unmodified_since).unwrap());
+    headers.insert("Range", serde_json::to_string(&input.range).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&input.sse_customer_algorithm).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&input.sse_customer_key).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&input.sse_customer_key_md5).unwrap());
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "response-cache-control", serde_json::to_string(&input.response_cache_control).unwrap()),
+        false => format!("{}&{}={}", path, "response-cache-control", serde_json::to_string(&input.response_cache_control).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "response-content-disposition", serde_json::to_string(&input.response_content_disposition).unwrap()),
+        false => format!("{}&{}={}", path, "response-content-disposition", serde_json::to_string(&input.response_content_disposition).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "response-content-encoding", serde_json::to_string(&input.response_content_encoding).unwrap()),
+        false => format!("{}&{}={}", path, "response-content-encoding", serde_json::to_string(&input.response_content_encoding).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "response-content-language", serde_json::to_string(&input.response_content_language).unwrap()),
+        false => format!("{}&{}={}", path, "response-content-language", serde_json::to_string(&input.response_content_language).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "response-content-type", serde_json::to_string(&input.response_content_type).unwrap()),
+        false => format!("{}&{}={}", path, "response-content-type", serde_json::to_string(&input.response_content_type).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "response-expires", serde_json::to_string(&input.response_expires).unwrap()),
+        false => format!("{}&{}={}", path, "response-expires", serde_json::to_string(&input.response_expires).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "partNumber", serde_json::to_string(&input.part_number).unwrap()),
+        false => format!("{}&{}={}", path, "partNumber", serde_json::to_string(&input.part_number).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetObjectOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetObjectOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetObjectOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1423,18 +2263,38 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetObjectAclOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetObjectAclOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetObjectAclOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1455,18 +2315,38 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetObjectLegalHoldOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetObjectLegalHoldOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetObjectLegalHoldOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1483,18 +2363,33 @@ fn __get_object_lock_configuration(input: GetObjectLockConfigurationRequest) -> 
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetObjectLockConfigurationOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetObjectLockConfigurationOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetObjectLockConfigurationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1515,18 +2410,38 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetObjectRetentionOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetObjectRetentionOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetObjectRetentionOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1547,18 +2462,37 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetObjectTaggingOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetObjectTaggingOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetObjectTaggingOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1579,18 +2513,34 @@ fn __get_object_torrent(input: GetObjectTorrentRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetObjectTorrentOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetObjectTorrentOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetObjectTorrentOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1607,18 +2557,33 @@ fn __get_public_access_block(input: GetPublicAccessBlockRequest) -> BoxFuture<'s
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<GetPublicAccessBlockOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<GetPublicAccessBlockOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<GetPublicAccessBlockOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1635,18 +2600,33 @@ fn __head_bucket(input: HeadBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("HEAD", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("HEAD", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1667,18 +2647,50 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("If-Match", serde_json::to_string(&input.if_match).unwrap());
+    headers.insert("If-Modified-Since", serde_json::to_string(&input.if_modified_since).unwrap());
+    headers.insert("If-None-Match", serde_json::to_string(&input.if_none_match).unwrap());
+    headers.insert("If-Unmodified-Since", serde_json::to_string(&input.if_unmodified_since).unwrap());
+    headers.insert("Range", serde_json::to_string(&input.range).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&input.sse_customer_algorithm).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&input.sse_customer_key).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&input.sse_customer_key_md5).unwrap());
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "partNumber", serde_json::to_string(&input.part_number).unwrap()),
+        false => format!("{}&{}={}", path, "partNumber", serde_json::to_string(&input.part_number).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("HEAD", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<HeadObjectOutput>("HEAD", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<HeadObjectOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<HeadObjectOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1695,18 +2707,37 @@ fn __list_bucket_analytics_configurations(input: ListBucketAnalyticsConfiguratio
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "continuation-token", serde_json::to_string(&input.continuation_token).unwrap()),
+        false => format!("{}&{}={}", path, "continuation-token", serde_json::to_string(&input.continuation_token).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<ListBucketAnalyticsConfigurationsOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<ListBucketAnalyticsConfigurationsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<ListBucketAnalyticsConfigurationsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1723,18 +2754,36 @@ fn __list_bucket_intelligent_tiering_configurations(input: ListBucketIntelligent
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "continuation-token", serde_json::to_string(&input.continuation_token).unwrap()),
+        false => format!("{}&{}={}", path, "continuation-token", serde_json::to_string(&input.continuation_token).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<ListBucketIntelligentTieringConfigurationsOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<ListBucketIntelligentTieringConfigurationsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<ListBucketIntelligentTieringConfigurationsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1751,18 +2800,37 @@ fn __list_bucket_inventory_configurations(input: ListBucketInventoryConfiguratio
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "continuation-token", serde_json::to_string(&input.continuation_token).unwrap()),
+        false => format!("{}&{}={}", path, "continuation-token", serde_json::to_string(&input.continuation_token).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<ListBucketInventoryConfigurationsOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<ListBucketInventoryConfigurationsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<ListBucketInventoryConfigurationsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1779,18 +2847,37 @@ fn __list_bucket_metrics_configurations(input: ListBucketMetricsConfigurationsRe
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "continuation-token", serde_json::to_string(&input.continuation_token).unwrap()),
+        false => format!("{}&{}={}", path, "continuation-token", serde_json::to_string(&input.continuation_token).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<ListBucketMetricsConfigurationsOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<ListBucketMetricsConfigurationsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<ListBucketMetricsConfigurationsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1803,20 +2890,32 @@ pub fn list_buckets(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 
 fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
     let path = "/";
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<ListBucketsOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let resstr = std::str::from_utf8(response.as_slice()).unwrap();
-                let response = serde_xml_rs::from_reader(response.as_slice()).unwrap();
-                println!("DEBUG: got {:?}", resstr);
                 serde_json::to_vec(&Result::<ListBucketsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<ListBucketsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1833,18 +2932,57 @@ fn __list_multipart_uploads(input: ListMultipartUploadsRequest) -> BoxFuture<'st
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "delimiter", serde_json::to_string(&input.delimiter).unwrap()),
+        false => format!("{}&{}={}", path, "delimiter", serde_json::to_string(&input.delimiter).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "encoding-type", serde_json::to_string(&input.encoding_type).unwrap()),
+        false => format!("{}&{}={}", path, "encoding-type", serde_json::to_string(&input.encoding_type).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "key-marker", serde_json::to_string(&input.key_marker).unwrap()),
+        false => format!("{}&{}={}", path, "key-marker", serde_json::to_string(&input.key_marker).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "max-uploads", serde_json::to_string(&input.max_uploads).unwrap()),
+        false => format!("{}&{}={}", path, "max-uploads", serde_json::to_string(&input.max_uploads).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "prefix", serde_json::to_string(&input.prefix).unwrap()),
+        false => format!("{}&{}={}", path, "prefix", serde_json::to_string(&input.prefix).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "upload-id-marker", serde_json::to_string(&input.upload_id_marker).unwrap()),
+        false => format!("{}&{}={}", path, "upload-id-marker", serde_json::to_string(&input.upload_id_marker).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<ListMultipartUploadsOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<ListMultipartUploadsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<ListMultipartUploadsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1861,18 +2999,57 @@ fn __list_object_versions(input: ListObjectVersionsRequest) -> BoxFuture<'static
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "delimiter", serde_json::to_string(&input.delimiter).unwrap()),
+        false => format!("{}&{}={}", path, "delimiter", serde_json::to_string(&input.delimiter).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "encoding-type", serde_json::to_string(&input.encoding_type).unwrap()),
+        false => format!("{}&{}={}", path, "encoding-type", serde_json::to_string(&input.encoding_type).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "key-marker", serde_json::to_string(&input.key_marker).unwrap()),
+        false => format!("{}&{}={}", path, "key-marker", serde_json::to_string(&input.key_marker).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "max-keys", serde_json::to_string(&input.max_keys).unwrap()),
+        false => format!("{}&{}={}", path, "max-keys", serde_json::to_string(&input.max_keys).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "prefix", serde_json::to_string(&input.prefix).unwrap()),
+        false => format!("{}&{}={}", path, "prefix", serde_json::to_string(&input.prefix).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "version-id-marker", serde_json::to_string(&input.version_id_marker).unwrap()),
+        false => format!("{}&{}={}", path, "version-id-marker", serde_json::to_string(&input.version_id_marker).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<ListObjectVersionsOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<ListObjectVersionsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<ListObjectVersionsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1889,18 +3066,54 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "delimiter", serde_json::to_string(&input.delimiter).unwrap()),
+        false => format!("{}&{}={}", path, "delimiter", serde_json::to_string(&input.delimiter).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "encoding-type", serde_json::to_string(&input.encoding_type).unwrap()),
+        false => format!("{}&{}={}", path, "encoding-type", serde_json::to_string(&input.encoding_type).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "marker", serde_json::to_string(&input.marker).unwrap()),
+        false => format!("{}&{}={}", path, "marker", serde_json::to_string(&input.marker).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "max-keys", serde_json::to_string(&input.max_keys).unwrap()),
+        false => format!("{}&{}={}", path, "max-keys", serde_json::to_string(&input.max_keys).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "prefix", serde_json::to_string(&input.prefix).unwrap()),
+        false => format!("{}&{}={}", path, "prefix", serde_json::to_string(&input.prefix).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<ListObjectsOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<ListObjectsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<ListObjectsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1917,18 +3130,62 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "delimiter", serde_json::to_string(&input.delimiter).unwrap()),
+        false => format!("{}&{}={}", path, "delimiter", serde_json::to_string(&input.delimiter).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "encoding-type", serde_json::to_string(&input.encoding_type).unwrap()),
+        false => format!("{}&{}={}", path, "encoding-type", serde_json::to_string(&input.encoding_type).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "max-keys", serde_json::to_string(&input.max_keys).unwrap()),
+        false => format!("{}&{}={}", path, "max-keys", serde_json::to_string(&input.max_keys).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "prefix", serde_json::to_string(&input.prefix).unwrap()),
+        false => format!("{}&{}={}", path, "prefix", serde_json::to_string(&input.prefix).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "continuation-token", serde_json::to_string(&input.continuation_token).unwrap()),
+        false => format!("{}&{}={}", path, "continuation-token", serde_json::to_string(&input.continuation_token).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "fetch-owner", serde_json::to_string(&input.fetch_owner).unwrap()),
+        false => format!("{}&{}={}", path, "fetch-owner", serde_json::to_string(&input.fetch_owner).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "start-after", serde_json::to_string(&input.start_after).unwrap()),
+        false => format!("{}&{}={}", path, "start-after", serde_json::to_string(&input.start_after).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<ListObjectsV2Output>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<ListObjectsV2Output, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<ListObjectsV2Output, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1949,18 +3206,46 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "max-parts", serde_json::to_string(&input.max_parts).unwrap()),
+        false => format!("{}&{}={}", path, "max-parts", serde_json::to_string(&input.max_parts).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "part-number-marker", serde_json::to_string(&input.part_number_marker).unwrap()),
+        false => format!("{}&{}={}", path, "part-number-marker", serde_json::to_string(&input.part_number_marker).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap()),
+        false => format!("{}&{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<ListPartsOutput>("GET", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<ListPartsOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<ListPartsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -1977,18 +3262,34 @@ fn __put_bucket_accelerate_configuration(input: PutBucketAccelerateConfiguration
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("AccelerateConfiguration", serde_xml_rs::to_string(&input.accelerate_configuration).unwrap());
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2005,18 +3306,41 @@ fn __put_bucket_acl(input: PutBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("AccessControlPolicy", serde_xml_rs::to_string(&input.access_control_policy).unwrap());
+
+    headers.insert("x-amz-acl", serde_json::to_string(&input.acl).unwrap());
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-grant-full-control", serde_json::to_string(&input.grant_full_control).unwrap());
+    headers.insert("x-amz-grant-read", serde_json::to_string(&input.grant_read).unwrap());
+    headers.insert("x-amz-grant-read-acp", serde_json::to_string(&input.grant_read_acp).unwrap());
+    headers.insert("x-amz-grant-write", serde_json::to_string(&input.grant_write).unwrap());
+    headers.insert("x-amz-grant-write-acp", serde_json::to_string(&input.grant_write_acp).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2033,18 +3357,38 @@ fn __put_bucket_analytics_configuration(input: PutBucketAnalyticsConfigurationRe
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("AnalyticsConfiguration", serde_xml_rs::to_string(&input.analytics_configuration).unwrap());
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "id", serde_json::to_string(&input.id).unwrap()),
+        false => format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2061,18 +3405,35 @@ fn __put_bucket_cors(input: PutBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("CORSConfiguration", serde_xml_rs::to_string(&input.cors_configuration).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2089,18 +3450,35 @@ fn __put_bucket_encryption(input: PutBucketEncryptionRequest) -> BoxFuture<'stat
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("ServerSideEncryptionConfiguration", serde_xml_rs::to_string(&input.server_side_encryption_configuration).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2117,18 +3495,37 @@ fn __put_bucket_intelligent_tiering_configuration(input: PutBucketIntelligentTie
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("IntelligentTieringConfiguration", serde_xml_rs::to_string(&input.intelligent_tiering_configuration).unwrap());
+
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "id", serde_json::to_string(&input.id).unwrap()),
+        false => format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2145,18 +3542,38 @@ fn __put_bucket_inventory_configuration(input: PutBucketInventoryConfigurationRe
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("InventoryConfiguration", serde_xml_rs::to_string(&input.inventory_configuration).unwrap());
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "id", serde_json::to_string(&input.id).unwrap()),
+        false => format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2173,18 +3590,35 @@ fn __put_bucket_lifecycle(input: PutBucketLifecycleRequest) -> BoxFuture<'static
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("LifecycleConfiguration", serde_xml_rs::to_string(&input.lifecycle_configuration).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2201,18 +3635,34 @@ fn __put_bucket_lifecycle_configuration(input: PutBucketLifecycleConfigurationRe
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("LifecycleConfiguration", serde_xml_rs::to_string(&input.lifecycle_configuration).unwrap());
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2229,18 +3679,35 @@ fn __put_bucket_logging(input: PutBucketLoggingRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("BucketLoggingStatus", serde_xml_rs::to_string(&input.bucket_logging_status).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2257,18 +3724,38 @@ fn __put_bucket_metrics_configuration(input: PutBucketMetricsConfigurationReques
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("MetricsConfiguration", serde_xml_rs::to_string(&input.metrics_configuration).unwrap());
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "id", serde_json::to_string(&input.id).unwrap()),
+        false => format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2285,18 +3772,35 @@ fn __put_bucket_notification(input: PutBucketNotificationRequest) -> BoxFuture<'
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("NotificationConfiguration", serde_xml_rs::to_string(&input.notification_configuration).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2313,18 +3817,34 @@ fn __put_bucket_notification_configuration(input: PutBucketNotificationConfigura
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("NotificationConfiguration", serde_xml_rs::to_string(&input.notification_configuration).unwrap());
+
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2341,18 +3861,35 @@ fn __put_bucket_ownership_controls(input: PutBucketOwnershipControlsRequest) -> 
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("OwnershipControls", serde_xml_rs::to_string(&input.ownership_controls).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2369,18 +3906,36 @@ fn __put_bucket_policy(input: PutBucketPolicyRequest) -> BoxFuture<'static, Vec<
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("Policy", serde_xml_rs::to_string(&input.policy).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-confirm-remove-self-bucket-access", serde_json::to_string(&input.confirm_remove_self_bucket_access).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2397,18 +3952,36 @@ fn __put_bucket_replication(input: PutBucketReplicationRequest) -> BoxFuture<'st
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("ReplicationConfiguration", serde_xml_rs::to_string(&input.replication_configuration).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-bucket-object-lock-token", serde_json::to_string(&input.token).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2425,18 +3998,35 @@ fn __put_bucket_request_payment(input: PutBucketRequestPaymentRequest) -> BoxFut
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("RequestPaymentConfiguration", serde_xml_rs::to_string(&input.request_payment_configuration).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2453,18 +4043,35 @@ fn __put_bucket_tagging(input: PutBucketTaggingRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("Tagging", serde_xml_rs::to_string(&input.tagging).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2481,18 +4088,36 @@ fn __put_bucket_versioning(input: PutBucketVersioningRequest) -> BoxFuture<'stat
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("VersioningConfiguration", serde_xml_rs::to_string(&input.versioning_configuration).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-mfa", serde_json::to_string(&input.mfa).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2509,18 +4134,35 @@ fn __put_bucket_website(input: PutBucketWebsiteRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("WebsiteConfiguration", serde_xml_rs::to_string(&input.website_configuration).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2541,18 +4183,61 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("Body", serde_xml_rs::to_string(&input.body).unwrap());
+
+    headers.insert("x-amz-acl", serde_json::to_string(&input.acl).unwrap());
+    headers.insert("Cache-Control", serde_json::to_string(&input.cache_control).unwrap());
+    headers.insert("Content-Disposition", serde_json::to_string(&input.content_disposition).unwrap());
+    headers.insert("Content-Encoding", serde_json::to_string(&input.content_encoding).unwrap());
+    headers.insert("Content-Language", serde_json::to_string(&input.content_language).unwrap());
+    headers.insert("Content-Length", serde_json::to_string(&input.content_length).unwrap());
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("Content-Type", serde_json::to_string(&input.content_type).unwrap());
+    headers.insert("Expires", serde_json::to_string(&input.expires).unwrap());
+    headers.insert("x-amz-grant-full-control", serde_json::to_string(&input.grant_full_control).unwrap());
+    headers.insert("x-amz-grant-read", serde_json::to_string(&input.grant_read).unwrap());
+    headers.insert("x-amz-grant-read-acp", serde_json::to_string(&input.grant_read_acp).unwrap());
+    headers.insert("x-amz-grant-write-acp", serde_json::to_string(&input.grant_write_acp).unwrap());
+    headers.insert("x-amz-server-side-encryption", serde_json::to_string(&input.server_side_encryption).unwrap());
+    headers.insert("x-amz-storage-class", serde_json::to_string(&input.storage_class).unwrap());
+    headers.insert("x-amz-website-redirect-location", serde_json::to_string(&input.website_redirect_location).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&input.sse_customer_algorithm).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&input.sse_customer_key).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&input.sse_customer_key_md5).unwrap());
+    headers.insert("x-amz-server-side-encryption-aws-kms-key-id", serde_json::to_string(&input.ssekms_key_id).unwrap());
+    headers.insert("x-amz-server-side-encryption-context", serde_json::to_string(&input.ssekms_encryption_context).unwrap());
+    headers.insert("x-amz-server-side-encryption-bucket-key-enabled", serde_json::to_string(&input.bucket_key_enabled).unwrap());
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-tagging", serde_json::to_string(&input.tagging).unwrap());
+    headers.insert("x-amz-object-lock-mode", serde_json::to_string(&input.object_lock_mode).unwrap());
+    headers.insert("x-amz-object-lock-retain-until-date", serde_json::to_string(&input.object_lock_retain_until_date).unwrap());
+    headers.insert("x-amz-object-lock-legal-hold", serde_json::to_string(&input.object_lock_legal_hold_status).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<PutObjectOutput>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<PutObjectOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<PutObjectOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2573,18 +4258,46 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("AccessControlPolicy", serde_xml_rs::to_string(&input.access_control_policy).unwrap());
+
+    headers.insert("x-amz-acl", serde_json::to_string(&input.acl).unwrap());
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-grant-full-control", serde_json::to_string(&input.grant_full_control).unwrap());
+    headers.insert("x-amz-grant-read", serde_json::to_string(&input.grant_read).unwrap());
+    headers.insert("x-amz-grant-read-acp", serde_json::to_string(&input.grant_read_acp).unwrap());
+    headers.insert("x-amz-grant-write", serde_json::to_string(&input.grant_write).unwrap());
+    headers.insert("x-amz-grant-write-acp", serde_json::to_string(&input.grant_write_acp).unwrap());
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<PutObjectAclOutput>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<PutObjectAclOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<PutObjectAclOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2605,18 +4318,40 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("LegalHold", serde_xml_rs::to_string(&input.legal_hold).unwrap());
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<PutObjectLegalHoldOutput>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<PutObjectLegalHoldOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<PutObjectLegalHoldOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2633,18 +4368,37 @@ fn __put_object_lock_configuration(input: PutObjectLockConfigurationRequest) -> 
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("ObjectLockConfiguration", serde_xml_rs::to_string(&input.object_lock_configuration).unwrap());
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-bucket-object-lock-token", serde_json::to_string(&input.token).unwrap());
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<PutObjectLockConfigurationOutput>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<PutObjectLockConfigurationOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<PutObjectLockConfigurationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2665,18 +4419,41 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("Retention", serde_xml_rs::to_string(&input.retention).unwrap());
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-bypass-governance-retention", serde_json::to_string(&input.bypass_governance_retention).unwrap());
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<PutObjectRetentionOutput>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<PutObjectRetentionOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<PutObjectRetentionOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2697,18 +4474,39 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("Tagging", serde_xml_rs::to_string(&input.tagging).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<PutObjectTaggingOutput>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<PutObjectTaggingOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<PutObjectTaggingOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2725,18 +4523,35 @@ fn __put_public_access_block(input: PutPublicAccessBlockRequest) -> BoxFuture<'s
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("PublicAccessBlockConfiguration", serde_xml_rs::to_string(&input.public_access_block_configuration).unwrap());
+
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<()>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = ();
                 serde_json::to_vec(&Result::<(), guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2757,18 +4572,39 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("RestoreRequest", serde_xml_rs::to_string(&input.restore_request).unwrap());
+
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap()),
+        false => format!("{}&{}={}", path, "versionId", serde_json::to_string(&input.version_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<RestoreObjectOutput>("POST", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<RestoreObjectOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<RestoreObjectOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2789,18 +4625,42 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("Expression", serde_xml_rs::to_string(&input.expression).unwrap());
+    body.insert("ExpressionType", serde_xml_rs::to_string(&input.expression_type).unwrap());
+    body.insert("RequestProgress", serde_xml_rs::to_string(&input.request_progress).unwrap());
+    body.insert("InputSerialization", serde_xml_rs::to_string(&input.input_serialization).unwrap());
+    body.insert("OutputSerialization", serde_xml_rs::to_string(&input.output_serialization).unwrap());
+    body.insert("ScanRange", serde_xml_rs::to_string(&input.scan_range).unwrap());
+
+    headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&input.sse_customer_algorithm).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&input.sse_customer_key).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&input.sse_customer_key_md5).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<SelectObjectContentOutput>("POST", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<SelectObjectContentOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<SelectObjectContentOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2821,18 +4681,48 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+    body.insert("Body", serde_xml_rs::to_string(&input.body).unwrap());
+
+    headers.insert("Content-Length", serde_json::to_string(&input.content_length).unwrap());
+    headers.insert("Content-MD5", serde_json::to_string(&input.content_md5).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&input.sse_customer_algorithm).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&input.sse_customer_key).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&input.sse_customer_key_md5).unwrap());
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "partNumber", serde_json::to_string(&input.part_number).unwrap()),
+        false => format!("{}&{}={}", path, "partNumber", serde_json::to_string(&input.part_number).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap()),
+        false => format!("{}&{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<UploadPartOutput>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<UploadPartOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<UploadPartOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
@@ -2853,19 +4743,57 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
         Some(_) => path.replace("{Key+}", &input.key),
         None => path.to_string(),
     };
+    let path = match path.find('?') {
+        Some(_) => path.to_string(),
+        None => format!("{}?", path),
+    };
+
+    let mut body = std::collections::HashMap::new();
+    let mut headers = std::collections::HashMap::new();
+
+
+    headers.insert("x-amz-copy-source", serde_json::to_string(&input.copy_source).unwrap());
+    headers.insert("x-amz-copy-source-if-match", serde_json::to_string(&input.copy_source_if_match).unwrap());
+    headers.insert("x-amz-copy-source-if-modified-since", serde_json::to_string(&input.copy_source_if_modified_since).unwrap());
+    headers.insert("x-amz-copy-source-if-none-match", serde_json::to_string(&input.copy_source_if_none_match).unwrap());
+    headers.insert("x-amz-copy-source-if-unmodified-since", serde_json::to_string(&input.copy_source_if_unmodified_since).unwrap());
+    headers.insert("x-amz-copy-source-range", serde_json::to_string(&input.copy_source_range).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&input.sse_customer_algorithm).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&input.sse_customer_key).unwrap());
+    headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&input.sse_customer_key_md5).unwrap());
+    headers.insert("x-amz-copy-source-server-side-encryption-customer-algorithm", serde_json::to_string(&input.copy_source_sse_customer_algorithm).unwrap());
+    headers.insert("x-amz-copy-source-server-side-encryption-customer-key", serde_json::to_string(&input.copy_source_sse_customer_key).unwrap());
+    headers.insert("x-amz-copy-source-server-side-encryption-customer-key-MD5", serde_json::to_string(&input.copy_source_sse_customer_key_md5).unwrap());
+    headers.insert("x-amz-request-payer", serde_json::to_string(&input.request_payer).unwrap());
+    headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&input.expected_bucket_owner).unwrap());
+    headers.insert("x-amz-source-expected-bucket-owner", serde_json::to_string(&input.expected_source_bucket_owner).unwrap());
+
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "partNumber", serde_json::to_string(&input.part_number).unwrap()),
+        false => format!("{}&{}={}", path, "partNumber", serde_json::to_string(&input.part_number).unwrap())
+    };
+    let path = match path.ends_with('?') {
+        true => format!("{}{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap()),
+        false => format!("{}&{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())
+    };
+
+    let client_input = client::ClientInput {
+        body,
+        headers,
+    };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", input).await {
+        match crate::CLIENT.call::<UploadPartCopyOutput>("PUT", &path, "rest-xml", client_input).await {
             Ok(response) => {
-                let response = serde_json::from_slice(response.as_slice()).unwrap();
                 serde_json::to_vec(&Result::<UploadPartCopyOutput, guest::Error>::Ok(response)).unwrap()
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<UploadPartCopyOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                    .unwrap()
+                .unwrap()
             },
         }
     })
 }
+

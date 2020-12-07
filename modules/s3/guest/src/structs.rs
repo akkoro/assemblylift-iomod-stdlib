@@ -23,6 +23,7 @@ pub type ArchiveStatus = String;
 pub type Body = Vec<u8>;
 pub type BucketAccelerateStatus = String;
 pub type BucketCannedACL = String;
+pub type BucketKeyEnabled = bool;
 pub type BucketLocationConstraint = String;
 pub type BucketLogsPermission = String;
 pub type BucketName = String;
@@ -203,6 +204,7 @@ pub type RecordDelimiter = String;
 pub type ReplaceKeyPrefixWith = String;
 pub type ReplaceKeyWith = String;
 pub type ReplicaKmsKeyID = String;
+pub type ReplicaModificationsStatus = String;
 pub type ReplicationRuleStatus = String;
 pub type ReplicationRules = Vec<ReplicationRule>;
 pub type ReplicationStatus = String;
@@ -250,7 +252,7 @@ pub type TopicArn = String;
 pub type TopicConfigurationList = Vec<TopicConfiguration>;
 pub type TransitionList = Vec<Transition>;
 pub type TransitionStorageClass = String;
-pub type GranteeType = String;
+pub type Type = String;
 pub type URI = String;
 pub type UploadIdMarker = String;
 pub type UserMetadata = Vec<MetadataEntry>;
@@ -259,19 +261,19 @@ pub type VersionIdMarker = String;
 pub type WebsiteRedirectLocation = String;
 pub type Years = u64;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AbortIncompleteMultipartUpload {
     #[serde(rename = "DaysAfterInitiation")]
     pub days_after_initiation: Option<DaysAfterInitiation>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AbortMultipartUploadOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AbortMultipartUploadRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -285,13 +287,13 @@ pub struct AbortMultipartUploadRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AccelerateConfiguration {
     #[serde(rename = "Status")]
     pub status: Option<BucketAccelerateStatus>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AccessControlPolicy {
     #[serde(rename = "Grants")]
     pub grants: Option<Grants>,
@@ -299,13 +301,13 @@ pub struct AccessControlPolicy {
     pub owner: Option<Owner>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AccessControlTranslation {
     #[serde(rename = "Owner")]
     pub owner: OwnerOverride,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AnalyticsAndOperator {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
@@ -313,7 +315,7 @@ pub struct AnalyticsAndOperator {
     pub tags: Option<TagSet>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AnalyticsConfiguration {
     #[serde(rename = "Id")]
     pub id: AnalyticsId,
@@ -323,13 +325,13 @@ pub struct AnalyticsConfiguration {
     pub storage_class_analysis: StorageClassAnalysis,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AnalyticsExportDestination {
     #[serde(rename = "S3BucketDestination")]
     pub s3_bucket_destination: AnalyticsS3BucketDestination,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AnalyticsFilter {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
@@ -339,7 +341,7 @@ pub struct AnalyticsFilter {
     pub and: Option<AnalyticsAndOperator>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AnalyticsS3BucketDestination {
     #[serde(rename = "Format")]
     pub format: AnalyticsS3ExportFileFormat,
@@ -359,33 +361,33 @@ pub struct Bucket {
     pub creation_date: Option<CreationDate>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct BucketAlreadyExists {
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct BucketAlreadyOwnedByYou {
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct BucketLifecycleConfiguration {
     #[serde(rename = "Rules")]
     pub rules: LifecycleRules,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct BucketLoggingStatus {
     #[serde(rename = "LoggingEnabled")]
     pub logging_enabled: Option<LoggingEnabled>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CORSConfiguration {
     #[serde(rename = "CORSRules")]
     pub cors_rules: CORSRules,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CORSRule {
     #[serde(rename = "AllowedHeaders")]
     pub allowed_headers: AllowedHeaders,
@@ -399,7 +401,7 @@ pub struct CORSRule {
     pub max_age_seconds: MaxAgeSeconds,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CSVInput {
     #[serde(rename = "FileHeaderInfo")]
     pub file_header_info: Option<FileHeaderInfo>,
@@ -417,7 +419,7 @@ pub struct CSVInput {
     pub allow_quoted_record_delimiter: Option<AllowQuotedRecordDelimiter>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CSVOutput {
     #[serde(rename = "QuoteFields")]
     pub quote_fields: Option<QuoteFields>,
@@ -431,7 +433,7 @@ pub struct CSVOutput {
     pub quote_character: Option<QuoteCharacter>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CloudFunctionConfiguration {
     #[serde(rename = "Id")]
     pub id: Option<NotificationId>,
@@ -445,13 +447,13 @@ pub struct CloudFunctionConfiguration {
     pub invocation_role: Option<CloudFunctionInvocationRole>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CommonPrefix {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CompleteMultipartUploadOutput {
     #[serde(rename = "Location")]
     pub location: Option<Location>,
@@ -469,11 +471,13 @@ pub struct CompleteMultipartUploadOutput {
     pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "SSEKMSKeyId")]
     pub ssekms_key_id: Option<SSEKMSKeyId>,
+    #[serde(rename = "BucketKeyEnabled")]
+    pub bucket_key_enabled: Option<BucketKeyEnabled>,
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CompleteMultipartUploadRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -489,13 +493,13 @@ pub struct CompleteMultipartUploadRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CompletedMultipartUpload {
     #[serde(rename = "Parts")]
     pub parts: Option<CompletedPartList>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CompletedPart {
     #[serde(rename = "ETag")]
     pub e_tag: Option<ETag>,
@@ -503,7 +507,7 @@ pub struct CompletedPart {
     pub part_number: Option<PartNumber>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Condition {
     #[serde(rename = "HttpErrorCodeReturnedEquals")]
     pub http_error_code_returned_equals: Option<HttpErrorCodeReturnedEquals>,
@@ -511,11 +515,11 @@ pub struct Condition {
     pub key_prefix_equals: Option<KeyPrefixEquals>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ContinuationEvent {
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CopyObjectOutput {
     #[serde(rename = "CopyObjectResult")]
     pub copy_object_result: Option<CopyObjectResult>,
@@ -535,11 +539,13 @@ pub struct CopyObjectOutput {
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     #[serde(rename = "SSEKMSEncryptionContext")]
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
+    #[serde(rename = "BucketKeyEnabled")]
+    pub bucket_key_enabled: Option<BucketKeyEnabled>,
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CopyObjectRequest {
     #[serde(rename = "ACL")]
     pub acl: ObjectCannedACL,
@@ -599,6 +605,8 @@ pub struct CopyObjectRequest {
     pub ssekms_key_id: SSEKMSKeyId,
     #[serde(rename = "SSEKMSEncryptionContext")]
     pub ssekms_encryption_context: SSEKMSEncryptionContext,
+    #[serde(rename = "BucketKeyEnabled")]
+    pub bucket_key_enabled: BucketKeyEnabled,
     #[serde(rename = "CopySourceSSECustomerAlgorithm")]
     pub copy_source_sse_customer_algorithm: CopySourceSSECustomerAlgorithm,
     #[serde(rename = "CopySourceSSECustomerKey")]
@@ -621,7 +629,7 @@ pub struct CopyObjectRequest {
     pub expected_source_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CopyObjectResult {
     #[serde(rename = "ETag")]
     pub e_tag: Option<ETag>,
@@ -629,7 +637,7 @@ pub struct CopyObjectResult {
     pub last_modified: Option<LastModified>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CopyPartResult {
     #[serde(rename = "ETag")]
     pub e_tag: Option<ETag>,
@@ -637,19 +645,19 @@ pub struct CopyPartResult {
     pub last_modified: Option<LastModified>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CreateBucketConfiguration {
     #[serde(rename = "LocationConstraint")]
     pub location_constraint: Option<BucketLocationConstraint>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CreateBucketOutput {
     #[serde(rename = "Location")]
     pub location: Option<Location>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CreateBucketRequest {
     #[serde(rename = "ACL")]
     pub acl: BucketCannedACL,
@@ -671,7 +679,7 @@ pub struct CreateBucketRequest {
     pub object_lock_enabled_for_bucket: ObjectLockEnabledForBucket,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CreateMultipartUploadOutput {
     #[serde(rename = "AbortDate")]
     pub abort_date: Option<AbortDate>,
@@ -693,11 +701,13 @@ pub struct CreateMultipartUploadOutput {
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     #[serde(rename = "SSEKMSEncryptionContext")]
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
+    #[serde(rename = "BucketKeyEnabled")]
+    pub bucket_key_enabled: Option<BucketKeyEnabled>,
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CreateMultipartUploadRequest {
     #[serde(rename = "ACL")]
     pub acl: ObjectCannedACL,
@@ -743,6 +753,8 @@ pub struct CreateMultipartUploadRequest {
     pub ssekms_key_id: SSEKMSKeyId,
     #[serde(rename = "SSEKMSEncryptionContext")]
     pub ssekms_encryption_context: SSEKMSEncryptionContext,
+    #[serde(rename = "BucketKeyEnabled")]
+    pub bucket_key_enabled: BucketKeyEnabled,
     #[serde(rename = "RequestPayer")]
     pub request_payer: RequestPayer,
     #[serde(rename = "Tagging")]
@@ -757,7 +769,7 @@ pub struct CreateMultipartUploadRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DefaultRetention {
     #[serde(rename = "Mode")]
     pub mode: Option<ObjectLockRetentionMode>,
@@ -767,7 +779,7 @@ pub struct DefaultRetention {
     pub years: Option<Years>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Delete {
     #[serde(rename = "Objects")]
     pub objects: ObjectIdentifierList,
@@ -775,7 +787,7 @@ pub struct Delete {
     pub quiet: Quiet,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketAnalyticsConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -785,7 +797,7 @@ pub struct DeleteBucketAnalyticsConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketCorsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -793,7 +805,7 @@ pub struct DeleteBucketCorsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketEncryptionRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -801,7 +813,7 @@ pub struct DeleteBucketEncryptionRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketIntelligentTieringConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -809,7 +821,7 @@ pub struct DeleteBucketIntelligentTieringConfigurationRequest {
     pub id: IntelligentTieringId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketInventoryConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -819,7 +831,7 @@ pub struct DeleteBucketInventoryConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketLifecycleRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -827,7 +839,7 @@ pub struct DeleteBucketLifecycleRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketMetricsConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -837,7 +849,7 @@ pub struct DeleteBucketMetricsConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketOwnershipControlsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -845,7 +857,7 @@ pub struct DeleteBucketOwnershipControlsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketPolicyRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -853,7 +865,7 @@ pub struct DeleteBucketPolicyRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketReplicationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -861,7 +873,7 @@ pub struct DeleteBucketReplicationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -869,7 +881,7 @@ pub struct DeleteBucketRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketTaggingRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -877,7 +889,7 @@ pub struct DeleteBucketTaggingRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteBucketWebsiteRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -885,7 +897,7 @@ pub struct DeleteBucketWebsiteRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteMarkerEntry {
     #[serde(rename = "Owner")]
     pub owner: Option<Owner>,
@@ -899,13 +911,13 @@ pub struct DeleteMarkerEntry {
     pub last_modified: Option<LastModified>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteMarkerReplication {
     #[serde(rename = "Status")]
     pub status: Option<DeleteMarkerReplicationStatus>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteObjectOutput {
     #[serde(rename = "DeleteMarker")]
     pub delete_marker: Option<DeleteMarker>,
@@ -915,7 +927,7 @@ pub struct DeleteObjectOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteObjectRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -933,13 +945,13 @@ pub struct DeleteObjectRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteObjectTaggingOutput {
     #[serde(rename = "VersionId")]
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteObjectTaggingRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -951,7 +963,7 @@ pub struct DeleteObjectTaggingRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteObjectsOutput {
     #[serde(rename = "Deleted")]
     pub deleted: Option<DeletedObjects>,
@@ -961,7 +973,7 @@ pub struct DeleteObjectsOutput {
     pub errors: Option<Errors>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeleteObjectsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -977,7 +989,7 @@ pub struct DeleteObjectsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeletePublicAccessBlockRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -985,7 +997,7 @@ pub struct DeletePublicAccessBlockRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeletedObject {
     #[serde(rename = "Key")]
     pub key: Option<ObjectKey>,
@@ -997,7 +1009,7 @@ pub struct DeletedObject {
     pub delete_marker_version_id: Option<DeleteMarkerVersionId>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Destination {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1015,7 +1027,7 @@ pub struct Destination {
     pub metrics: Metrics,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Encryption {
     #[serde(rename = "EncryptionType")]
     pub encryption_type: ServerSideEncryption,
@@ -1025,17 +1037,17 @@ pub struct Encryption {
     pub kms_context: KMSContext,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct EncryptionConfiguration {
     #[serde(rename = "ReplicaKmsKeyID")]
     pub replica_kms_key_id: Option<ReplicaKmsKeyID>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct EndEvent {
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Error {
     #[serde(rename = "Key")]
     pub key: Option<ObjectKey>,
@@ -1047,19 +1059,19 @@ pub struct Error {
     pub message: Option<Message>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ErrorDocument {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ExistingObjectReplication {
     #[serde(rename = "Status")]
     pub status: ExistingObjectReplicationStatus,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct FilterRule {
     #[serde(rename = "Name")]
     pub name: Option<FilterRuleName>,
@@ -1067,13 +1079,13 @@ pub struct FilterRule {
     pub value: Option<FilterRuleValue>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketAccelerateConfigurationOutput {
     #[serde(rename = "Status")]
     pub status: Option<BucketAccelerateStatus>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketAccelerateConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1081,7 +1093,7 @@ pub struct GetBucketAccelerateConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketAclOutput {
     #[serde(rename = "Owner")]
     pub owner: Option<Owner>,
@@ -1089,7 +1101,7 @@ pub struct GetBucketAclOutput {
     pub grants: Option<Grants>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketAclRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1097,13 +1109,13 @@ pub struct GetBucketAclRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketAnalyticsConfigurationOutput {
     #[serde(rename = "AnalyticsConfiguration")]
     pub analytics_configuration: Option<AnalyticsConfiguration>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketAnalyticsConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1113,13 +1125,13 @@ pub struct GetBucketAnalyticsConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketCorsOutput {
     #[serde(rename = "CORSRules")]
     pub cors_rules: Option<CORSRules>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketCorsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1127,13 +1139,13 @@ pub struct GetBucketCorsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketEncryptionOutput {
     #[serde(rename = "ServerSideEncryptionConfiguration")]
     pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketEncryptionRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1141,13 +1153,13 @@ pub struct GetBucketEncryptionRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketIntelligentTieringConfigurationOutput {
     #[serde(rename = "IntelligentTieringConfiguration")]
     pub intelligent_tiering_configuration: Option<IntelligentTieringConfiguration>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketIntelligentTieringConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1155,13 +1167,13 @@ pub struct GetBucketIntelligentTieringConfigurationRequest {
     pub id: IntelligentTieringId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketInventoryConfigurationOutput {
     #[serde(rename = "InventoryConfiguration")]
     pub inventory_configuration: Option<InventoryConfiguration>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketInventoryConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1171,13 +1183,13 @@ pub struct GetBucketInventoryConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketLifecycleConfigurationOutput {
     #[serde(rename = "Rules")]
     pub rules: Option<LifecycleRules>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketLifecycleConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1185,13 +1197,13 @@ pub struct GetBucketLifecycleConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketLifecycleOutput {
     #[serde(rename = "Rules")]
     pub rules: Option<Rules>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketLifecycleRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1199,13 +1211,13 @@ pub struct GetBucketLifecycleRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketLocationOutput {
     #[serde(rename = "LocationConstraint")]
     pub location_constraint: Option<BucketLocationConstraint>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketLocationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1213,13 +1225,13 @@ pub struct GetBucketLocationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketLoggingOutput {
     #[serde(rename = "LoggingEnabled")]
     pub logging_enabled: Option<LoggingEnabled>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketLoggingRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1227,13 +1239,13 @@ pub struct GetBucketLoggingRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketMetricsConfigurationOutput {
     #[serde(rename = "MetricsConfiguration")]
     pub metrics_configuration: Option<MetricsConfiguration>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketMetricsConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1243,7 +1255,7 @@ pub struct GetBucketMetricsConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketNotificationConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1251,13 +1263,13 @@ pub struct GetBucketNotificationConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketOwnershipControlsOutput {
     #[serde(rename = "OwnershipControls")]
     pub ownership_controls: Option<OwnershipControls>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketOwnershipControlsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1265,13 +1277,13 @@ pub struct GetBucketOwnershipControlsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketPolicyOutput {
     #[serde(rename = "Policy")]
     pub policy: Option<Policy>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketPolicyRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1279,13 +1291,13 @@ pub struct GetBucketPolicyRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketPolicyStatusOutput {
     #[serde(rename = "PolicyStatus")]
     pub policy_status: Option<PolicyStatus>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketPolicyStatusRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1293,13 +1305,13 @@ pub struct GetBucketPolicyStatusRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketReplicationOutput {
     #[serde(rename = "ReplicationConfiguration")]
     pub replication_configuration: Option<ReplicationConfiguration>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketReplicationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1307,13 +1319,13 @@ pub struct GetBucketReplicationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketRequestPaymentOutput {
     #[serde(rename = "Payer")]
     pub payer: Option<Payer>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketRequestPaymentRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1321,13 +1333,13 @@ pub struct GetBucketRequestPaymentRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketTaggingOutput {
     #[serde(rename = "TagSet")]
     pub tag_set: TagSet,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketTaggingRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1335,7 +1347,7 @@ pub struct GetBucketTaggingRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketVersioningOutput {
     #[serde(rename = "Status")]
     pub status: Option<BucketVersioningStatus>,
@@ -1343,7 +1355,7 @@ pub struct GetBucketVersioningOutput {
     pub mfa_delete: Option<MFADeleteStatus>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketVersioningRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1351,7 +1363,7 @@ pub struct GetBucketVersioningRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketWebsiteOutput {
     #[serde(rename = "RedirectAllRequestsTo")]
     pub redirect_all_requests_to: Option<RedirectAllRequestsTo>,
@@ -1363,7 +1375,7 @@ pub struct GetBucketWebsiteOutput {
     pub routing_rules: Option<RoutingRules>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetBucketWebsiteRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1371,7 +1383,7 @@ pub struct GetBucketWebsiteRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectAclOutput {
     #[serde(rename = "Owner")]
     pub owner: Option<Owner>,
@@ -1381,7 +1393,7 @@ pub struct GetObjectAclOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectAclRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1395,13 +1407,13 @@ pub struct GetObjectAclRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectLegalHoldOutput {
     #[serde(rename = "LegalHold")]
     pub legal_hold: Option<ObjectLockLegalHold>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectLegalHoldRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1415,13 +1427,13 @@ pub struct GetObjectLegalHoldRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectLockConfigurationOutput {
     #[serde(rename = "ObjectLockConfiguration")]
     pub object_lock_configuration: Option<ObjectLockConfiguration>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectLockConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1429,7 +1441,7 @@ pub struct GetObjectLockConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectOutput {
     #[serde(rename = "Body")]
     pub body: Option<Body>,
@@ -1477,6 +1489,8 @@ pub struct GetObjectOutput {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     #[serde(rename = "SSEKMSKeyId")]
     pub ssekms_key_id: Option<SSEKMSKeyId>,
+    #[serde(rename = "BucketKeyEnabled")]
+    pub bucket_key_enabled: Option<BucketKeyEnabled>,
     #[serde(rename = "StorageClass")]
     pub storage_class: Option<StorageClass>,
     #[serde(rename = "RequestCharged")]
@@ -1495,7 +1509,7 @@ pub struct GetObjectOutput {
     pub object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1539,13 +1553,13 @@ pub struct GetObjectRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectRetentionOutput {
     #[serde(rename = "Retention")]
     pub retention: Option<ObjectLockRetention>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectRetentionRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1559,7 +1573,7 @@ pub struct GetObjectRetentionRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectTaggingOutput {
     #[serde(rename = "VersionId")]
     pub version_id: ObjectVersionId,
@@ -1567,7 +1581,7 @@ pub struct GetObjectTaggingOutput {
     pub tag_set: TagSet,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectTaggingRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1579,7 +1593,7 @@ pub struct GetObjectTaggingRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectTorrentOutput {
     #[serde(rename = "Body")]
     pub body: Option<Body>,
@@ -1587,7 +1601,7 @@ pub struct GetObjectTorrentOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetObjectTorrentRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1599,13 +1613,13 @@ pub struct GetObjectTorrentRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetPublicAccessBlockOutput {
     #[serde(rename = "PublicAccessBlockConfiguration")]
     pub public_access_block_configuration: Option<PublicAccessBlockConfiguration>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GetPublicAccessBlockRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1613,13 +1627,13 @@ pub struct GetPublicAccessBlockRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GlacierJobParameters {
     #[serde(rename = "Tier")]
     pub tier: Tier,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Grant {
     #[serde(rename = "Grantee")]
     pub grantee: Option<Grantee>,
@@ -1627,7 +1641,7 @@ pub struct Grant {
     pub permission: Option<Permission>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Grantee {
     #[serde(rename = "DisplayName")]
     pub display_name: DisplayName,
@@ -1635,13 +1649,13 @@ pub struct Grantee {
     pub email_address: EmailAddress,
     #[serde(rename = "ID")]
     pub id: ID,
-    #[serde(rename = "Type")]
-    pub grantee_type: GranteeType,
+    #[serde(rename = "type")]
+    pub r#type: Type,
     #[serde(rename = "URI")]
     pub uri: URI,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct HeadBucketRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1649,7 +1663,7 @@ pub struct HeadBucketRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct HeadObjectOutput {
     #[serde(rename = "DeleteMarker")]
     pub delete_marker: Option<DeleteMarker>,
@@ -1695,6 +1709,8 @@ pub struct HeadObjectOutput {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     #[serde(rename = "SSEKMSKeyId")]
     pub ssekms_key_id: Option<SSEKMSKeyId>,
+    #[serde(rename = "BucketKeyEnabled")]
+    pub bucket_key_enabled: Option<BucketKeyEnabled>,
     #[serde(rename = "StorageClass")]
     pub storage_class: Option<StorageClass>,
     #[serde(rename = "RequestCharged")]
@@ -1711,7 +1727,7 @@ pub struct HeadObjectOutput {
     pub object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct HeadObjectRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1743,13 +1759,13 @@ pub struct HeadObjectRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct IndexDocument {
     #[serde(rename = "Suffix")]
     pub suffix: Suffix,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Initiator {
     #[serde(rename = "ID")]
     pub id: Option<ID>,
@@ -1757,7 +1773,7 @@ pub struct Initiator {
     pub display_name: Option<DisplayName>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InputSerialization {
     #[serde(rename = "CSV")]
     pub csv: Option<CSVInput>,
@@ -1769,7 +1785,7 @@ pub struct InputSerialization {
     pub parquet: Option<ParquetInput>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct IntelligentTieringAndOperator {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
@@ -1777,7 +1793,7 @@ pub struct IntelligentTieringAndOperator {
     pub tags: Option<TagSet>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct IntelligentTieringConfiguration {
     #[serde(rename = "Id")]
     pub id: IntelligentTieringId,
@@ -1789,7 +1805,7 @@ pub struct IntelligentTieringConfiguration {
     pub tierings: TieringList,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct IntelligentTieringFilter {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
@@ -1799,7 +1815,7 @@ pub struct IntelligentTieringFilter {
     pub and: Option<IntelligentTieringAndOperator>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InvalidObjectState {
     #[serde(rename = "StorageClass")]
     pub storage_class: Option<StorageClass>,
@@ -1807,7 +1823,7 @@ pub struct InvalidObjectState {
     pub access_tier: Option<IntelligentTieringAccessTier>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InventoryConfiguration {
     #[serde(rename = "Destination")]
     pub destination: InventoryDestination,
@@ -1825,13 +1841,13 @@ pub struct InventoryConfiguration {
     pub schedule: InventorySchedule,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InventoryDestination {
     #[serde(rename = "S3BucketDestination")]
     pub s3_bucket_destination: InventoryS3BucketDestination,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InventoryEncryption {
     #[serde(rename = "SSES3")]
     pub sses3: Option<SSES3>,
@@ -1839,13 +1855,13 @@ pub struct InventoryEncryption {
     pub ssekms: Option<SSEKMS>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InventoryFilter {
     #[serde(rename = "Prefix")]
     pub prefix: Prefix,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InventoryS3BucketDestination {
     #[serde(rename = "AccountId")]
     pub account_id: AccountId,
@@ -1859,25 +1875,25 @@ pub struct InventoryS3BucketDestination {
     pub encryption: InventoryEncryption,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InventorySchedule {
     #[serde(rename = "Frequency")]
     pub frequency: InventoryFrequency,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct JSONInput {
     #[serde(rename = "json_type")]
     pub json_type: Option<JSONType>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct JSONOutput {
     #[serde(rename = "RecordDelimiter")]
     pub record_delimiter: Option<RecordDelimiter>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LambdaFunctionConfiguration {
     #[serde(rename = "Id")]
     pub id: NotificationId,
@@ -1889,13 +1905,13 @@ pub struct LambdaFunctionConfiguration {
     pub filter: NotificationConfigurationFilter,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LifecycleConfiguration {
     #[serde(rename = "Rules")]
     pub rules: Rules,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LifecycleExpiration {
     #[serde(rename = "Date")]
     pub date: Option<Date>,
@@ -1905,7 +1921,7 @@ pub struct LifecycleExpiration {
     pub expired_object_delete_marker: Option<ExpiredObjectDeleteMarker>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LifecycleRule {
     #[serde(rename = "Expiration")]
     pub expiration: LifecycleExpiration,
@@ -1927,7 +1943,7 @@ pub struct LifecycleRule {
     pub abort_incomplete_multipart_upload: AbortIncompleteMultipartUpload,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LifecycleRuleAndOperator {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
@@ -1935,7 +1951,7 @@ pub struct LifecycleRuleAndOperator {
     pub tags: Option<TagSet>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LifecycleRuleFilter {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
@@ -1945,7 +1961,7 @@ pub struct LifecycleRuleFilter {
     pub and: Option<LifecycleRuleAndOperator>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListBucketAnalyticsConfigurationsOutput {
     #[serde(rename = "IsTruncated")]
     pub is_truncated: Option<IsTruncated>,
@@ -1957,7 +1973,7 @@ pub struct ListBucketAnalyticsConfigurationsOutput {
     pub analytics_configuration_list: Option<AnalyticsConfigurationList>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListBucketAnalyticsConfigurationsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1967,7 +1983,7 @@ pub struct ListBucketAnalyticsConfigurationsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListBucketIntelligentTieringConfigurationsOutput {
     #[serde(rename = "IsTruncated")]
     pub is_truncated: Option<IsTruncated>,
@@ -1979,7 +1995,7 @@ pub struct ListBucketIntelligentTieringConfigurationsOutput {
     pub intelligent_tiering_configuration_list: Option<IntelligentTieringConfigurationList>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListBucketIntelligentTieringConfigurationsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -1987,7 +2003,7 @@ pub struct ListBucketIntelligentTieringConfigurationsRequest {
     pub continuation_token: Token,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListBucketInventoryConfigurationsOutput {
     #[serde(rename = "ContinuationToken")]
     pub continuation_token: Option<Token>,
@@ -1999,7 +2015,7 @@ pub struct ListBucketInventoryConfigurationsOutput {
     pub next_continuation_token: Option<NextToken>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListBucketInventoryConfigurationsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2009,7 +2025,7 @@ pub struct ListBucketInventoryConfigurationsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListBucketMetricsConfigurationsOutput {
     #[serde(rename = "IsTruncated")]
     pub is_truncated: Option<IsTruncated>,
@@ -2021,7 +2037,7 @@ pub struct ListBucketMetricsConfigurationsOutput {
     pub metrics_configuration_list: Option<MetricsConfigurationList>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListBucketMetricsConfigurationsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2039,7 +2055,7 @@ pub struct ListBucketsOutput {
     pub owner: Option<Owner>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListMultipartUploadsOutput {
     #[serde(rename = "Bucket")]
     pub bucket: Option<BucketName>,
@@ -2067,7 +2083,7 @@ pub struct ListMultipartUploadsOutput {
     pub encoding_type: Option<EncodingType>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListMultipartUploadsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2087,7 +2103,7 @@ pub struct ListMultipartUploadsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListObjectVersionsOutput {
     #[serde(rename = "IsTruncated")]
     pub is_truncated: Option<IsTruncated>,
@@ -2117,7 +2133,7 @@ pub struct ListObjectVersionsOutput {
     pub encoding_type: Option<EncodingType>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListObjectVersionsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2137,7 +2153,7 @@ pub struct ListObjectVersionsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListObjectsOutput {
     #[serde(rename = "IsTruncated")]
     pub is_truncated: Option<IsTruncated>,
@@ -2161,7 +2177,7 @@ pub struct ListObjectsOutput {
     pub encoding_type: Option<EncodingType>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListObjectsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2181,7 +2197,7 @@ pub struct ListObjectsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListObjectsV2Output {
     #[serde(rename = "IsTruncated")]
     pub is_truncated: Option<IsTruncated>,
@@ -2209,7 +2225,7 @@ pub struct ListObjectsV2Output {
     pub start_after: Option<StartAfter>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListObjectsV2Request {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2233,7 +2249,7 @@ pub struct ListObjectsV2Request {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListPartsOutput {
     #[serde(rename = "AbortDate")]
     pub abort_date: Option<AbortDate>,
@@ -2265,7 +2281,7 @@ pub struct ListPartsOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListPartsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2283,7 +2299,7 @@ pub struct ListPartsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LoggingEnabled {
     #[serde(rename = "TargetBucket")]
     pub target_bucket: TargetBucket,
@@ -2293,7 +2309,7 @@ pub struct LoggingEnabled {
     pub target_prefix: TargetPrefix,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct MetadataEntry {
     #[serde(rename = "Name")]
     pub name: Option<MetadataKey>,
@@ -2301,7 +2317,7 @@ pub struct MetadataEntry {
     pub value: Option<MetadataValue>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Metrics {
     #[serde(rename = "Status")]
     pub status: MetricsStatus,
@@ -2309,7 +2325,7 @@ pub struct Metrics {
     pub event_threshold: ReplicationTimeValue,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct MetricsAndOperator {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
@@ -2317,7 +2333,7 @@ pub struct MetricsAndOperator {
     pub tags: Option<TagSet>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct MetricsConfiguration {
     #[serde(rename = "Id")]
     pub id: MetricsId,
@@ -2325,7 +2341,7 @@ pub struct MetricsConfiguration {
     pub filter: MetricsFilter,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct MetricsFilter {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
@@ -2335,7 +2351,7 @@ pub struct MetricsFilter {
     pub and: Option<MetricsAndOperator>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct MultipartUpload {
     #[serde(rename = "UploadId")]
     pub upload_id: Option<MultipartUploadId>,
@@ -2351,25 +2367,25 @@ pub struct MultipartUpload {
     pub initiator: Option<Initiator>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NoSuchBucket {
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NoSuchKey {
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NoSuchUpload {
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NoncurrentVersionExpiration {
     #[serde(rename = "NoncurrentDays")]
     pub noncurrent_days: Option<Days>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NoncurrentVersionTransition {
     #[serde(rename = "NoncurrentDays")]
     pub noncurrent_days: Option<Days>,
@@ -2377,7 +2393,7 @@ pub struct NoncurrentVersionTransition {
     pub storage_class: Option<TransitionStorageClass>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NotificationConfiguration {
     #[serde(rename = "TopicConfigurations")]
     pub topic_configurations: Option<TopicConfigurationList>,
@@ -2387,7 +2403,7 @@ pub struct NotificationConfiguration {
     pub lambda_function_configurations: Option<LambdaFunctionConfigurationList>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NotificationConfigurationDeprecated {
     #[serde(rename = "TopicConfiguration")]
     pub topic_configuration: Option<TopicConfigurationDeprecated>,
@@ -2397,13 +2413,13 @@ pub struct NotificationConfigurationDeprecated {
     pub cloud_function_configuration: Option<CloudFunctionConfiguration>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NotificationConfigurationFilter {
     #[serde(rename = "Key")]
     pub key: Option<S3KeyFilter>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Object {
     #[serde(rename = "Key")]
     pub key: Option<ObjectKey>,
@@ -2419,11 +2435,11 @@ pub struct Object {
     pub owner: Option<Owner>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ObjectAlreadyInActiveTierError {
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ObjectIdentifier {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
@@ -2431,7 +2447,7 @@ pub struct ObjectIdentifier {
     pub version_id: ObjectVersionId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ObjectLockConfiguration {
     #[serde(rename = "ObjectLockEnabled")]
     pub object_lock_enabled: Option<ObjectLockEnabled>,
@@ -2439,13 +2455,13 @@ pub struct ObjectLockConfiguration {
     pub rule: Option<ObjectLockRule>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ObjectLockLegalHold {
     #[serde(rename = "Status")]
     pub status: Option<ObjectLockLegalHoldStatus>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ObjectLockRetention {
     #[serde(rename = "Mode")]
     pub mode: Option<ObjectLockRetentionMode>,
@@ -2453,17 +2469,17 @@ pub struct ObjectLockRetention {
     pub retain_until_date: Option<Date>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ObjectLockRule {
     #[serde(rename = "DefaultRetention")]
     pub default_retention: Option<DefaultRetention>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ObjectNotInActiveTierError {
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ObjectVersion {
     #[serde(rename = "ETag")]
     pub e_tag: Option<ETag>,
@@ -2483,13 +2499,13 @@ pub struct ObjectVersion {
     pub owner: Option<Owner>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct OutputLocation {
     #[serde(rename = "S3")]
     pub s3: Option<S3Location>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct OutputSerialization {
     #[serde(rename = "CSV")]
     pub csv: Option<CSVOutput>,
@@ -2505,23 +2521,23 @@ pub struct Owner {
     pub id: Option<ID>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct OwnershipControls {
     #[serde(rename = "Rules")]
     pub rules: OwnershipControlsRules,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct OwnershipControlsRule {
     #[serde(rename = "ObjectOwnership")]
     pub object_ownership: ObjectOwnership,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ParquetInput {
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Part {
     #[serde(rename = "PartNumber")]
     pub part_number: Option<PartNumber>,
@@ -2533,13 +2549,13 @@ pub struct Part {
     pub size: Option<Size>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PolicyStatus {
     #[serde(rename = "IsPublic")]
     pub is_public: Option<IsPublic>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Progress {
     #[serde(rename = "BytesScanned")]
     pub bytes_scanned: Option<BytesScanned>,
@@ -2549,13 +2565,13 @@ pub struct Progress {
     pub bytes_returned: Option<BytesReturned>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ProgressEvent {
     #[serde(rename = "Details")]
     pub details: Option<Progress>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PublicAccessBlockConfiguration {
     #[serde(rename = "BlockPublicAcls")]
     pub block_public_acls: Option<Setting>,
@@ -2567,7 +2583,7 @@ pub struct PublicAccessBlockConfiguration {
     pub restrict_public_buckets: Option<Setting>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketAccelerateConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2577,7 +2593,7 @@ pub struct PutBucketAccelerateConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketAclRequest {
     #[serde(rename = "ACL")]
     pub acl: BucketCannedACL,
@@ -2601,7 +2617,7 @@ pub struct PutBucketAclRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketAnalyticsConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2613,7 +2629,7 @@ pub struct PutBucketAnalyticsConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketCorsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2625,7 +2641,7 @@ pub struct PutBucketCorsRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketEncryptionRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2637,7 +2653,7 @@ pub struct PutBucketEncryptionRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketIntelligentTieringConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2647,7 +2663,7 @@ pub struct PutBucketIntelligentTieringConfigurationRequest {
     pub intelligent_tiering_configuration: IntelligentTieringConfiguration,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketInventoryConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2659,7 +2675,7 @@ pub struct PutBucketInventoryConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketLifecycleConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2669,7 +2685,7 @@ pub struct PutBucketLifecycleConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketLifecycleRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2681,7 +2697,7 @@ pub struct PutBucketLifecycleRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketLoggingRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2693,7 +2709,7 @@ pub struct PutBucketLoggingRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketMetricsConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2705,7 +2721,7 @@ pub struct PutBucketMetricsConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketNotificationConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2715,7 +2731,7 @@ pub struct PutBucketNotificationConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketNotificationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2727,7 +2743,7 @@ pub struct PutBucketNotificationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketOwnershipControlsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2739,7 +2755,7 @@ pub struct PutBucketOwnershipControlsRequest {
     pub ownership_controls: OwnershipControls,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketPolicyRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2753,7 +2769,7 @@ pub struct PutBucketPolicyRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketReplicationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2767,7 +2783,7 @@ pub struct PutBucketReplicationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketRequestPaymentRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2779,7 +2795,7 @@ pub struct PutBucketRequestPaymentRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketTaggingRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2791,7 +2807,7 @@ pub struct PutBucketTaggingRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketVersioningRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2805,7 +2821,7 @@ pub struct PutBucketVersioningRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutBucketWebsiteRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2817,13 +2833,13 @@ pub struct PutBucketWebsiteRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutObjectAclOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutObjectAclRequest {
     #[serde(rename = "ACL")]
     pub acl: ObjectCannedACL,
@@ -2853,13 +2869,13 @@ pub struct PutObjectAclRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutObjectLegalHoldOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutObjectLegalHoldRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2877,13 +2893,13 @@ pub struct PutObjectLegalHoldRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutObjectLockConfigurationOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutObjectLockConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -2899,7 +2915,7 @@ pub struct PutObjectLockConfigurationRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutObjectOutput {
     #[serde(rename = "Expiration")]
     pub expiration: Option<Expiration>,
@@ -2917,11 +2933,13 @@ pub struct PutObjectOutput {
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     #[serde(rename = "SSEKMSEncryptionContext")]
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
+    #[serde(rename = "BucketKeyEnabled")]
+    pub bucket_key_enabled: Option<BucketKeyEnabled>,
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutObjectRequest {
     #[serde(rename = "ACL")]
     pub acl: ObjectCannedACL,
@@ -2973,6 +2991,8 @@ pub struct PutObjectRequest {
     pub ssekms_key_id: SSEKMSKeyId,
     #[serde(rename = "SSEKMSEncryptionContext")]
     pub ssekms_encryption_context: SSEKMSEncryptionContext,
+    #[serde(rename = "BucketKeyEnabled")]
+    pub bucket_key_enabled: BucketKeyEnabled,
     #[serde(rename = "RequestPayer")]
     pub request_payer: RequestPayer,
     #[serde(rename = "Tagging")]
@@ -2987,13 +3007,13 @@ pub struct PutObjectRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutObjectRetentionOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutObjectRetentionRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -3013,13 +3033,13 @@ pub struct PutObjectRetentionRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutObjectTaggingOutput {
     #[serde(rename = "VersionId")]
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutObjectTaggingRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -3035,7 +3055,7 @@ pub struct PutObjectTaggingRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PutPublicAccessBlockRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -3047,7 +3067,7 @@ pub struct PutPublicAccessBlockRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct QueueConfiguration {
     #[serde(rename = "Id")]
     pub id: NotificationId,
@@ -3059,7 +3079,7 @@ pub struct QueueConfiguration {
     pub filter: NotificationConfigurationFilter,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct QueueConfigurationDeprecated {
     #[serde(rename = "Id")]
     pub id: Option<NotificationId>,
@@ -3071,13 +3091,13 @@ pub struct QueueConfigurationDeprecated {
     pub queue: Option<QueueArn>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RecordsEvent {
     #[serde(rename = "Payload")]
     pub payload: Option<Body>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Redirect {
     #[serde(rename = "HostName")]
     pub host_name: Option<HostName>,
@@ -3091,7 +3111,7 @@ pub struct Redirect {
     pub replace_key_with: Option<ReplaceKeyWith>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RedirectAllRequestsTo {
     #[serde(rename = "HostName")]
     pub host_name: HostName,
@@ -3099,7 +3119,13 @@ pub struct RedirectAllRequestsTo {
     pub protocol: Protocol,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ReplicaModifications {
+    #[serde(rename = "Status")]
+    pub status: ReplicaModificationsStatus,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ReplicationConfiguration {
     #[serde(rename = "Role")]
     pub role: Role,
@@ -3107,7 +3133,7 @@ pub struct ReplicationConfiguration {
     pub rules: ReplicationRules,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ReplicationRule {
     #[serde(rename = "ID")]
     pub id: ID,
@@ -3129,7 +3155,7 @@ pub struct ReplicationRule {
     pub delete_marker_replication: DeleteMarkerReplication,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ReplicationRuleAndOperator {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
@@ -3137,7 +3163,7 @@ pub struct ReplicationRuleAndOperator {
     pub tags: Option<TagSet>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ReplicationRuleFilter {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
@@ -3147,7 +3173,7 @@ pub struct ReplicationRuleFilter {
     pub and: Option<ReplicationRuleAndOperator>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ReplicationTime {
     #[serde(rename = "Status")]
     pub status: ReplicationTimeStatus,
@@ -3155,25 +3181,25 @@ pub struct ReplicationTime {
     pub time: ReplicationTimeValue,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ReplicationTimeValue {
     #[serde(rename = "Minutes")]
     pub minutes: Option<Minutes>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RequestPaymentConfiguration {
     #[serde(rename = "Payer")]
     pub payer: Payer,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RequestProgress {
     #[serde(rename = "Enabled")]
     pub enabled: Option<EnableRequestProgress>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RestoreObjectOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
@@ -3181,7 +3207,7 @@ pub struct RestoreObjectOutput {
     pub restore_output_path: Option<RestoreOutputPath>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RestoreObjectRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -3197,7 +3223,7 @@ pub struct RestoreObjectRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RestoreRequest {
     #[serde(rename = "Days")]
     pub days: Option<Days>,
@@ -3215,7 +3241,7 @@ pub struct RestoreRequest {
     pub output_location: Option<OutputLocation>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RoutingRule {
     #[serde(rename = "Condition")]
     pub condition: Condition,
@@ -3223,7 +3249,7 @@ pub struct RoutingRule {
     pub redirect: Redirect,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Rule {
     #[serde(rename = "Expiration")]
     pub expiration: LifecycleExpiration,
@@ -3243,13 +3269,13 @@ pub struct Rule {
     pub abort_incomplete_multipart_upload: AbortIncompleteMultipartUpload,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct S3KeyFilter {
     #[serde(rename = "FilterRules")]
     pub filter_rules: Option<FilterRuleList>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct S3Location {
     #[serde(rename = "BucketName")]
     pub bucket_name: BucketName,
@@ -3269,17 +3295,17 @@ pub struct S3Location {
     pub storage_class: StorageClass,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SSEKMS {
     #[serde(rename = "KeyId")]
     pub key_id: SSEKMSKeyId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SSES3 {
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ScanRange {
     #[serde(rename = "Start")]
     pub start: Option<Start>,
@@ -3287,7 +3313,7 @@ pub struct ScanRange {
     pub end: Option<End>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SelectObjectContentEventStream {
     #[serde(rename = "Records")]
     pub records: Option<RecordsEvent>,
@@ -3301,13 +3327,13 @@ pub struct SelectObjectContentEventStream {
     pub end: Option<EndEvent>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SelectObjectContentOutput {
     #[serde(rename = "Payload")]
     pub payload: Option<SelectObjectContentEventStream>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SelectObjectContentRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -3335,7 +3361,7 @@ pub struct SelectObjectContentRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SelectParameters {
     #[serde(rename = "InputSerialization")]
     pub input_serialization: InputSerialization,
@@ -3347,7 +3373,7 @@ pub struct SelectParameters {
     pub output_serialization: OutputSerialization,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ServerSideEncryptionByDefault {
     #[serde(rename = "SSEAlgorithm")]
     pub sse_algorithm: ServerSideEncryption,
@@ -3355,31 +3381,35 @@ pub struct ServerSideEncryptionByDefault {
     pub kms_master_key_id: SSEKMSKeyId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ServerSideEncryptionConfiguration {
     #[serde(rename = "Rules")]
     pub rules: ServerSideEncryptionRules,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ServerSideEncryptionRule {
     #[serde(rename = "ApplyServerSideEncryptionByDefault")]
     pub apply_server_side_encryption_by_default: Option<ServerSideEncryptionByDefault>,
+    #[serde(rename = "BucketKeyEnabled")]
+    pub bucket_key_enabled: Option<BucketKeyEnabled>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SourceSelectionCriteria {
     #[serde(rename = "SseKmsEncryptedObjects")]
     pub sse_kms_encrypted_objects: Option<SseKmsEncryptedObjects>,
+    #[serde(rename = "ReplicaModifications")]
+    pub replica_modifications: Option<ReplicaModifications>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SseKmsEncryptedObjects {
     #[serde(rename = "Status")]
     pub status: SseKmsEncryptedObjectsStatus,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Stats {
     #[serde(rename = "BytesScanned")]
     pub bytes_scanned: Option<BytesScanned>,
@@ -3389,19 +3419,19 @@ pub struct Stats {
     pub bytes_returned: Option<BytesReturned>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct StatsEvent {
     #[serde(rename = "Details")]
     pub details: Option<Stats>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct StorageClassAnalysis {
     #[serde(rename = "DataExport")]
     pub data_export: Option<StorageClassAnalysisDataExport>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct StorageClassAnalysisDataExport {
     #[serde(rename = "OutputSchemaVersion")]
     pub output_schema_version: StorageClassAnalysisSchemaVersion,
@@ -3409,7 +3439,7 @@ pub struct StorageClassAnalysisDataExport {
     pub destination: AnalyticsExportDestination,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Tag {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
@@ -3417,13 +3447,13 @@ pub struct Tag {
     pub value: Value,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Tagging {
     #[serde(rename = "TagSet")]
     pub tag_set: TagSet,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct TargetGrant {
     #[serde(rename = "Grantee")]
     pub grantee: Option<Grantee>,
@@ -3431,7 +3461,7 @@ pub struct TargetGrant {
     pub permission: Option<BucketLogsPermission>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Tiering {
     #[serde(rename = "Days")]
     pub days: IntelligentTieringDays,
@@ -3439,7 +3469,7 @@ pub struct Tiering {
     pub access_tier: IntelligentTieringAccessTier,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct TopicConfiguration {
     #[serde(rename = "Id")]
     pub id: NotificationId,
@@ -3451,7 +3481,7 @@ pub struct TopicConfiguration {
     pub filter: NotificationConfigurationFilter,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct TopicConfigurationDeprecated {
     #[serde(rename = "Id")]
     pub id: Option<NotificationId>,
@@ -3463,7 +3493,7 @@ pub struct TopicConfigurationDeprecated {
     pub topic: Option<TopicArn>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Transition {
     #[serde(rename = "Date")]
     pub date: Option<Date>,
@@ -3473,7 +3503,7 @@ pub struct Transition {
     pub storage_class: Option<TransitionStorageClass>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct UploadPartCopyOutput {
     #[serde(rename = "CopySourceVersionId")]
     pub copy_source_version_id: Option<CopySourceVersionId>,
@@ -3487,11 +3517,13 @@ pub struct UploadPartCopyOutput {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     #[serde(rename = "SSEKMSKeyId")]
     pub ssekms_key_id: Option<SSEKMSKeyId>,
+    #[serde(rename = "BucketKeyEnabled")]
+    pub bucket_key_enabled: Option<BucketKeyEnabled>,
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct UploadPartCopyRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
@@ -3533,7 +3565,7 @@ pub struct UploadPartCopyRequest {
     pub expected_source_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct UploadPartOutput {
     #[serde(rename = "ServerSideEncryption")]
     pub server_side_encryption: Option<ServerSideEncryption>,
@@ -3545,11 +3577,13 @@ pub struct UploadPartOutput {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     #[serde(rename = "SSEKMSKeyId")]
     pub ssekms_key_id: Option<SSEKMSKeyId>,
+    #[serde(rename = "BucketKeyEnabled")]
+    pub bucket_key_enabled: Option<BucketKeyEnabled>,
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct UploadPartRequest {
     #[serde(rename = "Body")]
     pub body: Body,
@@ -3577,7 +3611,7 @@ pub struct UploadPartRequest {
     pub expected_bucket_owner: AccountId,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct VersioningConfiguration {
     #[serde(rename = "MFADelete")]
     pub mfa_delete: Option<MFADelete>,
@@ -3585,7 +3619,7 @@ pub struct VersioningConfiguration {
     pub status: Option<BucketVersioningStatus>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct WebsiteConfiguration {
     #[serde(rename = "ErrorDocument")]
     pub error_document: Option<ErrorDocument>,
@@ -3596,3 +3630,4 @@ pub struct WebsiteConfiguration {
     #[serde(rename = "RoutingRules")]
     pub routing_rules: Option<RoutingRules>,
 }
+
