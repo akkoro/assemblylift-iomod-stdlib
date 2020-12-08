@@ -105,7 +105,7 @@ impl Client {
             _ => panic!("unknown client protocol"),
         };
 
-        match self.__call(http_req.body(hyper::Body::from(body)).unwrap()).await {
+        match self.__call(http_req.body(hyper::Body::from(body)).unwrap(), protocol).await {
             Ok(resp) => {
                 println!("DEBUG: string {}", std::str::from_utf8(resp.as_slice()).unwrap());
                 let response = match protocol {
