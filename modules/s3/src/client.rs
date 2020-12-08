@@ -15,6 +15,7 @@ use rusoto_signature::credential::AwsCredentials;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClientError {
     pub why: String,
+    pub data: HashMap<String, String>,
 }
 impl fmt::Display for ClientError {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
@@ -125,10 +126,13 @@ impl Client {
             Ok(resp) => {
                 match resp.status() {
                     StatusCode::OK => Ok(Vec::from(&*hyper::body::to_bytes(resp.into_body()).await.unwrap())),
-                    status => Err(ClientError { why: String::from(status.canonical_reason().unwrap()) }),
+                    status => {
+                        let body = &*hyper::body::to_bytes(resp.into_body()).await.unwrap();
+                        Err(ClientError { why: String::from(status.canonical_reason().unwrap()), data: serde_json::from_slice(body).unwrap() })
+                    },
                 }
             },
-            Err(err) => Err(ClientError { why: err.to_string() })
+            Err(err) => Err(ClientError { why: err.to_string(), data: Default::default() })
         }
     }
 }
