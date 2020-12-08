@@ -2905,9 +2905,10 @@ fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
                 println!("DEBUG: struct {:?}", response);
                 serde_json::to_vec(&Result::<ListBucketsOutput, guest::Error>::Ok(response)).unwrap()
             },
-            Err(why) => {
+            Err(err) => {
+                println!("DEBUG: {:?}", err.data);
                 serde_json::to_vec(&Result::<ListBucketsOutput, guest::Error>::Err(guest::Error {
-                    why: why.to_string(),
+                    why: err.to_string(),
                 }))
                 .unwrap()
             },
