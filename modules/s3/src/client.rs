@@ -15,7 +15,7 @@ use rusoto_signature::credential::AwsCredentials;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClientError {
     pub why: String,
-    pub data: HashMap<String, String>,
+    pub data: String,
 }
 impl fmt::Display for ClientError {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
@@ -121,14 +121,23 @@ impl Client {
         
     }
 
-    async fn __call(&self, request: hyper::Request<hyper::Body>) -> Result<Vec<u8>, ClientError> {
+    async fn __call(&self, request: hyper::Request<hyper::Body>, protocol: &str) -> Result<Vec<u8>, ClientError> {
         match self.client.request(request).await {
             Ok(resp) => {
                 match resp.status() {
                     StatusCode::OK => Ok(Vec::from(&*hyper::body::to_bytes(resp.into_body()).await.unwrap())),
                     status => {
                         let body = &*hyper::body::to_bytes(resp.into_body()).await.unwrap();
-                        Err(ClientError { why: String::from(status.canonical_reason().unwrap()), data: serde_json::from_slice(body).unwrap() })
+                        let data = match protocol {
+                            "json" => {
+                                serde_json::to_string(body).unwrap()
+                            },
+                            "rest-xml" => {
+                                serde_xml_rs::to_string(&body).unwrap()
+                            },
+                            _ => panic!("unknown client protocol"),
+                        };
+                        Err(ClientError { why: String::from(status.canonical_reason().unwrap()), data })
                     },
                 }
             },
