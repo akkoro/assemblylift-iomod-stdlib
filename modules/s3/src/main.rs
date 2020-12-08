@@ -14,7 +14,11 @@ static CLIENT: Lazy<client::Client> = Lazy::new(|| {
     );
     c.set_credentials(
         env::var("AWS_ACCESS_KEY_ID").unwrap(), 
-        env::var("AWS_SECRET_ACCESS_KEY").unwrap()
+        env::var("AWS_SECRET_ACCESS_KEY").unwrap(),
+        match env::var("AWS_SESSION_TOKEN") {
+            Ok(token) => Some(token),
+            Err(_) => None,
+        },
     );
     c
 });

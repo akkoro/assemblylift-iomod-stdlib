@@ -30,7 +30,7 @@ pub struct Client {
     service: String,
     region: String,
     client: HyperClient,
-    aws_key: Option<(String, String)>,
+    aws_key: Option<(String, String, Option<String>)>,
 }
 
 pub struct ClientInput {
@@ -52,8 +52,8 @@ impl Client {
         }
     }
 
-    pub fn set_credentials(&mut self, id: String, key: String) {
-        self.aws_key = Some((id, key));
+    pub fn set_credentials(&mut self, id: String, key: String, token: Option<String>) {
+        self.aws_key = Some((id, key, token));
     }
 
     pub async fn call<'a, T: DeserializeOwned>(&self, method: &str, path: &str, protocol: &str, input: ClientInput) -> Result<T, ClientError> {
@@ -64,10 +64,11 @@ impl Client {
             path,
         );
         if let Some(key) = &self.aws_key {
+            let token = key.2.clone();
             aws_req.sign(&AwsCredentials::new(
                 &key.0, 
                 &key.1, 
-                None, 
+                token, 
                 None,
             ));
         }
