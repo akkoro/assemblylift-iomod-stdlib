@@ -15,7 +15,7 @@ use rusoto_signature::credential::AwsCredentials;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClientError {
     pub why: String,
-    pub data: HashMap<String, String>,
+    pub data: String,
 }
 impl fmt::Display for ClientError {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
@@ -105,7 +105,7 @@ impl Client {
             _ => panic!("unknown client protocol"),
         };
 
-        match self.__call(http_req.body(hyper::Body::from(body)).unwrap(), protocol).await {
+        match self.__call(http_req.body(hyper::Body::from(body)).unwrap()).await {
             Ok(resp) => {
                 println!("DEBUG: string {}", std::str::from_utf8(resp.as_slice()).unwrap());
                 let response = match protocol {
@@ -121,22 +121,15 @@ impl Client {
         
     }
 
-    async fn __call(&self, request: hyper::Request<hyper::Body>, protocol: &str) -> Result<Vec<u8>, ClientError> {
+    async fn __call(&self, request: hyper::Request<hyper::Body>) -> Result<Vec<u8>, ClientError> {
         match self.client.request(request).await {
             Ok(resp) => {
-                match resp.status() {
-                    StatusCode::OK => Ok(Vec::from(&*hyper::body::to_bytes(resp.into_body()).await.unwrap())),
+                let status = resp.status();
+                let body = &*hyper::body::to_bytes(resp.into_body()).await.unwrap();
+                match status {
+                    StatusCode::OK => Ok(Vec::from(body)),
                     status => {
-                        let body = &*hyper::body::to_bytes(resp.into_body()).await.unwrap();
-                        let data = match protocol {
-                            "json" => {
-                                serde_json::from_slice(body).unwrap()
-                            },
-                            "rest-xml" => {
-                                serde_xml_rs::from_reader(body).unwrap()
-                            },
-                            _ => panic!("unknown client protocol"),
-                        };
+                        let data = String::from(std::str::from_utf8(body).unwrap());
                         Err(ClientError { why: String::from(status.canonical_reason().unwrap()), data })
                     },
                 }
