@@ -1,11 +1,12 @@
+pub mod structs;
+pub mod xml_util;
+
 use assemblylift_core_iomod_guest::{call, export_iomod_guest};
 use serde::export::Formatter;
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
 use crate::structs::*;
-
-pub mod structs;
 
 export_iomod_guest!(akkoro, aws, s3);
 

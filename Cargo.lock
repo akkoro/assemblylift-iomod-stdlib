@@ -196,6 +196,7 @@ dependencies = [
  "serde_json",
  "tokio",
  "tokio-util",
+ "xml-rs",
 ]
 
 [[package]]
@@ -206,6 +207,7 @@ dependencies = [
  "assemblylift-core-iomod-guest",
  "serde",
  "serde_json",
+ "xml-rs",
 ]
 
 [[package]]

@@ -15,6 +15,7 @@ path = "src/main.rs"
 [dependencies]
 guest = { package = "assemblylift-iomod-s3-guest", version = "0.1.0", path = "guest" }
 
+xml-rs = "0.8"
 http = "0.2.1"
 hyper = "0.13.9"
 hyper-tls = "0.4.3"
