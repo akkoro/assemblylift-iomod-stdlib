@@ -1,10 +1,12 @@
+use std::borrow::Cow;
 use std::collections::HashMap;
 use std::fmt;
 use std::str::FromStr;
+use std::sync::Arc;
 
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use hyper;
-use hyper::StatusCode;
+use hyper::{Request, Response, StatusCode};
 use hyper_tls::HttpsConnector;
 use rusoto_signature::credential::AwsCredentials;
 use rusoto_signature::{Region, SignedRequest};
@@ -61,14 +63,16 @@ impl Client {
         self.aws_key = Some((id, key, token));
     }
 
-    pub async fn call<'a, T: DeserializeOwned>(
+    // pub async fn call<'a, T: DeserializeOwned>(
+    pub async fn call(
         &self,
         method: &str,
         path: &str,
         protocol: &str,
         input: ClientInput,
-        deserialize: Option<XmlDeserializer<'a, T>>,
-    ) -> Result<T, ClientError> {
+        // deserialize: Option<XmlDeserializer<'a, T>>,
+    // ) -> Result<T, ClientError> {
+    ) -> Result<(StatusCode, String), ClientError> {
         let mut aws_req = SignedRequest::new(
             method,
             &self.service,
@@ -110,42 +114,32 @@ impl Client {
         };
 
         let request = http_req.body(hyper::Body::from(body)).unwrap();
-        match self.client.request(request).await {
+        match self.call_internal(request).await {
             Ok(resp) => {
-                let status = resp.status();
-                let body = &*hyper::body::to_bytes(resp.into_body()).await.unwrap();
+                Ok(resp)
+                // let status = resp.0;
+                // let body = resp.1;
 
-                match status {
-                    StatusCode::OK => {
-                        let body = Vec::from(body);
-                        match protocol {
-                            "json" => serde_json::from_slice(body.as_slice()).unwrap(),
-                            "rest-xml" => {
-                                // TODO fix lifetime of body
-                                let reader = EventReader::new_with_config(
-                                    body.as_slice(),
-                                    ParserConfig::new().trim_whitespace(false),
-                                );
-                                let mut stack =
-                                    xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                                let _start_document = stack.next();
-                                let actual_tag_name =
-                                    xml_util::util::peek_at_name(&mut stack).unwrap();
-                                match deserialize.unwrap()(&actual_tag_name, &mut stack) {
-                                    Ok(response) => Ok(response),
-                                    _ => panic!("unhandled branch"),
-                                }
-                            }
-                        }
-                    }
-                    status => {
-                        let data = String::from(std::str::from_utf8(body).unwrap());
-                        Err(ClientError {
-                            why: String::from(status.canonical_reason().unwrap()),
-                            data,
-                        })
-                    }
-                }
+                // FIXME probably don't do serde here -- just return the status,body tuple
+                // match status {
+                //     StatusCode::OK => match protocol {
+                //         "json" => serde_json::from_slice(body.as_ref()).unwrap(),
+                //         "rest-xml" => {
+                //             let mut stack = Client::make_stack(body);
+                //             let _start_document = stack.next();
+                //             let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
+                //             match deserialize.unwrap()(&actual_tag_name, &mut stack) {
+                //                 Ok(response) => Ok(response),
+                //                 _ => panic!("unhandled branch"),
+                //             }
+                //         }
+                //         _ => panic!("unknown client protocol"),
+                //     },
+                //     status => Err(ClientError {
+                //         why: String::from(status.canonical_reason().unwrap()),
+                //         data: body,
+                //     }),
+                // }
             }
             Err(err) => Err(ClientError {
                 why: err.to_string(),
@@ -153,4 +147,28 @@ impl Client {
             }),
         }
     }
+
+    async fn call_internal(
+        &self,
+        request: Request<hyper::Body>,
+    ) -> Result<(StatusCode, String), ClientError> {
+        match self.client.request(request).await {
+            Ok(resp) => {
+                let status = resp.status();
+                let body = &*hyper::body::to_bytes(resp.into_body()).await.unwrap();
+                let body = String::from(std::str::from_utf8(body).unwrap());
+                Ok((status, body))
+            }
+            Err(err) => Err(ClientError {
+                why: err.to_string(),
+                data: Default::default(),
+            }),
+        }
+    }
+
+    // fn make_stack<'a>(body: String) -> XmlResponse<'a> {
+    //     let reader =
+    //         EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
+    //     xml_util::util::XmlResponse::new(reader.into_iter().peekable())
+    // }
 }
