@@ -1,8 +1,6 @@
-use std::borrow::Cow;
 use std::collections::HashMap;
 use std::fmt;
 use std::str::FromStr;
-use std::sync::Arc;
 
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use hyper;
@@ -10,14 +8,8 @@ use hyper::{Request, Response, StatusCode};
 use hyper_tls::HttpsConnector;
 use rusoto_signature::credential::AwsCredentials;
 use rusoto_signature::{Region, SignedRequest};
-use serde::de::DeserializeOwned;
 use serde::export::Formatter;
 use serde::{Deserialize, Serialize};
-use xml;
-use xml::reader::{EventReader, ParserConfig};
-
-use guest::xml_util;
-use guest::xml_util::util::{Next, XmlParseError, XmlResponse};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClientError {
@@ -32,7 +24,6 @@ impl fmt::Display for ClientError {
 impl std::error::Error for ClientError {}
 
 pub type HyperClient = hyper::Client<HttpsConnector<hyper::client::HttpConnector>>;
-pub type XmlDeserializer<'a, T> = fn(&str, &mut XmlResponse<'a>) -> Result<T, XmlParseError>;
 
 pub struct Client {
     service: String,
@@ -63,16 +54,13 @@ impl Client {
         self.aws_key = Some((id, key, token));
     }
 
-    // pub async fn call<'a, T: DeserializeOwned>(
     pub async fn call(
         &self,
         method: &str,
         path: &str,
         protocol: &str,
         input: ClientInput,
-        // deserialize: Option<XmlDeserializer<'a, T>>,
-    // ) -> Result<T, ClientError> {
-    ) -> Result<(StatusCode, String), ClientError> {
+    ) -> Result<Response<String>, ClientError> {
         let mut aws_req = SignedRequest::new(
             method,
             &self.service,
@@ -115,32 +103,7 @@ impl Client {
 
         let request = http_req.body(hyper::Body::from(body)).unwrap();
         match self.call_internal(request).await {
-            Ok(resp) => {
-                Ok(resp)
-                // let status = resp.0;
-                // let body = resp.1;
-
-                // FIXME probably don't do serde here -- just return the status,body tuple
-                // match status {
-                //     StatusCode::OK => match protocol {
-                //         "json" => serde_json::from_slice(body.as_ref()).unwrap(),
-                //         "rest-xml" => {
-                //             let mut stack = Client::make_stack(body);
-                //             let _start_document = stack.next();
-                //             let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                //             match deserialize.unwrap()(&actual_tag_name, &mut stack) {
-                //                 Ok(response) => Ok(response),
-                //                 _ => panic!("unhandled branch"),
-                //             }
-                //         }
-                //         _ => panic!("unknown client protocol"),
-                //     },
-                //     status => Err(ClientError {
-                //         why: String::from(status.canonical_reason().unwrap()),
-                //         data: body,
-                //     }),
-                // }
-            }
+            Ok(resp) => Ok(resp),
             Err(err) => Err(ClientError {
                 why: err.to_string(),
                 data: Default::default(),
@@ -151,13 +114,24 @@ impl Client {
     async fn call_internal(
         &self,
         request: Request<hyper::Body>,
-    ) -> Result<(StatusCode, String), ClientError> {
+    ) -> Result<Response<String>, ClientError> {
         match self.client.request(request).await {
             Ok(resp) => {
                 let status = resp.status();
+                let mut headers = HeaderMap::new();
+                for h in resp.headers().iter() {
+                    let name = &*h.0;
+                    let value = &*h.1;
+                    headers.append(name, HeaderValue::from(value));
+                }
                 let body = &*hyper::body::to_bytes(resp.into_body()).await.unwrap();
                 let body = String::from(std::str::from_utf8(body).unwrap());
-                Ok((status, body))
+                let mut response = Response::builder()
+                    .status(status)
+                    .body(body)
+                    .unwrap();
+                *response.headers_mut() = headers;
+                Ok(response)
             }
             Err(err) => Err(ClientError {
                 why: err.to_string(),
@@ -165,10 +139,4 @@ impl Client {
             }),
         }
     }
-
-    // fn make_stack<'a>(body: String) -> XmlResponse<'a> {
-    //     let reader =
-    //         EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-    //     xml_util::util::XmlResponse::new(reader.into_iter().peekable())
-    // }
 }
