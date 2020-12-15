@@ -178,14 +178,6 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
                 match status {
                     StatusCode::OK => {
                         let mut output: AbortMultipartUploadOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match AbortMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
                         serde_json::to_vec(&Result::<AbortMultipartUploadOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -520,14 +512,6 @@ fn __create_bucket(input: CreateBucketRequest) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     StatusCode::OK => {
                         let mut output: CreateBucketOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match CreateBucketOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.location = Some(String::from_str(response.headers()["Location"].to_str().unwrap()).unwrap());
                         serde_json::to_vec(&Result::<CreateBucketOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -1437,14 +1421,6 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     StatusCode::OK => {
                         let mut output: DeleteObjectOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match DeleteObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.delete_marker = Some(bool::from_str(response.headers()["x-amz-delete-marker"].to_str().unwrap()).unwrap());
                         output.version_id = Some(String::from_str(response.headers()["x-amz-version-id"].to_str().unwrap()).unwrap());
                         output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
@@ -1510,14 +1486,6 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
                 match status {
                     StatusCode::OK => {
                         let mut output: DeleteObjectTaggingOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match DeleteObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.version_id = Some(String::from_str(response.headers()["x-amz-version-id"].to_str().unwrap()).unwrap());
                         serde_json::to_vec(&Result::<DeleteObjectTaggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3770,14 +3738,6 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     StatusCode::OK => {
                         let mut output: HeadObjectOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match HeadObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.delete_marker = Some(bool::from_str(response.headers()["x-amz-delete-marker"].to_str().unwrap()).unwrap());
                         output.accept_ranges = Some(String::from_str(response.headers()["accept-ranges"].to_str().unwrap()).unwrap());
                         output.expiration = Some(String::from_str(response.headers()["x-amz-expiration"].to_str().unwrap()).unwrap());
@@ -5879,14 +5839,6 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match PutObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.expiration = Some(String::from_str(response.headers()["x-amz-expiration"].to_str().unwrap()).unwrap());
                         output.e_tag = Some(String::from_str(response.headers()["ETag"].to_str().unwrap()).unwrap());
                         output.server_side_encryption = Some(String::from_str(response.headers()["x-amz-server-side-encryption"].to_str().unwrap()).unwrap());
@@ -5986,14 +5938,6 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectAclOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match PutObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
                         serde_json::to_vec(&Result::<PutObjectAclOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -6066,14 +6010,6 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectLegalHoldOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match PutObjectLegalHoldOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
                         serde_json::to_vec(&Result::<PutObjectLegalHoldOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -6139,14 +6075,6 @@ fn __put_object_lock_configuration(input: PutObjectLockConfigurationRequest) -> 
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectLockConfigurationOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match PutObjectLockConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
                         serde_json::to_vec(&Result::<PutObjectLockConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -6222,14 +6150,6 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectRetentionOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match PutObjectRetentionOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
                         serde_json::to_vec(&Result::<PutObjectRetentionOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -6297,14 +6217,6 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectTaggingOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match PutObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.version_id = Some(String::from_str(response.headers()["x-amz-version-id"].to_str().unwrap()).unwrap());
                         serde_json::to_vec(&Result::<PutObjectTaggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -6430,14 +6342,6 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
                 match status {
                     StatusCode::OK => {
                         let mut output: RestoreObjectOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match RestoreObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
                         output.restore_output_path = Some(String::from_str(response.headers()["x-amz-restore-output-path"].to_str().unwrap()).unwrap());
                         serde_json::to_vec(&Result::<RestoreObjectOutput, guest::Error>::Ok(output)).unwrap()
@@ -6605,14 +6509,6 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     StatusCode::OK => {
                         let mut output: UploadPartOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match UploadPartOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.server_side_encryption = Some(String::from_str(response.headers()["x-amz-server-side-encryption"].to_str().unwrap()).unwrap());
                         output.e_tag = Some(String::from_str(response.headers()["ETag"].to_str().unwrap()).unwrap());
                         output.sse_customer_algorithm = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-algorithm"].to_str().unwrap()).unwrap());
