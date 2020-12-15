@@ -956,9 +956,9 @@ pub struct AbortMultipartUploadRequest {
     #[serde(rename = "UploadId")]
     pub upload_id: MultipartUploadId,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct AbortMultipartUploadRequestDeserializer;
 impl AbortMultipartUploadRequestDeserializer {
@@ -981,10 +981,10 @@ impl AbortMultipartUploadRequestDeserializer {
                         obj.upload_id = deserialize_primitive("UploadId", stack, Ok)?;
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -1121,7 +1121,7 @@ pub struct AnalyticsConfiguration {
     #[serde(rename = "Id")]
     pub id: AnalyticsId,
     #[serde(rename = "Filter")]
-    pub filter: AnalyticsFilter,
+    pub filter: Option<AnalyticsFilter>,
     #[serde(rename = "StorageClassAnalysis")]
     pub storage_class_analysis: StorageClassAnalysis,
 }
@@ -1140,7 +1140,7 @@ impl AnalyticsConfigurationDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "Filter" => {
-                        obj.filter = AnalyticsFilterDeserializer::deserialize("Filter", stack)?;
+                        obj.filter = Some(AnalyticsFilterDeserializer::deserialize("Filter", stack)?);
                     }
                     "StorageClassAnalysis" => {
                         obj.storage_class_analysis = StorageClassAnalysisDeserializer::deserialize("StorageClassAnalysis", stack)?;
@@ -1222,11 +1222,11 @@ pub struct AnalyticsS3BucketDestination {
     #[serde(rename = "Format")]
     pub format: AnalyticsS3ExportFileFormat,
     #[serde(rename = "BucketAccountId")]
-    pub bucket_account_id: AccountId,
+    pub bucket_account_id: Option<AccountId>,
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "Prefix")]
-    pub prefix: Prefix,
+    pub prefix: Option<Prefix>,
 }
 pub struct AnalyticsS3BucketDestinationDeserializer;
 impl AnalyticsS3BucketDestinationDeserializer {
@@ -1243,13 +1243,13 @@ impl AnalyticsS3BucketDestinationDeserializer {
                         obj.format = deserialize_primitive("Format", stack, Ok)?;
                     }
                     "BucketAccountId" => {
-                        obj.bucket_account_id = deserialize_primitive("BucketAccountId", stack, Ok)?;
+                        obj.bucket_account_id = Some(deserialize_primitive("BucketAccountId", stack, Ok)?);
                     }
                     "Bucket" => {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "Prefix" => {
-                        obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
+                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -1421,15 +1421,15 @@ impl CORSConfigurationDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct CORSRule {
     #[serde(rename = "AllowedHeaders")]
-    pub allowed_headers: AllowedHeaders,
+    pub allowed_headers: Option<AllowedHeaders>,
     #[serde(rename = "AllowedMethods")]
     pub allowed_methods: AllowedMethods,
     #[serde(rename = "AllowedOrigins")]
     pub allowed_origins: AllowedOrigins,
     #[serde(rename = "ExposeHeaders")]
-    pub expose_headers: ExposeHeaders,
+    pub expose_headers: Option<ExposeHeaders>,
     #[serde(rename = "MaxAgeSeconds")]
-    pub max_age_seconds: MaxAgeSeconds,
+    pub max_age_seconds: Option<MaxAgeSeconds>,
 }
 pub struct CORSRuleDeserializer;
 impl CORSRuleDeserializer {
@@ -1444,6 +1444,7 @@ impl CORSRuleDeserializer {
                 match name {
                     "AllowedHeaders" => {
                         obj.allowed_headers
+                            .get_or_insert(vec![])
                             .extend(AllowedHeadersDeserializer::deserialize("AllowedHeaders", stack)?);
                     }
                     "AllowedMethods" => {
@@ -1456,10 +1457,11 @@ impl CORSRuleDeserializer {
                     }
                     "ExposeHeaders" => {
                         obj.expose_headers
+                            .get_or_insert(vec![])
                             .extend(ExposeHeadersDeserializer::deserialize("ExposeHeaders", stack)?);
                     }
                     "MaxAgeSeconds" => {
-                        obj.max_age_seconds = deserialize_primitive("MaxAgeSeconds", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
+                        obj.max_age_seconds = Some(deserialize_primitive("MaxAgeSeconds", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -1728,13 +1730,13 @@ pub struct CompleteMultipartUploadRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "MultipartUpload")]
-    pub multipart_upload: CompletedMultipartUpload,
+    pub multipart_upload: Option<CompletedMultipartUpload>,
     #[serde(rename = "UploadId")]
     pub upload_id: MultipartUploadId,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct CompleteMultipartUploadRequestDeserializer;
 impl CompleteMultipartUploadRequestDeserializer {
@@ -1754,16 +1756,16 @@ impl CompleteMultipartUploadRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "MultipartUpload" => {
-                        obj.multipart_upload = CompletedMultipartUploadDeserializer::deserialize("MultipartUpload", stack)?;
+                        obj.multipart_upload = Some(CompletedMultipartUploadDeserializer::deserialize("MultipartUpload", stack)?);
                     }
                     "UploadId" => {
                         obj.upload_id = deserialize_primitive("UploadId", stack, Ok)?;
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -1968,85 +1970,85 @@ impl CopyObjectOutputDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct CopyObjectRequest {
     #[serde(rename = "ACL")]
-    pub acl: ObjectCannedACL,
+    pub acl: Option<ObjectCannedACL>,
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "CacheControl")]
-    pub cache_control: CacheControl,
+    pub cache_control: Option<CacheControl>,
     #[serde(rename = "ContentDisposition")]
-    pub content_disposition: ContentDisposition,
+    pub content_disposition: Option<ContentDisposition>,
     #[serde(rename = "ContentEncoding")]
-    pub content_encoding: ContentEncoding,
+    pub content_encoding: Option<ContentEncoding>,
     #[serde(rename = "ContentLanguage")]
-    pub content_language: ContentLanguage,
+    pub content_language: Option<ContentLanguage>,
     #[serde(rename = "ContentType")]
-    pub content_type: ContentType,
+    pub content_type: Option<ContentType>,
     #[serde(rename = "CopySource")]
     pub copy_source: CopySource,
     #[serde(rename = "CopySourceIfMatch")]
-    pub copy_source_if_match: CopySourceIfMatch,
+    pub copy_source_if_match: Option<CopySourceIfMatch>,
     #[serde(rename = "CopySourceIfModifiedSince")]
-    pub copy_source_if_modified_since: CopySourceIfModifiedSince,
+    pub copy_source_if_modified_since: Option<CopySourceIfModifiedSince>,
     #[serde(rename = "CopySourceIfNoneMatch")]
-    pub copy_source_if_none_match: CopySourceIfNoneMatch,
+    pub copy_source_if_none_match: Option<CopySourceIfNoneMatch>,
     #[serde(rename = "CopySourceIfUnmodifiedSince")]
-    pub copy_source_if_unmodified_since: CopySourceIfUnmodifiedSince,
+    pub copy_source_if_unmodified_since: Option<CopySourceIfUnmodifiedSince>,
     #[serde(rename = "Expires")]
-    pub expires: Expires,
+    pub expires: Option<Expires>,
     #[serde(rename = "GrantFullControl")]
-    pub grant_full_control: GrantFullControl,
+    pub grant_full_control: Option<GrantFullControl>,
     #[serde(rename = "GrantRead")]
-    pub grant_read: GrantRead,
+    pub grant_read: Option<GrantRead>,
     #[serde(rename = "GrantReadACP")]
-    pub grant_read_acp: GrantReadACP,
+    pub grant_read_acp: Option<GrantReadACP>,
     #[serde(rename = "GrantWriteACP")]
-    pub grant_write_acp: GrantWriteACP,
+    pub grant_write_acp: Option<GrantWriteACP>,
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "Metadata")]
-    pub metadata: Metadata,
+    pub metadata: Option<Metadata>,
     #[serde(rename = "MetadataDirective")]
-    pub metadata_directive: MetadataDirective,
+    pub metadata_directive: Option<MetadataDirective>,
     #[serde(rename = "TaggingDirective")]
-    pub tagging_directive: TaggingDirective,
+    pub tagging_directive: Option<TaggingDirective>,
     #[serde(rename = "ServerSideEncryption")]
-    pub server_side_encryption: ServerSideEncryption,
+    pub server_side_encryption: Option<ServerSideEncryption>,
     #[serde(rename = "StorageClass")]
-    pub storage_class: StorageClass,
+    pub storage_class: Option<StorageClass>,
     #[serde(rename = "WebsiteRedirectLocation")]
-    pub website_redirect_location: WebsiteRedirectLocation,
+    pub website_redirect_location: Option<WebsiteRedirectLocation>,
     #[serde(rename = "SSECustomerAlgorithm")]
-    pub sse_customer_algorithm: SSECustomerAlgorithm,
+    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
     #[serde(rename = "SSECustomerKey")]
-    pub sse_customer_key: SSECustomerKey,
+    pub sse_customer_key: Option<SSECustomerKey>,
     #[serde(rename = "SSECustomerKeyMD5")]
-    pub sse_customer_key_md5: SSECustomerKeyMD5,
+    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     #[serde(rename = "SSEKMSKeyId")]
-    pub ssekms_key_id: SSEKMSKeyId,
+    pub ssekms_key_id: Option<SSEKMSKeyId>,
     #[serde(rename = "SSEKMSEncryptionContext")]
-    pub ssekms_encryption_context: SSEKMSEncryptionContext,
+    pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
     #[serde(rename = "BucketKeyEnabled")]
-    pub bucket_key_enabled: BucketKeyEnabled,
+    pub bucket_key_enabled: Option<BucketKeyEnabled>,
     #[serde(rename = "CopySourceSSECustomerAlgorithm")]
-    pub copy_source_sse_customer_algorithm: CopySourceSSECustomerAlgorithm,
+    pub copy_source_sse_customer_algorithm: Option<CopySourceSSECustomerAlgorithm>,
     #[serde(rename = "CopySourceSSECustomerKey")]
-    pub copy_source_sse_customer_key: CopySourceSSECustomerKey,
+    pub copy_source_sse_customer_key: Option<CopySourceSSECustomerKey>,
     #[serde(rename = "CopySourceSSECustomerKeyMD5")]
-    pub copy_source_sse_customer_key_md5: CopySourceSSECustomerKeyMD5,
+    pub copy_source_sse_customer_key_md5: Option<CopySourceSSECustomerKeyMD5>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "Tagging")]
-    pub tagging: TaggingHeader,
+    pub tagging: Option<TaggingHeader>,
     #[serde(rename = "ObjectLockMode")]
-    pub object_lock_mode: ObjectLockMode,
+    pub object_lock_mode: Option<ObjectLockMode>,
     #[serde(rename = "ObjectLockRetainUntilDate")]
-    pub object_lock_retain_until_date: ObjectLockRetainUntilDate,
+    pub object_lock_retain_until_date: Option<ObjectLockRetainUntilDate>,
     #[serde(rename = "ObjectLockLegalHoldStatus")]
-    pub object_lock_legal_hold_status: ObjectLockLegalHoldStatus,
+    pub object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
     #[serde(rename = "ExpectedSourceBucketOwner")]
-    pub expected_source_bucket_owner: AccountId,
+    pub expected_source_bucket_owner: Option<AccountId>,
 }
 pub struct CopyObjectRequestDeserializer;
 impl CopyObjectRequestDeserializer {
@@ -2060,124 +2062,124 @@ impl CopyObjectRequestDeserializer {
             |name, stack, obj| {
                 match name {
                     "ACL" => {
-                        obj.acl = deserialize_primitive("ACL", stack, Ok)?;
+                        obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
                     }
                     "Bucket" => {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "CacheControl" => {
-                        obj.cache_control = deserialize_primitive("CacheControl", stack, Ok)?;
+                        obj.cache_control = Some(deserialize_primitive("CacheControl", stack, Ok)?);
                     }
                     "ContentDisposition" => {
-                        obj.content_disposition = deserialize_primitive("ContentDisposition", stack, Ok)?;
+                        obj.content_disposition = Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
                     }
                     "ContentEncoding" => {
-                        obj.content_encoding = deserialize_primitive("ContentEncoding", stack, Ok)?;
+                        obj.content_encoding = Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
                     }
                     "ContentLanguage" => {
-                        obj.content_language = deserialize_primitive("ContentLanguage", stack, Ok)?;
+                        obj.content_language = Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
                     }
                     "ContentType" => {
-                        obj.content_type = deserialize_primitive("ContentType", stack, Ok)?;
+                        obj.content_type = Some(deserialize_primitive("ContentType", stack, Ok)?);
                     }
                     "CopySource" => {
                         obj.copy_source = deserialize_primitive("CopySource", stack, Ok)?;
                     }
                     "CopySourceIfMatch" => {
-                        obj.copy_source_if_match = deserialize_primitive("CopySourceIfMatch", stack, Ok)?;
+                        obj.copy_source_if_match = Some(deserialize_primitive("CopySourceIfMatch", stack, Ok)?);
                     }
                     "CopySourceIfModifiedSince" => {
-                        obj.copy_source_if_modified_since = deserialize_primitive("CopySourceIfModifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.copy_source_if_modified_since = Some(deserialize_primitive("CopySourceIfModifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "CopySourceIfNoneMatch" => {
-                        obj.copy_source_if_none_match = deserialize_primitive("CopySourceIfNoneMatch", stack, Ok)?;
+                        obj.copy_source_if_none_match = Some(deserialize_primitive("CopySourceIfNoneMatch", stack, Ok)?);
                     }
                     "CopySourceIfUnmodifiedSince" => {
-                        obj.copy_source_if_unmodified_since = deserialize_primitive("CopySourceIfUnmodifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.copy_source_if_unmodified_since = Some(deserialize_primitive("CopySourceIfUnmodifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "Expires" => {
-                        obj.expires = deserialize_primitive("Expires", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.expires = Some(deserialize_primitive("Expires", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "GrantFullControl" => {
-                        obj.grant_full_control = deserialize_primitive("GrantFullControl", stack, Ok)?;
+                        obj.grant_full_control = Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
                     }
                     "GrantRead" => {
-                        obj.grant_read = deserialize_primitive("GrantRead", stack, Ok)?;
+                        obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
                     }
                     "GrantReadACP" => {
-                        obj.grant_read_acp = deserialize_primitive("GrantReadACP", stack, Ok)?;
+                        obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
                     }
                     "GrantWriteACP" => {
-                        obj.grant_write_acp = deserialize_primitive("GrantWriteACP", stack, Ok)?;
+                        obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
                     }
                     "Key" => {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "Metadata" => {
-                        obj.metadata = Default::default();
+                        obj.metadata = Some(Default::default());
                     }
                     "MetadataDirective" => {
-                        obj.metadata_directive = deserialize_primitive("MetadataDirective", stack, Ok)?;
+                        obj.metadata_directive = Some(deserialize_primitive("MetadataDirective", stack, Ok)?);
                     }
                     "TaggingDirective" => {
-                        obj.tagging_directive = deserialize_primitive("TaggingDirective", stack, Ok)?;
+                        obj.tagging_directive = Some(deserialize_primitive("TaggingDirective", stack, Ok)?);
                     }
                     "ServerSideEncryption" => {
-                        obj.server_side_encryption = deserialize_primitive("ServerSideEncryption", stack, Ok)?;
+                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
                     }
                     "StorageClass" => {
-                        obj.storage_class = deserialize_primitive("StorageClass", stack, Ok)?;
+                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
                     }
                     "WebsiteRedirectLocation" => {
-                        obj.website_redirect_location = deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?;
+                        obj.website_redirect_location = Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
                     }
                     "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?;
+                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
                     }
                     "SSECustomerKey" => {
-                        obj.sse_customer_key = deserialize_primitive("SSECustomerKey", stack, Ok)?;
+                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
                     }
                     "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?;
+                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
                     }
                     "SSEKMSKeyId" => {
-                        obj.ssekms_key_id = deserialize_primitive("SSEKMSKeyId", stack, Ok)?;
+                        obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
                     }
                     "SSEKMSEncryptionContext" => {
-                        obj.ssekms_encryption_context = deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?;
+                        obj.ssekms_encryption_context = Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
                     }
                     "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?;
+                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
                     }
                     "CopySourceSSECustomerAlgorithm" => {
-                        obj.copy_source_sse_customer_algorithm = deserialize_primitive("CopySourceSSECustomerAlgorithm", stack, Ok)?;
+                        obj.copy_source_sse_customer_algorithm = Some(deserialize_primitive("CopySourceSSECustomerAlgorithm", stack, Ok)?);
                     }
                     "CopySourceSSECustomerKey" => {
-                        obj.copy_source_sse_customer_key = deserialize_primitive("CopySourceSSECustomerKey", stack, Ok)?;
+                        obj.copy_source_sse_customer_key = Some(deserialize_primitive("CopySourceSSECustomerKey", stack, Ok)?);
                     }
                     "CopySourceSSECustomerKeyMD5" => {
-                        obj.copy_source_sse_customer_key_md5 = deserialize_primitive("CopySourceSSECustomerKeyMD5", stack, Ok)?;
+                        obj.copy_source_sse_customer_key_md5 = Some(deserialize_primitive("CopySourceSSECustomerKeyMD5", stack, Ok)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "Tagging" => {
-                        obj.tagging = deserialize_primitive("Tagging", stack, Ok)?;
+                        obj.tagging = Some(deserialize_primitive("Tagging", stack, Ok)?);
                     }
                     "ObjectLockMode" => {
-                        obj.object_lock_mode = deserialize_primitive("ObjectLockMode", stack, Ok)?;
+                        obj.object_lock_mode = Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
                     }
                     "ObjectLockRetainUntilDate" => {
-                        obj.object_lock_retain_until_date = deserialize_primitive("ObjectLockRetainUntilDate", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.object_lock_retain_until_date = Some(deserialize_primitive("ObjectLockRetainUntilDate", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "ObjectLockLegalHoldStatus" => {
-                        obj.object_lock_legal_hold_status = deserialize_primitive("ObjectLockLegalHoldStatus", stack, Ok)?;
+                        obj.object_lock_legal_hold_status = Some(deserialize_primitive("ObjectLockLegalHoldStatus", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     "ExpectedSourceBucketOwner" => {
-                        obj.expected_source_bucket_owner = deserialize_primitive("ExpectedSourceBucketOwner", stack, Ok)?;
+                        obj.expected_source_bucket_owner = Some(deserialize_primitive("ExpectedSourceBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2308,23 +2310,23 @@ impl CreateBucketOutputDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct CreateBucketRequest {
     #[serde(rename = "ACL")]
-    pub acl: BucketCannedACL,
+    pub acl: Option<BucketCannedACL>,
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "CreateBucketConfiguration")]
-    pub create_bucket_configuration: CreateBucketConfiguration,
+    pub create_bucket_configuration: Option<CreateBucketConfiguration>,
     #[serde(rename = "GrantFullControl")]
-    pub grant_full_control: GrantFullControl,
+    pub grant_full_control: Option<GrantFullControl>,
     #[serde(rename = "GrantRead")]
-    pub grant_read: GrantRead,
+    pub grant_read: Option<GrantRead>,
     #[serde(rename = "GrantReadACP")]
-    pub grant_read_acp: GrantReadACP,
+    pub grant_read_acp: Option<GrantReadACP>,
     #[serde(rename = "GrantWrite")]
-    pub grant_write: GrantWrite,
+    pub grant_write: Option<GrantWrite>,
     #[serde(rename = "GrantWriteACP")]
-    pub grant_write_acp: GrantWriteACP,
+    pub grant_write_acp: Option<GrantWriteACP>,
     #[serde(rename = "ObjectLockEnabledForBucket")]
-    pub object_lock_enabled_for_bucket: ObjectLockEnabledForBucket,
+    pub object_lock_enabled_for_bucket: Option<ObjectLockEnabledForBucket>,
 }
 pub struct CreateBucketRequestDeserializer;
 impl CreateBucketRequestDeserializer {
@@ -2338,31 +2340,31 @@ impl CreateBucketRequestDeserializer {
             |name, stack, obj| {
                 match name {
                     "ACL" => {
-                        obj.acl = deserialize_primitive("ACL", stack, Ok)?;
+                        obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
                     }
                     "Bucket" => {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "CreateBucketConfiguration" => {
-                        obj.create_bucket_configuration = CreateBucketConfigurationDeserializer::deserialize("CreateBucketConfiguration", stack)?;
+                        obj.create_bucket_configuration = Some(CreateBucketConfigurationDeserializer::deserialize("CreateBucketConfiguration", stack)?);
                     }
                     "GrantFullControl" => {
-                        obj.grant_full_control = deserialize_primitive("GrantFullControl", stack, Ok)?;
+                        obj.grant_full_control = Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
                     }
                     "GrantRead" => {
-                        obj.grant_read = deserialize_primitive("GrantRead", stack, Ok)?;
+                        obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
                     }
                     "GrantReadACP" => {
-                        obj.grant_read_acp = deserialize_primitive("GrantReadACP", stack, Ok)?;
+                        obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
                     }
                     "GrantWrite" => {
-                        obj.grant_write = deserialize_primitive("GrantWrite", stack, Ok)?;
+                        obj.grant_write = Some(deserialize_primitive("GrantWrite", stack, Ok)?);
                     }
                     "GrantWriteACP" => {
-                        obj.grant_write_acp = deserialize_primitive("GrantWriteACP", stack, Ok)?;
+                        obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
                     }
                     "ObjectLockEnabledForBucket" => {
-                        obj.object_lock_enabled_for_bucket = deserialize_primitive("ObjectLockEnabledForBucket", stack, |s| Ok(bool::from_str(&s).unwrap()))?;
+                        obj.object_lock_enabled_for_bucket = Some(deserialize_primitive("ObjectLockEnabledForBucket", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2457,63 +2459,63 @@ impl CreateMultipartUploadOutputDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct CreateMultipartUploadRequest {
     #[serde(rename = "ACL")]
-    pub acl: ObjectCannedACL,
+    pub acl: Option<ObjectCannedACL>,
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "CacheControl")]
-    pub cache_control: CacheControl,
+    pub cache_control: Option<CacheControl>,
     #[serde(rename = "ContentDisposition")]
-    pub content_disposition: ContentDisposition,
+    pub content_disposition: Option<ContentDisposition>,
     #[serde(rename = "ContentEncoding")]
-    pub content_encoding: ContentEncoding,
+    pub content_encoding: Option<ContentEncoding>,
     #[serde(rename = "ContentLanguage")]
-    pub content_language: ContentLanguage,
+    pub content_language: Option<ContentLanguage>,
     #[serde(rename = "ContentType")]
-    pub content_type: ContentType,
+    pub content_type: Option<ContentType>,
     #[serde(rename = "Expires")]
-    pub expires: Expires,
+    pub expires: Option<Expires>,
     #[serde(rename = "GrantFullControl")]
-    pub grant_full_control: GrantFullControl,
+    pub grant_full_control: Option<GrantFullControl>,
     #[serde(rename = "GrantRead")]
-    pub grant_read: GrantRead,
+    pub grant_read: Option<GrantRead>,
     #[serde(rename = "GrantReadACP")]
-    pub grant_read_acp: GrantReadACP,
+    pub grant_read_acp: Option<GrantReadACP>,
     #[serde(rename = "GrantWriteACP")]
-    pub grant_write_acp: GrantWriteACP,
+    pub grant_write_acp: Option<GrantWriteACP>,
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "Metadata")]
-    pub metadata: Metadata,
+    pub metadata: Option<Metadata>,
     #[serde(rename = "ServerSideEncryption")]
-    pub server_side_encryption: ServerSideEncryption,
+    pub server_side_encryption: Option<ServerSideEncryption>,
     #[serde(rename = "StorageClass")]
-    pub storage_class: StorageClass,
+    pub storage_class: Option<StorageClass>,
     #[serde(rename = "WebsiteRedirectLocation")]
-    pub website_redirect_location: WebsiteRedirectLocation,
+    pub website_redirect_location: Option<WebsiteRedirectLocation>,
     #[serde(rename = "SSECustomerAlgorithm")]
-    pub sse_customer_algorithm: SSECustomerAlgorithm,
+    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
     #[serde(rename = "SSECustomerKey")]
-    pub sse_customer_key: SSECustomerKey,
+    pub sse_customer_key: Option<SSECustomerKey>,
     #[serde(rename = "SSECustomerKeyMD5")]
-    pub sse_customer_key_md5: SSECustomerKeyMD5,
+    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     #[serde(rename = "SSEKMSKeyId")]
-    pub ssekms_key_id: SSEKMSKeyId,
+    pub ssekms_key_id: Option<SSEKMSKeyId>,
     #[serde(rename = "SSEKMSEncryptionContext")]
-    pub ssekms_encryption_context: SSEKMSEncryptionContext,
+    pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
     #[serde(rename = "BucketKeyEnabled")]
-    pub bucket_key_enabled: BucketKeyEnabled,
+    pub bucket_key_enabled: Option<BucketKeyEnabled>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "Tagging")]
-    pub tagging: TaggingHeader,
+    pub tagging: Option<TaggingHeader>,
     #[serde(rename = "ObjectLockMode")]
-    pub object_lock_mode: ObjectLockMode,
+    pub object_lock_mode: Option<ObjectLockMode>,
     #[serde(rename = "ObjectLockRetainUntilDate")]
-    pub object_lock_retain_until_date: ObjectLockRetainUntilDate,
+    pub object_lock_retain_until_date: Option<ObjectLockRetainUntilDate>,
     #[serde(rename = "ObjectLockLegalHoldStatus")]
-    pub object_lock_legal_hold_status: ObjectLockLegalHoldStatus,
+    pub object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct CreateMultipartUploadRequestDeserializer;
 impl CreateMultipartUploadRequestDeserializer {
@@ -2527,91 +2529,91 @@ impl CreateMultipartUploadRequestDeserializer {
             |name, stack, obj| {
                 match name {
                     "ACL" => {
-                        obj.acl = deserialize_primitive("ACL", stack, Ok)?;
+                        obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
                     }
                     "Bucket" => {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "CacheControl" => {
-                        obj.cache_control = deserialize_primitive("CacheControl", stack, Ok)?;
+                        obj.cache_control = Some(deserialize_primitive("CacheControl", stack, Ok)?);
                     }
                     "ContentDisposition" => {
-                        obj.content_disposition = deserialize_primitive("ContentDisposition", stack, Ok)?;
+                        obj.content_disposition = Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
                     }
                     "ContentEncoding" => {
-                        obj.content_encoding = deserialize_primitive("ContentEncoding", stack, Ok)?;
+                        obj.content_encoding = Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
                     }
                     "ContentLanguage" => {
-                        obj.content_language = deserialize_primitive("ContentLanguage", stack, Ok)?;
+                        obj.content_language = Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
                     }
                     "ContentType" => {
-                        obj.content_type = deserialize_primitive("ContentType", stack, Ok)?;
+                        obj.content_type = Some(deserialize_primitive("ContentType", stack, Ok)?);
                     }
                     "Expires" => {
-                        obj.expires = deserialize_primitive("Expires", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.expires = Some(deserialize_primitive("Expires", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "GrantFullControl" => {
-                        obj.grant_full_control = deserialize_primitive("GrantFullControl", stack, Ok)?;
+                        obj.grant_full_control = Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
                     }
                     "GrantRead" => {
-                        obj.grant_read = deserialize_primitive("GrantRead", stack, Ok)?;
+                        obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
                     }
                     "GrantReadACP" => {
-                        obj.grant_read_acp = deserialize_primitive("GrantReadACP", stack, Ok)?;
+                        obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
                     }
                     "GrantWriteACP" => {
-                        obj.grant_write_acp = deserialize_primitive("GrantWriteACP", stack, Ok)?;
+                        obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
                     }
                     "Key" => {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "Metadata" => {
-                        obj.metadata = Default::default();
+                        obj.metadata = Some(Default::default());
                     }
                     "ServerSideEncryption" => {
-                        obj.server_side_encryption = deserialize_primitive("ServerSideEncryption", stack, Ok)?;
+                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
                     }
                     "StorageClass" => {
-                        obj.storage_class = deserialize_primitive("StorageClass", stack, Ok)?;
+                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
                     }
                     "WebsiteRedirectLocation" => {
-                        obj.website_redirect_location = deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?;
+                        obj.website_redirect_location = Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
                     }
                     "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?;
+                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
                     }
                     "SSECustomerKey" => {
-                        obj.sse_customer_key = deserialize_primitive("SSECustomerKey", stack, Ok)?;
+                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
                     }
                     "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?;
+                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
                     }
                     "SSEKMSKeyId" => {
-                        obj.ssekms_key_id = deserialize_primitive("SSEKMSKeyId", stack, Ok)?;
+                        obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
                     }
                     "SSEKMSEncryptionContext" => {
-                        obj.ssekms_encryption_context = deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?;
+                        obj.ssekms_encryption_context = Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
                     }
                     "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?;
+                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "Tagging" => {
-                        obj.tagging = deserialize_primitive("Tagging", stack, Ok)?;
+                        obj.tagging = Some(deserialize_primitive("Tagging", stack, Ok)?);
                     }
                     "ObjectLockMode" => {
-                        obj.object_lock_mode = deserialize_primitive("ObjectLockMode", stack, Ok)?;
+                        obj.object_lock_mode = Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
                     }
                     "ObjectLockRetainUntilDate" => {
-                        obj.object_lock_retain_until_date = deserialize_primitive("ObjectLockRetainUntilDate", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.object_lock_retain_until_date = Some(deserialize_primitive("ObjectLockRetainUntilDate", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "ObjectLockLegalHoldStatus" => {
-                        obj.object_lock_legal_hold_status = deserialize_primitive("ObjectLockLegalHoldStatus", stack, Ok)?;
+                        obj.object_lock_legal_hold_status = Some(deserialize_primitive("ObjectLockLegalHoldStatus", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2663,7 +2665,7 @@ pub struct Delete {
     #[serde(rename = "Objects")]
     pub objects: ObjectIdentifierList,
     #[serde(rename = "Quiet")]
-    pub quiet: Quiet,
+    pub quiet: Option<Quiet>,
 }
 pub struct DeleteDeserializer;
 impl DeleteDeserializer {
@@ -2681,7 +2683,7 @@ impl DeleteDeserializer {
                             .extend(ObjectIdentifierListDeserializer::deserialize("Objects", stack)?);
                     }
                     "Quiet" => {
-                        obj.quiet = deserialize_primitive("Quiet", stack, |s| Ok(bool::from_str(&s).unwrap()))?;
+                        obj.quiet = Some(deserialize_primitive("Quiet", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2698,7 +2700,7 @@ pub struct DeleteBucketAnalyticsConfigurationRequest {
     #[serde(rename = "Id")]
     pub id: AnalyticsId,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteBucketAnalyticsConfigurationRequestDeserializer;
 impl DeleteBucketAnalyticsConfigurationRequestDeserializer {
@@ -2718,7 +2720,7 @@ impl DeleteBucketAnalyticsConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2733,7 +2735,7 @@ pub struct DeleteBucketCorsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteBucketCorsRequestDeserializer;
 impl DeleteBucketCorsRequestDeserializer {
@@ -2750,7 +2752,7 @@ impl DeleteBucketCorsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2765,7 +2767,7 @@ pub struct DeleteBucketEncryptionRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteBucketEncryptionRequestDeserializer;
 impl DeleteBucketEncryptionRequestDeserializer {
@@ -2782,7 +2784,7 @@ impl DeleteBucketEncryptionRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2831,7 +2833,7 @@ pub struct DeleteBucketInventoryConfigurationRequest {
     #[serde(rename = "Id")]
     pub id: InventoryId,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteBucketInventoryConfigurationRequestDeserializer;
 impl DeleteBucketInventoryConfigurationRequestDeserializer {
@@ -2851,7 +2853,7 @@ impl DeleteBucketInventoryConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2866,7 +2868,7 @@ pub struct DeleteBucketLifecycleRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteBucketLifecycleRequestDeserializer;
 impl DeleteBucketLifecycleRequestDeserializer {
@@ -2883,7 +2885,7 @@ impl DeleteBucketLifecycleRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2900,7 +2902,7 @@ pub struct DeleteBucketMetricsConfigurationRequest {
     #[serde(rename = "Id")]
     pub id: MetricsId,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteBucketMetricsConfigurationRequestDeserializer;
 impl DeleteBucketMetricsConfigurationRequestDeserializer {
@@ -2920,7 +2922,7 @@ impl DeleteBucketMetricsConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2935,7 +2937,7 @@ pub struct DeleteBucketOwnershipControlsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteBucketOwnershipControlsRequestDeserializer;
 impl DeleteBucketOwnershipControlsRequestDeserializer {
@@ -2952,7 +2954,7 @@ impl DeleteBucketOwnershipControlsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2967,7 +2969,7 @@ pub struct DeleteBucketPolicyRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteBucketPolicyRequestDeserializer;
 impl DeleteBucketPolicyRequestDeserializer {
@@ -2984,7 +2986,7 @@ impl DeleteBucketPolicyRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2999,7 +3001,7 @@ pub struct DeleteBucketReplicationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteBucketReplicationRequestDeserializer;
 impl DeleteBucketReplicationRequestDeserializer {
@@ -3016,7 +3018,7 @@ impl DeleteBucketReplicationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3031,7 +3033,7 @@ pub struct DeleteBucketRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteBucketRequestDeserializer;
 impl DeleteBucketRequestDeserializer {
@@ -3048,7 +3050,7 @@ impl DeleteBucketRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3063,7 +3065,7 @@ pub struct DeleteBucketTaggingRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteBucketTaggingRequestDeserializer;
 impl DeleteBucketTaggingRequestDeserializer {
@@ -3080,7 +3082,7 @@ impl DeleteBucketTaggingRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3095,7 +3097,7 @@ pub struct DeleteBucketWebsiteRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteBucketWebsiteRequestDeserializer;
 impl DeleteBucketWebsiteRequestDeserializer {
@@ -3112,7 +3114,7 @@ impl DeleteBucketWebsiteRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3240,15 +3242,15 @@ pub struct DeleteObjectRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "MFA")]
-    pub mfa: MFA,
+    pub mfa: Option<MFA>,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "BypassGovernanceRetention")]
-    pub bypass_governance_retention: BypassGovernanceRetention,
+    pub bypass_governance_retention: Option<BypassGovernanceRetention>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteObjectRequestDeserializer;
 impl DeleteObjectRequestDeserializer {
@@ -3268,19 +3270,19 @@ impl DeleteObjectRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "MFA" => {
-                        obj.mfa = deserialize_primitive("MFA", stack, Ok)?;
+                        obj.mfa = Some(deserialize_primitive("MFA", stack, Ok)?);
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "BypassGovernanceRetention" => {
-                        obj.bypass_governance_retention = deserialize_primitive("BypassGovernanceRetention", stack, |s| Ok(bool::from_str(&s).unwrap()))?;
+                        obj.bypass_governance_retention = Some(deserialize_primitive("BypassGovernanceRetention", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3324,9 +3326,9 @@ pub struct DeleteObjectTaggingRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteObjectTaggingRequestDeserializer;
 impl DeleteObjectTaggingRequestDeserializer {
@@ -3346,10 +3348,10 @@ impl DeleteObjectTaggingRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3407,13 +3409,13 @@ pub struct DeleteObjectsRequest {
     #[serde(rename = "Delete")]
     pub delete: Delete,
     #[serde(rename = "MFA")]
-    pub mfa: MFA,
+    pub mfa: Option<MFA>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "BypassGovernanceRetention")]
-    pub bypass_governance_retention: BypassGovernanceRetention,
+    pub bypass_governance_retention: Option<BypassGovernanceRetention>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeleteObjectsRequestDeserializer;
 impl DeleteObjectsRequestDeserializer {
@@ -3433,16 +3435,16 @@ impl DeleteObjectsRequestDeserializer {
                         obj.delete = DeleteDeserializer::deserialize("Delete", stack)?;
                     }
                     "MFA" => {
-                        obj.mfa = deserialize_primitive("MFA", stack, Ok)?;
+                        obj.mfa = Some(deserialize_primitive("MFA", stack, Ok)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "BypassGovernanceRetention" => {
-                        obj.bypass_governance_retention = deserialize_primitive("BypassGovernanceRetention", stack, |s| Ok(bool::from_str(&s).unwrap()))?;
+                        obj.bypass_governance_retention = Some(deserialize_primitive("BypassGovernanceRetention", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3457,7 +3459,7 @@ pub struct DeletePublicAccessBlockRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct DeletePublicAccessBlockRequestDeserializer;
 impl DeletePublicAccessBlockRequestDeserializer {
@@ -3474,7 +3476,7 @@ impl DeletePublicAccessBlockRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3531,17 +3533,17 @@ pub struct Destination {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "Account")]
-    pub account: AccountId,
+    pub account: Option<AccountId>,
     #[serde(rename = "StorageClass")]
-    pub storage_class: StorageClass,
+    pub storage_class: Option<StorageClass>,
     #[serde(rename = "AccessControlTranslation")]
-    pub access_control_translation: AccessControlTranslation,
+    pub access_control_translation: Option<AccessControlTranslation>,
     #[serde(rename = "EncryptionConfiguration")]
-    pub encryption_configuration: EncryptionConfiguration,
+    pub encryption_configuration: Option<EncryptionConfiguration>,
     #[serde(rename = "ReplicationTime")]
-    pub replication_time: ReplicationTime,
+    pub replication_time: Option<ReplicationTime>,
     #[serde(rename = "Metrics")]
-    pub metrics: Metrics,
+    pub metrics: Option<Metrics>,
 }
 pub struct DestinationDeserializer;
 impl DestinationDeserializer {
@@ -3558,22 +3560,22 @@ impl DestinationDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "Account" => {
-                        obj.account = deserialize_primitive("Account", stack, Ok)?;
+                        obj.account = Some(deserialize_primitive("Account", stack, Ok)?);
                     }
                     "StorageClass" => {
-                        obj.storage_class = deserialize_primitive("StorageClass", stack, Ok)?;
+                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
                     }
                     "AccessControlTranslation" => {
-                        obj.access_control_translation = AccessControlTranslationDeserializer::deserialize("AccessControlTranslation", stack)?;
+                        obj.access_control_translation = Some(AccessControlTranslationDeserializer::deserialize("AccessControlTranslation", stack)?);
                     }
                     "EncryptionConfiguration" => {
-                        obj.encryption_configuration = EncryptionConfigurationDeserializer::deserialize("EncryptionConfiguration", stack)?;
+                        obj.encryption_configuration = Some(EncryptionConfigurationDeserializer::deserialize("EncryptionConfiguration", stack)?);
                     }
                     "ReplicationTime" => {
-                        obj.replication_time = ReplicationTimeDeserializer::deserialize("ReplicationTime", stack)?;
+                        obj.replication_time = Some(ReplicationTimeDeserializer::deserialize("ReplicationTime", stack)?);
                     }
                     "Metrics" => {
-                        obj.metrics = MetricsDeserializer::deserialize("Metrics", stack)?;
+                        obj.metrics = Some(MetricsDeserializer::deserialize("Metrics", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3588,9 +3590,9 @@ pub struct Encryption {
     #[serde(rename = "EncryptionType")]
     pub encryption_type: ServerSideEncryption,
     #[serde(rename = "KMSKeyId")]
-    pub kms_key_id: SSEKMSKeyId,
+    pub kms_key_id: Option<SSEKMSKeyId>,
     #[serde(rename = "KMSContext")]
-    pub kms_context: KMSContext,
+    pub kms_context: Option<KMSContext>,
 }
 pub struct EncryptionDeserializer;
 impl EncryptionDeserializer {
@@ -3607,10 +3609,10 @@ impl EncryptionDeserializer {
                         obj.encryption_type = deserialize_primitive("EncryptionType", stack, Ok)?;
                     }
                     "KMSKeyId" => {
-                        obj.kms_key_id = deserialize_primitive("KMSKeyId", stack, Ok)?;
+                        obj.kms_key_id = Some(deserialize_primitive("KMSKeyId", stack, Ok)?);
                     }
                     "KMSContext" => {
-                        obj.kms_context = deserialize_primitive("KMSContext", stack, Ok)?;
+                        obj.kms_context = Some(deserialize_primitive("KMSContext", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3829,7 +3831,7 @@ pub struct GetBucketAccelerateConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketAccelerateConfigurationRequestDeserializer;
 impl GetBucketAccelerateConfigurationRequestDeserializer {
@@ -3846,7 +3848,7 @@ impl GetBucketAccelerateConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3895,7 +3897,7 @@ pub struct GetBucketAclRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketAclRequestDeserializer;
 impl GetBucketAclRequestDeserializer {
@@ -3912,7 +3914,7 @@ impl GetBucketAclRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3956,7 +3958,7 @@ pub struct GetBucketAnalyticsConfigurationRequest {
     #[serde(rename = "Id")]
     pub id: AnalyticsId,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketAnalyticsConfigurationRequestDeserializer;
 impl GetBucketAnalyticsConfigurationRequestDeserializer {
@@ -3976,7 +3978,7 @@ impl GetBucketAnalyticsConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4020,7 +4022,7 @@ pub struct GetBucketCorsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketCorsRequestDeserializer;
 impl GetBucketCorsRequestDeserializer {
@@ -4037,7 +4039,7 @@ impl GetBucketCorsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4079,7 +4081,7 @@ pub struct GetBucketEncryptionRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketEncryptionRequestDeserializer;
 impl GetBucketEncryptionRequestDeserializer {
@@ -4096,7 +4098,7 @@ impl GetBucketEncryptionRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4199,7 +4201,7 @@ pub struct GetBucketInventoryConfigurationRequest {
     #[serde(rename = "Id")]
     pub id: InventoryId,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketInventoryConfigurationRequestDeserializer;
 impl GetBucketInventoryConfigurationRequestDeserializer {
@@ -4219,7 +4221,7 @@ impl GetBucketInventoryConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4263,7 +4265,7 @@ pub struct GetBucketLifecycleConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketLifecycleConfigurationRequestDeserializer;
 impl GetBucketLifecycleConfigurationRequestDeserializer {
@@ -4280,7 +4282,7 @@ impl GetBucketLifecycleConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4324,7 +4326,7 @@ pub struct GetBucketLifecycleRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketLifecycleRequestDeserializer;
 impl GetBucketLifecycleRequestDeserializer {
@@ -4341,7 +4343,7 @@ impl GetBucketLifecycleRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4383,7 +4385,7 @@ pub struct GetBucketLocationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketLocationRequestDeserializer;
 impl GetBucketLocationRequestDeserializer {
@@ -4400,7 +4402,7 @@ impl GetBucketLocationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4442,7 +4444,7 @@ pub struct GetBucketLoggingRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketLoggingRequestDeserializer;
 impl GetBucketLoggingRequestDeserializer {
@@ -4459,7 +4461,7 @@ impl GetBucketLoggingRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4503,7 +4505,7 @@ pub struct GetBucketMetricsConfigurationRequest {
     #[serde(rename = "Id")]
     pub id: MetricsId,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketMetricsConfigurationRequestDeserializer;
 impl GetBucketMetricsConfigurationRequestDeserializer {
@@ -4523,7 +4525,7 @@ impl GetBucketMetricsConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4538,7 +4540,7 @@ pub struct GetBucketNotificationConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketNotificationConfigurationRequestDeserializer;
 impl GetBucketNotificationConfigurationRequestDeserializer {
@@ -4555,7 +4557,7 @@ impl GetBucketNotificationConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4597,7 +4599,7 @@ pub struct GetBucketOwnershipControlsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketOwnershipControlsRequestDeserializer;
 impl GetBucketOwnershipControlsRequestDeserializer {
@@ -4614,7 +4616,7 @@ impl GetBucketOwnershipControlsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4656,7 +4658,7 @@ pub struct GetBucketPolicyRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketPolicyRequestDeserializer;
 impl GetBucketPolicyRequestDeserializer {
@@ -4673,7 +4675,7 @@ impl GetBucketPolicyRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4715,7 +4717,7 @@ pub struct GetBucketPolicyStatusRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketPolicyStatusRequestDeserializer;
 impl GetBucketPolicyStatusRequestDeserializer {
@@ -4732,7 +4734,7 @@ impl GetBucketPolicyStatusRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4774,7 +4776,7 @@ pub struct GetBucketReplicationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketReplicationRequestDeserializer;
 impl GetBucketReplicationRequestDeserializer {
@@ -4791,7 +4793,7 @@ impl GetBucketReplicationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4833,7 +4835,7 @@ pub struct GetBucketRequestPaymentRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketRequestPaymentRequestDeserializer;
 impl GetBucketRequestPaymentRequestDeserializer {
@@ -4850,7 +4852,7 @@ impl GetBucketRequestPaymentRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4893,7 +4895,7 @@ pub struct GetBucketTaggingRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketTaggingRequestDeserializer;
 impl GetBucketTaggingRequestDeserializer {
@@ -4910,7 +4912,7 @@ impl GetBucketTaggingRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4957,7 +4959,7 @@ pub struct GetBucketVersioningRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketVersioningRequestDeserializer;
 impl GetBucketVersioningRequestDeserializer {
@@ -4974,7 +4976,7 @@ impl GetBucketVersioningRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5033,7 +5035,7 @@ pub struct GetBucketWebsiteRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetBucketWebsiteRequestDeserializer;
 impl GetBucketWebsiteRequestDeserializer {
@@ -5050,7 +5052,7 @@ impl GetBucketWebsiteRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5106,11 +5108,11 @@ pub struct GetObjectAclRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetObjectAclRequestDeserializer;
 impl GetObjectAclRequestDeserializer {
@@ -5130,13 +5132,13 @@ impl GetObjectAclRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5180,11 +5182,11 @@ pub struct GetObjectLegalHoldRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetObjectLegalHoldRequestDeserializer;
 impl GetObjectLegalHoldRequestDeserializer {
@@ -5204,13 +5206,13 @@ impl GetObjectLegalHoldRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5252,7 +5254,7 @@ pub struct GetObjectLockConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetObjectLockConfigurationRequestDeserializer;
 impl GetObjectLockConfigurationRequestDeserializer {
@@ -5269,7 +5271,7 @@ impl GetObjectLockConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5466,43 +5468,43 @@ pub struct GetObjectRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "IfMatch")]
-    pub if_match: IfMatch,
+    pub if_match: Option<IfMatch>,
     #[serde(rename = "IfModifiedSince")]
-    pub if_modified_since: IfModifiedSince,
+    pub if_modified_since: Option<IfModifiedSince>,
     #[serde(rename = "IfNoneMatch")]
-    pub if_none_match: IfNoneMatch,
+    pub if_none_match: Option<IfNoneMatch>,
     #[serde(rename = "IfUnmodifiedSince")]
-    pub if_unmodified_since: IfUnmodifiedSince,
+    pub if_unmodified_since: Option<IfUnmodifiedSince>,
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "Range")]
-    pub range: Range,
+    pub range: Option<Range>,
     #[serde(rename = "ResponseCacheControl")]
-    pub response_cache_control: ResponseCacheControl,
+    pub response_cache_control: Option<ResponseCacheControl>,
     #[serde(rename = "ResponseContentDisposition")]
-    pub response_content_disposition: ResponseContentDisposition,
+    pub response_content_disposition: Option<ResponseContentDisposition>,
     #[serde(rename = "ResponseContentEncoding")]
-    pub response_content_encoding: ResponseContentEncoding,
+    pub response_content_encoding: Option<ResponseContentEncoding>,
     #[serde(rename = "ResponseContentLanguage")]
-    pub response_content_language: ResponseContentLanguage,
+    pub response_content_language: Option<ResponseContentLanguage>,
     #[serde(rename = "ResponseContentType")]
-    pub response_content_type: ResponseContentType,
+    pub response_content_type: Option<ResponseContentType>,
     #[serde(rename = "ResponseExpires")]
-    pub response_expires: ResponseExpires,
+    pub response_expires: Option<ResponseExpires>,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "SSECustomerAlgorithm")]
-    pub sse_customer_algorithm: SSECustomerAlgorithm,
+    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
     #[serde(rename = "SSECustomerKey")]
-    pub sse_customer_key: SSECustomerKey,
+    pub sse_customer_key: Option<SSECustomerKey>,
     #[serde(rename = "SSECustomerKeyMD5")]
-    pub sse_customer_key_md5: SSECustomerKeyMD5,
+    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "PartNumber")]
-    pub part_number: PartNumber,
+    pub part_number: Option<PartNumber>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetObjectRequestDeserializer;
 impl GetObjectRequestDeserializer {
@@ -5519,61 +5521,61 @@ impl GetObjectRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "IfMatch" => {
-                        obj.if_match = deserialize_primitive("IfMatch", stack, Ok)?;
+                        obj.if_match = Some(deserialize_primitive("IfMatch", stack, Ok)?);
                     }
                     "IfModifiedSince" => {
-                        obj.if_modified_since = deserialize_primitive("IfModifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.if_modified_since = Some(deserialize_primitive("IfModifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "IfNoneMatch" => {
-                        obj.if_none_match = deserialize_primitive("IfNoneMatch", stack, Ok)?;
+                        obj.if_none_match = Some(deserialize_primitive("IfNoneMatch", stack, Ok)?);
                     }
                     "IfUnmodifiedSince" => {
-                        obj.if_unmodified_since = deserialize_primitive("IfUnmodifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.if_unmodified_since = Some(deserialize_primitive("IfUnmodifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "Key" => {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "Range" => {
-                        obj.range = deserialize_primitive("Range", stack, Ok)?;
+                        obj.range = Some(deserialize_primitive("Range", stack, Ok)?);
                     }
                     "ResponseCacheControl" => {
-                        obj.response_cache_control = deserialize_primitive("ResponseCacheControl", stack, Ok)?;
+                        obj.response_cache_control = Some(deserialize_primitive("ResponseCacheControl", stack, Ok)?);
                     }
                     "ResponseContentDisposition" => {
-                        obj.response_content_disposition = deserialize_primitive("ResponseContentDisposition", stack, Ok)?;
+                        obj.response_content_disposition = Some(deserialize_primitive("ResponseContentDisposition", stack, Ok)?);
                     }
                     "ResponseContentEncoding" => {
-                        obj.response_content_encoding = deserialize_primitive("ResponseContentEncoding", stack, Ok)?;
+                        obj.response_content_encoding = Some(deserialize_primitive("ResponseContentEncoding", stack, Ok)?);
                     }
                     "ResponseContentLanguage" => {
-                        obj.response_content_language = deserialize_primitive("ResponseContentLanguage", stack, Ok)?;
+                        obj.response_content_language = Some(deserialize_primitive("ResponseContentLanguage", stack, Ok)?);
                     }
                     "ResponseContentType" => {
-                        obj.response_content_type = deserialize_primitive("ResponseContentType", stack, Ok)?;
+                        obj.response_content_type = Some(deserialize_primitive("ResponseContentType", stack, Ok)?);
                     }
                     "ResponseExpires" => {
-                        obj.response_expires = deserialize_primitive("ResponseExpires", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.response_expires = Some(deserialize_primitive("ResponseExpires", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?;
+                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
                     }
                     "SSECustomerKey" => {
-                        obj.sse_customer_key = deserialize_primitive("SSECustomerKey", stack, Ok)?;
+                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
                     }
                     "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?;
+                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "PartNumber" => {
-                        obj.part_number = deserialize_primitive("PartNumber", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
+                        obj.part_number = Some(deserialize_primitive("PartNumber", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5617,11 +5619,11 @@ pub struct GetObjectRetentionRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetObjectRetentionRequestDeserializer;
 impl GetObjectRetentionRequestDeserializer {
@@ -5641,13 +5643,13 @@ impl GetObjectRetentionRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5660,7 +5662,7 @@ impl GetObjectRetentionRequestDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct GetObjectTaggingOutput {
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "TagSet")]
     pub tag_set: TagSet,
 }
@@ -5676,7 +5678,7 @@ impl GetObjectTaggingOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "TagSet" => {
                         obj.tag_set
@@ -5697,9 +5699,9 @@ pub struct GetObjectTaggingRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetObjectTaggingRequestDeserializer;
 impl GetObjectTaggingRequestDeserializer {
@@ -5719,10 +5721,10 @@ impl GetObjectTaggingRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5771,9 +5773,9 @@ pub struct GetObjectTorrentRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetObjectTorrentRequestDeserializer;
 impl GetObjectTorrentRequestDeserializer {
@@ -5793,10 +5795,10 @@ impl GetObjectTorrentRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5838,7 +5840,7 @@ pub struct GetPublicAccessBlockRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct GetPublicAccessBlockRequestDeserializer;
 impl GetPublicAccessBlockRequestDeserializer {
@@ -5855,7 +5857,7 @@ impl GetPublicAccessBlockRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5927,15 +5929,15 @@ impl GrantDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Grantee {
     #[serde(rename = "DisplayName")]
-    pub display_name: DisplayName,
+    pub display_name: Option<DisplayName>,
     #[serde(rename = "EmailAddress")]
-    pub email_address: EmailAddress,
+    pub email_address: Option<EmailAddress>,
     #[serde(rename = "ID")]
-    pub id: ID,
+    pub id: Option<ID>,
     #[serde(rename = "Type")]
     pub r#type: Type,
     #[serde(rename = "URI")]
-    pub uri: URI,
+    pub uri: Option<URI>,
 }
 pub struct GranteeDeserializer;
 impl GranteeDeserializer {
@@ -5949,19 +5951,19 @@ impl GranteeDeserializer {
             |name, stack, obj| {
                 match name {
                     "DisplayName" => {
-                        obj.display_name = deserialize_primitive("DisplayName", stack, Ok)?;
+                        obj.display_name = Some(deserialize_primitive("DisplayName", stack, Ok)?);
                     }
                     "EmailAddress" => {
-                        obj.email_address = deserialize_primitive("EmailAddress", stack, Ok)?;
+                        obj.email_address = Some(deserialize_primitive("EmailAddress", stack, Ok)?);
                     }
                     "ID" => {
-                        obj.id = deserialize_primitive("ID", stack, Ok)?;
+                        obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
                     }
                     "Type" => {
                         obj.r#type = deserialize_primitive("Type", stack, Ok)?;
                     }
                     "URI" => {
-                        obj.uri = deserialize_primitive("URI", stack, Ok)?;
+                        obj.uri = Some(deserialize_primitive("URI", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5976,7 +5978,7 @@ pub struct HeadBucketRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct HeadBucketRequestDeserializer;
 impl HeadBucketRequestDeserializer {
@@ -5993,7 +5995,7 @@ impl HeadBucketRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -6180,31 +6182,31 @@ pub struct HeadObjectRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "IfMatch")]
-    pub if_match: IfMatch,
+    pub if_match: Option<IfMatch>,
     #[serde(rename = "IfModifiedSince")]
-    pub if_modified_since: IfModifiedSince,
+    pub if_modified_since: Option<IfModifiedSince>,
     #[serde(rename = "IfNoneMatch")]
-    pub if_none_match: IfNoneMatch,
+    pub if_none_match: Option<IfNoneMatch>,
     #[serde(rename = "IfUnmodifiedSince")]
-    pub if_unmodified_since: IfUnmodifiedSince,
+    pub if_unmodified_since: Option<IfUnmodifiedSince>,
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "Range")]
-    pub range: Range,
+    pub range: Option<Range>,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "SSECustomerAlgorithm")]
-    pub sse_customer_algorithm: SSECustomerAlgorithm,
+    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
     #[serde(rename = "SSECustomerKey")]
-    pub sse_customer_key: SSECustomerKey,
+    pub sse_customer_key: Option<SSECustomerKey>,
     #[serde(rename = "SSECustomerKeyMD5")]
-    pub sse_customer_key_md5: SSECustomerKeyMD5,
+    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "PartNumber")]
-    pub part_number: PartNumber,
+    pub part_number: Option<PartNumber>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct HeadObjectRequestDeserializer;
 impl HeadObjectRequestDeserializer {
@@ -6221,43 +6223,43 @@ impl HeadObjectRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "IfMatch" => {
-                        obj.if_match = deserialize_primitive("IfMatch", stack, Ok)?;
+                        obj.if_match = Some(deserialize_primitive("IfMatch", stack, Ok)?);
                     }
                     "IfModifiedSince" => {
-                        obj.if_modified_since = deserialize_primitive("IfModifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.if_modified_since = Some(deserialize_primitive("IfModifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "IfNoneMatch" => {
-                        obj.if_none_match = deserialize_primitive("IfNoneMatch", stack, Ok)?;
+                        obj.if_none_match = Some(deserialize_primitive("IfNoneMatch", stack, Ok)?);
                     }
                     "IfUnmodifiedSince" => {
-                        obj.if_unmodified_since = deserialize_primitive("IfUnmodifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.if_unmodified_since = Some(deserialize_primitive("IfUnmodifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "Key" => {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "Range" => {
-                        obj.range = deserialize_primitive("Range", stack, Ok)?;
+                        obj.range = Some(deserialize_primitive("Range", stack, Ok)?);
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?;
+                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
                     }
                     "SSECustomerKey" => {
-                        obj.sse_customer_key = deserialize_primitive("SSECustomerKey", stack, Ok)?;
+                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
                     }
                     "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?;
+                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "PartNumber" => {
-                        obj.part_number = deserialize_primitive("PartNumber", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
+                        obj.part_number = Some(deserialize_primitive("PartNumber", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -6407,7 +6409,7 @@ pub struct IntelligentTieringConfiguration {
     #[serde(rename = "Id")]
     pub id: IntelligentTieringId,
     #[serde(rename = "Filter")]
-    pub filter: IntelligentTieringFilter,
+    pub filter: Option<IntelligentTieringFilter>,
     #[serde(rename = "Status")]
     pub status: IntelligentTieringStatus,
     #[serde(rename = "Tierings")]
@@ -6428,7 +6430,7 @@ impl IntelligentTieringConfigurationDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "Filter" => {
-                        obj.filter = IntelligentTieringFilterDeserializer::deserialize("Filter", stack)?;
+                        obj.filter = Some(IntelligentTieringFilterDeserializer::deserialize("Filter", stack)?);
                     }
                     "Status" => {
                         obj.status = deserialize_primitive("Status", stack, Ok)?;
@@ -6521,13 +6523,13 @@ pub struct InventoryConfiguration {
     #[serde(rename = "IsEnabled")]
     pub is_enabled: IsEnabled,
     #[serde(rename = "Filter")]
-    pub filter: InventoryFilter,
+    pub filter: Option<InventoryFilter>,
     #[serde(rename = "Id")]
     pub id: InventoryId,
     #[serde(rename = "IncludedObjectVersions")]
     pub included_object_versions: InventoryIncludedObjectVersions,
     #[serde(rename = "OptionalFields")]
-    pub optional_fields: InventoryOptionalFields,
+    pub optional_fields: Option<InventoryOptionalFields>,
     #[serde(rename = "Schedule")]
     pub schedule: InventorySchedule,
 }
@@ -6549,7 +6551,7 @@ impl InventoryConfigurationDeserializer {
                         obj.is_enabled = deserialize_primitive("IsEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?;
                     }
                     "Filter" => {
-                        obj.filter = InventoryFilterDeserializer::deserialize("Filter", stack)?;
+                        obj.filter = Some(InventoryFilterDeserializer::deserialize("Filter", stack)?);
                     }
                     "Id" => {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
@@ -6559,6 +6561,7 @@ impl InventoryConfigurationDeserializer {
                     }
                     "OptionalFields" => {
                         obj.optional_fields
+                            .get_or_insert(vec![])
                             .extend(InventoryOptionalFieldsDeserializer::deserialize("OptionalFields", stack)?);
                     }
                     "Schedule" => {
@@ -6661,15 +6664,15 @@ impl InventoryFilterDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct InventoryS3BucketDestination {
     #[serde(rename = "AccountId")]
-    pub account_id: AccountId,
+    pub account_id: Option<AccountId>,
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "Format")]
     pub format: InventoryFormat,
     #[serde(rename = "Prefix")]
-    pub prefix: Prefix,
+    pub prefix: Option<Prefix>,
     #[serde(rename = "Encryption")]
-    pub encryption: InventoryEncryption,
+    pub encryption: Option<InventoryEncryption>,
 }
 pub struct InventoryS3BucketDestinationDeserializer;
 impl InventoryS3BucketDestinationDeserializer {
@@ -6683,7 +6686,7 @@ impl InventoryS3BucketDestinationDeserializer {
             |name, stack, obj| {
                 match name {
                     "AccountId" => {
-                        obj.account_id = deserialize_primitive("AccountId", stack, Ok)?;
+                        obj.account_id = Some(deserialize_primitive("AccountId", stack, Ok)?);
                     }
                     "Bucket" => {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
@@ -6692,10 +6695,10 @@ impl InventoryS3BucketDestinationDeserializer {
                         obj.format = deserialize_primitive("Format", stack, Ok)?;
                     }
                     "Prefix" => {
-                        obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
+                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                     }
                     "Encryption" => {
-                        obj.encryption = InventoryEncryptionDeserializer::deserialize("Encryption", stack)?;
+                        obj.encryption = Some(InventoryEncryptionDeserializer::deserialize("Encryption", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -6789,13 +6792,13 @@ impl JSONOutputDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct LambdaFunctionConfiguration {
     #[serde(rename = "Id")]
-    pub id: NotificationId,
+    pub id: Option<NotificationId>,
     #[serde(rename = "LambdaFunctionArn")]
     pub lambda_function_arn: LambdaFunctionArn,
     #[serde(rename = "Events")]
     pub events: EventList,
     #[serde(rename = "Filter")]
-    pub filter: NotificationConfigurationFilter,
+    pub filter: Option<NotificationConfigurationFilter>,
 }
 pub struct LambdaFunctionConfigurationDeserializer;
 impl LambdaFunctionConfigurationDeserializer {
@@ -6809,7 +6812,7 @@ impl LambdaFunctionConfigurationDeserializer {
             |name, stack, obj| {
                 match name {
                     "Id" => {
-                        obj.id = deserialize_primitive("Id", stack, Ok)?;
+                        obj.id = Some(deserialize_primitive("Id", stack, Ok)?);
                     }
                     "LambdaFunctionArn" => {
                         obj.lambda_function_arn = deserialize_primitive("LambdaFunctionArn", stack, Ok)?;
@@ -6819,7 +6822,7 @@ impl LambdaFunctionConfigurationDeserializer {
                             .extend(EventListDeserializer::deserialize("Events", stack)?);
                     }
                     "Filter" => {
-                        obj.filter = NotificationConfigurationFilterDeserializer::deserialize("Filter", stack)?;
+                        obj.filter = Some(NotificationConfigurationFilterDeserializer::deserialize("Filter", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -6897,23 +6900,23 @@ impl LifecycleExpirationDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct LifecycleRule {
     #[serde(rename = "Expiration")]
-    pub expiration: LifecycleExpiration,
+    pub expiration: Option<LifecycleExpiration>,
     #[serde(rename = "ID")]
-    pub id: ID,
+    pub id: Option<ID>,
     #[serde(rename = "Prefix")]
-    pub prefix: Prefix,
+    pub prefix: Option<Prefix>,
     #[serde(rename = "Filter")]
-    pub filter: LifecycleRuleFilter,
+    pub filter: Option<LifecycleRuleFilter>,
     #[serde(rename = "Status")]
     pub status: ExpirationStatus,
     #[serde(rename = "Transitions")]
-    pub transitions: TransitionList,
+    pub transitions: Option<TransitionList>,
     #[serde(rename = "NoncurrentVersionTransitions")]
-    pub noncurrent_version_transitions: NoncurrentVersionTransitionList,
+    pub noncurrent_version_transitions: Option<NoncurrentVersionTransitionList>,
     #[serde(rename = "NoncurrentVersionExpiration")]
-    pub noncurrent_version_expiration: NoncurrentVersionExpiration,
+    pub noncurrent_version_expiration: Option<NoncurrentVersionExpiration>,
     #[serde(rename = "AbortIncompleteMultipartUpload")]
-    pub abort_incomplete_multipart_upload: AbortIncompleteMultipartUpload,
+    pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
 }
 pub struct LifecycleRuleDeserializer;
 impl LifecycleRuleDeserializer {
@@ -6927,33 +6930,35 @@ impl LifecycleRuleDeserializer {
             |name, stack, obj| {
                 match name {
                     "Expiration" => {
-                        obj.expiration = LifecycleExpirationDeserializer::deserialize("Expiration", stack)?;
+                        obj.expiration = Some(LifecycleExpirationDeserializer::deserialize("Expiration", stack)?);
                     }
                     "ID" => {
-                        obj.id = deserialize_primitive("ID", stack, Ok)?;
+                        obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
                     }
                     "Prefix" => {
-                        obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
+                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                     }
                     "Filter" => {
-                        obj.filter = LifecycleRuleFilterDeserializer::deserialize("Filter", stack)?;
+                        obj.filter = Some(LifecycleRuleFilterDeserializer::deserialize("Filter", stack)?);
                     }
                     "Status" => {
                         obj.status = deserialize_primitive("Status", stack, Ok)?;
                     }
                     "Transitions" => {
                         obj.transitions
+                            .get_or_insert(vec![])
                             .extend(TransitionListDeserializer::deserialize("Transitions", stack)?);
                     }
                     "NoncurrentVersionTransitions" => {
                         obj.noncurrent_version_transitions
+                            .get_or_insert(vec![])
                             .extend(NoncurrentVersionTransitionListDeserializer::deserialize("NoncurrentVersionTransitions", stack)?);
                     }
                     "NoncurrentVersionExpiration" => {
-                        obj.noncurrent_version_expiration = NoncurrentVersionExpirationDeserializer::deserialize("NoncurrentVersionExpiration", stack)?;
+                        obj.noncurrent_version_expiration = Some(NoncurrentVersionExpirationDeserializer::deserialize("NoncurrentVersionExpiration", stack)?);
                     }
                     "AbortIncompleteMultipartUpload" => {
-                        obj.abort_incomplete_multipart_upload = AbortIncompleteMultipartUploadDeserializer::deserialize("AbortIncompleteMultipartUpload", stack)?;
+                        obj.abort_incomplete_multipart_upload = Some(AbortIncompleteMultipartUploadDeserializer::deserialize("AbortIncompleteMultipartUpload", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7083,9 +7088,9 @@ pub struct ListBucketAnalyticsConfigurationsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContinuationToken")]
-    pub continuation_token: Token,
+    pub continuation_token: Option<Token>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct ListBucketAnalyticsConfigurationsRequestDeserializer;
 impl ListBucketAnalyticsConfigurationsRequestDeserializer {
@@ -7102,10 +7107,10 @@ impl ListBucketAnalyticsConfigurationsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContinuationToken" => {
-                        obj.continuation_token = deserialize_primitive("ContinuationToken", stack, Ok)?;
+                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7164,7 +7169,7 @@ pub struct ListBucketIntelligentTieringConfigurationsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContinuationToken")]
-    pub continuation_token: Token,
+    pub continuation_token: Option<Token>,
 }
 pub struct ListBucketIntelligentTieringConfigurationsRequestDeserializer;
 impl ListBucketIntelligentTieringConfigurationsRequestDeserializer {
@@ -7181,7 +7186,7 @@ impl ListBucketIntelligentTieringConfigurationsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContinuationToken" => {
-                        obj.continuation_token = deserialize_primitive("ContinuationToken", stack, Ok)?;
+                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7240,9 +7245,9 @@ pub struct ListBucketInventoryConfigurationsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContinuationToken")]
-    pub continuation_token: Token,
+    pub continuation_token: Option<Token>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct ListBucketInventoryConfigurationsRequestDeserializer;
 impl ListBucketInventoryConfigurationsRequestDeserializer {
@@ -7259,10 +7264,10 @@ impl ListBucketInventoryConfigurationsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContinuationToken" => {
-                        obj.continuation_token = deserialize_primitive("ContinuationToken", stack, Ok)?;
+                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7321,9 +7326,9 @@ pub struct ListBucketMetricsConfigurationsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContinuationToken")]
-    pub continuation_token: Token,
+    pub continuation_token: Option<Token>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct ListBucketMetricsConfigurationsRequestDeserializer;
 impl ListBucketMetricsConfigurationsRequestDeserializer {
@@ -7340,10 +7345,10 @@ impl ListBucketMetricsConfigurationsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContinuationToken" => {
-                        obj.continuation_token = deserialize_primitive("ContinuationToken", stack, Ok)?;
+                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7478,19 +7483,19 @@ pub struct ListMultipartUploadsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "Delimiter")]
-    pub delimiter: Delimiter,
+    pub delimiter: Option<Delimiter>,
     #[serde(rename = "EncodingType")]
-    pub encoding_type: EncodingType,
+    pub encoding_type: Option<EncodingType>,
     #[serde(rename = "KeyMarker")]
-    pub key_marker: KeyMarker,
+    pub key_marker: Option<KeyMarker>,
     #[serde(rename = "MaxUploads")]
-    pub max_uploads: MaxUploads,
+    pub max_uploads: Option<MaxUploads>,
     #[serde(rename = "Prefix")]
-    pub prefix: Prefix,
+    pub prefix: Option<Prefix>,
     #[serde(rename = "UploadIdMarker")]
-    pub upload_id_marker: UploadIdMarker,
+    pub upload_id_marker: Option<UploadIdMarker>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct ListMultipartUploadsRequestDeserializer;
 impl ListMultipartUploadsRequestDeserializer {
@@ -7507,25 +7512,25 @@ impl ListMultipartUploadsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "Delimiter" => {
-                        obj.delimiter = deserialize_primitive("Delimiter", stack, Ok)?;
+                        obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
                     }
                     "EncodingType" => {
-                        obj.encoding_type = deserialize_primitive("EncodingType", stack, Ok)?;
+                        obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
                     }
                     "KeyMarker" => {
-                        obj.key_marker = deserialize_primitive("KeyMarker", stack, Ok)?;
+                        obj.key_marker = Some(deserialize_primitive("KeyMarker", stack, Ok)?);
                     }
                     "MaxUploads" => {
-                        obj.max_uploads = deserialize_primitive("MaxUploads", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
+                        obj.max_uploads = Some(deserialize_primitive("MaxUploads", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
                     }
                     "Prefix" => {
-                        obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
+                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                     }
                     "UploadIdMarker" => {
-                        obj.upload_id_marker = deserialize_primitive("UploadIdMarker", stack, Ok)?;
+                        obj.upload_id_marker = Some(deserialize_primitive("UploadIdMarker", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7633,19 +7638,19 @@ pub struct ListObjectVersionsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "Delimiter")]
-    pub delimiter: Delimiter,
+    pub delimiter: Option<Delimiter>,
     #[serde(rename = "EncodingType")]
-    pub encoding_type: EncodingType,
+    pub encoding_type: Option<EncodingType>,
     #[serde(rename = "KeyMarker")]
-    pub key_marker: KeyMarker,
+    pub key_marker: Option<KeyMarker>,
     #[serde(rename = "MaxKeys")]
-    pub max_keys: MaxKeys,
+    pub max_keys: Option<MaxKeys>,
     #[serde(rename = "Prefix")]
-    pub prefix: Prefix,
+    pub prefix: Option<Prefix>,
     #[serde(rename = "VersionIdMarker")]
-    pub version_id_marker: VersionIdMarker,
+    pub version_id_marker: Option<VersionIdMarker>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct ListObjectVersionsRequestDeserializer;
 impl ListObjectVersionsRequestDeserializer {
@@ -7662,25 +7667,25 @@ impl ListObjectVersionsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "Delimiter" => {
-                        obj.delimiter = deserialize_primitive("Delimiter", stack, Ok)?;
+                        obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
                     }
                     "EncodingType" => {
-                        obj.encoding_type = deserialize_primitive("EncodingType", stack, Ok)?;
+                        obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
                     }
                     "KeyMarker" => {
-                        obj.key_marker = deserialize_primitive("KeyMarker", stack, Ok)?;
+                        obj.key_marker = Some(deserialize_primitive("KeyMarker", stack, Ok)?);
                     }
                     "MaxKeys" => {
-                        obj.max_keys = deserialize_primitive("MaxKeys", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
+                        obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
                     }
                     "Prefix" => {
-                        obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
+                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                     }
                     "VersionIdMarker" => {
-                        obj.version_id_marker = deserialize_primitive("VersionIdMarker", stack, Ok)?;
+                        obj.version_id_marker = Some(deserialize_primitive("VersionIdMarker", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7771,19 +7776,19 @@ pub struct ListObjectsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "Delimiter")]
-    pub delimiter: Delimiter,
+    pub delimiter: Option<Delimiter>,
     #[serde(rename = "EncodingType")]
-    pub encoding_type: EncodingType,
+    pub encoding_type: Option<EncodingType>,
     #[serde(rename = "Marker")]
-    pub marker: Marker,
+    pub marker: Option<Marker>,
     #[serde(rename = "MaxKeys")]
-    pub max_keys: MaxKeys,
+    pub max_keys: Option<MaxKeys>,
     #[serde(rename = "Prefix")]
-    pub prefix: Prefix,
+    pub prefix: Option<Prefix>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct ListObjectsRequestDeserializer;
 impl ListObjectsRequestDeserializer {
@@ -7800,25 +7805,25 @@ impl ListObjectsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "Delimiter" => {
-                        obj.delimiter = deserialize_primitive("Delimiter", stack, Ok)?;
+                        obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
                     }
                     "EncodingType" => {
-                        obj.encoding_type = deserialize_primitive("EncodingType", stack, Ok)?;
+                        obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
                     }
                     "Marker" => {
-                        obj.marker = deserialize_primitive("Marker", stack, Ok)?;
+                        obj.marker = Some(deserialize_primitive("Marker", stack, Ok)?);
                     }
                     "MaxKeys" => {
-                        obj.max_keys = deserialize_primitive("MaxKeys", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
+                        obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
                     }
                     "Prefix" => {
-                        obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
+                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7919,23 +7924,23 @@ pub struct ListObjectsV2Request {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "Delimiter")]
-    pub delimiter: Delimiter,
+    pub delimiter: Option<Delimiter>,
     #[serde(rename = "EncodingType")]
-    pub encoding_type: EncodingType,
+    pub encoding_type: Option<EncodingType>,
     #[serde(rename = "MaxKeys")]
-    pub max_keys: MaxKeys,
+    pub max_keys: Option<MaxKeys>,
     #[serde(rename = "Prefix")]
-    pub prefix: Prefix,
+    pub prefix: Option<Prefix>,
     #[serde(rename = "ContinuationToken")]
-    pub continuation_token: Token,
+    pub continuation_token: Option<Token>,
     #[serde(rename = "FetchOwner")]
-    pub fetch_owner: FetchOwner,
+    pub fetch_owner: Option<FetchOwner>,
     #[serde(rename = "StartAfter")]
-    pub start_after: StartAfter,
+    pub start_after: Option<StartAfter>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct ListObjectsV2RequestDeserializer;
 impl ListObjectsV2RequestDeserializer {
@@ -7952,31 +7957,31 @@ impl ListObjectsV2RequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "Delimiter" => {
-                        obj.delimiter = deserialize_primitive("Delimiter", stack, Ok)?;
+                        obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
                     }
                     "EncodingType" => {
-                        obj.encoding_type = deserialize_primitive("EncodingType", stack, Ok)?;
+                        obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
                     }
                     "MaxKeys" => {
-                        obj.max_keys = deserialize_primitive("MaxKeys", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
+                        obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
                     }
                     "Prefix" => {
-                        obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
+                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                     }
                     "ContinuationToken" => {
-                        obj.continuation_token = deserialize_primitive("ContinuationToken", stack, Ok)?;
+                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     "FetchOwner" => {
-                        obj.fetch_owner = deserialize_primitive("FetchOwner", stack, |s| Ok(bool::from_str(&s).unwrap()))?;
+                        obj.fetch_owner = Some(deserialize_primitive("FetchOwner", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
                     }
                     "StartAfter" => {
-                        obj.start_after = deserialize_primitive("StartAfter", stack, Ok)?;
+                        obj.start_after = Some(deserialize_primitive("StartAfter", stack, Ok)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -8087,15 +8092,15 @@ pub struct ListPartsRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "MaxParts")]
-    pub max_parts: MaxParts,
+    pub max_parts: Option<MaxParts>,
     #[serde(rename = "PartNumberMarker")]
-    pub part_number_marker: PartNumberMarker,
+    pub part_number_marker: Option<PartNumberMarker>,
     #[serde(rename = "UploadId")]
     pub upload_id: MultipartUploadId,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct ListPartsRequestDeserializer;
 impl ListPartsRequestDeserializer {
@@ -8115,19 +8120,19 @@ impl ListPartsRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "MaxParts" => {
-                        obj.max_parts = deserialize_primitive("MaxParts", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
+                        obj.max_parts = Some(deserialize_primitive("MaxParts", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
                     }
                     "PartNumberMarker" => {
-                        obj.part_number_marker = deserialize_primitive("PartNumberMarker", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
+                        obj.part_number_marker = Some(deserialize_primitive("PartNumberMarker", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
                     }
                     "UploadId" => {
                         obj.upload_id = deserialize_primitive("UploadId", stack, Ok)?;
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -8142,7 +8147,7 @@ pub struct LoggingEnabled {
     #[serde(rename = "TargetBucket")]
     pub target_bucket: TargetBucket,
     #[serde(rename = "TargetGrants")]
-    pub target_grants: TargetGrants,
+    pub target_grants: Option<TargetGrants>,
     #[serde(rename = "TargetPrefix")]
     pub target_prefix: TargetPrefix,
 }
@@ -8162,6 +8167,7 @@ impl LoggingEnabledDeserializer {
                     }
                     "TargetGrants" => {
                         obj.target_grants
+                            .get_or_insert(vec![])
                             .extend(TargetGrantsDeserializer::deserialize("TargetGrants", stack)?);
                     }
                     "TargetPrefix" => {
@@ -8212,7 +8218,7 @@ pub struct Metrics {
     #[serde(rename = "Status")]
     pub status: MetricsStatus,
     #[serde(rename = "EventThreshold")]
-    pub event_threshold: ReplicationTimeValue,
+    pub event_threshold: Option<ReplicationTimeValue>,
 }
 pub struct MetricsDeserializer;
 impl MetricsDeserializer {
@@ -8229,7 +8235,7 @@ impl MetricsDeserializer {
                         obj.status = deserialize_primitive("Status", stack, Ok)?;
                     }
                     "EventThreshold" => {
-                        obj.event_threshold = ReplicationTimeValueDeserializer::deserialize("EventThreshold", stack)?;
+                        obj.event_threshold = Some(ReplicationTimeValueDeserializer::deserialize("EventThreshold", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -8278,7 +8284,7 @@ pub struct MetricsConfiguration {
     #[serde(rename = "Id")]
     pub id: MetricsId,
     #[serde(rename = "Filter")]
-    pub filter: MetricsFilter,
+    pub filter: Option<MetricsFilter>,
 }
 pub struct MetricsConfigurationDeserializer;
 impl MetricsConfigurationDeserializer {
@@ -8295,7 +8301,7 @@ impl MetricsConfigurationDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "Filter" => {
-                        obj.filter = MetricsFilterDeserializer::deserialize("Filter", stack)?;
+                        obj.filter = Some(MetricsFilterDeserializer::deserialize("Filter", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -8705,7 +8711,7 @@ pub struct ObjectIdentifier {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
 }
 pub struct ObjectIdentifierDeserializer;
 impl ObjectIdentifierDeserializer {
@@ -8722,7 +8728,7 @@ impl ObjectIdentifierDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9284,7 +9290,7 @@ pub struct PutBucketAccelerateConfigurationRequest {
     #[serde(rename = "AccelerateConfiguration")]
     pub accelerate_configuration: AccelerateConfiguration,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketAccelerateConfigurationRequestDeserializer;
 impl PutBucketAccelerateConfigurationRequestDeserializer {
@@ -9304,7 +9310,7 @@ impl PutBucketAccelerateConfigurationRequestDeserializer {
                         obj.accelerate_configuration = AccelerateConfigurationDeserializer::deserialize("AccelerateConfiguration", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9317,25 +9323,25 @@ impl PutBucketAccelerateConfigurationRequestDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct PutBucketAclRequest {
     #[serde(rename = "ACL")]
-    pub acl: BucketCannedACL,
+    pub acl: Option<BucketCannedACL>,
     #[serde(rename = "AccessControlPolicy")]
-    pub access_control_policy: AccessControlPolicy,
+    pub access_control_policy: Option<AccessControlPolicy>,
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "GrantFullControl")]
-    pub grant_full_control: GrantFullControl,
+    pub grant_full_control: Option<GrantFullControl>,
     #[serde(rename = "GrantRead")]
-    pub grant_read: GrantRead,
+    pub grant_read: Option<GrantRead>,
     #[serde(rename = "GrantReadACP")]
-    pub grant_read_acp: GrantReadACP,
+    pub grant_read_acp: Option<GrantReadACP>,
     #[serde(rename = "GrantWrite")]
-    pub grant_write: GrantWrite,
+    pub grant_write: Option<GrantWrite>,
     #[serde(rename = "GrantWriteACP")]
-    pub grant_write_acp: GrantWriteACP,
+    pub grant_write_acp: Option<GrantWriteACP>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketAclRequestDeserializer;
 impl PutBucketAclRequestDeserializer {
@@ -9349,34 +9355,34 @@ impl PutBucketAclRequestDeserializer {
             |name, stack, obj| {
                 match name {
                     "ACL" => {
-                        obj.acl = deserialize_primitive("ACL", stack, Ok)?;
+                        obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
                     }
                     "AccessControlPolicy" => {
-                        obj.access_control_policy = AccessControlPolicyDeserializer::deserialize("AccessControlPolicy", stack)?;
+                        obj.access_control_policy = Some(AccessControlPolicyDeserializer::deserialize("AccessControlPolicy", stack)?);
                     }
                     "Bucket" => {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "GrantFullControl" => {
-                        obj.grant_full_control = deserialize_primitive("GrantFullControl", stack, Ok)?;
+                        obj.grant_full_control = Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
                     }
                     "GrantRead" => {
-                        obj.grant_read = deserialize_primitive("GrantRead", stack, Ok)?;
+                        obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
                     }
                     "GrantReadACP" => {
-                        obj.grant_read_acp = deserialize_primitive("GrantReadACP", stack, Ok)?;
+                        obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
                     }
                     "GrantWrite" => {
-                        obj.grant_write = deserialize_primitive("GrantWrite", stack, Ok)?;
+                        obj.grant_write = Some(deserialize_primitive("GrantWrite", stack, Ok)?);
                     }
                     "GrantWriteACP" => {
-                        obj.grant_write_acp = deserialize_primitive("GrantWriteACP", stack, Ok)?;
+                        obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9395,7 +9401,7 @@ pub struct PutBucketAnalyticsConfigurationRequest {
     #[serde(rename = "AnalyticsConfiguration")]
     pub analytics_configuration: AnalyticsConfiguration,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketAnalyticsConfigurationRequestDeserializer;
 impl PutBucketAnalyticsConfigurationRequestDeserializer {
@@ -9418,7 +9424,7 @@ impl PutBucketAnalyticsConfigurationRequestDeserializer {
                         obj.analytics_configuration = AnalyticsConfigurationDeserializer::deserialize("AnalyticsConfiguration", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9435,9 +9441,9 @@ pub struct PutBucketCorsRequest {
     #[serde(rename = "CORSConfiguration")]
     pub cors_configuration: CORSConfiguration,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketCorsRequestDeserializer;
 impl PutBucketCorsRequestDeserializer {
@@ -9457,10 +9463,10 @@ impl PutBucketCorsRequestDeserializer {
                         obj.cors_configuration = CORSConfigurationDeserializer::deserialize("CORSConfiguration", stack)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9475,11 +9481,11 @@ pub struct PutBucketEncryptionRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "ServerSideEncryptionConfiguration")]
     pub server_side_encryption_configuration: ServerSideEncryptionConfiguration,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketEncryptionRequestDeserializer;
 impl PutBucketEncryptionRequestDeserializer {
@@ -9496,13 +9502,13 @@ impl PutBucketEncryptionRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ServerSideEncryptionConfiguration" => {
                         obj.server_side_encryption_configuration = ServerSideEncryptionConfigurationDeserializer::deserialize("ServerSideEncryptionConfiguration", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9558,7 +9564,7 @@ pub struct PutBucketInventoryConfigurationRequest {
     #[serde(rename = "InventoryConfiguration")]
     pub inventory_configuration: InventoryConfiguration,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketInventoryConfigurationRequestDeserializer;
 impl PutBucketInventoryConfigurationRequestDeserializer {
@@ -9581,7 +9587,7 @@ impl PutBucketInventoryConfigurationRequestDeserializer {
                         obj.inventory_configuration = InventoryConfigurationDeserializer::deserialize("InventoryConfiguration", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9596,9 +9602,9 @@ pub struct PutBucketLifecycleConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "LifecycleConfiguration")]
-    pub lifecycle_configuration: BucketLifecycleConfiguration,
+    pub lifecycle_configuration: Option<BucketLifecycleConfiguration>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketLifecycleConfigurationRequestDeserializer;
 impl PutBucketLifecycleConfigurationRequestDeserializer {
@@ -9615,10 +9621,10 @@ impl PutBucketLifecycleConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "LifecycleConfiguration" => {
-                        obj.lifecycle_configuration = BucketLifecycleConfigurationDeserializer::deserialize("LifecycleConfiguration", stack)?;
+                        obj.lifecycle_configuration = Some(BucketLifecycleConfigurationDeserializer::deserialize("LifecycleConfiguration", stack)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9633,11 +9639,11 @@ pub struct PutBucketLifecycleRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "LifecycleConfiguration")]
-    pub lifecycle_configuration: LifecycleConfiguration,
+    pub lifecycle_configuration: Option<LifecycleConfiguration>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketLifecycleRequestDeserializer;
 impl PutBucketLifecycleRequestDeserializer {
@@ -9654,13 +9660,13 @@ impl PutBucketLifecycleRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "LifecycleConfiguration" => {
-                        obj.lifecycle_configuration = LifecycleConfigurationDeserializer::deserialize("LifecycleConfiguration", stack)?;
+                        obj.lifecycle_configuration = Some(LifecycleConfigurationDeserializer::deserialize("LifecycleConfiguration", stack)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9677,9 +9683,9 @@ pub struct PutBucketLoggingRequest {
     #[serde(rename = "BucketLoggingStatus")]
     pub bucket_logging_status: BucketLoggingStatus,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketLoggingRequestDeserializer;
 impl PutBucketLoggingRequestDeserializer {
@@ -9699,10 +9705,10 @@ impl PutBucketLoggingRequestDeserializer {
                         obj.bucket_logging_status = BucketLoggingStatusDeserializer::deserialize("BucketLoggingStatus", stack)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9721,7 +9727,7 @@ pub struct PutBucketMetricsConfigurationRequest {
     #[serde(rename = "MetricsConfiguration")]
     pub metrics_configuration: MetricsConfiguration,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketMetricsConfigurationRequestDeserializer;
 impl PutBucketMetricsConfigurationRequestDeserializer {
@@ -9744,7 +9750,7 @@ impl PutBucketMetricsConfigurationRequestDeserializer {
                         obj.metrics_configuration = MetricsConfigurationDeserializer::deserialize("MetricsConfiguration", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9761,7 +9767,7 @@ pub struct PutBucketNotificationConfigurationRequest {
     #[serde(rename = "NotificationConfiguration")]
     pub notification_configuration: NotificationConfiguration,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketNotificationConfigurationRequestDeserializer;
 impl PutBucketNotificationConfigurationRequestDeserializer {
@@ -9781,7 +9787,7 @@ impl PutBucketNotificationConfigurationRequestDeserializer {
                         obj.notification_configuration = NotificationConfigurationDeserializer::deserialize("NotificationConfiguration", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9796,11 +9802,11 @@ pub struct PutBucketNotificationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "NotificationConfiguration")]
     pub notification_configuration: NotificationConfigurationDeprecated,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketNotificationRequestDeserializer;
 impl PutBucketNotificationRequestDeserializer {
@@ -9817,13 +9823,13 @@ impl PutBucketNotificationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "NotificationConfiguration" => {
                         obj.notification_configuration = NotificationConfigurationDeprecatedDeserializer::deserialize("NotificationConfiguration", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9838,9 +9844,9 @@ pub struct PutBucketOwnershipControlsRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
     #[serde(rename = "OwnershipControls")]
     pub ownership_controls: OwnershipControls,
 }
@@ -9859,10 +9865,10 @@ impl PutBucketOwnershipControlsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     "OwnershipControls" => {
                         obj.ownership_controls = OwnershipControlsDeserializer::deserialize("OwnershipControls", stack)?;
@@ -9880,13 +9886,13 @@ pub struct PutBucketPolicyRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "ConfirmRemoveSelfBucketAccess")]
-    pub confirm_remove_self_bucket_access: ConfirmRemoveSelfBucketAccess,
+    pub confirm_remove_self_bucket_access: Option<ConfirmRemoveSelfBucketAccess>,
     #[serde(rename = "Policy")]
     pub policy: Policy,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketPolicyRequestDeserializer;
 impl PutBucketPolicyRequestDeserializer {
@@ -9903,16 +9909,16 @@ impl PutBucketPolicyRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ConfirmRemoveSelfBucketAccess" => {
-                        obj.confirm_remove_self_bucket_access = deserialize_primitive("ConfirmRemoveSelfBucketAccess", stack, |s| Ok(bool::from_str(&s).unwrap()))?;
+                        obj.confirm_remove_self_bucket_access = Some(deserialize_primitive("ConfirmRemoveSelfBucketAccess", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
                     }
                     "Policy" => {
                         obj.policy = deserialize_primitive("Policy", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9927,13 +9933,13 @@ pub struct PutBucketReplicationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "ReplicationConfiguration")]
     pub replication_configuration: ReplicationConfiguration,
     #[serde(rename = "Token")]
-    pub token: ObjectLockToken,
+    pub token: Option<ObjectLockToken>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketReplicationRequestDeserializer;
 impl PutBucketReplicationRequestDeserializer {
@@ -9950,16 +9956,16 @@ impl PutBucketReplicationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ReplicationConfiguration" => {
                         obj.replication_configuration = ReplicationConfigurationDeserializer::deserialize("ReplicationConfiguration", stack)?;
                     }
                     "Token" => {
-                        obj.token = deserialize_primitive("Token", stack, Ok)?;
+                        obj.token = Some(deserialize_primitive("Token", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9974,11 +9980,11 @@ pub struct PutBucketRequestPaymentRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "RequestPaymentConfiguration")]
     pub request_payment_configuration: RequestPaymentConfiguration,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketRequestPaymentRequestDeserializer;
 impl PutBucketRequestPaymentRequestDeserializer {
@@ -9995,13 +10001,13 @@ impl PutBucketRequestPaymentRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "RequestPaymentConfiguration" => {
                         obj.request_payment_configuration = RequestPaymentConfigurationDeserializer::deserialize("RequestPaymentConfiguration", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10016,11 +10022,11 @@ pub struct PutBucketTaggingRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "Tagging")]
     pub tagging: Tagging,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketTaggingRequestDeserializer;
 impl PutBucketTaggingRequestDeserializer {
@@ -10037,13 +10043,13 @@ impl PutBucketTaggingRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "Tagging" => {
                         obj.tagging = TaggingDeserializer::deserialize("Tagging", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10058,13 +10064,13 @@ pub struct PutBucketVersioningRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "MFA")]
-    pub mfa: MFA,
+    pub mfa: Option<MFA>,
     #[serde(rename = "VersioningConfiguration")]
     pub versioning_configuration: VersioningConfiguration,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketVersioningRequestDeserializer;
 impl PutBucketVersioningRequestDeserializer {
@@ -10081,16 +10087,16 @@ impl PutBucketVersioningRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "MFA" => {
-                        obj.mfa = deserialize_primitive("MFA", stack, Ok)?;
+                        obj.mfa = Some(deserialize_primitive("MFA", stack, Ok)?);
                     }
                     "VersioningConfiguration" => {
                         obj.versioning_configuration = VersioningConfigurationDeserializer::deserialize("VersioningConfiguration", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10105,11 +10111,11 @@ pub struct PutBucketWebsiteRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "WebsiteConfiguration")]
     pub website_configuration: WebsiteConfiguration,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutBucketWebsiteRequestDeserializer;
 impl PutBucketWebsiteRequestDeserializer {
@@ -10126,13 +10132,13 @@ impl PutBucketWebsiteRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "WebsiteConfiguration" => {
                         obj.website_configuration = WebsiteConfigurationDeserializer::deserialize("WebsiteConfiguration", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10172,31 +10178,31 @@ impl PutObjectAclOutputDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct PutObjectAclRequest {
     #[serde(rename = "ACL")]
-    pub acl: ObjectCannedACL,
+    pub acl: Option<ObjectCannedACL>,
     #[serde(rename = "AccessControlPolicy")]
-    pub access_control_policy: AccessControlPolicy,
+    pub access_control_policy: Option<AccessControlPolicy>,
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "GrantFullControl")]
-    pub grant_full_control: GrantFullControl,
+    pub grant_full_control: Option<GrantFullControl>,
     #[serde(rename = "GrantRead")]
-    pub grant_read: GrantRead,
+    pub grant_read: Option<GrantRead>,
     #[serde(rename = "GrantReadACP")]
-    pub grant_read_acp: GrantReadACP,
+    pub grant_read_acp: Option<GrantReadACP>,
     #[serde(rename = "GrantWrite")]
-    pub grant_write: GrantWrite,
+    pub grant_write: Option<GrantWrite>,
     #[serde(rename = "GrantWriteACP")]
-    pub grant_write_acp: GrantWriteACP,
+    pub grant_write_acp: Option<GrantWriteACP>,
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutObjectAclRequestDeserializer;
 impl PutObjectAclRequestDeserializer {
@@ -10210,43 +10216,43 @@ impl PutObjectAclRequestDeserializer {
             |name, stack, obj| {
                 match name {
                     "ACL" => {
-                        obj.acl = deserialize_primitive("ACL", stack, Ok)?;
+                        obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
                     }
                     "AccessControlPolicy" => {
-                        obj.access_control_policy = AccessControlPolicyDeserializer::deserialize("AccessControlPolicy", stack)?;
+                        obj.access_control_policy = Some(AccessControlPolicyDeserializer::deserialize("AccessControlPolicy", stack)?);
                     }
                     "Bucket" => {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "GrantFullControl" => {
-                        obj.grant_full_control = deserialize_primitive("GrantFullControl", stack, Ok)?;
+                        obj.grant_full_control = Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
                     }
                     "GrantRead" => {
-                        obj.grant_read = deserialize_primitive("GrantRead", stack, Ok)?;
+                        obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
                     }
                     "GrantReadACP" => {
-                        obj.grant_read_acp = deserialize_primitive("GrantReadACP", stack, Ok)?;
+                        obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
                     }
                     "GrantWrite" => {
-                        obj.grant_write = deserialize_primitive("GrantWrite", stack, Ok)?;
+                        obj.grant_write = Some(deserialize_primitive("GrantWrite", stack, Ok)?);
                     }
                     "GrantWriteACP" => {
-                        obj.grant_write_acp = deserialize_primitive("GrantWriteACP", stack, Ok)?;
+                        obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
                     }
                     "Key" => {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10290,15 +10296,15 @@ pub struct PutObjectLegalHoldRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "LegalHold")]
-    pub legal_hold: ObjectLockLegalHold,
+    pub legal_hold: Option<ObjectLockLegalHold>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutObjectLegalHoldRequestDeserializer;
 impl PutObjectLegalHoldRequestDeserializer {
@@ -10318,19 +10324,19 @@ impl PutObjectLegalHoldRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "LegalHold" => {
-                        obj.legal_hold = ObjectLockLegalHoldDeserializer::deserialize("LegalHold", stack)?;
+                        obj.legal_hold = Some(ObjectLockLegalHoldDeserializer::deserialize("LegalHold", stack)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10372,15 +10378,15 @@ pub struct PutObjectLockConfigurationRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ObjectLockConfiguration")]
-    pub object_lock_configuration: ObjectLockConfiguration,
+    pub object_lock_configuration: Option<ObjectLockConfiguration>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "Token")]
-    pub token: ObjectLockToken,
+    pub token: Option<ObjectLockToken>,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutObjectLockConfigurationRequestDeserializer;
 impl PutObjectLockConfigurationRequestDeserializer {
@@ -10397,19 +10403,19 @@ impl PutObjectLockConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ObjectLockConfiguration" => {
-                        obj.object_lock_configuration = ObjectLockConfigurationDeserializer::deserialize("ObjectLockConfiguration", stack)?;
+                        obj.object_lock_configuration = Some(ObjectLockConfigurationDeserializer::deserialize("ObjectLockConfiguration", stack)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "Token" => {
-                        obj.token = deserialize_primitive("Token", stack, Ok)?;
+                        obj.token = Some(deserialize_primitive("Token", stack, Ok)?);
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10494,69 +10500,69 @@ impl PutObjectOutputDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct PutObjectRequest {
     #[serde(rename = "ACL")]
-    pub acl: ObjectCannedACL,
+    pub acl: Option<ObjectCannedACL>,
     #[serde(rename = "Body")]
-    pub body: Body,
+    pub body: Option<Body>,
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "CacheControl")]
-    pub cache_control: CacheControl,
+    pub cache_control: Option<CacheControl>,
     #[serde(rename = "ContentDisposition")]
-    pub content_disposition: ContentDisposition,
+    pub content_disposition: Option<ContentDisposition>,
     #[serde(rename = "ContentEncoding")]
-    pub content_encoding: ContentEncoding,
+    pub content_encoding: Option<ContentEncoding>,
     #[serde(rename = "ContentLanguage")]
-    pub content_language: ContentLanguage,
+    pub content_language: Option<ContentLanguage>,
     #[serde(rename = "ContentLength")]
-    pub content_length: ContentLength,
+    pub content_length: Option<ContentLength>,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "ContentType")]
-    pub content_type: ContentType,
+    pub content_type: Option<ContentType>,
     #[serde(rename = "Expires")]
-    pub expires: Expires,
+    pub expires: Option<Expires>,
     #[serde(rename = "GrantFullControl")]
-    pub grant_full_control: GrantFullControl,
+    pub grant_full_control: Option<GrantFullControl>,
     #[serde(rename = "GrantRead")]
-    pub grant_read: GrantRead,
+    pub grant_read: Option<GrantRead>,
     #[serde(rename = "GrantReadACP")]
-    pub grant_read_acp: GrantReadACP,
+    pub grant_read_acp: Option<GrantReadACP>,
     #[serde(rename = "GrantWriteACP")]
-    pub grant_write_acp: GrantWriteACP,
+    pub grant_write_acp: Option<GrantWriteACP>,
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "Metadata")]
-    pub metadata: Metadata,
+    pub metadata: Option<Metadata>,
     #[serde(rename = "ServerSideEncryption")]
-    pub server_side_encryption: ServerSideEncryption,
+    pub server_side_encryption: Option<ServerSideEncryption>,
     #[serde(rename = "StorageClass")]
-    pub storage_class: StorageClass,
+    pub storage_class: Option<StorageClass>,
     #[serde(rename = "WebsiteRedirectLocation")]
-    pub website_redirect_location: WebsiteRedirectLocation,
+    pub website_redirect_location: Option<WebsiteRedirectLocation>,
     #[serde(rename = "SSECustomerAlgorithm")]
-    pub sse_customer_algorithm: SSECustomerAlgorithm,
+    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
     #[serde(rename = "SSECustomerKey")]
-    pub sse_customer_key: SSECustomerKey,
+    pub sse_customer_key: Option<SSECustomerKey>,
     #[serde(rename = "SSECustomerKeyMD5")]
-    pub sse_customer_key_md5: SSECustomerKeyMD5,
+    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     #[serde(rename = "SSEKMSKeyId")]
-    pub ssekms_key_id: SSEKMSKeyId,
+    pub ssekms_key_id: Option<SSEKMSKeyId>,
     #[serde(rename = "SSEKMSEncryptionContext")]
-    pub ssekms_encryption_context: SSEKMSEncryptionContext,
+    pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
     #[serde(rename = "BucketKeyEnabled")]
-    pub bucket_key_enabled: BucketKeyEnabled,
+    pub bucket_key_enabled: Option<BucketKeyEnabled>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "Tagging")]
-    pub tagging: TaggingHeader,
+    pub tagging: Option<TaggingHeader>,
     #[serde(rename = "ObjectLockMode")]
-    pub object_lock_mode: ObjectLockMode,
+    pub object_lock_mode: Option<ObjectLockMode>,
     #[serde(rename = "ObjectLockRetainUntilDate")]
-    pub object_lock_retain_until_date: ObjectLockRetainUntilDate,
+    pub object_lock_retain_until_date: Option<ObjectLockRetainUntilDate>,
     #[serde(rename = "ObjectLockLegalHoldStatus")]
-    pub object_lock_legal_hold_status: ObjectLockLegalHoldStatus,
+    pub object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutObjectRequestDeserializer;
 impl PutObjectRequestDeserializer {
@@ -10570,100 +10576,100 @@ impl PutObjectRequestDeserializer {
             |name, stack, obj| {
                 match name {
                     "ACL" => {
-                        obj.acl = deserialize_primitive("ACL", stack, Ok)?;
+                        obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
                     }
                     "Body" => {
-                        obj.body = Default::default();
+                        obj.body = Some(Default::default());
                     }
                     "Bucket" => {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "CacheControl" => {
-                        obj.cache_control = deserialize_primitive("CacheControl", stack, Ok)?;
+                        obj.cache_control = Some(deserialize_primitive("CacheControl", stack, Ok)?);
                     }
                     "ContentDisposition" => {
-                        obj.content_disposition = deserialize_primitive("ContentDisposition", stack, Ok)?;
+                        obj.content_disposition = Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
                     }
                     "ContentEncoding" => {
-                        obj.content_encoding = deserialize_primitive("ContentEncoding", stack, Ok)?;
+                        obj.content_encoding = Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
                     }
                     "ContentLanguage" => {
-                        obj.content_language = deserialize_primitive("ContentLanguage", stack, Ok)?;
+                        obj.content_language = Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
                     }
                     "ContentLength" => {
-                        obj.content_length = deserialize_primitive("ContentLength", stack, |s| Ok(u64::from_str(&s).unwrap()))?;
+                        obj.content_length = Some(deserialize_primitive("ContentLength", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ContentType" => {
-                        obj.content_type = deserialize_primitive("ContentType", stack, Ok)?;
+                        obj.content_type = Some(deserialize_primitive("ContentType", stack, Ok)?);
                     }
                     "Expires" => {
-                        obj.expires = deserialize_primitive("Expires", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.expires = Some(deserialize_primitive("Expires", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "GrantFullControl" => {
-                        obj.grant_full_control = deserialize_primitive("GrantFullControl", stack, Ok)?;
+                        obj.grant_full_control = Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
                     }
                     "GrantRead" => {
-                        obj.grant_read = deserialize_primitive("GrantRead", stack, Ok)?;
+                        obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
                     }
                     "GrantReadACP" => {
-                        obj.grant_read_acp = deserialize_primitive("GrantReadACP", stack, Ok)?;
+                        obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
                     }
                     "GrantWriteACP" => {
-                        obj.grant_write_acp = deserialize_primitive("GrantWriteACP", stack, Ok)?;
+                        obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
                     }
                     "Key" => {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "Metadata" => {
-                        obj.metadata = Default::default();
+                        obj.metadata = Some(Default::default());
                     }
                     "ServerSideEncryption" => {
-                        obj.server_side_encryption = deserialize_primitive("ServerSideEncryption", stack, Ok)?;
+                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
                     }
                     "StorageClass" => {
-                        obj.storage_class = deserialize_primitive("StorageClass", stack, Ok)?;
+                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
                     }
                     "WebsiteRedirectLocation" => {
-                        obj.website_redirect_location = deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?;
+                        obj.website_redirect_location = Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
                     }
                     "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?;
+                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
                     }
                     "SSECustomerKey" => {
-                        obj.sse_customer_key = deserialize_primitive("SSECustomerKey", stack, Ok)?;
+                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
                     }
                     "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?;
+                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
                     }
                     "SSEKMSKeyId" => {
-                        obj.ssekms_key_id = deserialize_primitive("SSEKMSKeyId", stack, Ok)?;
+                        obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
                     }
                     "SSEKMSEncryptionContext" => {
-                        obj.ssekms_encryption_context = deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?;
+                        obj.ssekms_encryption_context = Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
                     }
                     "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?;
+                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "Tagging" => {
-                        obj.tagging = deserialize_primitive("Tagging", stack, Ok)?;
+                        obj.tagging = Some(deserialize_primitive("Tagging", stack, Ok)?);
                     }
                     "ObjectLockMode" => {
-                        obj.object_lock_mode = deserialize_primitive("ObjectLockMode", stack, Ok)?;
+                        obj.object_lock_mode = Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
                     }
                     "ObjectLockRetainUntilDate" => {
-                        obj.object_lock_retain_until_date = deserialize_primitive("ObjectLockRetainUntilDate", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.object_lock_retain_until_date = Some(deserialize_primitive("ObjectLockRetainUntilDate", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "ObjectLockLegalHoldStatus" => {
-                        obj.object_lock_legal_hold_status = deserialize_primitive("ObjectLockLegalHoldStatus", stack, Ok)?;
+                        obj.object_lock_legal_hold_status = Some(deserialize_primitive("ObjectLockLegalHoldStatus", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10707,17 +10713,17 @@ pub struct PutObjectRetentionRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "Retention")]
-    pub retention: ObjectLockRetention,
+    pub retention: Option<ObjectLockRetention>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "BypassGovernanceRetention")]
-    pub bypass_governance_retention: BypassGovernanceRetention,
+    pub bypass_governance_retention: Option<BypassGovernanceRetention>,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutObjectRetentionRequestDeserializer;
 impl PutObjectRetentionRequestDeserializer {
@@ -10737,22 +10743,22 @@ impl PutObjectRetentionRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "Retention" => {
-                        obj.retention = ObjectLockRetentionDeserializer::deserialize("Retention", stack)?;
+                        obj.retention = Some(ObjectLockRetentionDeserializer::deserialize("Retention", stack)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "BypassGovernanceRetention" => {
-                        obj.bypass_governance_retention = deserialize_primitive("BypassGovernanceRetention", stack, |s| Ok(bool::from_str(&s).unwrap()))?;
+                        obj.bypass_governance_retention = Some(deserialize_primitive("BypassGovernanceRetention", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10796,13 +10802,13 @@ pub struct PutObjectTaggingRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "Tagging")]
     pub tagging: Tagging,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutObjectTaggingRequestDeserializer;
 impl PutObjectTaggingRequestDeserializer {
@@ -10822,16 +10828,16 @@ impl PutObjectTaggingRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "Tagging" => {
                         obj.tagging = TaggingDeserializer::deserialize("Tagging", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10846,11 +10852,11 @@ pub struct PutPublicAccessBlockRequest {
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "PublicAccessBlockConfiguration")]
     pub public_access_block_configuration: PublicAccessBlockConfiguration,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct PutPublicAccessBlockRequestDeserializer;
 impl PutPublicAccessBlockRequestDeserializer {
@@ -10867,13 +10873,13 @@ impl PutPublicAccessBlockRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "PublicAccessBlockConfiguration" => {
                         obj.public_access_block_configuration = PublicAccessBlockConfigurationDeserializer::deserialize("PublicAccessBlockConfiguration", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10886,13 +10892,13 @@ impl PutPublicAccessBlockRequestDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct QueueConfiguration {
     #[serde(rename = "Id")]
-    pub id: NotificationId,
+    pub id: Option<NotificationId>,
     #[serde(rename = "QueueArn")]
     pub queue_arn: QueueArn,
     #[serde(rename = "Events")]
     pub events: EventList,
     #[serde(rename = "Filter")]
-    pub filter: NotificationConfigurationFilter,
+    pub filter: Option<NotificationConfigurationFilter>,
 }
 pub struct QueueConfigurationDeserializer;
 impl QueueConfigurationDeserializer {
@@ -10906,7 +10912,7 @@ impl QueueConfigurationDeserializer {
             |name, stack, obj| {
                 match name {
                     "Id" => {
-                        obj.id = deserialize_primitive("Id", stack, Ok)?;
+                        obj.id = Some(deserialize_primitive("Id", stack, Ok)?);
                     }
                     "QueueArn" => {
                         obj.queue_arn = deserialize_primitive("QueueArn", stack, Ok)?;
@@ -10916,7 +10922,7 @@ impl QueueConfigurationDeserializer {
                             .extend(EventListDeserializer::deserialize("Events", stack)?);
                     }
                     "Filter" => {
-                        obj.filter = NotificationConfigurationFilterDeserializer::deserialize("Filter", stack)?;
+                        obj.filter = Some(NotificationConfigurationFilterDeserializer::deserialize("Filter", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -11049,7 +11055,7 @@ pub struct RedirectAllRequestsTo {
     #[serde(rename = "HostName")]
     pub host_name: HostName,
     #[serde(rename = "Protocol")]
-    pub protocol: Protocol,
+    pub protocol: Option<Protocol>,
 }
 pub struct RedirectAllRequestsToDeserializer;
 impl RedirectAllRequestsToDeserializer {
@@ -11066,7 +11072,7 @@ impl RedirectAllRequestsToDeserializer {
                         obj.host_name = deserialize_primitive("HostName", stack, Ok)?;
                     }
                     "Protocol" => {
-                        obj.protocol = deserialize_primitive("Protocol", stack, Ok)?;
+                        obj.protocol = Some(deserialize_primitive("Protocol", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -11139,23 +11145,23 @@ impl ReplicationConfigurationDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ReplicationRule {
     #[serde(rename = "ID")]
-    pub id: ID,
+    pub id: Option<ID>,
     #[serde(rename = "Priority")]
-    pub priority: Priority,
+    pub priority: Option<Priority>,
     #[serde(rename = "Prefix")]
-    pub prefix: Prefix,
+    pub prefix: Option<Prefix>,
     #[serde(rename = "Filter")]
-    pub filter: ReplicationRuleFilter,
+    pub filter: Option<ReplicationRuleFilter>,
     #[serde(rename = "Status")]
     pub status: ReplicationRuleStatus,
     #[serde(rename = "SourceSelectionCriteria")]
-    pub source_selection_criteria: SourceSelectionCriteria,
+    pub source_selection_criteria: Option<SourceSelectionCriteria>,
     #[serde(rename = "ExistingObjectReplication")]
-    pub existing_object_replication: ExistingObjectReplication,
+    pub existing_object_replication: Option<ExistingObjectReplication>,
     #[serde(rename = "Destination")]
     pub destination: Destination,
     #[serde(rename = "DeleteMarkerReplication")]
-    pub delete_marker_replication: DeleteMarkerReplication,
+    pub delete_marker_replication: Option<DeleteMarkerReplication>,
 }
 pub struct ReplicationRuleDeserializer;
 impl ReplicationRuleDeserializer {
@@ -11169,31 +11175,31 @@ impl ReplicationRuleDeserializer {
             |name, stack, obj| {
                 match name {
                     "ID" => {
-                        obj.id = deserialize_primitive("ID", stack, Ok)?;
+                        obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
                     }
                     "Priority" => {
-                        obj.priority = deserialize_primitive("Priority", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
+                        obj.priority = Some(deserialize_primitive("Priority", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
                     }
                     "Prefix" => {
-                        obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
+                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                     }
                     "Filter" => {
-                        obj.filter = ReplicationRuleFilterDeserializer::deserialize("Filter", stack)?;
+                        obj.filter = Some(ReplicationRuleFilterDeserializer::deserialize("Filter", stack)?);
                     }
                     "Status" => {
                         obj.status = deserialize_primitive("Status", stack, Ok)?;
                     }
                     "SourceSelectionCriteria" => {
-                        obj.source_selection_criteria = SourceSelectionCriteriaDeserializer::deserialize("SourceSelectionCriteria", stack)?;
+                        obj.source_selection_criteria = Some(SourceSelectionCriteriaDeserializer::deserialize("SourceSelectionCriteria", stack)?);
                     }
                     "ExistingObjectReplication" => {
-                        obj.existing_object_replication = ExistingObjectReplicationDeserializer::deserialize("ExistingObjectReplication", stack)?;
+                        obj.existing_object_replication = Some(ExistingObjectReplicationDeserializer::deserialize("ExistingObjectReplication", stack)?);
                     }
                     "Destination" => {
                         obj.destination = DestinationDeserializer::deserialize("Destination", stack)?;
                     }
                     "DeleteMarkerReplication" => {
-                        obj.delete_marker_replication = DeleteMarkerReplicationDeserializer::deserialize("DeleteMarkerReplication", stack)?;
+                        obj.delete_marker_replication = Some(DeleteMarkerReplicationDeserializer::deserialize("DeleteMarkerReplication", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -11426,13 +11432,13 @@ pub struct RestoreObjectRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "VersionId")]
-    pub version_id: ObjectVersionId,
+    pub version_id: Option<ObjectVersionId>,
     #[serde(rename = "RestoreRequest")]
-    pub restore_request: RestoreRequest,
+    pub restore_request: Option<RestoreRequest>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct RestoreObjectRequestDeserializer;
 impl RestoreObjectRequestDeserializer {
@@ -11452,16 +11458,16 @@ impl RestoreObjectRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "VersionId" => {
-                        obj.version_id = deserialize_primitive("VersionId", stack, Ok)?;
+                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "RestoreRequest" => {
-                        obj.restore_request = RestoreRequestDeserializer::deserialize("RestoreRequest", stack)?;
+                        obj.restore_request = Some(RestoreRequestDeserializer::deserialize("RestoreRequest", stack)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -11531,7 +11537,7 @@ impl RestoreRequestDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct RoutingRule {
     #[serde(rename = "Condition")]
-    pub condition: Condition,
+    pub condition: Option<Condition>,
     #[serde(rename = "Redirect")]
     pub redirect: Redirect,
 }
@@ -11547,7 +11553,7 @@ impl RoutingRuleDeserializer {
             |name, stack, obj| {
                 match name {
                     "Condition" => {
-                        obj.condition = ConditionDeserializer::deserialize("Condition", stack)?;
+                        obj.condition = Some(ConditionDeserializer::deserialize("Condition", stack)?);
                     }
                     "Redirect" => {
                         obj.redirect = RedirectDeserializer::deserialize("Redirect", stack)?;
@@ -11563,21 +11569,21 @@ impl RoutingRuleDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Rule {
     #[serde(rename = "Expiration")]
-    pub expiration: LifecycleExpiration,
+    pub expiration: Option<LifecycleExpiration>,
     #[serde(rename = "ID")]
-    pub id: ID,
+    pub id: Option<ID>,
     #[serde(rename = "Prefix")]
     pub prefix: Prefix,
     #[serde(rename = "Status")]
     pub status: ExpirationStatus,
     #[serde(rename = "Transition")]
-    pub transition: Transition,
+    pub transition: Option<Transition>,
     #[serde(rename = "NoncurrentVersionTransition")]
-    pub noncurrent_version_transition: NoncurrentVersionTransition,
+    pub noncurrent_version_transition: Option<NoncurrentVersionTransition>,
     #[serde(rename = "NoncurrentVersionExpiration")]
-    pub noncurrent_version_expiration: NoncurrentVersionExpiration,
+    pub noncurrent_version_expiration: Option<NoncurrentVersionExpiration>,
     #[serde(rename = "AbortIncompleteMultipartUpload")]
-    pub abort_incomplete_multipart_upload: AbortIncompleteMultipartUpload,
+    pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
 }
 pub struct RuleDeserializer;
 impl RuleDeserializer {
@@ -11591,10 +11597,10 @@ impl RuleDeserializer {
             |name, stack, obj| {
                 match name {
                     "Expiration" => {
-                        obj.expiration = LifecycleExpirationDeserializer::deserialize("Expiration", stack)?;
+                        obj.expiration = Some(LifecycleExpirationDeserializer::deserialize("Expiration", stack)?);
                     }
                     "ID" => {
-                        obj.id = deserialize_primitive("ID", stack, Ok)?;
+                        obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
                     }
                     "Prefix" => {
                         obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
@@ -11603,16 +11609,16 @@ impl RuleDeserializer {
                         obj.status = deserialize_primitive("Status", stack, Ok)?;
                     }
                     "Transition" => {
-                        obj.transition = TransitionDeserializer::deserialize("Transition", stack)?;
+                        obj.transition = Some(TransitionDeserializer::deserialize("Transition", stack)?);
                     }
                     "NoncurrentVersionTransition" => {
-                        obj.noncurrent_version_transition = NoncurrentVersionTransitionDeserializer::deserialize("NoncurrentVersionTransition", stack)?;
+                        obj.noncurrent_version_transition = Some(NoncurrentVersionTransitionDeserializer::deserialize("NoncurrentVersionTransition", stack)?);
                     }
                     "NoncurrentVersionExpiration" => {
-                        obj.noncurrent_version_expiration = NoncurrentVersionExpirationDeserializer::deserialize("NoncurrentVersionExpiration", stack)?;
+                        obj.noncurrent_version_expiration = Some(NoncurrentVersionExpirationDeserializer::deserialize("NoncurrentVersionExpiration", stack)?);
                     }
                     "AbortIncompleteMultipartUpload" => {
-                        obj.abort_incomplete_multipart_upload = AbortIncompleteMultipartUploadDeserializer::deserialize("AbortIncompleteMultipartUpload", stack)?;
+                        obj.abort_incomplete_multipart_upload = Some(AbortIncompleteMultipartUploadDeserializer::deserialize("AbortIncompleteMultipartUpload", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -11658,17 +11664,17 @@ pub struct S3Location {
     #[serde(rename = "Prefix")]
     pub prefix: LocationPrefix,
     #[serde(rename = "Encryption")]
-    pub encryption: Encryption,
+    pub encryption: Option<Encryption>,
     #[serde(rename = "CannedACL")]
-    pub canned_acl: ObjectCannedACL,
+    pub canned_acl: Option<ObjectCannedACL>,
     #[serde(rename = "AccessControlList")]
-    pub access_control_list: Grants,
+    pub access_control_list: Option<Grants>,
     #[serde(rename = "Tagging")]
-    pub tagging: Tagging,
+    pub tagging: Option<Tagging>,
     #[serde(rename = "UserMetadata")]
-    pub user_metadata: UserMetadata,
+    pub user_metadata: Option<UserMetadata>,
     #[serde(rename = "StorageClass")]
-    pub storage_class: StorageClass,
+    pub storage_class: Option<StorageClass>,
 }
 pub struct S3LocationDeserializer;
 impl S3LocationDeserializer {
@@ -11688,24 +11694,26 @@ impl S3LocationDeserializer {
                         obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
                     }
                     "Encryption" => {
-                        obj.encryption = EncryptionDeserializer::deserialize("Encryption", stack)?;
+                        obj.encryption = Some(EncryptionDeserializer::deserialize("Encryption", stack)?);
                     }
                     "CannedACL" => {
-                        obj.canned_acl = deserialize_primitive("CannedACL", stack, Ok)?;
+                        obj.canned_acl = Some(deserialize_primitive("CannedACL", stack, Ok)?);
                     }
                     "AccessControlList" => {
                         obj.access_control_list
+                            .get_or_insert(vec![])
                             .extend(GrantsDeserializer::deserialize("AccessControlList", stack)?);
                     }
                     "Tagging" => {
-                        obj.tagging = TaggingDeserializer::deserialize("Tagging", stack)?;
+                        obj.tagging = Some(TaggingDeserializer::deserialize("Tagging", stack)?);
                     }
                     "UserMetadata" => {
                         obj.user_metadata
+                            .get_or_insert(vec![])
                             .extend(UserMetadataDeserializer::deserialize("UserMetadata", stack)?);
                     }
                     "StorageClass" => {
-                        obj.storage_class = deserialize_primitive("StorageClass", stack, Ok)?;
+                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -11877,25 +11885,25 @@ pub struct SelectObjectContentRequest {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "SSECustomerAlgorithm")]
-    pub sse_customer_algorithm: SSECustomerAlgorithm,
+    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
     #[serde(rename = "SSECustomerKey")]
-    pub sse_customer_key: SSECustomerKey,
+    pub sse_customer_key: Option<SSECustomerKey>,
     #[serde(rename = "SSECustomerKeyMD5")]
-    pub sse_customer_key_md5: SSECustomerKeyMD5,
+    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     #[serde(rename = "Expression")]
     pub expression: Expression,
     #[serde(rename = "ExpressionType")]
     pub expression_type: ExpressionType,
     #[serde(rename = "RequestProgress")]
-    pub request_progress: RequestProgress,
+    pub request_progress: Option<RequestProgress>,
     #[serde(rename = "InputSerialization")]
     pub input_serialization: InputSerialization,
     #[serde(rename = "OutputSerialization")]
     pub output_serialization: OutputSerialization,
     #[serde(rename = "ScanRange")]
-    pub scan_range: ScanRange,
+    pub scan_range: Option<ScanRange>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct SelectObjectContentRequestDeserializer;
 impl SelectObjectContentRequestDeserializer {
@@ -11915,13 +11923,13 @@ impl SelectObjectContentRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?;
+                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
                     }
                     "SSECustomerKey" => {
-                        obj.sse_customer_key = deserialize_primitive("SSECustomerKey", stack, Ok)?;
+                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
                     }
                     "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?;
+                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
                     }
                     "Expression" => {
                         obj.expression = deserialize_primitive("Expression", stack, Ok)?;
@@ -11930,7 +11938,7 @@ impl SelectObjectContentRequestDeserializer {
                         obj.expression_type = deserialize_primitive("ExpressionType", stack, Ok)?;
                     }
                     "RequestProgress" => {
-                        obj.request_progress = RequestProgressDeserializer::deserialize("RequestProgress", stack)?;
+                        obj.request_progress = Some(RequestProgressDeserializer::deserialize("RequestProgress", stack)?);
                     }
                     "InputSerialization" => {
                         obj.input_serialization = InputSerializationDeserializer::deserialize("InputSerialization", stack)?;
@@ -11939,10 +11947,10 @@ impl SelectObjectContentRequestDeserializer {
                         obj.output_serialization = OutputSerializationDeserializer::deserialize("OutputSerialization", stack)?;
                     }
                     "ScanRange" => {
-                        obj.scan_range = ScanRangeDeserializer::deserialize("ScanRange", stack)?;
+                        obj.scan_range = Some(ScanRangeDeserializer::deserialize("ScanRange", stack)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -11999,7 +12007,7 @@ pub struct ServerSideEncryptionByDefault {
     #[serde(rename = "SSEAlgorithm")]
     pub sse_algorithm: ServerSideEncryption,
     #[serde(rename = "KMSMasterKeyID")]
-    pub kms_master_key_id: SSEKMSKeyId,
+    pub kms_master_key_id: Option<SSEKMSKeyId>,
 }
 pub struct ServerSideEncryptionByDefaultDeserializer;
 impl ServerSideEncryptionByDefaultDeserializer {
@@ -12016,7 +12024,7 @@ impl ServerSideEncryptionByDefaultDeserializer {
                         obj.sse_algorithm = deserialize_primitive("SSEAlgorithm", stack, Ok)?;
                     }
                     "KMSMasterKeyID" => {
-                        obj.kms_master_key_id = deserialize_primitive("KMSMasterKeyID", stack, Ok)?;
+                        obj.kms_master_key_id = Some(deserialize_primitive("KMSMasterKeyID", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -12395,13 +12403,13 @@ impl TieringDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct TopicConfiguration {
     #[serde(rename = "Id")]
-    pub id: NotificationId,
+    pub id: Option<NotificationId>,
     #[serde(rename = "TopicArn")]
     pub topic_arn: TopicArn,
     #[serde(rename = "Events")]
     pub events: EventList,
     #[serde(rename = "Filter")]
-    pub filter: NotificationConfigurationFilter,
+    pub filter: Option<NotificationConfigurationFilter>,
 }
 pub struct TopicConfigurationDeserializer;
 impl TopicConfigurationDeserializer {
@@ -12415,7 +12423,7 @@ impl TopicConfigurationDeserializer {
             |name, stack, obj| {
                 match name {
                     "Id" => {
-                        obj.id = deserialize_primitive("Id", stack, Ok)?;
+                        obj.id = Some(deserialize_primitive("Id", stack, Ok)?);
                     }
                     "TopicArn" => {
                         obj.topic_arn = deserialize_primitive("TopicArn", stack, Ok)?;
@@ -12425,7 +12433,7 @@ impl TopicConfigurationDeserializer {
                             .extend(EventListDeserializer::deserialize("Events", stack)?);
                     }
                     "Filter" => {
-                        obj.filter = NotificationConfigurationFilterDeserializer::deserialize("Filter", stack)?;
+                        obj.filter = Some(NotificationConfigurationFilterDeserializer::deserialize("Filter", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -12585,15 +12593,15 @@ pub struct UploadPartCopyRequest {
     #[serde(rename = "CopySource")]
     pub copy_source: CopySource,
     #[serde(rename = "CopySourceIfMatch")]
-    pub copy_source_if_match: CopySourceIfMatch,
+    pub copy_source_if_match: Option<CopySourceIfMatch>,
     #[serde(rename = "CopySourceIfModifiedSince")]
-    pub copy_source_if_modified_since: CopySourceIfModifiedSince,
+    pub copy_source_if_modified_since: Option<CopySourceIfModifiedSince>,
     #[serde(rename = "CopySourceIfNoneMatch")]
-    pub copy_source_if_none_match: CopySourceIfNoneMatch,
+    pub copy_source_if_none_match: Option<CopySourceIfNoneMatch>,
     #[serde(rename = "CopySourceIfUnmodifiedSince")]
-    pub copy_source_if_unmodified_since: CopySourceIfUnmodifiedSince,
+    pub copy_source_if_unmodified_since: Option<CopySourceIfUnmodifiedSince>,
     #[serde(rename = "CopySourceRange")]
-    pub copy_source_range: CopySourceRange,
+    pub copy_source_range: Option<CopySourceRange>,
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "PartNumber")]
@@ -12601,23 +12609,23 @@ pub struct UploadPartCopyRequest {
     #[serde(rename = "UploadId")]
     pub upload_id: MultipartUploadId,
     #[serde(rename = "SSECustomerAlgorithm")]
-    pub sse_customer_algorithm: SSECustomerAlgorithm,
+    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
     #[serde(rename = "SSECustomerKey")]
-    pub sse_customer_key: SSECustomerKey,
+    pub sse_customer_key: Option<SSECustomerKey>,
     #[serde(rename = "SSECustomerKeyMD5")]
-    pub sse_customer_key_md5: SSECustomerKeyMD5,
+    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     #[serde(rename = "CopySourceSSECustomerAlgorithm")]
-    pub copy_source_sse_customer_algorithm: CopySourceSSECustomerAlgorithm,
+    pub copy_source_sse_customer_algorithm: Option<CopySourceSSECustomerAlgorithm>,
     #[serde(rename = "CopySourceSSECustomerKey")]
-    pub copy_source_sse_customer_key: CopySourceSSECustomerKey,
+    pub copy_source_sse_customer_key: Option<CopySourceSSECustomerKey>,
     #[serde(rename = "CopySourceSSECustomerKeyMD5")]
-    pub copy_source_sse_customer_key_md5: CopySourceSSECustomerKeyMD5,
+    pub copy_source_sse_customer_key_md5: Option<CopySourceSSECustomerKeyMD5>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
     #[serde(rename = "ExpectedSourceBucketOwner")]
-    pub expected_source_bucket_owner: AccountId,
+    pub expected_source_bucket_owner: Option<AccountId>,
 }
 pub struct UploadPartCopyRequestDeserializer;
 impl UploadPartCopyRequestDeserializer {
@@ -12637,19 +12645,19 @@ impl UploadPartCopyRequestDeserializer {
                         obj.copy_source = deserialize_primitive("CopySource", stack, Ok)?;
                     }
                     "CopySourceIfMatch" => {
-                        obj.copy_source_if_match = deserialize_primitive("CopySourceIfMatch", stack, Ok)?;
+                        obj.copy_source_if_match = Some(deserialize_primitive("CopySourceIfMatch", stack, Ok)?);
                     }
                     "CopySourceIfModifiedSince" => {
-                        obj.copy_source_if_modified_since = deserialize_primitive("CopySourceIfModifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.copy_source_if_modified_since = Some(deserialize_primitive("CopySourceIfModifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "CopySourceIfNoneMatch" => {
-                        obj.copy_source_if_none_match = deserialize_primitive("CopySourceIfNoneMatch", stack, Ok)?;
+                        obj.copy_source_if_none_match = Some(deserialize_primitive("CopySourceIfNoneMatch", stack, Ok)?);
                     }
                     "CopySourceIfUnmodifiedSince" => {
-                        obj.copy_source_if_unmodified_since = deserialize_primitive("CopySourceIfUnmodifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?;
+                        obj.copy_source_if_unmodified_since = Some(deserialize_primitive("CopySourceIfUnmodifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
                     }
                     "CopySourceRange" => {
-                        obj.copy_source_range = deserialize_primitive("CopySourceRange", stack, Ok)?;
+                        obj.copy_source_range = Some(deserialize_primitive("CopySourceRange", stack, Ok)?);
                     }
                     "Key" => {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
@@ -12661,31 +12669,31 @@ impl UploadPartCopyRequestDeserializer {
                         obj.upload_id = deserialize_primitive("UploadId", stack, Ok)?;
                     }
                     "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?;
+                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
                     }
                     "SSECustomerKey" => {
-                        obj.sse_customer_key = deserialize_primitive("SSECustomerKey", stack, Ok)?;
+                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
                     }
                     "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?;
+                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
                     }
                     "CopySourceSSECustomerAlgorithm" => {
-                        obj.copy_source_sse_customer_algorithm = deserialize_primitive("CopySourceSSECustomerAlgorithm", stack, Ok)?;
+                        obj.copy_source_sse_customer_algorithm = Some(deserialize_primitive("CopySourceSSECustomerAlgorithm", stack, Ok)?);
                     }
                     "CopySourceSSECustomerKey" => {
-                        obj.copy_source_sse_customer_key = deserialize_primitive("CopySourceSSECustomerKey", stack, Ok)?;
+                        obj.copy_source_sse_customer_key = Some(deserialize_primitive("CopySourceSSECustomerKey", stack, Ok)?);
                     }
                     "CopySourceSSECustomerKeyMD5" => {
-                        obj.copy_source_sse_customer_key_md5 = deserialize_primitive("CopySourceSSECustomerKeyMD5", stack, Ok)?;
+                        obj.copy_source_sse_customer_key_md5 = Some(deserialize_primitive("CopySourceSSECustomerKeyMD5", stack, Ok)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     "ExpectedSourceBucketOwner" => {
-                        obj.expected_source_bucket_owner = deserialize_primitive("ExpectedSourceBucketOwner", stack, Ok)?;
+                        obj.expected_source_bucket_owner = Some(deserialize_primitive("ExpectedSourceBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -12755,13 +12763,13 @@ impl UploadPartOutputDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct UploadPartRequest {
     #[serde(rename = "Body")]
-    pub body: Body,
+    pub body: Option<Body>,
     #[serde(rename = "Bucket")]
     pub bucket: BucketName,
     #[serde(rename = "ContentLength")]
-    pub content_length: ContentLength,
+    pub content_length: Option<ContentLength>,
     #[serde(rename = "ContentMD5")]
-    pub content_md5: ContentMD5,
+    pub content_md5: Option<ContentMD5>,
     #[serde(rename = "Key")]
     pub key: ObjectKey,
     #[serde(rename = "PartNumber")]
@@ -12769,15 +12777,15 @@ pub struct UploadPartRequest {
     #[serde(rename = "UploadId")]
     pub upload_id: MultipartUploadId,
     #[serde(rename = "SSECustomerAlgorithm")]
-    pub sse_customer_algorithm: SSECustomerAlgorithm,
+    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
     #[serde(rename = "SSECustomerKey")]
-    pub sse_customer_key: SSECustomerKey,
+    pub sse_customer_key: Option<SSECustomerKey>,
     #[serde(rename = "SSECustomerKeyMD5")]
-    pub sse_customer_key_md5: SSECustomerKeyMD5,
+    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     #[serde(rename = "RequestPayer")]
-    pub request_payer: RequestPayer,
+    pub request_payer: Option<RequestPayer>,
     #[serde(rename = "ExpectedBucketOwner")]
-    pub expected_bucket_owner: AccountId,
+    pub expected_bucket_owner: Option<AccountId>,
 }
 pub struct UploadPartRequestDeserializer;
 impl UploadPartRequestDeserializer {
@@ -12791,16 +12799,16 @@ impl UploadPartRequestDeserializer {
             |name, stack, obj| {
                 match name {
                     "Body" => {
-                        obj.body = Default::default();
+                        obj.body = Some(Default::default());
                     }
                     "Bucket" => {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContentLength" => {
-                        obj.content_length = deserialize_primitive("ContentLength", stack, |s| Ok(u64::from_str(&s).unwrap()))?;
+                        obj.content_length = Some(deserialize_primitive("ContentLength", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
                     }
                     "ContentMD5" => {
-                        obj.content_md5 = deserialize_primitive("ContentMD5", stack, Ok)?;
+                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "Key" => {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
@@ -12812,19 +12820,19 @@ impl UploadPartRequestDeserializer {
                         obj.upload_id = deserialize_primitive("UploadId", stack, Ok)?;
                     }
                     "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?;
+                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
                     }
                     "SSECustomerKey" => {
-                        obj.sse_customer_key = deserialize_primitive("SSECustomerKey", stack, Ok)?;
+                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
                     }
                     "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?;
+                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
                     }
                     "RequestPayer" => {
-                        obj.request_payer = deserialize_primitive("RequestPayer", stack, Ok)?;
+                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = deserialize_primitive("ExpectedBucketOwner", stack, Ok)?;
+                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
