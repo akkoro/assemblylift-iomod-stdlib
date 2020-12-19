@@ -1,6 +1,4 @@
-use std::collections::HashMap;
 use std::fmt;
-use std::str::FromStr;
 
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use hyper;
@@ -26,25 +24,16 @@ impl std::error::Error for ClientError {}
 pub type HyperClient = hyper::Client<HttpsConnector<hyper::client::HttpConnector>>;
 
 pub struct Client {
-    service: String,
-    region: String,
     client: HyperClient,
     aws_key: Option<(String, String, Option<String>)>,
 }
 
-pub struct ClientInput {
-    pub body: HashMap<&'static str, String>,
-    pub headers: HashMap<&'static str, String>,
-}
-
 impl Client {
-    pub fn new(service: String, region: String) -> Self {
+    pub fn new() -> Self {
         let https = HttpsConnector::new();
         let client = hyper::Client::builder().build::<_, hyper::Body>(https);
 
         Self {
-            service,
-            region,
             client,
             aws_key: None,
         }
@@ -54,26 +43,15 @@ impl Client {
         self.aws_key = Some((id, key, token));
     }
 
-    pub async fn call(
-        &self,
-        method: &str,
-        path: &str,
-        protocol: &str,
-        input: ClientInput,
-    ) -> Result<Response<String>, ClientError> {
-        let mut aws_req = SignedRequest::new(
-            method,
-            &self.service,
-            &Region::from_str(&self.region).unwrap_or(Region::UsEast1),
-            path,
-        );
+    pub async fn call(&self, mut request: SignedRequest) -> Result<Response<String>, ClientError> {
+        let mut headers = HeaderMap::new();
+
         if let Some(key) = &self.aws_key {
             let token = key.2.clone();
-            aws_req.sign(&AwsCredentials::new(&key.0, &key.1, token, None));
+            request.sign(&AwsCredentials::new(&key.0, &key.1, token, None));
         }
 
-        let mut headers = HeaderMap::new();
-        for h in aws_req.headers().iter() {
+        for h in request.headers().iter() {
             let name = h.0.parse::<HeaderName>().unwrap();
             for v in h.1.iter() {
                 let value = HeaderValue::from_bytes(v).unwrap();
@@ -82,27 +60,31 @@ impl Client {
         }
         headers.insert("user-agent", HeaderValue::from_str("AssemblyLift").unwrap());
 
-        let mut final_uri = format!(
-            "{}://{}{}",
-            aws_req.scheme(),
-            aws_req.hostname(),
-            aws_req.canonical_path()
-        );
-        if !aws_req.canonical_query_string().is_empty() {
-            final_uri = final_uri + &format!("?{}", aws_req.canonical_query_string());
+        for (h, v) in headers.iter() {
+            println!("{}:{:?}", h.as_str(), v);
         }
 
-        let mut http_req = hyper::Request::builder().method(method).uri(final_uri);
-        *http_req.headers_mut().unwrap() = headers;
+        let mut final_uri = format!(
+            "{}://{}{}",
+            request.scheme(),
+            request.hostname(),
+            request.canonical_path()
+        );
+        if !request.canonical_query_string().is_empty() {
+            final_uri = final_uri + &format!("?{}", request.canonical_query_string());
+        }
 
-        let body = match protocol {
-            "json" => serde_json::to_string(&input.body).unwrap(),
-            "rest-xml" => serde_xml_rs::to_string(&input.body).unwrap(),
-            _ => panic!("unknown client protocol"),
-        };
+        let mut http_req = hyper::Request::builder()
+            .method(request.method())
+            .uri(final_uri)
+            .body(match request.payload {
+                Some(payload) => payload.into_body(),
+                None => hyper::Body::empty(),
+            })
+            .unwrap();
+        *http_req.headers_mut() = headers;
 
-        let request = http_req.body(hyper::Body::from(body)).unwrap();
-        match self.call_internal(request).await {
+        match self.call_internal(http_req).await {
             Ok(resp) => Ok(resp),
             Err(err) => Err(ClientError {
                 why: err.to_string(),

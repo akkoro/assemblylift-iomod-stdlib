@@ -9,6 +9,7 @@ use assemblylift_core_iomod::iomod;
 use futures::future::BoxFuture;
 use once_cell::sync::Lazy;
 use hyper::StatusCode;
+use rusoto_signature::{Region, SignedRequest};
 
 use xml;
 use xml::reader::{EventReader, ParserConfig};
@@ -19,10 +20,7 @@ use guest::structs::*;
 
 static CLIENT: Lazy<client::Client> = Lazy::new(|| {
     use std::env;
-    let mut c = client::Client::new(
-        String::from("s3"), 
-        env::var("AWS_REGION").unwrap_or(String::from("us-east-1")),
-    );
+    let mut c = client::Client::new();
     c.set_credentials(
         env::var("AWS_ACCESS_KEY_ID").unwrap(), 
         env::var("AWS_SECRET_ACCESS_KEY").unwrap(),
@@ -151,26 +149,31 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("uploadId", &serde_json::to_string(&input.upload_id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -215,29 +218,34 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "POST",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     if let Some(multipart_upload) = input.multipart_upload {
         body.insert("MultipartUpload", serde_json::to_string(&multipart_upload).unwrap());
     };
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("uploadId", &serde_json::to_string(&input.upload_id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -295,125 +303,133 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(acl) = input.acl {
-        headers.insert("x-amz-acl", serde_json::to_string(&acl).unwrap());
+        http_request.add_header("x-amz-acl", &serde_json::to_string(&acl).unwrap());
     };
     if let Some(cache_control) = input.cache_control {
-        headers.insert("Cache-Control", serde_json::to_string(&cache_control).unwrap());
+        http_request.add_header("Cache-Control", &serde_json::to_string(&cache_control).unwrap());
     };
     if let Some(content_disposition) = input.content_disposition {
-        headers.insert("Content-Disposition", serde_json::to_string(&content_disposition).unwrap());
+        http_request.add_header("Content-Disposition", &serde_json::to_string(&content_disposition).unwrap());
     };
     if let Some(content_encoding) = input.content_encoding {
-        headers.insert("Content-Encoding", serde_json::to_string(&content_encoding).unwrap());
+        http_request.add_header("Content-Encoding", &serde_json::to_string(&content_encoding).unwrap());
     };
     if let Some(content_language) = input.content_language {
-        headers.insert("Content-Language", serde_json::to_string(&content_language).unwrap());
+        http_request.add_header("Content-Language", &serde_json::to_string(&content_language).unwrap());
     };
     if let Some(content_type) = input.content_type {
-        headers.insert("Content-Type", serde_json::to_string(&content_type).unwrap());
+        http_request.add_header("Content-Type", &serde_json::to_string(&content_type).unwrap());
     };
-    headers.insert("x-amz-copy-source", serde_json::to_string(&input.copy_source).unwrap());
+    http_request.add_header("x-amz-copy-source", &serde_json::to_string(&input.copy_source).unwrap());
     if let Some(copy_source_if_match) = input.copy_source_if_match {
-        headers.insert("x-amz-copy-source-if-match", serde_json::to_string(&copy_source_if_match).unwrap());
+        http_request.add_header("x-amz-copy-source-if-match", &serde_json::to_string(&copy_source_if_match).unwrap());
     };
     if let Some(copy_source_if_modified_since) = input.copy_source_if_modified_since {
-        headers.insert("x-amz-copy-source-if-modified-since", serde_json::to_string(&copy_source_if_modified_since).unwrap());
+        http_request.add_header("x-amz-copy-source-if-modified-since", &serde_json::to_string(&copy_source_if_modified_since).unwrap());
     };
     if let Some(copy_source_if_none_match) = input.copy_source_if_none_match {
-        headers.insert("x-amz-copy-source-if-none-match", serde_json::to_string(&copy_source_if_none_match).unwrap());
+        http_request.add_header("x-amz-copy-source-if-none-match", &serde_json::to_string(&copy_source_if_none_match).unwrap());
     };
     if let Some(copy_source_if_unmodified_since) = input.copy_source_if_unmodified_since {
-        headers.insert("x-amz-copy-source-if-unmodified-since", serde_json::to_string(&copy_source_if_unmodified_since).unwrap());
+        http_request.add_header("x-amz-copy-source-if-unmodified-since", &serde_json::to_string(&copy_source_if_unmodified_since).unwrap());
     };
     if let Some(expires) = input.expires {
-        headers.insert("Expires", serde_json::to_string(&expires).unwrap());
+        http_request.add_header("Expires", &serde_json::to_string(&expires).unwrap());
     };
     if let Some(grant_full_control) = input.grant_full_control {
-        headers.insert("x-amz-grant-full-control", serde_json::to_string(&grant_full_control).unwrap());
+        http_request.add_header("x-amz-grant-full-control", &serde_json::to_string(&grant_full_control).unwrap());
     };
     if let Some(grant_read) = input.grant_read {
-        headers.insert("x-amz-grant-read", serde_json::to_string(&grant_read).unwrap());
+        http_request.add_header("x-amz-grant-read", &serde_json::to_string(&grant_read).unwrap());
     };
     if let Some(grant_read_acp) = input.grant_read_acp {
-        headers.insert("x-amz-grant-read-acp", serde_json::to_string(&grant_read_acp).unwrap());
+        http_request.add_header("x-amz-grant-read-acp", &serde_json::to_string(&grant_read_acp).unwrap());
     };
     if let Some(grant_write_acp) = input.grant_write_acp {
-        headers.insert("x-amz-grant-write-acp", serde_json::to_string(&grant_write_acp).unwrap());
+        http_request.add_header("x-amz-grant-write-acp", &serde_json::to_string(&grant_write_acp).unwrap());
     };
     if let Some(metadata_directive) = input.metadata_directive {
-        headers.insert("x-amz-metadata-directive", serde_json::to_string(&metadata_directive).unwrap());
+        http_request.add_header("x-amz-metadata-directive", &serde_json::to_string(&metadata_directive).unwrap());
     };
     if let Some(tagging_directive) = input.tagging_directive {
-        headers.insert("x-amz-tagging-directive", serde_json::to_string(&tagging_directive).unwrap());
+        http_request.add_header("x-amz-tagging-directive", &serde_json::to_string(&tagging_directive).unwrap());
     };
     if let Some(server_side_encryption) = input.server_side_encryption {
-        headers.insert("x-amz-server-side-encryption", serde_json::to_string(&server_side_encryption).unwrap());
+        http_request.add_header("x-amz-server-side-encryption", &serde_json::to_string(&server_side_encryption).unwrap());
     };
     if let Some(storage_class) = input.storage_class {
-        headers.insert("x-amz-storage-class", serde_json::to_string(&storage_class).unwrap());
+        http_request.add_header("x-amz-storage-class", &serde_json::to_string(&storage_class).unwrap());
     };
     if let Some(website_redirect_location) = input.website_redirect_location {
-        headers.insert("x-amz-website-redirect-location", serde_json::to_string(&website_redirect_location).unwrap());
+        http_request.add_header("x-amz-website-redirect-location", &serde_json::to_string(&website_redirect_location).unwrap());
     };
     if let Some(sse_customer_algorithm) = input.sse_customer_algorithm {
-        headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&sse_customer_algorithm).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-algorithm", &serde_json::to_string(&sse_customer_algorithm).unwrap());
     };
     if let Some(sse_customer_key) = input.sse_customer_key {
-        headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&sse_customer_key).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key", &serde_json::to_string(&sse_customer_key).unwrap());
     };
     if let Some(sse_customer_key_md5) = input.sse_customer_key_md5 {
-        headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&sse_customer_key_md5).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key-MD5", &serde_json::to_string(&sse_customer_key_md5).unwrap());
     };
     if let Some(ssekms_key_id) = input.ssekms_key_id {
-        headers.insert("x-amz-server-side-encryption-aws-kms-key-id", serde_json::to_string(&ssekms_key_id).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-aws-kms-key-id", &serde_json::to_string(&ssekms_key_id).unwrap());
     };
     if let Some(ssekms_encryption_context) = input.ssekms_encryption_context {
-        headers.insert("x-amz-server-side-encryption-context", serde_json::to_string(&ssekms_encryption_context).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-context", &serde_json::to_string(&ssekms_encryption_context).unwrap());
     };
     if let Some(bucket_key_enabled) = input.bucket_key_enabled {
-        headers.insert("x-amz-server-side-encryption-bucket-key-enabled", serde_json::to_string(&bucket_key_enabled).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-bucket-key-enabled", &serde_json::to_string(&bucket_key_enabled).unwrap());
     };
     if let Some(copy_source_sse_customer_algorithm) = input.copy_source_sse_customer_algorithm {
-        headers.insert("x-amz-copy-source-server-side-encryption-customer-algorithm", serde_json::to_string(&copy_source_sse_customer_algorithm).unwrap());
+        http_request.add_header("x-amz-copy-source-server-side-encryption-customer-algorithm", &serde_json::to_string(&copy_source_sse_customer_algorithm).unwrap());
     };
     if let Some(copy_source_sse_customer_key) = input.copy_source_sse_customer_key {
-        headers.insert("x-amz-copy-source-server-side-encryption-customer-key", serde_json::to_string(&copy_source_sse_customer_key).unwrap());
+        http_request.add_header("x-amz-copy-source-server-side-encryption-customer-key", &serde_json::to_string(&copy_source_sse_customer_key).unwrap());
     };
     if let Some(copy_source_sse_customer_key_md5) = input.copy_source_sse_customer_key_md5 {
-        headers.insert("x-amz-copy-source-server-side-encryption-customer-key-MD5", serde_json::to_string(&copy_source_sse_customer_key_md5).unwrap());
+        http_request.add_header("x-amz-copy-source-server-side-encryption-customer-key-MD5", &serde_json::to_string(&copy_source_sse_customer_key_md5).unwrap());
     };
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(tagging) = input.tagging {
-        headers.insert("x-amz-tagging", serde_json::to_string(&tagging).unwrap());
+        http_request.add_header("x-amz-tagging", &serde_json::to_string(&tagging).unwrap());
     };
     if let Some(object_lock_mode) = input.object_lock_mode {
-        headers.insert("x-amz-object-lock-mode", serde_json::to_string(&object_lock_mode).unwrap());
+        http_request.add_header("x-amz-object-lock-mode", &serde_json::to_string(&object_lock_mode).unwrap());
     };
     if let Some(object_lock_retain_until_date) = input.object_lock_retain_until_date {
-        headers.insert("x-amz-object-lock-retain-until-date", serde_json::to_string(&object_lock_retain_until_date).unwrap());
+        http_request.add_header("x-amz-object-lock-retain-until-date", &serde_json::to_string(&object_lock_retain_until_date).unwrap());
     };
     if let Some(object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
-        headers.insert("x-amz-object-lock-legal-hold", serde_json::to_string(&object_lock_legal_hold_status).unwrap());
+        http_request.add_header("x-amz-object-lock-legal-hold", &serde_json::to_string(&object_lock_legal_hold_status).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(expected_source_bucket_owner) = input.expected_source_bucket_owner {
-        headers.insert("x-amz-source-expected-bucket-owner", serde_json::to_string(&expected_source_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-source-expected-bucket-owner", &serde_json::to_string(&expected_source_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -471,40 +487,48 @@ fn __create_bucket(input: CreateBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     if let Some(create_bucket_configuration) = input.create_bucket_configuration {
         body.insert("CreateBucketConfiguration", serde_json::to_string(&create_bucket_configuration).unwrap());
     };
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(acl) = input.acl {
-        headers.insert("x-amz-acl", serde_json::to_string(&acl).unwrap());
+        http_request.add_header("x-amz-acl", &serde_json::to_string(&acl).unwrap());
     };
     if let Some(grant_full_control) = input.grant_full_control {
-        headers.insert("x-amz-grant-full-control", serde_json::to_string(&grant_full_control).unwrap());
+        http_request.add_header("x-amz-grant-full-control", &serde_json::to_string(&grant_full_control).unwrap());
     };
     if let Some(grant_read) = input.grant_read {
-        headers.insert("x-amz-grant-read", serde_json::to_string(&grant_read).unwrap());
+        http_request.add_header("x-amz-grant-read", &serde_json::to_string(&grant_read).unwrap());
     };
     if let Some(grant_read_acp) = input.grant_read_acp {
-        headers.insert("x-amz-grant-read-acp", serde_json::to_string(&grant_read_acp).unwrap());
+        http_request.add_header("x-amz-grant-read-acp", &serde_json::to_string(&grant_read_acp).unwrap());
     };
     if let Some(grant_write) = input.grant_write {
-        headers.insert("x-amz-grant-write", serde_json::to_string(&grant_write).unwrap());
+        http_request.add_header("x-amz-grant-write", &serde_json::to_string(&grant_write).unwrap());
     };
     if let Some(grant_write_acp) = input.grant_write_acp {
-        headers.insert("x-amz-grant-write-acp", serde_json::to_string(&grant_write_acp).unwrap());
+        http_request.add_header("x-amz-grant-write-acp", &serde_json::to_string(&grant_write_acp).unwrap());
     };
     if let Some(object_lock_enabled_for_bucket) = input.object_lock_enabled_for_bucket {
-        headers.insert("x-amz-bucket-object-lock-enabled", serde_json::to_string(&object_lock_enabled_for_bucket).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-bucket-object-lock-enabled", &serde_json::to_string(&object_lock_enabled_for_bucket).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -549,94 +573,102 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "POST",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(acl) = input.acl {
-        headers.insert("x-amz-acl", serde_json::to_string(&acl).unwrap());
+        http_request.add_header("x-amz-acl", &serde_json::to_string(&acl).unwrap());
     };
     if let Some(cache_control) = input.cache_control {
-        headers.insert("Cache-Control", serde_json::to_string(&cache_control).unwrap());
+        http_request.add_header("Cache-Control", &serde_json::to_string(&cache_control).unwrap());
     };
     if let Some(content_disposition) = input.content_disposition {
-        headers.insert("Content-Disposition", serde_json::to_string(&content_disposition).unwrap());
+        http_request.add_header("Content-Disposition", &serde_json::to_string(&content_disposition).unwrap());
     };
     if let Some(content_encoding) = input.content_encoding {
-        headers.insert("Content-Encoding", serde_json::to_string(&content_encoding).unwrap());
+        http_request.add_header("Content-Encoding", &serde_json::to_string(&content_encoding).unwrap());
     };
     if let Some(content_language) = input.content_language {
-        headers.insert("Content-Language", serde_json::to_string(&content_language).unwrap());
+        http_request.add_header("Content-Language", &serde_json::to_string(&content_language).unwrap());
     };
     if let Some(content_type) = input.content_type {
-        headers.insert("Content-Type", serde_json::to_string(&content_type).unwrap());
+        http_request.add_header("Content-Type", &serde_json::to_string(&content_type).unwrap());
     };
     if let Some(expires) = input.expires {
-        headers.insert("Expires", serde_json::to_string(&expires).unwrap());
+        http_request.add_header("Expires", &serde_json::to_string(&expires).unwrap());
     };
     if let Some(grant_full_control) = input.grant_full_control {
-        headers.insert("x-amz-grant-full-control", serde_json::to_string(&grant_full_control).unwrap());
+        http_request.add_header("x-amz-grant-full-control", &serde_json::to_string(&grant_full_control).unwrap());
     };
     if let Some(grant_read) = input.grant_read {
-        headers.insert("x-amz-grant-read", serde_json::to_string(&grant_read).unwrap());
+        http_request.add_header("x-amz-grant-read", &serde_json::to_string(&grant_read).unwrap());
     };
     if let Some(grant_read_acp) = input.grant_read_acp {
-        headers.insert("x-amz-grant-read-acp", serde_json::to_string(&grant_read_acp).unwrap());
+        http_request.add_header("x-amz-grant-read-acp", &serde_json::to_string(&grant_read_acp).unwrap());
     };
     if let Some(grant_write_acp) = input.grant_write_acp {
-        headers.insert("x-amz-grant-write-acp", serde_json::to_string(&grant_write_acp).unwrap());
+        http_request.add_header("x-amz-grant-write-acp", &serde_json::to_string(&grant_write_acp).unwrap());
     };
     if let Some(server_side_encryption) = input.server_side_encryption {
-        headers.insert("x-amz-server-side-encryption", serde_json::to_string(&server_side_encryption).unwrap());
+        http_request.add_header("x-amz-server-side-encryption", &serde_json::to_string(&server_side_encryption).unwrap());
     };
     if let Some(storage_class) = input.storage_class {
-        headers.insert("x-amz-storage-class", serde_json::to_string(&storage_class).unwrap());
+        http_request.add_header("x-amz-storage-class", &serde_json::to_string(&storage_class).unwrap());
     };
     if let Some(website_redirect_location) = input.website_redirect_location {
-        headers.insert("x-amz-website-redirect-location", serde_json::to_string(&website_redirect_location).unwrap());
+        http_request.add_header("x-amz-website-redirect-location", &serde_json::to_string(&website_redirect_location).unwrap());
     };
     if let Some(sse_customer_algorithm) = input.sse_customer_algorithm {
-        headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&sse_customer_algorithm).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-algorithm", &serde_json::to_string(&sse_customer_algorithm).unwrap());
     };
     if let Some(sse_customer_key) = input.sse_customer_key {
-        headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&sse_customer_key).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key", &serde_json::to_string(&sse_customer_key).unwrap());
     };
     if let Some(sse_customer_key_md5) = input.sse_customer_key_md5 {
-        headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&sse_customer_key_md5).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key-MD5", &serde_json::to_string(&sse_customer_key_md5).unwrap());
     };
     if let Some(ssekms_key_id) = input.ssekms_key_id {
-        headers.insert("x-amz-server-side-encryption-aws-kms-key-id", serde_json::to_string(&ssekms_key_id).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-aws-kms-key-id", &serde_json::to_string(&ssekms_key_id).unwrap());
     };
     if let Some(ssekms_encryption_context) = input.ssekms_encryption_context {
-        headers.insert("x-amz-server-side-encryption-context", serde_json::to_string(&ssekms_encryption_context).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-context", &serde_json::to_string(&ssekms_encryption_context).unwrap());
     };
     if let Some(bucket_key_enabled) = input.bucket_key_enabled {
-        headers.insert("x-amz-server-side-encryption-bucket-key-enabled", serde_json::to_string(&bucket_key_enabled).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-bucket-key-enabled", &serde_json::to_string(&bucket_key_enabled).unwrap());
     };
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(tagging) = input.tagging {
-        headers.insert("x-amz-tagging", serde_json::to_string(&tagging).unwrap());
+        http_request.add_header("x-amz-tagging", &serde_json::to_string(&tagging).unwrap());
     };
     if let Some(object_lock_mode) = input.object_lock_mode {
-        headers.insert("x-amz-object-lock-mode", serde_json::to_string(&object_lock_mode).unwrap());
+        http_request.add_header("x-amz-object-lock-mode", &serde_json::to_string(&object_lock_mode).unwrap());
     };
     if let Some(object_lock_retain_until_date) = input.object_lock_retain_until_date {
-        headers.insert("x-amz-object-lock-retain-until-date", serde_json::to_string(&object_lock_retain_until_date).unwrap());
+        http_request.add_header("x-amz-object-lock-retain-until-date", &serde_json::to_string(&object_lock_retain_until_date).unwrap());
     };
     if let Some(object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
-        headers.insert("x-amz-object-lock-legal-hold", serde_json::to_string(&object_lock_legal_hold_status).unwrap());
+        http_request.add_header("x-amz-object-lock-legal-hold", &serde_json::to_string(&object_lock_legal_hold_status).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -693,19 +725,27 @@ fn __delete_bucket(input: DeleteBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -745,23 +785,28 @@ fn __delete_bucket_analytics_configuration(input: DeleteBucketAnalyticsConfigura
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -801,19 +846,27 @@ fn __delete_bucket_cors(input: DeleteBucketCorsRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -853,19 +906,27 @@ fn __delete_bucket_encryption(input: DeleteBucketEncryptionRequest) -> BoxFuture
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -905,20 +966,25 @@ fn __delete_bucket_intelligent_tiering_configuration(input: DeleteBucketIntellig
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
+    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -958,23 +1024,28 @@ fn __delete_bucket_inventory_configuration(input: DeleteBucketInventoryConfigura
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1014,19 +1085,27 @@ fn __delete_bucket_lifecycle(input: DeleteBucketLifecycleRequest) -> BoxFuture<'
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1066,23 +1145,28 @@ fn __delete_bucket_metrics_configuration(input: DeleteBucketMetricsConfiguration
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1122,19 +1206,27 @@ fn __delete_bucket_ownership_controls(input: DeleteBucketOwnershipControlsReques
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1174,19 +1266,27 @@ fn __delete_bucket_policy(input: DeleteBucketPolicyRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1226,19 +1326,27 @@ fn __delete_bucket_replication(input: DeleteBucketReplicationRequest) -> BoxFutu
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1278,19 +1386,27 @@ fn __delete_bucket_tagging(input: DeleteBucketTaggingRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1330,19 +1446,27 @@ fn __delete_bucket_website(input: DeleteBucketWebsiteRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1386,34 +1510,39 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(mfa) = input.mfa {
-        headers.insert("x-amz-mfa", serde_json::to_string(&mfa).unwrap());
+        http_request.add_header("x-amz-mfa", &serde_json::to_string(&mfa).unwrap());
     };
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(bypass_governance_retention) = input.bypass_governance_retention {
-        headers.insert("x-amz-bypass-governance-retention", serde_json::to_string(&bypass_governance_retention).unwrap());
+        http_request.add_header("x-amz-bypass-governance-retention", &serde_json::to_string(&bypass_governance_retention).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1460,25 +1589,30 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1519,29 +1653,37 @@ fn __delete_objects(input: DeleteObjectsRequest) -> BoxFuture<'static, Vec<u8>> 
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "POST",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("Delete", serde_xml_rs::to_string(&input.delete).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(mfa) = input.mfa {
-        headers.insert("x-amz-mfa", serde_json::to_string(&mfa).unwrap());
+        http_request.add_header("x-amz-mfa", &serde_json::to_string(&mfa).unwrap());
     };
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(bypass_governance_retention) = input.bypass_governance_retention {
-        headers.insert("x-amz-bypass-governance-retention", serde_json::to_string(&bypass_governance_retention).unwrap());
+        http_request.add_header("x-amz-bypass-governance-retention", &serde_json::to_string(&bypass_governance_retention).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1590,19 +1732,27 @@ fn __delete_public_access_block(input: DeletePublicAccessBlockRequest) -> BoxFut
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("DELETE", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1642,19 +1792,27 @@ fn __get_bucket_accelerate_configuration(input: GetBucketAccelerateConfiguration
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1702,19 +1860,27 @@ fn __get_bucket_acl(input: GetBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1762,23 +1928,28 @@ fn __get_bucket_analytics_configuration(input: GetBucketAnalyticsConfigurationRe
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1826,19 +1997,27 @@ fn __get_bucket_cors(input: GetBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1886,19 +2065,27 @@ fn __get_bucket_encryption(input: GetBucketEncryptionRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -1946,20 +2133,25 @@ fn __get_bucket_intelligent_tiering_configuration(input: GetBucketIntelligentTie
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
+    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2007,23 +2199,28 @@ fn __get_bucket_inventory_configuration(input: GetBucketInventoryConfigurationRe
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2071,19 +2268,27 @@ fn __get_bucket_lifecycle(input: GetBucketLifecycleRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2131,19 +2336,27 @@ fn __get_bucket_lifecycle_configuration(input: GetBucketLifecycleConfigurationRe
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2191,19 +2404,27 @@ fn __get_bucket_location(input: GetBucketLocationRequest) -> BoxFuture<'static, 
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2251,19 +2472,27 @@ fn __get_bucket_logging(input: GetBucketLoggingRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2311,23 +2540,28 @@ fn __get_bucket_metrics_configuration(input: GetBucketMetricsConfigurationReques
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2375,19 +2609,27 @@ fn __get_bucket_notification(input: GetBucketNotificationConfigurationRequest) -
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2435,19 +2677,27 @@ fn __get_bucket_notification_configuration(input: GetBucketNotificationConfigura
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2495,19 +2745,27 @@ fn __get_bucket_ownership_controls(input: GetBucketOwnershipControlsRequest) -> 
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2555,19 +2813,27 @@ fn __get_bucket_policy(input: GetBucketPolicyRequest) -> BoxFuture<'static, Vec<
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2615,19 +2881,27 @@ fn __get_bucket_policy_status(input: GetBucketPolicyStatusRequest) -> BoxFuture<
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2675,19 +2949,27 @@ fn __get_bucket_replication(input: GetBucketReplicationRequest) -> BoxFuture<'st
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2735,19 +3017,27 @@ fn __get_bucket_request_payment(input: GetBucketRequestPaymentRequest) -> BoxFut
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2795,19 +3085,27 @@ fn __get_bucket_tagging(input: GetBucketTaggingRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2855,19 +3153,27 @@ fn __get_bucket_versioning(input: GetBucketVersioningRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2915,19 +3221,27 @@ fn __get_bucket_website(input: GetBucketWebsiteRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -2979,94 +3293,78 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(if_match) = input.if_match {
-        headers.insert("If-Match", serde_json::to_string(&if_match).unwrap());
+        http_request.add_header("If-Match", &serde_json::to_string(&if_match).unwrap());
     };
     if let Some(if_modified_since) = input.if_modified_since {
-        headers.insert("If-Modified-Since", serde_json::to_string(&if_modified_since).unwrap());
+        http_request.add_header("If-Modified-Since", &serde_json::to_string(&if_modified_since).unwrap());
     };
     if let Some(if_none_match) = input.if_none_match {
-        headers.insert("If-None-Match", serde_json::to_string(&if_none_match).unwrap());
+        http_request.add_header("If-None-Match", &serde_json::to_string(&if_none_match).unwrap());
     };
     if let Some(if_unmodified_since) = input.if_unmodified_since {
-        headers.insert("If-Unmodified-Since", serde_json::to_string(&if_unmodified_since).unwrap());
+        http_request.add_header("If-Unmodified-Since", &serde_json::to_string(&if_unmodified_since).unwrap());
     };
     if let Some(range) = input.range {
-        headers.insert("Range", serde_json::to_string(&range).unwrap());
+        http_request.add_header("Range", &serde_json::to_string(&range).unwrap());
     };
     if let Some(sse_customer_algorithm) = input.sse_customer_algorithm {
-        headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&sse_customer_algorithm).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-algorithm", &serde_json::to_string(&sse_customer_algorithm).unwrap());
     };
     if let Some(sse_customer_key) = input.sse_customer_key {
-        headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&sse_customer_key).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key", &serde_json::to_string(&sse_customer_key).unwrap());
     };
     if let Some(sse_customer_key_md5) = input.sse_customer_key_md5 {
-        headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&sse_customer_key_md5).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key-MD5", &serde_json::to_string(&sse_customer_key_md5).unwrap());
     };
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(response_cache_control) = input.response_cache_control {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "response-cache-control", serde_json::to_string(&response_cache_control).unwrap())),
-            None => path.push_str(&format!("?{}={}", "response-cache-control", serde_json::to_string(&response_cache_control).unwrap())),
-        }
+        http_request.add_param("response-cache-control", &serde_json::to_string(&response_cache_control).unwrap());
     };
     if let Some(response_content_disposition) = input.response_content_disposition {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "response-content-disposition", serde_json::to_string(&response_content_disposition).unwrap())),
-            None => path.push_str(&format!("?{}={}", "response-content-disposition", serde_json::to_string(&response_content_disposition).unwrap())),
-        }
+        http_request.add_param("response-content-disposition", &serde_json::to_string(&response_content_disposition).unwrap());
     };
     if let Some(response_content_encoding) = input.response_content_encoding {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "response-content-encoding", serde_json::to_string(&response_content_encoding).unwrap())),
-            None => path.push_str(&format!("?{}={}", "response-content-encoding", serde_json::to_string(&response_content_encoding).unwrap())),
-        }
+        http_request.add_param("response-content-encoding", &serde_json::to_string(&response_content_encoding).unwrap());
     };
     if let Some(response_content_language) = input.response_content_language {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "response-content-language", serde_json::to_string(&response_content_language).unwrap())),
-            None => path.push_str(&format!("?{}={}", "response-content-language", serde_json::to_string(&response_content_language).unwrap())),
-        }
+        http_request.add_param("response-content-language", &serde_json::to_string(&response_content_language).unwrap());
     };
     if let Some(response_content_type) = input.response_content_type {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "response-content-type", serde_json::to_string(&response_content_type).unwrap())),
-            None => path.push_str(&format!("?{}={}", "response-content-type", serde_json::to_string(&response_content_type).unwrap())),
-        }
+        http_request.add_param("response-content-type", &serde_json::to_string(&response_content_type).unwrap());
     };
     if let Some(response_expires) = input.response_expires {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "response-expires", serde_json::to_string(&response_expires).unwrap())),
-            None => path.push_str(&format!("?{}={}", "response-expires", serde_json::to_string(&response_expires).unwrap())),
-        }
+        http_request.add_param("response-expires", &serde_json::to_string(&response_expires).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
     if let Some(part_number) = input.part_number {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "partNumber", serde_json::to_string(&part_number).unwrap())),
-            None => path.push_str(&format!("?{}={}", "partNumber", serde_json::to_string(&part_number).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("partNumber", &serde_json::to_string(&part_number).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3148,28 +3446,33 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3222,28 +3525,33 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3291,19 +3599,27 @@ fn __get_object_lock_configuration(input: GetObjectLockConfigurationRequest) -> 
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3355,28 +3671,33 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3428,25 +3749,30 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3499,22 +3825,30 @@ fn __get_object_torrent(input: GetObjectTorrentRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3563,19 +3897,27 @@ fn __get_public_access_block(input: GetPublicAccessBlockRequest) -> BoxFuture<'s
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3623,19 +3965,27 @@ fn __head_bucket(input: HeadBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "HEAD",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("HEAD", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3679,58 +4029,60 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "HEAD",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(if_match) = input.if_match {
-        headers.insert("If-Match", serde_json::to_string(&if_match).unwrap());
+        http_request.add_header("If-Match", &serde_json::to_string(&if_match).unwrap());
     };
     if let Some(if_modified_since) = input.if_modified_since {
-        headers.insert("If-Modified-Since", serde_json::to_string(&if_modified_since).unwrap());
+        http_request.add_header("If-Modified-Since", &serde_json::to_string(&if_modified_since).unwrap());
     };
     if let Some(if_none_match) = input.if_none_match {
-        headers.insert("If-None-Match", serde_json::to_string(&if_none_match).unwrap());
+        http_request.add_header("If-None-Match", &serde_json::to_string(&if_none_match).unwrap());
     };
     if let Some(if_unmodified_since) = input.if_unmodified_since {
-        headers.insert("If-Unmodified-Since", serde_json::to_string(&if_unmodified_since).unwrap());
+        http_request.add_header("If-Unmodified-Since", &serde_json::to_string(&if_unmodified_since).unwrap());
     };
     if let Some(range) = input.range {
-        headers.insert("Range", serde_json::to_string(&range).unwrap());
+        http_request.add_header("Range", &serde_json::to_string(&range).unwrap());
     };
     if let Some(sse_customer_algorithm) = input.sse_customer_algorithm {
-        headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&sse_customer_algorithm).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-algorithm", &serde_json::to_string(&sse_customer_algorithm).unwrap());
     };
     if let Some(sse_customer_key) = input.sse_customer_key {
-        headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&sse_customer_key).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key", &serde_json::to_string(&sse_customer_key).unwrap());
     };
     if let Some(sse_customer_key_md5) = input.sse_customer_key_md5 {
-        headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&sse_customer_key_md5).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key-MD5", &serde_json::to_string(&sse_customer_key_md5).unwrap());
     };
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
     if let Some(part_number) = input.part_number {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "partNumber", serde_json::to_string(&part_number).unwrap())),
-            None => path.push_str(&format!("?{}={}", "partNumber", serde_json::to_string(&part_number).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("partNumber", &serde_json::to_string(&part_number).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("HEAD", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3799,25 +4151,30 @@ fn __list_bucket_analytics_configurations(input: ListBucketAnalyticsConfiguratio
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(continuation_token) = input.continuation_token {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "continuation-token", serde_json::to_string(&continuation_token).unwrap())),
-            None => path.push_str(&format!("?{}={}", "continuation-token", serde_json::to_string(&continuation_token).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("continuation-token", &serde_json::to_string(&continuation_token).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3865,22 +4222,27 @@ fn __list_bucket_intelligent_tiering_configurations(input: ListBucketIntelligent
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(continuation_token) = input.continuation_token {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "continuation-token", serde_json::to_string(&continuation_token).unwrap())),
-            None => path.push_str(&format!("?{}={}", "continuation-token", serde_json::to_string(&continuation_token).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("continuation-token", &serde_json::to_string(&continuation_token).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3928,25 +4290,30 @@ fn __list_bucket_inventory_configurations(input: ListBucketInventoryConfiguratio
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(continuation_token) = input.continuation_token {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "continuation-token", serde_json::to_string(&continuation_token).unwrap())),
-            None => path.push_str(&format!("?{}={}", "continuation-token", serde_json::to_string(&continuation_token).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("continuation-token", &serde_json::to_string(&continuation_token).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -3994,25 +4361,30 @@ fn __list_bucket_metrics_configurations(input: ListBucketMetricsConfigurationsRe
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(continuation_token) = input.continuation_token {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "continuation-token", serde_json::to_string(&continuation_token).unwrap())),
-            None => path.push_str(&format!("?{}={}", "continuation-token", serde_json::to_string(&continuation_token).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("continuation-token", &serde_json::to_string(&continuation_token).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4056,16 +4428,24 @@ pub fn list_buckets(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4113,55 +4493,45 @@ fn __list_multipart_uploads(input: ListMultipartUploadsRequest) -> BoxFuture<'st
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(delimiter) = input.delimiter {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "delimiter", serde_json::to_string(&delimiter).unwrap())),
-            None => path.push_str(&format!("?{}={}", "delimiter", serde_json::to_string(&delimiter).unwrap())),
-        }
+        http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
     };
     if let Some(encoding_type) = input.encoding_type {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "encoding-type", serde_json::to_string(&encoding_type).unwrap())),
-            None => path.push_str(&format!("?{}={}", "encoding-type", serde_json::to_string(&encoding_type).unwrap())),
-        }
+        http_request.add_param("encoding-type", &serde_json::to_string(&encoding_type).unwrap());
     };
     if let Some(key_marker) = input.key_marker {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "key-marker", serde_json::to_string(&key_marker).unwrap())),
-            None => path.push_str(&format!("?{}={}", "key-marker", serde_json::to_string(&key_marker).unwrap())),
-        }
+        http_request.add_param("key-marker", &serde_json::to_string(&key_marker).unwrap());
     };
     if let Some(max_uploads) = input.max_uploads {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "max-uploads", serde_json::to_string(&max_uploads).unwrap())),
-            None => path.push_str(&format!("?{}={}", "max-uploads", serde_json::to_string(&max_uploads).unwrap())),
-        }
+        http_request.add_param("max-uploads", &serde_json::to_string(&max_uploads).unwrap());
     };
     if let Some(prefix) = input.prefix {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "prefix", serde_json::to_string(&prefix).unwrap())),
-            None => path.push_str(&format!("?{}={}", "prefix", serde_json::to_string(&prefix).unwrap())),
-        }
+        http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
     };
     if let Some(upload_id_marker) = input.upload_id_marker {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "upload-id-marker", serde_json::to_string(&upload_id_marker).unwrap())),
-            None => path.push_str(&format!("?{}={}", "upload-id-marker", serde_json::to_string(&upload_id_marker).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("upload-id-marker", &serde_json::to_string(&upload_id_marker).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4209,55 +4579,45 @@ fn __list_object_versions(input: ListObjectVersionsRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(delimiter) = input.delimiter {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "delimiter", serde_json::to_string(&delimiter).unwrap())),
-            None => path.push_str(&format!("?{}={}", "delimiter", serde_json::to_string(&delimiter).unwrap())),
-        }
+        http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
     };
     if let Some(encoding_type) = input.encoding_type {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "encoding-type", serde_json::to_string(&encoding_type).unwrap())),
-            None => path.push_str(&format!("?{}={}", "encoding-type", serde_json::to_string(&encoding_type).unwrap())),
-        }
+        http_request.add_param("encoding-type", &serde_json::to_string(&encoding_type).unwrap());
     };
     if let Some(key_marker) = input.key_marker {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "key-marker", serde_json::to_string(&key_marker).unwrap())),
-            None => path.push_str(&format!("?{}={}", "key-marker", serde_json::to_string(&key_marker).unwrap())),
-        }
+        http_request.add_param("key-marker", &serde_json::to_string(&key_marker).unwrap());
     };
     if let Some(max_keys) = input.max_keys {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "max-keys", serde_json::to_string(&max_keys).unwrap())),
-            None => path.push_str(&format!("?{}={}", "max-keys", serde_json::to_string(&max_keys).unwrap())),
-        }
+        http_request.add_param("max-keys", &serde_json::to_string(&max_keys).unwrap());
     };
     if let Some(prefix) = input.prefix {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "prefix", serde_json::to_string(&prefix).unwrap())),
-            None => path.push_str(&format!("?{}={}", "prefix", serde_json::to_string(&prefix).unwrap())),
-        }
+        http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
     };
     if let Some(version_id_marker) = input.version_id_marker {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "version-id-marker", serde_json::to_string(&version_id_marker).unwrap())),
-            None => path.push_str(&format!("?{}={}", "version-id-marker", serde_json::to_string(&version_id_marker).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("version-id-marker", &serde_json::to_string(&version_id_marker).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4305,52 +4665,45 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(delimiter) = input.delimiter {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "delimiter", serde_json::to_string(&delimiter).unwrap())),
-            None => path.push_str(&format!("?{}={}", "delimiter", serde_json::to_string(&delimiter).unwrap())),
-        }
+        http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
     };
     if let Some(encoding_type) = input.encoding_type {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "encoding-type", serde_json::to_string(&encoding_type).unwrap())),
-            None => path.push_str(&format!("?{}={}", "encoding-type", serde_json::to_string(&encoding_type).unwrap())),
-        }
+        http_request.add_param("encoding-type", &serde_json::to_string(&encoding_type).unwrap());
     };
     if let Some(marker) = input.marker {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "marker", serde_json::to_string(&marker).unwrap())),
-            None => path.push_str(&format!("?{}={}", "marker", serde_json::to_string(&marker).unwrap())),
-        }
+        http_request.add_param("marker", &serde_json::to_string(&marker).unwrap());
     };
     if let Some(max_keys) = input.max_keys {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "max-keys", serde_json::to_string(&max_keys).unwrap())),
-            None => path.push_str(&format!("?{}={}", "max-keys", serde_json::to_string(&max_keys).unwrap())),
-        }
+        http_request.add_param("max-keys", &serde_json::to_string(&max_keys).unwrap());
     };
     if let Some(prefix) = input.prefix {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "prefix", serde_json::to_string(&prefix).unwrap())),
-            None => path.push_str(&format!("?{}={}", "prefix", serde_json::to_string(&prefix).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4398,64 +4751,51 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(delimiter) = input.delimiter {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "delimiter", serde_json::to_string(&delimiter).unwrap())),
-            None => path.push_str(&format!("?{}={}", "delimiter", serde_json::to_string(&delimiter).unwrap())),
-        }
+        http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
     };
     if let Some(encoding_type) = input.encoding_type {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "encoding-type", serde_json::to_string(&encoding_type).unwrap())),
-            None => path.push_str(&format!("?{}={}", "encoding-type", serde_json::to_string(&encoding_type).unwrap())),
-        }
+        http_request.add_param("encoding-type", &serde_json::to_string(&encoding_type).unwrap());
     };
     if let Some(max_keys) = input.max_keys {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "max-keys", serde_json::to_string(&max_keys).unwrap())),
-            None => path.push_str(&format!("?{}={}", "max-keys", serde_json::to_string(&max_keys).unwrap())),
-        }
+        http_request.add_param("max-keys", &serde_json::to_string(&max_keys).unwrap());
     };
     if let Some(prefix) = input.prefix {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "prefix", serde_json::to_string(&prefix).unwrap())),
-            None => path.push_str(&format!("?{}={}", "prefix", serde_json::to_string(&prefix).unwrap())),
-        }
+        http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
     };
     if let Some(continuation_token) = input.continuation_token {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "continuation-token", serde_json::to_string(&continuation_token).unwrap())),
-            None => path.push_str(&format!("?{}={}", "continuation-token", serde_json::to_string(&continuation_token).unwrap())),
-        }
+        http_request.add_param("continuation-token", &serde_json::to_string(&continuation_token).unwrap());
     };
     if let Some(fetch_owner) = input.fetch_owner {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "fetch-owner", serde_json::to_string(&fetch_owner).unwrap())),
-            None => path.push_str(&format!("?{}={}", "fetch-owner", serde_json::to_string(&fetch_owner).unwrap())),
-        }
+        http_request.add_param("fetch-owner", &serde_json::to_string(&fetch_owner).unwrap());
     };
     if let Some(start_after) = input.start_after {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "start-after", serde_json::to_string(&start_after).unwrap())),
-            None => path.push_str(&format!("?{}={}", "start-after", serde_json::to_string(&start_after).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("start-after", &serde_json::to_string(&start_after).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4507,38 +4847,37 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(max_parts) = input.max_parts {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "max-parts", serde_json::to_string(&max_parts).unwrap())),
-            None => path.push_str(&format!("?{}={}", "max-parts", serde_json::to_string(&max_parts).unwrap())),
-        }
+        http_request.add_param("max-parts", &serde_json::to_string(&max_parts).unwrap());
     };
     if let Some(part_number_marker) = input.part_number_marker {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "part-number-marker", serde_json::to_string(&part_number_marker).unwrap())),
-            None => path.push_str(&format!("?{}={}", "part-number-marker", serde_json::to_string(&part_number_marker).unwrap())),
-        }
+        http_request.add_param("part-number-marker", &serde_json::to_string(&part_number_marker).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("uploadId", &serde_json::to_string(&input.upload_id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("GET", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4589,20 +4928,28 @@ fn __put_bucket_accelerate_configuration(input: PutBucketAccelerateConfiguration
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("AccelerateConfiguration", serde_xml_rs::to_string(&input.accelerate_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4642,43 +4989,51 @@ fn __put_bucket_acl(input: PutBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     if let Some(access_control_policy) = input.access_control_policy {
         body.insert("AccessControlPolicy", serde_json::to_string(&access_control_policy).unwrap());
     };
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(acl) = input.acl {
-        headers.insert("x-amz-acl", serde_json::to_string(&acl).unwrap());
+        http_request.add_header("x-amz-acl", &serde_json::to_string(&acl).unwrap());
     };
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(grant_full_control) = input.grant_full_control {
-        headers.insert("x-amz-grant-full-control", serde_json::to_string(&grant_full_control).unwrap());
+        http_request.add_header("x-amz-grant-full-control", &serde_json::to_string(&grant_full_control).unwrap());
     };
     if let Some(grant_read) = input.grant_read {
-        headers.insert("x-amz-grant-read", serde_json::to_string(&grant_read).unwrap());
+        http_request.add_header("x-amz-grant-read", &serde_json::to_string(&grant_read).unwrap());
     };
     if let Some(grant_read_acp) = input.grant_read_acp {
-        headers.insert("x-amz-grant-read-acp", serde_json::to_string(&grant_read_acp).unwrap());
+        http_request.add_header("x-amz-grant-read-acp", &serde_json::to_string(&grant_read_acp).unwrap());
     };
     if let Some(grant_write) = input.grant_write {
-        headers.insert("x-amz-grant-write", serde_json::to_string(&grant_write).unwrap());
+        http_request.add_header("x-amz-grant-write", &serde_json::to_string(&grant_write).unwrap());
     };
     if let Some(grant_write_acp) = input.grant_write_acp {
-        headers.insert("x-amz-grant-write-acp", serde_json::to_string(&grant_write_acp).unwrap());
+        http_request.add_header("x-amz-grant-write-acp", &serde_json::to_string(&grant_write_acp).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4718,24 +5073,29 @@ fn __put_bucket_analytics_configuration(input: PutBucketAnalyticsConfigurationRe
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("AnalyticsConfiguration", serde_xml_rs::to_string(&input.analytics_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4775,23 +5135,31 @@ fn __put_bucket_cors(input: PutBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("CORSConfiguration", serde_xml_rs::to_string(&input.cors_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4831,23 +5199,31 @@ fn __put_bucket_encryption(input: PutBucketEncryptionRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("ServerSideEncryptionConfiguration", serde_xml_rs::to_string(&input.server_side_encryption_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4887,21 +5263,26 @@ fn __put_bucket_intelligent_tiering_configuration(input: PutBucketIntelligentTie
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("IntelligentTieringConfiguration", serde_xml_rs::to_string(&input.intelligent_tiering_configuration).unwrap());
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
+    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4941,24 +5322,29 @@ fn __put_bucket_inventory_configuration(input: PutBucketInventoryConfigurationRe
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("InventoryConfiguration", serde_xml_rs::to_string(&input.inventory_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -4998,25 +5384,33 @@ fn __put_bucket_lifecycle(input: PutBucketLifecycleRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     if let Some(lifecycle_configuration) = input.lifecycle_configuration {
         body.insert("LifecycleConfiguration", serde_json::to_string(&lifecycle_configuration).unwrap());
     };
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5056,22 +5450,30 @@ fn __put_bucket_lifecycle_configuration(input: PutBucketLifecycleConfigurationRe
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     if let Some(lifecycle_configuration) = input.lifecycle_configuration {
         body.insert("LifecycleConfiguration", serde_json::to_string(&lifecycle_configuration).unwrap());
     };
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5111,23 +5513,31 @@ fn __put_bucket_logging(input: PutBucketLoggingRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("BucketLoggingStatus", serde_xml_rs::to_string(&input.bucket_logging_status).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5167,24 +5577,29 @@ fn __put_bucket_metrics_configuration(input: PutBucketMetricsConfigurationReques
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("MetricsConfiguration", serde_xml_rs::to_string(&input.metrics_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "id", serde_json::to_string(&input.id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5224,23 +5639,31 @@ fn __put_bucket_notification(input: PutBucketNotificationRequest) -> BoxFuture<'
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("NotificationConfiguration", serde_xml_rs::to_string(&input.notification_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5280,20 +5703,28 @@ fn __put_bucket_notification_configuration(input: PutBucketNotificationConfigura
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("NotificationConfiguration", serde_xml_rs::to_string(&input.notification_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5333,23 +5764,31 @@ fn __put_bucket_ownership_controls(input: PutBucketOwnershipControlsRequest) -> 
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("OwnershipControls", serde_xml_rs::to_string(&input.ownership_controls).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5389,26 +5828,34 @@ fn __put_bucket_policy(input: PutBucketPolicyRequest) -> BoxFuture<'static, Vec<
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("Policy", serde_xml_rs::to_string(&input.policy).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(confirm_remove_self_bucket_access) = input.confirm_remove_self_bucket_access {
-        headers.insert("x-amz-confirm-remove-self-bucket-access", serde_json::to_string(&confirm_remove_self_bucket_access).unwrap());
+        http_request.add_header("x-amz-confirm-remove-self-bucket-access", &serde_json::to_string(&confirm_remove_self_bucket_access).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5448,26 +5895,34 @@ fn __put_bucket_replication(input: PutBucketReplicationRequest) -> BoxFuture<'st
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("ReplicationConfiguration", serde_xml_rs::to_string(&input.replication_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(token) = input.token {
-        headers.insert("x-amz-bucket-object-lock-token", serde_json::to_string(&token).unwrap());
+        http_request.add_header("x-amz-bucket-object-lock-token", &serde_json::to_string(&token).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5507,23 +5962,31 @@ fn __put_bucket_request_payment(input: PutBucketRequestPaymentRequest) -> BoxFut
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("RequestPaymentConfiguration", serde_xml_rs::to_string(&input.request_payment_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5563,23 +6026,31 @@ fn __put_bucket_tagging(input: PutBucketTaggingRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("Tagging", serde_xml_rs::to_string(&input.tagging).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5619,26 +6090,34 @@ fn __put_bucket_versioning(input: PutBucketVersioningRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("VersioningConfiguration", serde_xml_rs::to_string(&input.versioning_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(mfa) = input.mfa {
-        headers.insert("x-amz-mfa", serde_json::to_string(&mfa).unwrap());
+        http_request.add_header("x-amz-mfa", &serde_json::to_string(&mfa).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5678,23 +6157,31 @@ fn __put_bucket_website(input: PutBucketWebsiteRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("WebsiteConfiguration", serde_xml_rs::to_string(&input.website_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5738,100 +6225,103 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    http_request.set_payload(input.body);
+    
     if let Some(acl) = input.acl {
-        headers.insert("x-amz-acl", serde_json::to_string(&acl).unwrap());
+        http_request.add_header("x-amz-acl", &serde_json::to_string(&acl).unwrap());
     };
     if let Some(cache_control) = input.cache_control {
-        headers.insert("Cache-Control", serde_json::to_string(&cache_control).unwrap());
+        http_request.add_header("Cache-Control", &serde_json::to_string(&cache_control).unwrap());
     };
     if let Some(content_disposition) = input.content_disposition {
-        headers.insert("Content-Disposition", serde_json::to_string(&content_disposition).unwrap());
+        http_request.add_header("Content-Disposition", &serde_json::to_string(&content_disposition).unwrap());
     };
     if let Some(content_encoding) = input.content_encoding {
-        headers.insert("Content-Encoding", serde_json::to_string(&content_encoding).unwrap());
+        http_request.add_header("Content-Encoding", &serde_json::to_string(&content_encoding).unwrap());
     };
     if let Some(content_language) = input.content_language {
-        headers.insert("Content-Language", serde_json::to_string(&content_language).unwrap());
+        http_request.add_header("Content-Language", &serde_json::to_string(&content_language).unwrap());
     };
     if let Some(content_length) = input.content_length {
-        headers.insert("Content-Length", serde_json::to_string(&content_length).unwrap());
+        http_request.add_header("Content-Length", &serde_json::to_string(&content_length).unwrap());
     };
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(content_type) = input.content_type {
-        headers.insert("Content-Type", serde_json::to_string(&content_type).unwrap());
+        http_request.add_header("Content-Type", &serde_json::to_string(&content_type).unwrap());
     };
     if let Some(expires) = input.expires {
-        headers.insert("Expires", serde_json::to_string(&expires).unwrap());
+        http_request.add_header("Expires", &serde_json::to_string(&expires).unwrap());
     };
     if let Some(grant_full_control) = input.grant_full_control {
-        headers.insert("x-amz-grant-full-control", serde_json::to_string(&grant_full_control).unwrap());
+        http_request.add_header("x-amz-grant-full-control", &serde_json::to_string(&grant_full_control).unwrap());
     };
     if let Some(grant_read) = input.grant_read {
-        headers.insert("x-amz-grant-read", serde_json::to_string(&grant_read).unwrap());
+        http_request.add_header("x-amz-grant-read", &serde_json::to_string(&grant_read).unwrap());
     };
     if let Some(grant_read_acp) = input.grant_read_acp {
-        headers.insert("x-amz-grant-read-acp", serde_json::to_string(&grant_read_acp).unwrap());
+        http_request.add_header("x-amz-grant-read-acp", &serde_json::to_string(&grant_read_acp).unwrap());
     };
     if let Some(grant_write_acp) = input.grant_write_acp {
-        headers.insert("x-amz-grant-write-acp", serde_json::to_string(&grant_write_acp).unwrap());
+        http_request.add_header("x-amz-grant-write-acp", &serde_json::to_string(&grant_write_acp).unwrap());
     };
     if let Some(server_side_encryption) = input.server_side_encryption {
-        headers.insert("x-amz-server-side-encryption", serde_json::to_string(&server_side_encryption).unwrap());
+        http_request.add_header("x-amz-server-side-encryption", &serde_json::to_string(&server_side_encryption).unwrap());
     };
     if let Some(storage_class) = input.storage_class {
-        headers.insert("x-amz-storage-class", serde_json::to_string(&storage_class).unwrap());
+        http_request.add_header("x-amz-storage-class", &serde_json::to_string(&storage_class).unwrap());
     };
     if let Some(website_redirect_location) = input.website_redirect_location {
-        headers.insert("x-amz-website-redirect-location", serde_json::to_string(&website_redirect_location).unwrap());
+        http_request.add_header("x-amz-website-redirect-location", &serde_json::to_string(&website_redirect_location).unwrap());
     };
     if let Some(sse_customer_algorithm) = input.sse_customer_algorithm {
-        headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&sse_customer_algorithm).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-algorithm", &serde_json::to_string(&sse_customer_algorithm).unwrap());
     };
     if let Some(sse_customer_key) = input.sse_customer_key {
-        headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&sse_customer_key).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key", &serde_json::to_string(&sse_customer_key).unwrap());
     };
     if let Some(sse_customer_key_md5) = input.sse_customer_key_md5 {
-        headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&sse_customer_key_md5).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key-MD5", &serde_json::to_string(&sse_customer_key_md5).unwrap());
     };
     if let Some(ssekms_key_id) = input.ssekms_key_id {
-        headers.insert("x-amz-server-side-encryption-aws-kms-key-id", serde_json::to_string(&ssekms_key_id).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-aws-kms-key-id", &serde_json::to_string(&ssekms_key_id).unwrap());
     };
     if let Some(ssekms_encryption_context) = input.ssekms_encryption_context {
-        headers.insert("x-amz-server-side-encryption-context", serde_json::to_string(&ssekms_encryption_context).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-context", &serde_json::to_string(&ssekms_encryption_context).unwrap());
     };
     if let Some(bucket_key_enabled) = input.bucket_key_enabled {
-        headers.insert("x-amz-server-side-encryption-bucket-key-enabled", serde_json::to_string(&bucket_key_enabled).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-bucket-key-enabled", &serde_json::to_string(&bucket_key_enabled).unwrap());
     };
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(tagging) = input.tagging {
-        headers.insert("x-amz-tagging", serde_json::to_string(&tagging).unwrap());
+        http_request.add_header("x-amz-tagging", &serde_json::to_string(&tagging).unwrap());
     };
     if let Some(object_lock_mode) = input.object_lock_mode {
-        headers.insert("x-amz-object-lock-mode", serde_json::to_string(&object_lock_mode).unwrap());
+        http_request.add_header("x-amz-object-lock-mode", &serde_json::to_string(&object_lock_mode).unwrap());
     };
     if let Some(object_lock_retain_until_date) = input.object_lock_retain_until_date {
-        headers.insert("x-amz-object-lock-retain-until-date", serde_json::to_string(&object_lock_retain_until_date).unwrap());
+        http_request.add_header("x-amz-object-lock-retain-until-date", &serde_json::to_string(&object_lock_retain_until_date).unwrap());
     };
     if let Some(object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
-        headers.insert("x-amz-object-lock-legal-hold", serde_json::to_string(&object_lock_legal_hold_status).unwrap());
+        http_request.add_header("x-amz-object-lock-legal-hold", &serde_json::to_string(&object_lock_legal_hold_status).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5885,52 +6375,57 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     if let Some(access_control_policy) = input.access_control_policy {
         body.insert("AccessControlPolicy", serde_json::to_string(&access_control_policy).unwrap());
     };
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(acl) = input.acl {
-        headers.insert("x-amz-acl", serde_json::to_string(&acl).unwrap());
+        http_request.add_header("x-amz-acl", &serde_json::to_string(&acl).unwrap());
     };
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(grant_full_control) = input.grant_full_control {
-        headers.insert("x-amz-grant-full-control", serde_json::to_string(&grant_full_control).unwrap());
+        http_request.add_header("x-amz-grant-full-control", &serde_json::to_string(&grant_full_control).unwrap());
     };
     if let Some(grant_read) = input.grant_read {
-        headers.insert("x-amz-grant-read", serde_json::to_string(&grant_read).unwrap());
+        http_request.add_header("x-amz-grant-read", &serde_json::to_string(&grant_read).unwrap());
     };
     if let Some(grant_read_acp) = input.grant_read_acp {
-        headers.insert("x-amz-grant-read-acp", serde_json::to_string(&grant_read_acp).unwrap());
+        http_request.add_header("x-amz-grant-read-acp", &serde_json::to_string(&grant_read_acp).unwrap());
     };
     if let Some(grant_write) = input.grant_write {
-        headers.insert("x-amz-grant-write", serde_json::to_string(&grant_write).unwrap());
+        http_request.add_header("x-amz-grant-write", &serde_json::to_string(&grant_write).unwrap());
     };
     if let Some(grant_write_acp) = input.grant_write_acp {
-        headers.insert("x-amz-grant-write-acp", serde_json::to_string(&grant_write_acp).unwrap());
+        http_request.add_header("x-amz-grant-write-acp", &serde_json::to_string(&grant_write_acp).unwrap());
     };
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -5975,34 +6470,39 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     if let Some(legal_hold) = input.legal_hold {
         body.insert("LegalHold", serde_json::to_string(&legal_hold).unwrap());
     };
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -6043,31 +6543,39 @@ fn __put_object_lock_configuration(input: PutObjectLockConfigurationRequest) -> 
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     if let Some(object_lock_configuration) = input.object_lock_configuration {
         body.insert("ObjectLockConfiguration", serde_json::to_string(&object_lock_configuration).unwrap());
     };
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(token) = input.token {
-        headers.insert("x-amz-bucket-object-lock-token", serde_json::to_string(&token).unwrap());
+        http_request.add_header("x-amz-bucket-object-lock-token", &serde_json::to_string(&token).unwrap());
     };
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -6112,37 +6620,42 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     if let Some(retention) = input.retention {
         body.insert("Retention", serde_json::to_string(&retention).unwrap());
     };
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(bypass_governance_retention) = input.bypass_governance_retention {
-        headers.insert("x-amz-bypass-governance-retention", serde_json::to_string(&bypass_governance_retention).unwrap());
+        http_request.add_header("x-amz-bypass-governance-retention", &serde_json::to_string(&bypass_governance_retention).unwrap());
     };
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -6187,29 +6700,34 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("Tagging", serde_xml_rs::to_string(&input.tagging).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -6250,23 +6768,31 @@ fn __put_public_access_block(input: PutPublicAccessBlockRequest) -> BoxFuture<'s
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("PublicAccessBlockConfiguration", serde_xml_rs::to_string(&input.public_access_block_configuration).unwrap());
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -6310,31 +6836,36 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "POST",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     if let Some(restore_request) = input.restore_request {
         body.insert("RestoreRequest", serde_json::to_string(&restore_request).unwrap());
     };
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        match path.find('?') {
-            Some(_) => path.push_str(&format!("&{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-            None => path.push_str(&format!("?{}={}", "versionId", serde_json::to_string(&version_id).unwrap())),
-        }
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -6370,7 +6901,7 @@ pub fn select_object_content(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 }
 
 fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'static, Vec<u8>> {
-    let mut path = String::from("/{Bucket}/{Key+}?select&amp;select-type=2");
+    let mut path = String::from("/{Bucket}/{Key+}?select&select-type=2");
     path = match path.find("{Bucket}") {
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
@@ -6380,8 +6911,15 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "POST",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
     body.insert("Expression", serde_xml_rs::to_string(&input.expression).unwrap());
     body.insert("ExpressionType", serde_xml_rs::to_string(&input.expression_type).unwrap());
     if let Some(request_progress) = input.request_progress {
@@ -6392,26 +6930,27 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
     if let Some(scan_range) = input.scan_range {
         body.insert("ScanRange", serde_json::to_string(&scan_range).unwrap());
     };
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
     if let Some(sse_customer_algorithm) = input.sse_customer_algorithm {
-        headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&sse_customer_algorithm).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-algorithm", &serde_json::to_string(&sse_customer_algorithm).unwrap());
     };
     if let Some(sse_customer_key) = input.sse_customer_key {
-        headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&sse_customer_key).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key", &serde_json::to_string(&sse_customer_key).unwrap());
     };
     if let Some(sse_customer_key_md5) = input.sse_customer_key_md5 {
-        headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&sse_customer_key_md5).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key-MD5", &serde_json::to_string(&sse_customer_key_md5).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
 
     Box::pin(async move {
-        match crate::CLIENT.call("POST", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -6463,45 +7002,42 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    http_request.set_payload(input.body);
+    
     if let Some(content_length) = input.content_length {
-        headers.insert("Content-Length", serde_json::to_string(&content_length).unwrap());
+        http_request.add_header("Content-Length", &serde_json::to_string(&content_length).unwrap());
     };
     if let Some(content_md5) = input.content_md5 {
-        headers.insert("Content-MD5", serde_json::to_string(&content_md5).unwrap());
+        http_request.add_header("Content-MD5", &serde_json::to_string(&content_md5).unwrap());
     };
     if let Some(sse_customer_algorithm) = input.sse_customer_algorithm {
-        headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&sse_customer_algorithm).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-algorithm", &serde_json::to_string(&sse_customer_algorithm).unwrap());
     };
     if let Some(sse_customer_key) = input.sse_customer_key {
-        headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&sse_customer_key).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key", &serde_json::to_string(&sse_customer_key).unwrap());
     };
     if let Some(sse_customer_key_md5) = input.sse_customer_key_md5 {
-        headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&sse_customer_key_md5).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key-MD5", &serde_json::to_string(&sse_customer_key_md5).unwrap());
     };
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "partNumber", serde_json::to_string(&input.part_number).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "partNumber", serde_json::to_string(&input.part_number).unwrap())),
-    };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("partNumber", &serde_json::to_string(&input.part_number).unwrap());
+    http_request.add_param("uploadId", &serde_json::to_string(&input.upload_id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
@@ -6552,67 +7088,69 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
         None => path.to_string(),
     };
 
-    let mut body = std::collections::HashMap::new();
-    let mut headers = std::collections::HashMap::new();
-    headers.insert("x-amz-copy-source", serde_json::to_string(&input.copy_source).unwrap());
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "s3",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+    
+    let mut body: std::collections::HashMap<&str, String> = Default::default();
+    if body.len() != 0 {
+        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
+    } else {
+        http_request.set_payload(Option::<String>::None);
+    }
+    
+    http_request.add_header("x-amz-copy-source", &serde_json::to_string(&input.copy_source).unwrap());
     if let Some(copy_source_if_match) = input.copy_source_if_match {
-        headers.insert("x-amz-copy-source-if-match", serde_json::to_string(&copy_source_if_match).unwrap());
+        http_request.add_header("x-amz-copy-source-if-match", &serde_json::to_string(&copy_source_if_match).unwrap());
     };
     if let Some(copy_source_if_modified_since) = input.copy_source_if_modified_since {
-        headers.insert("x-amz-copy-source-if-modified-since", serde_json::to_string(&copy_source_if_modified_since).unwrap());
+        http_request.add_header("x-amz-copy-source-if-modified-since", &serde_json::to_string(&copy_source_if_modified_since).unwrap());
     };
     if let Some(copy_source_if_none_match) = input.copy_source_if_none_match {
-        headers.insert("x-amz-copy-source-if-none-match", serde_json::to_string(&copy_source_if_none_match).unwrap());
+        http_request.add_header("x-amz-copy-source-if-none-match", &serde_json::to_string(&copy_source_if_none_match).unwrap());
     };
     if let Some(copy_source_if_unmodified_since) = input.copy_source_if_unmodified_since {
-        headers.insert("x-amz-copy-source-if-unmodified-since", serde_json::to_string(&copy_source_if_unmodified_since).unwrap());
+        http_request.add_header("x-amz-copy-source-if-unmodified-since", &serde_json::to_string(&copy_source_if_unmodified_since).unwrap());
     };
     if let Some(copy_source_range) = input.copy_source_range {
-        headers.insert("x-amz-copy-source-range", serde_json::to_string(&copy_source_range).unwrap());
+        http_request.add_header("x-amz-copy-source-range", &serde_json::to_string(&copy_source_range).unwrap());
     };
     if let Some(sse_customer_algorithm) = input.sse_customer_algorithm {
-        headers.insert("x-amz-server-side-encryption-customer-algorithm", serde_json::to_string(&sse_customer_algorithm).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-algorithm", &serde_json::to_string(&sse_customer_algorithm).unwrap());
     };
     if let Some(sse_customer_key) = input.sse_customer_key {
-        headers.insert("x-amz-server-side-encryption-customer-key", serde_json::to_string(&sse_customer_key).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key", &serde_json::to_string(&sse_customer_key).unwrap());
     };
     if let Some(sse_customer_key_md5) = input.sse_customer_key_md5 {
-        headers.insert("x-amz-server-side-encryption-customer-key-MD5", serde_json::to_string(&sse_customer_key_md5).unwrap());
+        http_request.add_header("x-amz-server-side-encryption-customer-key-MD5", &serde_json::to_string(&sse_customer_key_md5).unwrap());
     };
     if let Some(copy_source_sse_customer_algorithm) = input.copy_source_sse_customer_algorithm {
-        headers.insert("x-amz-copy-source-server-side-encryption-customer-algorithm", serde_json::to_string(&copy_source_sse_customer_algorithm).unwrap());
+        http_request.add_header("x-amz-copy-source-server-side-encryption-customer-algorithm", &serde_json::to_string(&copy_source_sse_customer_algorithm).unwrap());
     };
     if let Some(copy_source_sse_customer_key) = input.copy_source_sse_customer_key {
-        headers.insert("x-amz-copy-source-server-side-encryption-customer-key", serde_json::to_string(&copy_source_sse_customer_key).unwrap());
+        http_request.add_header("x-amz-copy-source-server-side-encryption-customer-key", &serde_json::to_string(&copy_source_sse_customer_key).unwrap());
     };
     if let Some(copy_source_sse_customer_key_md5) = input.copy_source_sse_customer_key_md5 {
-        headers.insert("x-amz-copy-source-server-side-encryption-customer-key-MD5", serde_json::to_string(&copy_source_sse_customer_key_md5).unwrap());
+        http_request.add_header("x-amz-copy-source-server-side-encryption-customer-key-MD5", &serde_json::to_string(&copy_source_sse_customer_key_md5).unwrap());
     };
     if let Some(request_payer) = input.request_payer {
-        headers.insert("x-amz-request-payer", serde_json::to_string(&request_payer).unwrap());
+        http_request.add_header("x-amz-request-payer", &serde_json::to_string(&request_payer).unwrap());
     };
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
-        headers.insert("x-amz-expected-bucket-owner", serde_json::to_string(&expected_bucket_owner).unwrap());
+        http_request.add_header("x-amz-expected-bucket-owner", &serde_json::to_string(&expected_bucket_owner).unwrap());
     };
     if let Some(expected_source_bucket_owner) = input.expected_source_bucket_owner {
-        headers.insert("x-amz-source-expected-bucket-owner", serde_json::to_string(&expected_source_bucket_owner).unwrap());
+        http_request.add_header("x-amz-source-expected-bucket-owner", &serde_json::to_string(&expected_source_bucket_owner).unwrap());
     };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "partNumber", serde_json::to_string(&input.part_number).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "partNumber", serde_json::to_string(&input.part_number).unwrap())),
-    };
-    path = match path.find('?') {
-        Some(_) => String::from(&format!("{}&{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())),
-        None => String::from(&format!("{}?{}={}", path, "uploadId", serde_json::to_string(&input.upload_id).unwrap())),
-    };
-
-    let client_input = client::ClientInput {
-        body,
-        headers,
-    };
+    http_request.add_param("partNumber", &serde_json::to_string(&input.part_number).unwrap());
+    http_request.add_param("uploadId", &serde_json::to_string(&input.upload_id).unwrap());
 
     Box::pin(async move {
-        match crate::CLIENT.call("PUT", &path, "rest-xml", client_input).await {
+        match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
                 let body = response.body();
