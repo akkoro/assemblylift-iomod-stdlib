@@ -133,11 +133,12 @@ async fn main() {
     });
 }
 
+#[allow(dead_code)]
 pub fn abort_multipart_upload(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: AbortMultipartUploadRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __abort_multipart_upload(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}");
     path = match path.find("{Bucket}") {
@@ -205,11 +206,12 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
     })
 }
 
+#[allow(dead_code)]
 pub fn complete_multipart_upload(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: CompleteMultipartUploadRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __complete_multipart_upload(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}");
     path = match path.find("{Bucket}") {
@@ -308,11 +310,12 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
     })
 }
 
+#[allow(dead_code)]
 pub fn copy_object(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: CopyObjectRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __copy_object(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}");
     path = match path.find("{Bucket}") {
@@ -526,11 +529,12 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn create_bucket(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: CreateBucketRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __create_bucket(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __create_bucket(input: CreateBucketRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}");
     path = match path.find("{Bucket}") {
@@ -611,11 +615,12 @@ fn __create_bucket(input: CreateBucketRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn create_multipart_upload(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: CreateMultipartUploadRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __create_multipart_upload(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?uploads");
     path = match path.find("{Bucket}") {
@@ -794,11 +799,12 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket(input: DeleteBucketRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}");
     path = match path.find("{Bucket}") {
@@ -854,11 +860,12 @@ fn __delete_bucket(input: DeleteBucketRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket_analytics_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketAnalyticsConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket_analytics_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket_analytics_configuration(input: DeleteBucketAnalyticsConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?analytics");
     path = match path.find("{Bucket}") {
@@ -915,11 +922,12 @@ fn __delete_bucket_analytics_configuration(input: DeleteBucketAnalyticsConfigura
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket_cors(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketCorsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket_cors(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket_cors(input: DeleteBucketCorsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?cors");
     path = match path.find("{Bucket}") {
@@ -975,11 +983,12 @@ fn __delete_bucket_cors(input: DeleteBucketCorsRequest) -> BoxFuture<'static, Ve
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket_encryption(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketEncryptionRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket_encryption(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket_encryption(input: DeleteBucketEncryptionRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?encryption");
     path = match path.find("{Bucket}") {
@@ -1035,11 +1044,12 @@ fn __delete_bucket_encryption(input: DeleteBucketEncryptionRequest) -> BoxFuture
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket_intelligent_tiering_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketIntelligentTieringConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket_intelligent_tiering_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket_intelligent_tiering_configuration(input: DeleteBucketIntelligentTieringConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?intelligent-tiering");
     path = match path.find("{Bucket}") {
@@ -1093,11 +1103,12 @@ fn __delete_bucket_intelligent_tiering_configuration(input: DeleteBucketIntellig
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket_inventory_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketInventoryConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket_inventory_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket_inventory_configuration(input: DeleteBucketInventoryConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?inventory");
     path = match path.find("{Bucket}") {
@@ -1154,11 +1165,12 @@ fn __delete_bucket_inventory_configuration(input: DeleteBucketInventoryConfigura
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket_lifecycle(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketLifecycleRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket_lifecycle(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket_lifecycle(input: DeleteBucketLifecycleRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?lifecycle");
     path = match path.find("{Bucket}") {
@@ -1214,11 +1226,12 @@ fn __delete_bucket_lifecycle(input: DeleteBucketLifecycleRequest) -> BoxFuture<'
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket_metrics_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketMetricsConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket_metrics_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket_metrics_configuration(input: DeleteBucketMetricsConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?metrics");
     path = match path.find("{Bucket}") {
@@ -1275,11 +1288,12 @@ fn __delete_bucket_metrics_configuration(input: DeleteBucketMetricsConfiguration
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket_ownership_controls(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketOwnershipControlsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket_ownership_controls(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket_ownership_controls(input: DeleteBucketOwnershipControlsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?ownershipControls");
     path = match path.find("{Bucket}") {
@@ -1335,11 +1349,12 @@ fn __delete_bucket_ownership_controls(input: DeleteBucketOwnershipControlsReques
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket_policy(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketPolicyRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket_policy(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket_policy(input: DeleteBucketPolicyRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?policy");
     path = match path.find("{Bucket}") {
@@ -1395,11 +1410,12 @@ fn __delete_bucket_policy(input: DeleteBucketPolicyRequest) -> BoxFuture<'static
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket_replication(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketReplicationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket_replication(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket_replication(input: DeleteBucketReplicationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?replication");
     path = match path.find("{Bucket}") {
@@ -1455,11 +1471,12 @@ fn __delete_bucket_replication(input: DeleteBucketReplicationRequest) -> BoxFutu
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket_tagging(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketTaggingRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket_tagging(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket_tagging(input: DeleteBucketTaggingRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?tagging");
     path = match path.find("{Bucket}") {
@@ -1515,11 +1532,12 @@ fn __delete_bucket_tagging(input: DeleteBucketTaggingRequest) -> BoxFuture<'stat
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_bucket_website(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteBucketWebsiteRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_bucket_website(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_bucket_website(input: DeleteBucketWebsiteRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?website");
     path = match path.find("{Bucket}") {
@@ -1575,11 +1593,12 @@ fn __delete_bucket_website(input: DeleteBucketWebsiteRequest) -> BoxFuture<'stat
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_object(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteObjectRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_object(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}");
     path = match path.find("{Bucket}") {
@@ -1663,11 +1682,12 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_object_tagging(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteObjectTaggingRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_object_tagging(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?tagging");
     path = match path.find("{Bucket}") {
@@ -1734,11 +1754,12 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_objects(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeleteObjectsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_objects(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_objects(input: DeleteObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?delete");
     path = match path.find("{Bucket}") {
@@ -1816,11 +1837,12 @@ fn __delete_objects(input: DeleteObjectsRequest) -> BoxFuture<'static, Vec<u8>> 
     })
 }
 
+#[allow(dead_code)]
 pub fn delete_public_access_block(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: DeletePublicAccessBlockRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __delete_public_access_block(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __delete_public_access_block(input: DeletePublicAccessBlockRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?publicAccessBlock");
     path = match path.find("{Bucket}") {
@@ -1876,11 +1898,12 @@ fn __delete_public_access_block(input: DeletePublicAccessBlockRequest) -> BoxFut
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_accelerate_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketAccelerateConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_accelerate_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_accelerate_configuration(input: GetBucketAccelerateConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?accelerate");
     path = match path.find("{Bucket}") {
@@ -1944,11 +1967,12 @@ fn __get_bucket_accelerate_configuration(input: GetBucketAccelerateConfiguration
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_acl(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketAclRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_acl(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_acl(input: GetBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?acl");
     path = match path.find("{Bucket}") {
@@ -2012,11 +2036,12 @@ fn __get_bucket_acl(input: GetBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_analytics_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketAnalyticsConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_analytics_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_analytics_configuration(input: GetBucketAnalyticsConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?analytics");
     path = match path.find("{Bucket}") {
@@ -2081,11 +2106,12 @@ fn __get_bucket_analytics_configuration(input: GetBucketAnalyticsConfigurationRe
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_cors(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketCorsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_cors(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_cors(input: GetBucketCorsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?cors");
     path = match path.find("{Bucket}") {
@@ -2149,11 +2175,12 @@ fn __get_bucket_cors(input: GetBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_encryption(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketEncryptionRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_encryption(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_encryption(input: GetBucketEncryptionRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?encryption");
     path = match path.find("{Bucket}") {
@@ -2217,11 +2244,12 @@ fn __get_bucket_encryption(input: GetBucketEncryptionRequest) -> BoxFuture<'stat
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_intelligent_tiering_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketIntelligentTieringConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_intelligent_tiering_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_intelligent_tiering_configuration(input: GetBucketIntelligentTieringConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?intelligent-tiering");
     path = match path.find("{Bucket}") {
@@ -2283,11 +2311,12 @@ fn __get_bucket_intelligent_tiering_configuration(input: GetBucketIntelligentTie
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_inventory_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketInventoryConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_inventory_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_inventory_configuration(input: GetBucketInventoryConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?inventory");
     path = match path.find("{Bucket}") {
@@ -2352,11 +2381,12 @@ fn __get_bucket_inventory_configuration(input: GetBucketInventoryConfigurationRe
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_lifecycle(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketLifecycleRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_lifecycle(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_lifecycle(input: GetBucketLifecycleRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?lifecycle");
     path = match path.find("{Bucket}") {
@@ -2420,11 +2450,12 @@ fn __get_bucket_lifecycle(input: GetBucketLifecycleRequest) -> BoxFuture<'static
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_lifecycle_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketLifecycleConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_lifecycle_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_lifecycle_configuration(input: GetBucketLifecycleConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?lifecycle");
     path = match path.find("{Bucket}") {
@@ -2488,11 +2519,12 @@ fn __get_bucket_lifecycle_configuration(input: GetBucketLifecycleConfigurationRe
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_location(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketLocationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_location(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_location(input: GetBucketLocationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?location");
     path = match path.find("{Bucket}") {
@@ -2556,11 +2588,12 @@ fn __get_bucket_location(input: GetBucketLocationRequest) -> BoxFuture<'static, 
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_logging(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketLoggingRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_logging(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_logging(input: GetBucketLoggingRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?logging");
     path = match path.find("{Bucket}") {
@@ -2624,11 +2657,12 @@ fn __get_bucket_logging(input: GetBucketLoggingRequest) -> BoxFuture<'static, Ve
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_metrics_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketMetricsConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_metrics_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_metrics_configuration(input: GetBucketMetricsConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?metrics");
     path = match path.find("{Bucket}") {
@@ -2693,11 +2727,12 @@ fn __get_bucket_metrics_configuration(input: GetBucketMetricsConfigurationReques
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_notification(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketNotificationConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_notification(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_notification(input: GetBucketNotificationConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?notification");
     path = match path.find("{Bucket}") {
@@ -2761,11 +2796,12 @@ fn __get_bucket_notification(input: GetBucketNotificationConfigurationRequest) -
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_notification_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketNotificationConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_notification_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_notification_configuration(input: GetBucketNotificationConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?notification");
     path = match path.find("{Bucket}") {
@@ -2829,11 +2865,12 @@ fn __get_bucket_notification_configuration(input: GetBucketNotificationConfigura
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_ownership_controls(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketOwnershipControlsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_ownership_controls(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_ownership_controls(input: GetBucketOwnershipControlsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?ownershipControls");
     path = match path.find("{Bucket}") {
@@ -2897,11 +2934,12 @@ fn __get_bucket_ownership_controls(input: GetBucketOwnershipControlsRequest) -> 
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_policy(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketPolicyRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_policy(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_policy(input: GetBucketPolicyRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?policy");
     path = match path.find("{Bucket}") {
@@ -2965,11 +3003,12 @@ fn __get_bucket_policy(input: GetBucketPolicyRequest) -> BoxFuture<'static, Vec<
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_policy_status(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketPolicyStatusRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_policy_status(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_policy_status(input: GetBucketPolicyStatusRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?policyStatus");
     path = match path.find("{Bucket}") {
@@ -3033,11 +3072,12 @@ fn __get_bucket_policy_status(input: GetBucketPolicyStatusRequest) -> BoxFuture<
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_replication(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketReplicationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_replication(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_replication(input: GetBucketReplicationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?replication");
     path = match path.find("{Bucket}") {
@@ -3101,11 +3141,12 @@ fn __get_bucket_replication(input: GetBucketReplicationRequest) -> BoxFuture<'st
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_request_payment(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketRequestPaymentRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_request_payment(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_request_payment(input: GetBucketRequestPaymentRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?requestPayment");
     path = match path.find("{Bucket}") {
@@ -3169,11 +3210,12 @@ fn __get_bucket_request_payment(input: GetBucketRequestPaymentRequest) -> BoxFut
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_tagging(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketTaggingRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_tagging(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_tagging(input: GetBucketTaggingRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?tagging");
     path = match path.find("{Bucket}") {
@@ -3237,11 +3279,12 @@ fn __get_bucket_tagging(input: GetBucketTaggingRequest) -> BoxFuture<'static, Ve
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_versioning(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketVersioningRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_versioning(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_versioning(input: GetBucketVersioningRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?versioning");
     path = match path.find("{Bucket}") {
@@ -3305,11 +3348,12 @@ fn __get_bucket_versioning(input: GetBucketVersioningRequest) -> BoxFuture<'stat
     })
 }
 
+#[allow(dead_code)]
 pub fn get_bucket_website(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetBucketWebsiteRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_bucket_website(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_bucket_website(input: GetBucketWebsiteRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?website");
     path = match path.find("{Bucket}") {
@@ -3373,11 +3417,12 @@ fn __get_bucket_website(input: GetBucketWebsiteRequest) -> BoxFuture<'static, Ve
     })
 }
 
+#[allow(dead_code)]
 pub fn get_object(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetObjectRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_object(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}");
     path = match path.find("{Bucket}") {
@@ -3616,11 +3661,12 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn get_object_acl(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetObjectAclRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_object_acl(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?acl");
     path = match path.find("{Bucket}") {
@@ -3698,11 +3744,12 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn get_object_legal_hold(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetObjectLegalHoldRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_object_legal_hold(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?legal-hold");
     path = match path.find("{Bucket}") {
@@ -3776,11 +3823,12 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
     })
 }
 
+#[allow(dead_code)]
 pub fn get_object_lock_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetObjectLockConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_object_lock_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_object_lock_configuration(input: GetObjectLockConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?object-lock");
     path = match path.find("{Bucket}") {
@@ -3844,11 +3892,12 @@ fn __get_object_lock_configuration(input: GetObjectLockConfigurationRequest) -> 
     })
 }
 
+#[allow(dead_code)]
 pub fn get_object_retention(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetObjectRetentionRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_object_retention(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?retention");
     path = match path.find("{Bucket}") {
@@ -3922,11 +3971,12 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
     })
 }
 
+#[allow(dead_code)]
 pub fn get_object_tagging(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetObjectTaggingRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_object_tagging(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?tagging");
     path = match path.find("{Bucket}") {
@@ -4001,11 +4051,12 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
     })
 }
 
+#[allow(dead_code)]
 pub fn get_object_torrent(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetObjectTorrentRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_object_torrent(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_object_torrent(input: GetObjectTorrentRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?torrent");
     path = match path.find("{Bucket}") {
@@ -4080,11 +4131,12 @@ fn __get_object_torrent(input: GetObjectTorrentRequest) -> BoxFuture<'static, Ve
     })
 }
 
+#[allow(dead_code)]
 pub fn get_public_access_block(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetPublicAccessBlockRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_public_access_block(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __get_public_access_block(input: GetPublicAccessBlockRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?publicAccessBlock");
     path = match path.find("{Bucket}") {
@@ -4148,11 +4200,12 @@ fn __get_public_access_block(input: GetPublicAccessBlockRequest) -> BoxFuture<'s
     })
 }
 
+#[allow(dead_code)]
 pub fn head_bucket(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: HeadBucketRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __head_bucket(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __head_bucket(input: HeadBucketRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}");
     path = match path.find("{Bucket}") {
@@ -4208,11 +4261,12 @@ fn __head_bucket(input: HeadBucketRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn head_object(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: HeadObjectRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __head_object(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}");
     path = match path.find("{Bucket}") {
@@ -4421,11 +4475,12 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn list_bucket_analytics_configurations(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: ListBucketAnalyticsConfigurationsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __list_bucket_analytics_configurations(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __list_bucket_analytics_configurations(input: ListBucketAnalyticsConfigurationsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?analytics");
     path = match path.find("{Bucket}") {
@@ -4492,11 +4547,12 @@ fn __list_bucket_analytics_configurations(input: ListBucketAnalyticsConfiguratio
     })
 }
 
+#[allow(dead_code)]
 pub fn list_bucket_intelligent_tiering_configurations(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: ListBucketIntelligentTieringConfigurationsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __list_bucket_intelligent_tiering_configurations(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __list_bucket_intelligent_tiering_configurations(input: ListBucketIntelligentTieringConfigurationsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?intelligent-tiering");
     path = match path.find("{Bucket}") {
@@ -4560,11 +4616,12 @@ fn __list_bucket_intelligent_tiering_configurations(input: ListBucketIntelligent
     })
 }
 
+#[allow(dead_code)]
 pub fn list_bucket_inventory_configurations(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: ListBucketInventoryConfigurationsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __list_bucket_inventory_configurations(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __list_bucket_inventory_configurations(input: ListBucketInventoryConfigurationsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?inventory");
     path = match path.find("{Bucket}") {
@@ -4631,11 +4688,12 @@ fn __list_bucket_inventory_configurations(input: ListBucketInventoryConfiguratio
     })
 }
 
+#[allow(dead_code)]
 pub fn list_bucket_metrics_configurations(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: ListBucketMetricsConfigurationsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __list_bucket_metrics_configurations(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __list_bucket_metrics_configurations(input: ListBucketMetricsConfigurationsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?metrics");
     path = match path.find("{Bucket}") {
@@ -4702,11 +4760,12 @@ fn __list_bucket_metrics_configurations(input: ListBucketMetricsConfigurationsRe
     })
 }
 
+#[allow(dead_code)]
 pub fn list_buckets(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: () = serde_json::from_slice(input.as_slice()).unwrap();
     __list_buckets(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
@@ -4763,11 +4822,12 @@ fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn list_multipart_uploads(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: ListMultipartUploadsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __list_multipart_uploads(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __list_multipart_uploads(input: ListMultipartUploadsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?uploads");
     path = match path.find("{Bucket}") {
@@ -4849,11 +4909,12 @@ fn __list_multipart_uploads(input: ListMultipartUploadsRequest) -> BoxFuture<'st
     })
 }
 
+#[allow(dead_code)]
 pub fn list_object_versions(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: ListObjectVersionsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __list_object_versions(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __list_object_versions(input: ListObjectVersionsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?versions");
     path = match path.find("{Bucket}") {
@@ -4935,11 +4996,12 @@ fn __list_object_versions(input: ListObjectVersionsRequest) -> BoxFuture<'static
     })
 }
 
+#[allow(dead_code)]
 pub fn list_objects(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: ListObjectsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __list_objects(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}");
     path = match path.find("{Bucket}") {
@@ -5021,11 +5083,12 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn list_objects_v2(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: ListObjectsV2Request = serde_json::from_slice(input.as_slice()).unwrap();
     __list_objects_v2(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?list-type=2");
     path = match path.find("{Bucket}") {
@@ -5113,11 +5176,12 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
     })
 }
 
+#[allow(dead_code)]
 pub fn list_parts(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: ListPartsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __list_parts(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}");
     path = match path.find("{Bucket}") {
@@ -5207,11 +5271,12 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_accelerate_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketAccelerateConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_accelerate_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_accelerate_configuration(input: PutBucketAccelerateConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?accelerate");
     path = match path.find("{Bucket}") {
@@ -5268,11 +5333,12 @@ fn __put_bucket_accelerate_configuration(input: PutBucketAccelerateConfiguration
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_acl(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketAclRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_acl(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_acl(input: PutBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?acl");
     path = match path.find("{Bucket}") {
@@ -5352,11 +5418,12 @@ fn __put_bucket_acl(input: PutBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_analytics_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketAnalyticsConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_analytics_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_analytics_configuration(input: PutBucketAnalyticsConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?analytics");
     path = match path.find("{Bucket}") {
@@ -5414,11 +5481,12 @@ fn __put_bucket_analytics_configuration(input: PutBucketAnalyticsConfigurationRe
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_cors(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketCorsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_cors(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_cors(input: PutBucketCorsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?cors");
     path = match path.find("{Bucket}") {
@@ -5478,11 +5546,12 @@ fn __put_bucket_cors(input: PutBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_encryption(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketEncryptionRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_encryption(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_encryption(input: PutBucketEncryptionRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?encryption");
     path = match path.find("{Bucket}") {
@@ -5542,11 +5611,12 @@ fn __put_bucket_encryption(input: PutBucketEncryptionRequest) -> BoxFuture<'stat
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_intelligent_tiering_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketIntelligentTieringConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_intelligent_tiering_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_intelligent_tiering_configuration(input: PutBucketIntelligentTieringConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?intelligent-tiering");
     path = match path.find("{Bucket}") {
@@ -5601,11 +5671,12 @@ fn __put_bucket_intelligent_tiering_configuration(input: PutBucketIntelligentTie
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_inventory_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketInventoryConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_inventory_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_inventory_configuration(input: PutBucketInventoryConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?inventory");
     path = match path.find("{Bucket}") {
@@ -5663,11 +5734,12 @@ fn __put_bucket_inventory_configuration(input: PutBucketInventoryConfigurationRe
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_lifecycle(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketLifecycleRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_lifecycle(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_lifecycle(input: PutBucketLifecycleRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?lifecycle");
     path = match path.find("{Bucket}") {
@@ -5729,11 +5801,12 @@ fn __put_bucket_lifecycle(input: PutBucketLifecycleRequest) -> BoxFuture<'static
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_lifecycle_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketLifecycleConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_lifecycle_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_lifecycle_configuration(input: PutBucketLifecycleConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?lifecycle");
     path = match path.find("{Bucket}") {
@@ -5792,11 +5865,12 @@ fn __put_bucket_lifecycle_configuration(input: PutBucketLifecycleConfigurationRe
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_logging(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketLoggingRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_logging(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_logging(input: PutBucketLoggingRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?logging");
     path = match path.find("{Bucket}") {
@@ -5856,11 +5930,12 @@ fn __put_bucket_logging(input: PutBucketLoggingRequest) -> BoxFuture<'static, Ve
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_metrics_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketMetricsConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_metrics_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_metrics_configuration(input: PutBucketMetricsConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?metrics");
     path = match path.find("{Bucket}") {
@@ -5918,11 +5993,12 @@ fn __put_bucket_metrics_configuration(input: PutBucketMetricsConfigurationReques
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_notification(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketNotificationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_notification(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_notification(input: PutBucketNotificationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?notification");
     path = match path.find("{Bucket}") {
@@ -5982,11 +6058,12 @@ fn __put_bucket_notification(input: PutBucketNotificationRequest) -> BoxFuture<'
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_notification_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketNotificationConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_notification_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_notification_configuration(input: PutBucketNotificationConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?notification");
     path = match path.find("{Bucket}") {
@@ -6043,11 +6120,12 @@ fn __put_bucket_notification_configuration(input: PutBucketNotificationConfigura
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_ownership_controls(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketOwnershipControlsRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_ownership_controls(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_ownership_controls(input: PutBucketOwnershipControlsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?ownershipControls");
     path = match path.find("{Bucket}") {
@@ -6107,11 +6185,12 @@ fn __put_bucket_ownership_controls(input: PutBucketOwnershipControlsRequest) -> 
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_policy(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketPolicyRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_policy(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_policy(input: PutBucketPolicyRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?policy");
     path = match path.find("{Bucket}") {
@@ -6174,11 +6253,12 @@ fn __put_bucket_policy(input: PutBucketPolicyRequest) -> BoxFuture<'static, Vec<
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_replication(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketReplicationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_replication(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_replication(input: PutBucketReplicationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?replication");
     path = match path.find("{Bucket}") {
@@ -6241,11 +6321,12 @@ fn __put_bucket_replication(input: PutBucketReplicationRequest) -> BoxFuture<'st
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_request_payment(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketRequestPaymentRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_request_payment(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_request_payment(input: PutBucketRequestPaymentRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?requestPayment");
     path = match path.find("{Bucket}") {
@@ -6305,11 +6386,12 @@ fn __put_bucket_request_payment(input: PutBucketRequestPaymentRequest) -> BoxFut
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_tagging(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketTaggingRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_tagging(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_tagging(input: PutBucketTaggingRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?tagging");
     path = match path.find("{Bucket}") {
@@ -6369,11 +6451,12 @@ fn __put_bucket_tagging(input: PutBucketTaggingRequest) -> BoxFuture<'static, Ve
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_versioning(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketVersioningRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_versioning(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_versioning(input: PutBucketVersioningRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?versioning");
     path = match path.find("{Bucket}") {
@@ -6436,11 +6519,12 @@ fn __put_bucket_versioning(input: PutBucketVersioningRequest) -> BoxFuture<'stat
     })
 }
 
+#[allow(dead_code)]
 pub fn put_bucket_website(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutBucketWebsiteRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_bucket_website(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_bucket_website(input: PutBucketWebsiteRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?website");
     path = match path.find("{Bucket}") {
@@ -6500,11 +6584,12 @@ fn __put_bucket_website(input: PutBucketWebsiteRequest) -> BoxFuture<'static, Ve
     })
 }
 
+#[allow(dead_code)]
 pub fn put_object(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutObjectRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_object(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}");
     path = match path.find("{Bucket}") {
@@ -6680,11 +6765,12 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn put_object_acl(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutObjectAclRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_object_acl(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?acl");
     path = match path.find("{Bucket}") {
@@ -6778,11 +6864,12 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn put_object_legal_hold(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutObjectLegalHoldRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_object_legal_hold(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?legal-hold");
     path = match path.find("{Bucket}") {
@@ -6858,11 +6945,12 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
     })
 }
 
+#[allow(dead_code)]
 pub fn put_object_lock_configuration(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutObjectLockConfigurationRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_object_lock_configuration(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_object_lock_configuration(input: PutObjectLockConfigurationRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?object-lock");
     path = match path.find("{Bucket}") {
@@ -6934,11 +7022,12 @@ fn __put_object_lock_configuration(input: PutObjectLockConfigurationRequest) -> 
     })
 }
 
+#[allow(dead_code)]
 pub fn put_object_retention(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutObjectRetentionRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_object_retention(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?retention");
     path = match path.find("{Bucket}") {
@@ -7017,11 +7106,12 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
     })
 }
 
+#[allow(dead_code)]
 pub fn put_object_tagging(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutObjectTaggingRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_object_tagging(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?tagging");
     path = match path.find("{Bucket}") {
@@ -7092,11 +7182,12 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
     })
 }
 
+#[allow(dead_code)]
 pub fn put_public_access_block(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: PutPublicAccessBlockRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __put_public_access_block(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __put_public_access_block(input: PutPublicAccessBlockRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}?publicAccessBlock");
     path = match path.find("{Bucket}") {
@@ -7156,11 +7247,12 @@ fn __put_public_access_block(input: PutPublicAccessBlockRequest) -> BoxFuture<'s
     })
 }
 
+#[allow(dead_code)]
 pub fn restore_object(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: RestoreObjectRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __restore_object(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?restore");
     path = match path.find("{Bucket}") {
@@ -7237,11 +7329,12 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
     })
 }
 
+#[allow(dead_code)]
 pub fn select_object_content(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: SelectObjectContentRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __select_object_content(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}?select&select-type=2");
     path = match path.find("{Bucket}") {
@@ -7328,11 +7421,12 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
     })
 }
 
+#[allow(dead_code)]
 pub fn upload_part(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: UploadPartRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __upload_part(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}");
     path = match path.find("{Bucket}") {
@@ -7435,11 +7529,12 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
     })
 }
 
+#[allow(dead_code)]
 pub fn upload_part_copy(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: UploadPartCopyRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __upload_part_copy(deserialized)
 }
-
+#[allow(unused_assignments, unused_mut, unused_variables)]
 fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/{Bucket}/{Key+}");
     path = match path.find("{Bucket}") {
