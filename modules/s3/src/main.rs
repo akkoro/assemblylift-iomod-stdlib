@@ -181,7 +181,10 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
                 match status {
                     StatusCode::OK => {
                         let mut output: AbortMultipartUploadOutput = Default::default();
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<AbortMultipartUploadOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -261,12 +264,30 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.expiration = Some(String::from_str(response.headers()["x-amz-expiration"].to_str().unwrap()).unwrap());
-                        output.server_side_encryption = Some(String::from_str(response.headers()["x-amz-server-side-encryption"].to_str().unwrap()).unwrap());
-                        output.version_id = Some(String::from_str(response.headers()["x-amz-version-id"].to_str().unwrap()).unwrap());
-                        output.ssekms_key_id = Some(String::from_str(response.headers()["x-amz-server-side-encryption-aws-kms-key-id"].to_str().unwrap()).unwrap());
-                        output.bucket_key_enabled = Some(bool::from_str(response.headers()["x-amz-server-side-encryption-bucket-key-enabled"].to_str().unwrap()).unwrap());
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.expiration = match response.headers().get("x-amz-expiration") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.server_side_encryption = match response.headers().get("x-amz-server-side-encryption") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.version_id = match response.headers().get("x-amz-version-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.ssekms_key_id = match response.headers().get("x-amz-server-side-encryption-aws-kms-key-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.bucket_key_enabled = match response.headers().get("x-amz-server-side-encryption-bucket-key-enabled") {
+                            Some(v) => Some(bool::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<CompleteMultipartUploadOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -445,16 +466,46 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.expiration = Some(String::from_str(response.headers()["x-amz-expiration"].to_str().unwrap()).unwrap());
-                        output.copy_source_version_id = Some(String::from_str(response.headers()["x-amz-copy-source-version-id"].to_str().unwrap()).unwrap());
-                        output.version_id = Some(String::from_str(response.headers()["x-amz-version-id"].to_str().unwrap()).unwrap());
-                        output.server_side_encryption = Some(String::from_str(response.headers()["x-amz-server-side-encryption"].to_str().unwrap()).unwrap());
-                        output.sse_customer_algorithm = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-algorithm"].to_str().unwrap()).unwrap());
-                        output.sse_customer_key_md5 = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-key-MD5"].to_str().unwrap()).unwrap());
-                        output.ssekms_key_id = Some(String::from_str(response.headers()["x-amz-server-side-encryption-aws-kms-key-id"].to_str().unwrap()).unwrap());
-                        output.ssekms_encryption_context = Some(String::from_str(response.headers()["x-amz-server-side-encryption-context"].to_str().unwrap()).unwrap());
-                        output.bucket_key_enabled = Some(bool::from_str(response.headers()["x-amz-server-side-encryption-bucket-key-enabled"].to_str().unwrap()).unwrap());
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.expiration = match response.headers().get("x-amz-expiration") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.copy_source_version_id = match response.headers().get("x-amz-copy-source-version-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.version_id = match response.headers().get("x-amz-version-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.server_side_encryption = match response.headers().get("x-amz-server-side-encryption") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_algorithm = match response.headers().get("x-amz-server-side-encryption-customer-algorithm") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_key_md5 = match response.headers().get("x-amz-server-side-encryption-customer-key-MD5") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.ssekms_key_id = match response.headers().get("x-amz-server-side-encryption-aws-kms-key-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.ssekms_encryption_context = match response.headers().get("x-amz-server-side-encryption-context") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.bucket_key_enabled = match response.headers().get("x-amz-server-side-encryption-bucket-key-enabled") {
+                            Some(v) => Some(bool::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<CopyObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -536,7 +587,10 @@ fn __create_bucket(input: CreateBucketRequest) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     StatusCode::OK => {
                         let mut output: CreateBucketOutput = Default::default();
-                        output.location = Some(String::from_str(response.headers()["Location"].to_str().unwrap()).unwrap());
+                        output.location = match response.headers().get("Location") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<CreateBucketOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -684,15 +738,42 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.abort_date = Some(String::from_str(response.headers()["x-amz-abort-date"].to_str().unwrap()).unwrap());
-                        output.abort_rule_id = Some(String::from_str(response.headers()["x-amz-abort-rule-id"].to_str().unwrap()).unwrap());
-                        output.server_side_encryption = Some(String::from_str(response.headers()["x-amz-server-side-encryption"].to_str().unwrap()).unwrap());
-                        output.sse_customer_algorithm = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-algorithm"].to_str().unwrap()).unwrap());
-                        output.sse_customer_key_md5 = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-key-MD5"].to_str().unwrap()).unwrap());
-                        output.ssekms_key_id = Some(String::from_str(response.headers()["x-amz-server-side-encryption-aws-kms-key-id"].to_str().unwrap()).unwrap());
-                        output.ssekms_encryption_context = Some(String::from_str(response.headers()["x-amz-server-side-encryption-context"].to_str().unwrap()).unwrap());
-                        output.bucket_key_enabled = Some(bool::from_str(response.headers()["x-amz-server-side-encryption-bucket-key-enabled"].to_str().unwrap()).unwrap());
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.abort_date = match response.headers().get("x-amz-abort-date") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.abort_rule_id = match response.headers().get("x-amz-abort-rule-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.server_side_encryption = match response.headers().get("x-amz-server-side-encryption") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_algorithm = match response.headers().get("x-amz-server-side-encryption-customer-algorithm") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_key_md5 = match response.headers().get("x-amz-server-side-encryption-customer-key-MD5") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.ssekms_key_id = match response.headers().get("x-amz-server-side-encryption-aws-kms-key-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.ssekms_encryption_context = match response.headers().get("x-amz-server-side-encryption-context") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.bucket_key_enabled = match response.headers().get("x-amz-server-side-encryption-bucket-key-enabled") {
+                            Some(v) => Some(bool::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<CreateMultipartUploadOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1550,9 +1631,18 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     StatusCode::OK => {
                         let mut output: DeleteObjectOutput = Default::default();
-                        output.delete_marker = Some(bool::from_str(response.headers()["x-amz-delete-marker"].to_str().unwrap()).unwrap());
-                        output.version_id = Some(String::from_str(response.headers()["x-amz-version-id"].to_str().unwrap()).unwrap());
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.delete_marker = match response.headers().get("x-amz-delete-marker") {
+                            Some(v) => Some(bool::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.version_id = match response.headers().get("x-amz-version-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<DeleteObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1620,7 +1710,10 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
                 match status {
                     StatusCode::OK => {
                         let mut output: DeleteObjectTaggingOutput = Default::default();
-                        output.version_id = Some(String::from_str(response.headers()["x-amz-version-id"].to_str().unwrap()).unwrap());
+                        output.version_id = match response.headers().get("x-amz-version-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<DeleteObjectTaggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1699,7 +1792,10 @@ fn __delete_objects(input: DeleteObjectsRequest) -> BoxFuture<'static, Vec<u8>> 
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<DeleteObjectsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3380,36 +3476,126 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.delete_marker = Some(bool::from_str(response.headers()["x-amz-delete-marker"].to_str().unwrap()).unwrap());
-                        output.accept_ranges = Some(String::from_str(response.headers()["accept-ranges"].to_str().unwrap()).unwrap());
-                        output.expiration = Some(String::from_str(response.headers()["x-amz-expiration"].to_str().unwrap()).unwrap());
-                        output.restore = Some(String::from_str(response.headers()["x-amz-restore"].to_str().unwrap()).unwrap());
-                        output.last_modified = Some(String::from_str(response.headers()["Last-Modified"].to_str().unwrap()).unwrap());
-                        output.content_length = Some(u64::from_str(response.headers()["Content-Length"].to_str().unwrap()).unwrap());
-                        output.e_tag = Some(String::from_str(response.headers()["ETag"].to_str().unwrap()).unwrap());
-                        output.missing_meta = Some(i64::from_str(response.headers()["x-amz-missing-meta"].to_str().unwrap()).unwrap());
-                        output.version_id = Some(String::from_str(response.headers()["x-amz-version-id"].to_str().unwrap()).unwrap());
-                        output.cache_control = Some(String::from_str(response.headers()["Cache-Control"].to_str().unwrap()).unwrap());
-                        output.content_disposition = Some(String::from_str(response.headers()["Content-Disposition"].to_str().unwrap()).unwrap());
-                        output.content_encoding = Some(String::from_str(response.headers()["Content-Encoding"].to_str().unwrap()).unwrap());
-                        output.content_language = Some(String::from_str(response.headers()["Content-Language"].to_str().unwrap()).unwrap());
-                        output.content_range = Some(String::from_str(response.headers()["Content-Range"].to_str().unwrap()).unwrap());
-                        output.content_type = Some(String::from_str(response.headers()["Content-Type"].to_str().unwrap()).unwrap());
-                        output.expires = Some(String::from_str(response.headers()["Expires"].to_str().unwrap()).unwrap());
-                        output.website_redirect_location = Some(String::from_str(response.headers()["x-amz-website-redirect-location"].to_str().unwrap()).unwrap());
-                        output.server_side_encryption = Some(String::from_str(response.headers()["x-amz-server-side-encryption"].to_str().unwrap()).unwrap());
-                        output.sse_customer_algorithm = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-algorithm"].to_str().unwrap()).unwrap());
-                        output.sse_customer_key_md5 = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-key-MD5"].to_str().unwrap()).unwrap());
-                        output.ssekms_key_id = Some(String::from_str(response.headers()["x-amz-server-side-encryption-aws-kms-key-id"].to_str().unwrap()).unwrap());
-                        output.bucket_key_enabled = Some(bool::from_str(response.headers()["x-amz-server-side-encryption-bucket-key-enabled"].to_str().unwrap()).unwrap());
-                        output.storage_class = Some(String::from_str(response.headers()["x-amz-storage-class"].to_str().unwrap()).unwrap());
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
-                        output.replication_status = Some(String::from_str(response.headers()["x-amz-replication-status"].to_str().unwrap()).unwrap());
-                        output.parts_count = Some(i64::from_str(response.headers()["x-amz-mp-parts-count"].to_str().unwrap()).unwrap());
-                        output.tag_count = Some(i64::from_str(response.headers()["x-amz-tagging-count"].to_str().unwrap()).unwrap());
-                        output.object_lock_mode = Some(String::from_str(response.headers()["x-amz-object-lock-mode"].to_str().unwrap()).unwrap());
-                        output.object_lock_retain_until_date = Some(String::from_str(response.headers()["x-amz-object-lock-retain-until-date"].to_str().unwrap()).unwrap());
-                        output.object_lock_legal_hold_status = Some(String::from_str(response.headers()["x-amz-object-lock-legal-hold"].to_str().unwrap()).unwrap());
+                        output.delete_marker = match response.headers().get("x-amz-delete-marker") {
+                            Some(v) => Some(bool::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.accept_ranges = match response.headers().get("accept-ranges") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.expiration = match response.headers().get("x-amz-expiration") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.restore = match response.headers().get("x-amz-restore") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.last_modified = match response.headers().get("Last-Modified") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.content_length = match response.headers().get("Content-Length") {
+                            Some(v) => Some(u64::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.e_tag = match response.headers().get("ETag") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.missing_meta = match response.headers().get("x-amz-missing-meta") {
+                            Some(v) => Some(i64::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.version_id = match response.headers().get("x-amz-version-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.cache_control = match response.headers().get("Cache-Control") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.content_disposition = match response.headers().get("Content-Disposition") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.content_encoding = match response.headers().get("Content-Encoding") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.content_language = match response.headers().get("Content-Language") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.content_range = match response.headers().get("Content-Range") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.content_type = match response.headers().get("Content-Type") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.expires = match response.headers().get("Expires") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.website_redirect_location = match response.headers().get("x-amz-website-redirect-location") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.server_side_encryption = match response.headers().get("x-amz-server-side-encryption") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_algorithm = match response.headers().get("x-amz-server-side-encryption-customer-algorithm") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_key_md5 = match response.headers().get("x-amz-server-side-encryption-customer-key-MD5") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.ssekms_key_id = match response.headers().get("x-amz-server-side-encryption-aws-kms-key-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.bucket_key_enabled = match response.headers().get("x-amz-server-side-encryption-bucket-key-enabled") {
+                            Some(v) => Some(bool::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.storage_class = match response.headers().get("x-amz-storage-class") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.replication_status = match response.headers().get("x-amz-replication-status") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.parts_count = match response.headers().get("x-amz-mp-parts-count") {
+                            Some(v) => Some(i64::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.tag_count = match response.headers().get("x-amz-tagging-count") {
+                            Some(v) => Some(i64::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.object_lock_mode = match response.headers().get("x-amz-object-lock-mode") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.object_lock_retain_until_date = match response.headers().get("x-amz-object-lock-retain-until-date") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.object_lock_legal_hold_status = match response.headers().get("x-amz-object-lock-legal-hold") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<GetObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3488,7 +3674,10 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<GetObjectAclOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3788,7 +3977,10 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.version_id = Some(String::from_str(response.headers()["x-amz-version-id"].to_str().unwrap()).unwrap());
+                        output.version_id = match response.headers().get("x-amz-version-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<GetObjectTaggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3864,7 +4056,10 @@ fn __get_object_torrent(input: GetObjectTorrentRequest) -> BoxFuture<'static, Ve
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<GetObjectTorrentOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4090,35 +4285,122 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     StatusCode::OK => {
                         let mut output: HeadObjectOutput = Default::default();
-                        output.delete_marker = Some(bool::from_str(response.headers()["x-amz-delete-marker"].to_str().unwrap()).unwrap());
-                        output.accept_ranges = Some(String::from_str(response.headers()["accept-ranges"].to_str().unwrap()).unwrap());
-                        output.expiration = Some(String::from_str(response.headers()["x-amz-expiration"].to_str().unwrap()).unwrap());
-                        output.restore = Some(String::from_str(response.headers()["x-amz-restore"].to_str().unwrap()).unwrap());
-                        output.archive_status = Some(String::from_str(response.headers()["x-amz-archive-status"].to_str().unwrap()).unwrap());
-                        output.last_modified = Some(String::from_str(response.headers()["Last-Modified"].to_str().unwrap()).unwrap());
-                        output.content_length = Some(u64::from_str(response.headers()["Content-Length"].to_str().unwrap()).unwrap());
-                        output.e_tag = Some(String::from_str(response.headers()["ETag"].to_str().unwrap()).unwrap());
-                        output.missing_meta = Some(i64::from_str(response.headers()["x-amz-missing-meta"].to_str().unwrap()).unwrap());
-                        output.version_id = Some(String::from_str(response.headers()["x-amz-version-id"].to_str().unwrap()).unwrap());
-                        output.cache_control = Some(String::from_str(response.headers()["Cache-Control"].to_str().unwrap()).unwrap());
-                        output.content_disposition = Some(String::from_str(response.headers()["Content-Disposition"].to_str().unwrap()).unwrap());
-                        output.content_encoding = Some(String::from_str(response.headers()["Content-Encoding"].to_str().unwrap()).unwrap());
-                        output.content_language = Some(String::from_str(response.headers()["Content-Language"].to_str().unwrap()).unwrap());
-                        output.content_type = Some(String::from_str(response.headers()["Content-Type"].to_str().unwrap()).unwrap());
-                        output.expires = Some(String::from_str(response.headers()["Expires"].to_str().unwrap()).unwrap());
-                        output.website_redirect_location = Some(String::from_str(response.headers()["x-amz-website-redirect-location"].to_str().unwrap()).unwrap());
-                        output.server_side_encryption = Some(String::from_str(response.headers()["x-amz-server-side-encryption"].to_str().unwrap()).unwrap());
-                        output.sse_customer_algorithm = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-algorithm"].to_str().unwrap()).unwrap());
-                        output.sse_customer_key_md5 = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-key-MD5"].to_str().unwrap()).unwrap());
-                        output.ssekms_key_id = Some(String::from_str(response.headers()["x-amz-server-side-encryption-aws-kms-key-id"].to_str().unwrap()).unwrap());
-                        output.bucket_key_enabled = Some(bool::from_str(response.headers()["x-amz-server-side-encryption-bucket-key-enabled"].to_str().unwrap()).unwrap());
-                        output.storage_class = Some(String::from_str(response.headers()["x-amz-storage-class"].to_str().unwrap()).unwrap());
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
-                        output.replication_status = Some(String::from_str(response.headers()["x-amz-replication-status"].to_str().unwrap()).unwrap());
-                        output.parts_count = Some(i64::from_str(response.headers()["x-amz-mp-parts-count"].to_str().unwrap()).unwrap());
-                        output.object_lock_mode = Some(String::from_str(response.headers()["x-amz-object-lock-mode"].to_str().unwrap()).unwrap());
-                        output.object_lock_retain_until_date = Some(String::from_str(response.headers()["x-amz-object-lock-retain-until-date"].to_str().unwrap()).unwrap());
-                        output.object_lock_legal_hold_status = Some(String::from_str(response.headers()["x-amz-object-lock-legal-hold"].to_str().unwrap()).unwrap());
+                        output.delete_marker = match response.headers().get("x-amz-delete-marker") {
+                            Some(v) => Some(bool::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.accept_ranges = match response.headers().get("accept-ranges") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.expiration = match response.headers().get("x-amz-expiration") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.restore = match response.headers().get("x-amz-restore") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.archive_status = match response.headers().get("x-amz-archive-status") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.last_modified = match response.headers().get("Last-Modified") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.content_length = match response.headers().get("Content-Length") {
+                            Some(v) => Some(u64::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.e_tag = match response.headers().get("ETag") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.missing_meta = match response.headers().get("x-amz-missing-meta") {
+                            Some(v) => Some(i64::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.version_id = match response.headers().get("x-amz-version-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.cache_control = match response.headers().get("Cache-Control") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.content_disposition = match response.headers().get("Content-Disposition") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.content_encoding = match response.headers().get("Content-Encoding") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.content_language = match response.headers().get("Content-Language") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.content_type = match response.headers().get("Content-Type") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.expires = match response.headers().get("Expires") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.website_redirect_location = match response.headers().get("x-amz-website-redirect-location") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.server_side_encryption = match response.headers().get("x-amz-server-side-encryption") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_algorithm = match response.headers().get("x-amz-server-side-encryption-customer-algorithm") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_key_md5 = match response.headers().get("x-amz-server-side-encryption-customer-key-MD5") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.ssekms_key_id = match response.headers().get("x-amz-server-side-encryption-aws-kms-key-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.bucket_key_enabled = match response.headers().get("x-amz-server-side-encryption-bucket-key-enabled") {
+                            Some(v) => Some(bool::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.storage_class = match response.headers().get("x-amz-storage-class") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.replication_status = match response.headers().get("x-amz-replication-status") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.parts_count = match response.headers().get("x-amz-mp-parts-count") {
+                            Some(v) => Some(i64::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.object_lock_mode = match response.headers().get("x-amz-object-lock-mode") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.object_lock_retain_until_date = match response.headers().get("x-amz-object-lock-retain-until-date") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.object_lock_legal_hold_status = match response.headers().get("x-amz-object-lock-legal-hold") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<HeadObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4893,9 +5175,18 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.abort_date = Some(String::from_str(response.headers()["x-amz-abort-date"].to_str().unwrap()).unwrap());
-                        output.abort_rule_id = Some(String::from_str(response.headers()["x-amz-abort-rule-id"].to_str().unwrap()).unwrap());
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.abort_date = match response.headers().get("x-amz-abort-date") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.abort_rule_id = match response.headers().get("x-amz-abort-rule-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<ListPartsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6329,16 +6620,46 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectOutput = Default::default();
-                        output.expiration = Some(String::from_str(response.headers()["x-amz-expiration"].to_str().unwrap()).unwrap());
-                        output.e_tag = Some(String::from_str(response.headers()["ETag"].to_str().unwrap()).unwrap());
-                        output.server_side_encryption = Some(String::from_str(response.headers()["x-amz-server-side-encryption"].to_str().unwrap()).unwrap());
-                        output.version_id = Some(String::from_str(response.headers()["x-amz-version-id"].to_str().unwrap()).unwrap());
-                        output.sse_customer_algorithm = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-algorithm"].to_str().unwrap()).unwrap());
-                        output.sse_customer_key_md5 = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-key-MD5"].to_str().unwrap()).unwrap());
-                        output.ssekms_key_id = Some(String::from_str(response.headers()["x-amz-server-side-encryption-aws-kms-key-id"].to_str().unwrap()).unwrap());
-                        output.ssekms_encryption_context = Some(String::from_str(response.headers()["x-amz-server-side-encryption-context"].to_str().unwrap()).unwrap());
-                        output.bucket_key_enabled = Some(bool::from_str(response.headers()["x-amz-server-side-encryption-bucket-key-enabled"].to_str().unwrap()).unwrap());
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.expiration = match response.headers().get("x-amz-expiration") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.e_tag = match response.headers().get("ETag") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.server_side_encryption = match response.headers().get("x-amz-server-side-encryption") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.version_id = match response.headers().get("x-amz-version-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_algorithm = match response.headers().get("x-amz-server-side-encryption-customer-algorithm") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_key_md5 = match response.headers().get("x-amz-server-side-encryption-customer-key-MD5") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.ssekms_key_id = match response.headers().get("x-amz-server-side-encryption-aws-kms-key-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.ssekms_encryption_context = match response.headers().get("x-amz-server-side-encryption-context") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.bucket_key_enabled = match response.headers().get("x-amz-server-side-encryption-bucket-key-enabled") {
+                            Some(v) => Some(bool::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<PutObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6433,7 +6754,10 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectAclOutput = Default::default();
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<PutObjectAclOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6510,7 +6834,10 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectLegalHoldOutput = Default::default();
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<PutObjectLegalHoldOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6583,7 +6910,10 @@ fn __put_object_lock_configuration(input: PutObjectLockConfigurationRequest) -> 
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectLockConfigurationOutput = Default::default();
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<PutObjectLockConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6663,7 +6993,10 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectRetentionOutput = Default::default();
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<PutObjectRetentionOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6735,7 +7068,10 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectTaggingOutput = Default::default();
-                        output.version_id = Some(String::from_str(response.headers()["x-amz-version-id"].to_str().unwrap()).unwrap());
+                        output.version_id = match response.headers().get("x-amz-version-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<PutObjectTaggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6873,8 +7209,14 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
                 match status {
                     StatusCode::OK => {
                         let mut output: RestoreObjectOutput = Default::default();
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
-                        output.restore_output_path = Some(String::from_str(response.headers()["x-amz-restore-output-path"].to_str().unwrap()).unwrap());
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.restore_output_path = match response.headers().get("x-amz-restore-output-path") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<RestoreObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -7045,13 +7387,34 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     StatusCode::OK => {
                         let mut output: UploadPartOutput = Default::default();
-                        output.server_side_encryption = Some(String::from_str(response.headers()["x-amz-server-side-encryption"].to_str().unwrap()).unwrap());
-                        output.e_tag = Some(String::from_str(response.headers()["ETag"].to_str().unwrap()).unwrap());
-                        output.sse_customer_algorithm = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-algorithm"].to_str().unwrap()).unwrap());
-                        output.sse_customer_key_md5 = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-key-MD5"].to_str().unwrap()).unwrap());
-                        output.ssekms_key_id = Some(String::from_str(response.headers()["x-amz-server-side-encryption-aws-kms-key-id"].to_str().unwrap()).unwrap());
-                        output.bucket_key_enabled = Some(bool::from_str(response.headers()["x-amz-server-side-encryption-bucket-key-enabled"].to_str().unwrap()).unwrap());
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.server_side_encryption = match response.headers().get("x-amz-server-side-encryption") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.e_tag = match response.headers().get("ETag") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_algorithm = match response.headers().get("x-amz-server-side-encryption-customer-algorithm") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_key_md5 = match response.headers().get("x-amz-server-side-encryption-customer-key-MD5") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.ssekms_key_id = match response.headers().get("x-amz-server-side-encryption-aws-kms-key-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.bucket_key_enabled = match response.headers().get("x-amz-server-side-encryption-bucket-key-enabled") {
+                            Some(v) => Some(bool::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<UploadPartOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -7166,13 +7529,34 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.copy_source_version_id = Some(String::from_str(response.headers()["x-amz-copy-source-version-id"].to_str().unwrap()).unwrap());
-                        output.server_side_encryption = Some(String::from_str(response.headers()["x-amz-server-side-encryption"].to_str().unwrap()).unwrap());
-                        output.sse_customer_algorithm = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-algorithm"].to_str().unwrap()).unwrap());
-                        output.sse_customer_key_md5 = Some(String::from_str(response.headers()["x-amz-server-side-encryption-customer-key-MD5"].to_str().unwrap()).unwrap());
-                        output.ssekms_key_id = Some(String::from_str(response.headers()["x-amz-server-side-encryption-aws-kms-key-id"].to_str().unwrap()).unwrap());
-                        output.bucket_key_enabled = Some(bool::from_str(response.headers()["x-amz-server-side-encryption-bucket-key-enabled"].to_str().unwrap()).unwrap());
-                        output.request_charged = Some(String::from_str(response.headers()["x-amz-request-charged"].to_str().unwrap()).unwrap());
+                        output.copy_source_version_id = match response.headers().get("x-amz-copy-source-version-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.server_side_encryption = match response.headers().get("x-amz-server-side-encryption") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_algorithm = match response.headers().get("x-amz-server-side-encryption-customer-algorithm") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.sse_customer_key_md5 = match response.headers().get("x-amz-server-side-encryption-customer-key-MD5") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.ssekms_key_id = match response.headers().get("x-amz-server-side-encryption-aws-kms-key-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.bucket_key_enabled = match response.headers().get("x-amz-server-side-encryption-bucket-key-enabled") {
+                            Some(v) => Some(bool::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
                         serde_json::to_vec(&Result::<UploadPartCopyOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {

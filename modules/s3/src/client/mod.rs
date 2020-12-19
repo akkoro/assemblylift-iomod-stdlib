@@ -2,10 +2,10 @@ use std::fmt;
 
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use hyper;
-use hyper::{Request, Response, StatusCode};
+use hyper::{Request, Response};
 use hyper_tls::HttpsConnector;
 use rusoto_signature::credential::AwsCredentials;
-use rusoto_signature::{Region, SignedRequest};
+use rusoto_signature::SignedRequest;
 use serde::export::Formatter;
 use serde::{Deserialize, Serialize};
 
@@ -44,13 +44,12 @@ impl Client {
     }
 
     pub async fn call(&self, mut request: SignedRequest) -> Result<Response<String>, ClientError> {
-        let mut headers = HeaderMap::new();
-
         if let Some(key) = &self.aws_key {
             let token = key.2.clone();
             request.sign(&AwsCredentials::new(&key.0, &key.1, token, None));
         }
 
+        let mut headers = HeaderMap::new();
         for h in request.headers().iter() {
             let name = h.0.parse::<HeaderName>().unwrap();
             for v in h.1.iter() {
@@ -59,10 +58,6 @@ impl Client {
             }
         }
         headers.insert("user-agent", HeaderValue::from_str("AssemblyLift").unwrap());
-
-        for (h, v) in headers.iter() {
-            println!("{}:{:?}", h.as_str(), v);
-        }
 
         let mut final_uri = format!(
             "{}://{}{}",

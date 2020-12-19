@@ -20,8 +20,10 @@ pub type AccountId = String;
 pub type AllowQuotedRecordDelimiter = bool;
 pub type AllowedHeader = String;
 pub type AllowedHeaders = Vec<AllowedHeader>;
+#[allow(dead_code)]
 pub struct AllowedHeadersDeserializer;
 impl AllowedHeadersDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -38,8 +40,10 @@ impl AllowedHeadersDeserializer {
 }
 pub type AllowedMethod = String;
 pub type AllowedMethods = Vec<AllowedMethod>;
+#[allow(dead_code)]
 pub struct AllowedMethodsDeserializer;
 impl AllowedMethodsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -56,8 +60,10 @@ impl AllowedMethodsDeserializer {
 }
 pub type AllowedOrigin = String;
 pub type AllowedOrigins = Vec<AllowedOrigin>;
+#[allow(dead_code)]
 pub struct AllowedOriginsDeserializer;
 impl AllowedOriginsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -73,8 +79,10 @@ impl AllowedOriginsDeserializer {
     }
 }
 pub type AnalyticsConfigurationList = Vec<AnalyticsConfiguration>;
+#[allow(dead_code)]
 pub struct AnalyticsConfigurationListDeserializer;
 impl AnalyticsConfigurationListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -101,8 +109,10 @@ pub type BucketLogsPermission = String;
 pub type BucketName = String;
 pub type BucketVersioningStatus = String;
 pub type Buckets = Vec<Bucket>;
+#[allow(dead_code)]
 pub struct BucketsDeserializer;
 impl BucketsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -122,8 +132,10 @@ pub type BytesProcessed = u64;
 pub type BytesReturned = u64;
 pub type BytesScanned = u64;
 pub type CORSRules = Vec<CORSRule>;
+#[allow(dead_code)]
 pub struct CORSRulesDeserializer;
 impl CORSRulesDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -144,8 +156,10 @@ pub type CloudFunctionInvocationRole = String;
 pub type Code = String;
 pub type Comments = String;
 pub type CommonPrefixList = Vec<CommonPrefix>;
+#[allow(dead_code)]
 pub struct CommonPrefixListDeserializer;
 impl CommonPrefixListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -161,8 +175,10 @@ impl CommonPrefixListDeserializer {
     }
 }
 pub type CompletedPartList = Vec<CompletedPart>;
+#[allow(dead_code)]
 pub struct CompletedPartListDeserializer;
 impl CompletedPartListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -204,8 +220,10 @@ pub type DeleteMarker = bool;
 pub type DeleteMarkerReplicationStatus = String;
 pub type DeleteMarkerVersionId = String;
 pub type DeleteMarkers = Vec<DeleteMarkerEntry>;
+#[allow(dead_code)]
 pub struct DeleteMarkersDeserializer;
 impl DeleteMarkersDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -221,8 +239,10 @@ impl DeleteMarkersDeserializer {
     }
 }
 pub type DeletedObjects = Vec<DeletedObject>;
+#[allow(dead_code)]
 pub struct DeletedObjectsDeserializer;
 impl DeletedObjectsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -246,8 +266,10 @@ pub type EnableRequestProgress = bool;
 pub type EncodingType = String;
 pub type End = u64;
 pub type Errors = Vec<Error>;
+#[allow(dead_code)]
 pub struct ErrorsDeserializer;
 impl ErrorsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -264,8 +286,10 @@ impl ErrorsDeserializer {
 }
 pub type Event = String;
 pub type EventList = Vec<Event>;
+#[allow(dead_code)]
 pub struct EventListDeserializer;
 impl EventListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -287,8 +311,10 @@ pub type ExpiredObjectDeleteMarker = bool;
 pub type Expires = String;
 pub type ExposeHeader = String;
 pub type ExposeHeaders = Vec<ExposeHeader>;
+#[allow(dead_code)]
 pub struct ExposeHeadersDeserializer;
 impl ExposeHeadersDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -309,8 +335,10 @@ pub type FetchOwner = bool;
 pub type FieldDelimiter = String;
 pub type FileHeaderInfo = String;
 pub type FilterRuleList = Vec<FilterRule>;
+#[allow(dead_code)]
 pub struct FilterRuleListDeserializer;
 impl FilterRuleListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -333,8 +361,10 @@ pub type GrantReadACP = String;
 pub type GrantWrite = String;
 pub type GrantWriteACP = String;
 pub type Grants = Vec<Grant>;
+#[allow(dead_code)]
 pub struct GrantsDeserializer;
 impl GrantsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -360,8 +390,10 @@ pub type IfUnmodifiedSince = String;
 pub type Initiated = String;
 pub type IntelligentTieringAccessTier = String;
 pub type IntelligentTieringConfigurationList = Vec<IntelligentTieringConfiguration>;
+#[allow(dead_code)]
 pub struct IntelligentTieringConfigurationListDeserializer;
 impl IntelligentTieringConfigurationListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -380,8 +412,10 @@ pub type IntelligentTieringDays = i64;
 pub type IntelligentTieringId = String;
 pub type IntelligentTieringStatus = String;
 pub type InventoryConfigurationList = Vec<InventoryConfiguration>;
+#[allow(dead_code)]
 pub struct InventoryConfigurationListDeserializer;
 impl InventoryConfigurationListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -402,8 +436,10 @@ pub type InventoryId = String;
 pub type InventoryIncludedObjectVersions = String;
 pub type InventoryOptionalField = String;
 pub type InventoryOptionalFields = Vec<InventoryOptionalField>;
+#[allow(dead_code)]
 pub struct InventoryOptionalFieldsDeserializer;
 impl InventoryOptionalFieldsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -429,8 +465,10 @@ pub type KeyMarker = String;
 pub type KeyPrefixEquals = String;
 pub type LambdaFunctionArn = String;
 pub type LambdaFunctionConfigurationList = Vec<LambdaFunctionConfiguration>;
+#[allow(dead_code)]
 pub struct LambdaFunctionConfigurationListDeserializer;
 impl LambdaFunctionConfigurationListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -447,8 +485,10 @@ impl LambdaFunctionConfigurationListDeserializer {
 }
 pub type LastModified = String;
 pub type LifecycleRules = Vec<LifecycleRule>;
+#[allow(dead_code)]
 pub struct LifecycleRulesDeserializer;
 impl LifecycleRulesDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -479,8 +519,10 @@ pub type MetadataDirective = String;
 pub type MetadataKey = String;
 pub type MetadataValue = String;
 pub type MetricsConfigurationList = Vec<MetricsConfiguration>;
+#[allow(dead_code)]
 pub struct MetricsConfigurationListDeserializer;
 impl MetricsConfigurationListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -501,8 +543,10 @@ pub type Minutes = i64;
 pub type MissingMeta = i64;
 pub type MultipartUploadId = String;
 pub type MultipartUploadList = Vec<MultipartUpload>;
+#[allow(dead_code)]
 pub struct MultipartUploadListDeserializer;
 impl MultipartUploadListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -524,8 +568,10 @@ pub type NextToken = String;
 pub type NextUploadIdMarker = String;
 pub type NextVersionIdMarker = String;
 pub type NoncurrentVersionTransitionList = Vec<NoncurrentVersionTransition>;
+#[allow(dead_code)]
 pub struct NoncurrentVersionTransitionListDeserializer;
 impl NoncurrentVersionTransitionListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -543,8 +589,10 @@ impl NoncurrentVersionTransitionListDeserializer {
 pub type NotificationId = String;
 pub type ObjectCannedACL = String;
 pub type ObjectIdentifierList = Vec<ObjectIdentifier>;
+#[allow(dead_code)]
 pub struct ObjectIdentifierListDeserializer;
 impl ObjectIdentifierListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -561,8 +609,10 @@ impl ObjectIdentifierListDeserializer {
 }
 pub type ObjectKey = String;
 pub type ObjectList = Vec<Object>;
+#[allow(dead_code)]
 pub struct ObjectListDeserializer;
 impl ObjectListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -588,8 +638,10 @@ pub type ObjectOwnership = String;
 pub type ObjectStorageClass = String;
 pub type ObjectVersionId = String;
 pub type ObjectVersionList = Vec<ObjectVersion>;
+#[allow(dead_code)]
 pub struct ObjectVersionListDeserializer;
 impl ObjectVersionListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -607,8 +659,10 @@ impl ObjectVersionListDeserializer {
 pub type ObjectVersionStorageClass = String;
 pub type OwnerOverride = String;
 pub type OwnershipControlsRules = Vec<OwnershipControlsRule>;
+#[allow(dead_code)]
 pub struct OwnershipControlsRulesDeserializer;
 impl OwnershipControlsRulesDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -626,8 +680,10 @@ impl OwnershipControlsRulesDeserializer {
 pub type PartNumber = i64;
 pub type PartNumberMarker = i64;
 pub type Parts = Vec<Part>;
+#[allow(dead_code)]
 pub struct PartsDeserializer;
 impl PartsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -651,8 +707,10 @@ pub type Priority = i64;
 pub type Protocol = String;
 pub type QueueArn = String;
 pub type QueueConfigurationList = Vec<QueueConfiguration>;
+#[allow(dead_code)]
 pub struct QueueConfigurationListDeserializer;
 impl QueueConfigurationListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -679,8 +737,10 @@ pub type ReplicaKmsKeyID = String;
 pub type ReplicaModificationsStatus = String;
 pub type ReplicationRuleStatus = String;
 pub type ReplicationRules = Vec<ReplicationRule>;
+#[allow(dead_code)]
 pub struct ReplicationRulesDeserializer;
 impl ReplicationRulesDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -710,8 +770,10 @@ pub type RestoreOutputPath = String;
 pub type RestoreRequestType = String;
 pub type Role = String;
 pub type RoutingRules = Vec<RoutingRule>;
+#[allow(dead_code)]
 pub struct RoutingRulesDeserializer;
 impl RoutingRulesDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -727,8 +789,10 @@ impl RoutingRulesDeserializer {
     }
 }
 pub type Rules = Vec<Rule>;
+#[allow(dead_code)]
 pub struct RulesDeserializer;
 impl RulesDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -750,8 +814,10 @@ pub type SSEKMSEncryptionContext = String;
 pub type SSEKMSKeyId = String;
 pub type ServerSideEncryption = String;
 pub type ServerSideEncryptionRules = Vec<ServerSideEncryptionRule>;
+#[allow(dead_code)]
 pub struct ServerSideEncryptionRulesDeserializer;
 impl ServerSideEncryptionRulesDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -776,8 +842,10 @@ pub type StorageClassAnalysisSchemaVersion = String;
 pub type Suffix = String;
 pub type TagCount = i64;
 pub type TagSet = Vec<Tag>;
+#[allow(dead_code)]
 pub struct TagSetDeserializer;
 impl TagSetDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -796,8 +864,10 @@ pub type TaggingDirective = String;
 pub type TaggingHeader = String;
 pub type TargetBucket = String;
 pub type TargetGrants = Vec<TargetGrant>;
+#[allow(dead_code)]
 pub struct TargetGrantsDeserializer;
 impl TargetGrantsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -815,8 +885,10 @@ impl TargetGrantsDeserializer {
 pub type TargetPrefix = String;
 pub type Tier = String;
 pub type TieringList = Vec<Tiering>;
+#[allow(dead_code)]
 pub struct TieringListDeserializer;
 impl TieringListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -834,8 +906,10 @@ impl TieringListDeserializer {
 pub type Token = String;
 pub type TopicArn = String;
 pub type TopicConfigurationList = Vec<TopicConfiguration>;
+#[allow(dead_code)]
 pub struct TopicConfigurationListDeserializer;
 impl TopicConfigurationListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -851,8 +925,10 @@ impl TopicConfigurationListDeserializer {
     }
 }
 pub type TransitionList = Vec<Transition>;
+#[allow(dead_code)]
 pub struct TransitionListDeserializer;
 impl TransitionListDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -872,8 +948,10 @@ pub type Type = String;
 pub type URI = String;
 pub type UploadIdMarker = String;
 pub type UserMetadata = Vec<MetadataEntry>;
+#[allow(dead_code)]
 pub struct UserMetadataDeserializer;
 impl UserMetadataDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -898,8 +976,10 @@ pub struct AbortIncompleteMultipartUpload {
     #[serde(rename = "DaysAfterInitiation")]
     pub days_after_initiation: Option<DaysAfterInitiation>,
 }
+#[allow(dead_code)]
 pub struct AbortIncompleteMultipartUploadDeserializer;
 impl AbortIncompleteMultipartUploadDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -925,8 +1005,10 @@ pub struct AbortMultipartUploadOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct AbortMultipartUploadOutputDeserializer;
 impl AbortMultipartUploadOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -960,8 +1042,10 @@ pub struct AbortMultipartUploadRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct AbortMultipartUploadRequestDeserializer;
 impl AbortMultipartUploadRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -999,8 +1083,10 @@ pub struct AccelerateConfiguration {
     #[serde(rename = "Status")]
     pub status: Option<BucketAccelerateStatus>,
 }
+#[allow(dead_code)]
 pub struct AccelerateConfigurationDeserializer;
 impl AccelerateConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1028,8 +1114,10 @@ pub struct AccessControlPolicy {
     #[serde(rename = "Owner")]
     pub owner: Option<Owner>,
 }
+#[allow(dead_code)]
 pub struct AccessControlPolicyDeserializer;
 impl AccessControlPolicyDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1060,8 +1148,10 @@ pub struct AccessControlTranslation {
     #[serde(rename = "Owner")]
     pub owner: OwnerOverride,
 }
+#[allow(dead_code)]
 pub struct AccessControlTranslationDeserializer;
 impl AccessControlTranslationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1089,8 +1179,10 @@ pub struct AnalyticsAndOperator {
     #[serde(rename = "Tags")]
     pub tags: Option<TagSet>,
 }
+#[allow(dead_code)]
 pub struct AnalyticsAndOperatorDeserializer;
 impl AnalyticsAndOperatorDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1125,8 +1217,10 @@ pub struct AnalyticsConfiguration {
     #[serde(rename = "StorageClassAnalysis")]
     pub storage_class_analysis: StorageClassAnalysis,
 }
+#[allow(dead_code)]
 pub struct AnalyticsConfigurationDeserializer;
 impl AnalyticsConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1158,8 +1252,10 @@ pub struct AnalyticsExportDestination {
     #[serde(rename = "S3BucketDestination")]
     pub s3_bucket_destination: AnalyticsS3BucketDestination,
 }
+#[allow(dead_code)]
 pub struct AnalyticsExportDestinationDeserializer;
 impl AnalyticsExportDestinationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1189,8 +1285,10 @@ pub struct AnalyticsFilter {
     #[serde(rename = "And")]
     pub and: Option<AnalyticsAndOperator>,
 }
+#[allow(dead_code)]
 pub struct AnalyticsFilterDeserializer;
 impl AnalyticsFilterDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1228,8 +1326,10 @@ pub struct AnalyticsS3BucketDestination {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
 }
+#[allow(dead_code)]
 pub struct AnalyticsS3BucketDestinationDeserializer;
 impl AnalyticsS3BucketDestinationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1266,8 +1366,10 @@ pub struct Bucket {
     #[serde(rename = "CreationDate")]
     pub creation_date: Option<CreationDate>,
 }
+#[allow(dead_code)]
 pub struct BucketDeserializer;
 impl BucketDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1294,8 +1396,10 @@ impl BucketDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct BucketAlreadyExists {
 }
+#[allow(dead_code)]
 pub struct BucketAlreadyExistsDeserializer;
 impl BucketAlreadyExistsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1316,8 +1420,10 @@ impl BucketAlreadyExistsDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct BucketAlreadyOwnedByYou {
 }
+#[allow(dead_code)]
 pub struct BucketAlreadyOwnedByYouDeserializer;
 impl BucketAlreadyOwnedByYouDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1340,8 +1446,10 @@ pub struct BucketLifecycleConfiguration {
     #[serde(rename = "Rules")]
     pub rules: LifecycleRules,
 }
+#[allow(dead_code)]
 pub struct BucketLifecycleConfigurationDeserializer;
 impl BucketLifecycleConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1368,8 +1476,10 @@ pub struct BucketLoggingStatus {
     #[serde(rename = "LoggingEnabled")]
     pub logging_enabled: Option<LoggingEnabled>,
 }
+#[allow(dead_code)]
 pub struct BucketLoggingStatusDeserializer;
 impl BucketLoggingStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1395,8 +1505,10 @@ pub struct CORSConfiguration {
     #[serde(rename = "CORSRules")]
     pub cors_rules: CORSRules,
 }
+#[allow(dead_code)]
 pub struct CORSConfigurationDeserializer;
 impl CORSConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1431,8 +1543,10 @@ pub struct CORSRule {
     #[serde(rename = "MaxAgeSeconds")]
     pub max_age_seconds: Option<MaxAgeSeconds>,
 }
+#[allow(dead_code)]
 pub struct CORSRuleDeserializer;
 impl CORSRuleDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1488,8 +1602,10 @@ pub struct CSVInput {
     #[serde(rename = "AllowQuotedRecordDelimiter")]
     pub allow_quoted_record_delimiter: Option<AllowQuotedRecordDelimiter>,
 }
+#[allow(dead_code)]
 pub struct CSVInputDeserializer;
 impl CSVInputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1541,8 +1657,10 @@ pub struct CSVOutput {
     #[serde(rename = "QuoteCharacter")]
     pub quote_character: Option<QuoteCharacter>,
 }
+#[allow(dead_code)]
 pub struct CSVOutputDeserializer;
 impl CSVOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1588,8 +1706,10 @@ pub struct CloudFunctionConfiguration {
     #[serde(rename = "InvocationRole")]
     pub invocation_role: Option<CloudFunctionInvocationRole>,
 }
+#[allow(dead_code)]
 pub struct CloudFunctionConfigurationDeserializer;
 impl CloudFunctionConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1629,8 +1749,10 @@ pub struct CommonPrefix {
     #[serde(rename = "Prefix")]
     pub prefix: Option<Prefix>,
 }
+#[allow(dead_code)]
 pub struct CommonPrefixDeserializer;
 impl CommonPrefixDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1674,8 +1796,10 @@ pub struct CompleteMultipartUploadOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct CompleteMultipartUploadOutputDeserializer;
 impl CompleteMultipartUploadOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1738,8 +1862,10 @@ pub struct CompleteMultipartUploadRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct CompleteMultipartUploadRequestDeserializer;
 impl CompleteMultipartUploadRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1780,8 +1906,10 @@ pub struct CompletedMultipartUpload {
     #[serde(rename = "Parts")]
     pub parts: Option<CompletedPartList>,
 }
+#[allow(dead_code)]
 pub struct CompletedMultipartUploadDeserializer;
 impl CompletedMultipartUploadDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1811,8 +1939,10 @@ pub struct CompletedPart {
     #[serde(rename = "PartNumber")]
     pub part_number: Option<PartNumber>,
 }
+#[allow(dead_code)]
 pub struct CompletedPartDeserializer;
 impl CompletedPartDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1843,8 +1973,10 @@ pub struct Condition {
     #[serde(rename = "KeyPrefixEquals")]
     pub key_prefix_equals: Option<KeyPrefixEquals>,
 }
+#[allow(dead_code)]
 pub struct ConditionDeserializer;
 impl ConditionDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1871,8 +2003,10 @@ impl ConditionDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ContinuationEvent {
 }
+#[allow(dead_code)]
 pub struct ContinuationEventDeserializer;
 impl ContinuationEventDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1915,8 +2049,10 @@ pub struct CopyObjectOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct CopyObjectOutputDeserializer;
 impl CopyObjectOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2050,8 +2186,10 @@ pub struct CopyObjectRequest {
     #[serde(rename = "ExpectedSourceBucketOwner")]
     pub expected_source_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct CopyObjectRequestDeserializer;
 impl CopyObjectRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2196,8 +2334,10 @@ pub struct CopyObjectResult {
     #[serde(rename = "LastModified")]
     pub last_modified: Option<LastModified>,
 }
+#[allow(dead_code)]
 pub struct CopyObjectResultDeserializer;
 impl CopyObjectResultDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2228,8 +2368,10 @@ pub struct CopyPartResult {
     #[serde(rename = "LastModified")]
     pub last_modified: Option<LastModified>,
 }
+#[allow(dead_code)]
 pub struct CopyPartResultDeserializer;
 impl CopyPartResultDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2258,8 +2400,10 @@ pub struct CreateBucketConfiguration {
     #[serde(rename = "LocationConstraint")]
     pub location_constraint: Option<BucketLocationConstraint>,
 }
+#[allow(dead_code)]
 pub struct CreateBucketConfigurationDeserializer;
 impl CreateBucketConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2285,8 +2429,10 @@ pub struct CreateBucketOutput {
     #[serde(rename = "Location")]
     pub location: Option<Location>,
 }
+#[allow(dead_code)]
 pub struct CreateBucketOutputDeserializer;
 impl CreateBucketOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2328,8 +2474,10 @@ pub struct CreateBucketRequest {
     #[serde(rename = "ObjectLockEnabledForBucket")]
     pub object_lock_enabled_for_bucket: Option<ObjectLockEnabledForBucket>,
 }
+#[allow(dead_code)]
 pub struct CreateBucketRequestDeserializer;
 impl CreateBucketRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2401,8 +2549,10 @@ pub struct CreateMultipartUploadOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct CreateMultipartUploadOutputDeserializer;
 impl CreateMultipartUploadOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2517,8 +2667,10 @@ pub struct CreateMultipartUploadRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct CreateMultipartUploadRequestDeserializer;
 impl CreateMultipartUploadRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2632,8 +2784,10 @@ pub struct DefaultRetention {
     #[serde(rename = "Years")]
     pub years: Option<Years>,
 }
+#[allow(dead_code)]
 pub struct DefaultRetentionDeserializer;
 impl DefaultRetentionDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2667,8 +2821,10 @@ pub struct Delete {
     #[serde(rename = "Quiet")]
     pub quiet: Option<Quiet>,
 }
+#[allow(dead_code)]
 pub struct DeleteDeserializer;
 impl DeleteDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2702,8 +2858,10 @@ pub struct DeleteBucketAnalyticsConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketAnalyticsConfigurationRequestDeserializer;
 impl DeleteBucketAnalyticsConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2737,8 +2895,10 @@ pub struct DeleteBucketCorsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketCorsRequestDeserializer;
 impl DeleteBucketCorsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2769,8 +2929,10 @@ pub struct DeleteBucketEncryptionRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketEncryptionRequestDeserializer;
 impl DeleteBucketEncryptionRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2801,8 +2963,10 @@ pub struct DeleteBucketIntelligentTieringConfigurationRequest {
     #[serde(rename = "Id")]
     pub id: IntelligentTieringId,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketIntelligentTieringConfigurationRequestDeserializer;
 impl DeleteBucketIntelligentTieringConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2835,8 +2999,10 @@ pub struct DeleteBucketInventoryConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketInventoryConfigurationRequestDeserializer;
 impl DeleteBucketInventoryConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2870,8 +3036,10 @@ pub struct DeleteBucketLifecycleRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketLifecycleRequestDeserializer;
 impl DeleteBucketLifecycleRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2904,8 +3072,10 @@ pub struct DeleteBucketMetricsConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketMetricsConfigurationRequestDeserializer;
 impl DeleteBucketMetricsConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2939,8 +3109,10 @@ pub struct DeleteBucketOwnershipControlsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketOwnershipControlsRequestDeserializer;
 impl DeleteBucketOwnershipControlsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2971,8 +3143,10 @@ pub struct DeleteBucketPolicyRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketPolicyRequestDeserializer;
 impl DeleteBucketPolicyRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3003,8 +3177,10 @@ pub struct DeleteBucketReplicationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketReplicationRequestDeserializer;
 impl DeleteBucketReplicationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3035,8 +3211,10 @@ pub struct DeleteBucketRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketRequestDeserializer;
 impl DeleteBucketRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3067,8 +3245,10 @@ pub struct DeleteBucketTaggingRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketTaggingRequestDeserializer;
 impl DeleteBucketTaggingRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3099,8 +3279,10 @@ pub struct DeleteBucketWebsiteRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteBucketWebsiteRequestDeserializer;
 impl DeleteBucketWebsiteRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3137,8 +3319,10 @@ pub struct DeleteMarkerEntry {
     #[serde(rename = "LastModified")]
     pub last_modified: Option<LastModified>,
 }
+#[allow(dead_code)]
 pub struct DeleteMarkerEntryDeserializer;
 impl DeleteMarkerEntryDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3176,8 +3360,10 @@ pub struct DeleteMarkerReplication {
     #[serde(rename = "Status")]
     pub status: Option<DeleteMarkerReplicationStatus>,
 }
+#[allow(dead_code)]
 pub struct DeleteMarkerReplicationDeserializer;
 impl DeleteMarkerReplicationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3207,8 +3393,10 @@ pub struct DeleteObjectOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct DeleteObjectOutputDeserializer;
 impl DeleteObjectOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3252,8 +3440,10 @@ pub struct DeleteObjectRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteObjectRequestDeserializer;
 impl DeleteObjectRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3297,8 +3487,10 @@ pub struct DeleteObjectTaggingOutput {
     #[serde(rename = "VersionId")]
     pub version_id: Option<ObjectVersionId>,
 }
+#[allow(dead_code)]
 pub struct DeleteObjectTaggingOutputDeserializer;
 impl DeleteObjectTaggingOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3330,8 +3522,10 @@ pub struct DeleteObjectTaggingRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteObjectTaggingRequestDeserializer;
 impl DeleteObjectTaggingRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3370,8 +3564,10 @@ pub struct DeleteObjectsOutput {
     #[serde(rename = "Errors")]
     pub errors: Option<Errors>,
 }
+#[allow(dead_code)]
 pub struct DeleteObjectsOutputDeserializer;
 impl DeleteObjectsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3417,8 +3613,10 @@ pub struct DeleteObjectsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeleteObjectsRequestDeserializer;
 impl DeleteObjectsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3461,8 +3659,10 @@ pub struct DeletePublicAccessBlockRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct DeletePublicAccessBlockRequestDeserializer;
 impl DeletePublicAccessBlockRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3497,8 +3697,10 @@ pub struct DeletedObject {
     #[serde(rename = "DeleteMarkerVersionId")]
     pub delete_marker_version_id: Option<DeleteMarkerVersionId>,
 }
+#[allow(dead_code)]
 pub struct DeletedObjectDeserializer;
 impl DeletedObjectDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3545,8 +3747,10 @@ pub struct Destination {
     #[serde(rename = "Metrics")]
     pub metrics: Option<Metrics>,
 }
+#[allow(dead_code)]
 pub struct DestinationDeserializer;
 impl DestinationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3594,8 +3798,10 @@ pub struct Encryption {
     #[serde(rename = "KMSContext")]
     pub kms_context: Option<KMSContext>,
 }
+#[allow(dead_code)]
 pub struct EncryptionDeserializer;
 impl EncryptionDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3627,8 +3833,10 @@ pub struct EncryptionConfiguration {
     #[serde(rename = "ReplicaKmsKeyID")]
     pub replica_kms_key_id: Option<ReplicaKmsKeyID>,
 }
+#[allow(dead_code)]
 pub struct EncryptionConfigurationDeserializer;
 impl EncryptionConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3652,8 +3860,10 @@ impl EncryptionConfigurationDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct EndEvent {
 }
+#[allow(dead_code)]
 pub struct EndEventDeserializer;
 impl EndEventDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3682,8 +3892,10 @@ pub struct Error {
     #[serde(rename = "Message")]
     pub message: Option<Message>,
 }
+#[allow(dead_code)]
 pub struct ErrorDeserializer;
 impl ErrorDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3718,8 +3930,10 @@ pub struct ErrorDocument {
     #[serde(rename = "Key")]
     pub key: ObjectKey,
 }
+#[allow(dead_code)]
 pub struct ErrorDocumentDeserializer;
 impl ErrorDocumentDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3745,8 +3959,10 @@ pub struct ExistingObjectReplication {
     #[serde(rename = "Status")]
     pub status: ExistingObjectReplicationStatus,
 }
+#[allow(dead_code)]
 pub struct ExistingObjectReplicationDeserializer;
 impl ExistingObjectReplicationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3774,8 +3990,10 @@ pub struct FilterRule {
     #[serde(rename = "Value")]
     pub value: Option<FilterRuleValue>,
 }
+#[allow(dead_code)]
 pub struct FilterRuleDeserializer;
 impl FilterRuleDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3804,8 +4022,10 @@ pub struct GetBucketAccelerateConfigurationOutput {
     #[serde(rename = "Status")]
     pub status: Option<BucketAccelerateStatus>,
 }
+#[allow(dead_code)]
 pub struct GetBucketAccelerateConfigurationOutputDeserializer;
 impl GetBucketAccelerateConfigurationOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3833,8 +4053,10 @@ pub struct GetBucketAccelerateConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketAccelerateConfigurationRequestDeserializer;
 impl GetBucketAccelerateConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3865,8 +4087,10 @@ pub struct GetBucketAclOutput {
     #[serde(rename = "Grants")]
     pub grants: Option<Grants>,
 }
+#[allow(dead_code)]
 pub struct GetBucketAclOutputDeserializer;
 impl GetBucketAclOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3899,8 +4123,10 @@ pub struct GetBucketAclRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketAclRequestDeserializer;
 impl GetBucketAclRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3929,8 +4155,10 @@ pub struct GetBucketAnalyticsConfigurationOutput {
     #[serde(rename = "AnalyticsConfiguration")]
     pub analytics_configuration: Option<AnalyticsConfiguration>,
 }
+#[allow(dead_code)]
 pub struct GetBucketAnalyticsConfigurationOutputDeserializer;
 impl GetBucketAnalyticsConfigurationOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3960,8 +4188,10 @@ pub struct GetBucketAnalyticsConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketAnalyticsConfigurationRequestDeserializer;
 impl GetBucketAnalyticsConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3993,8 +4223,10 @@ pub struct GetBucketCorsOutput {
     #[serde(rename = "CORSRules")]
     pub cors_rules: Option<CORSRules>,
 }
+#[allow(dead_code)]
 pub struct GetBucketCorsOutputDeserializer;
 impl GetBucketCorsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4024,8 +4256,10 @@ pub struct GetBucketCorsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketCorsRequestDeserializer;
 impl GetBucketCorsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4054,8 +4288,10 @@ pub struct GetBucketEncryptionOutput {
     #[serde(rename = "ServerSideEncryptionConfiguration")]
     pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
 }
+#[allow(dead_code)]
 pub struct GetBucketEncryptionOutputDeserializer;
 impl GetBucketEncryptionOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4083,8 +4319,10 @@ pub struct GetBucketEncryptionRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketEncryptionRequestDeserializer;
 impl GetBucketEncryptionRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4113,8 +4351,10 @@ pub struct GetBucketIntelligentTieringConfigurationOutput {
     #[serde(rename = "IntelligentTieringConfiguration")]
     pub intelligent_tiering_configuration: Option<IntelligentTieringConfiguration>,
 }
+#[allow(dead_code)]
 pub struct GetBucketIntelligentTieringConfigurationOutputDeserializer;
 impl GetBucketIntelligentTieringConfigurationOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4142,8 +4382,10 @@ pub struct GetBucketIntelligentTieringConfigurationRequest {
     #[serde(rename = "Id")]
     pub id: IntelligentTieringId,
 }
+#[allow(dead_code)]
 pub struct GetBucketIntelligentTieringConfigurationRequestDeserializer;
 impl GetBucketIntelligentTieringConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4172,8 +4414,10 @@ pub struct GetBucketInventoryConfigurationOutput {
     #[serde(rename = "InventoryConfiguration")]
     pub inventory_configuration: Option<InventoryConfiguration>,
 }
+#[allow(dead_code)]
 pub struct GetBucketInventoryConfigurationOutputDeserializer;
 impl GetBucketInventoryConfigurationOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4203,8 +4447,10 @@ pub struct GetBucketInventoryConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketInventoryConfigurationRequestDeserializer;
 impl GetBucketInventoryConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4236,8 +4482,10 @@ pub struct GetBucketLifecycleConfigurationOutput {
     #[serde(rename = "Rules")]
     pub rules: Option<LifecycleRules>,
 }
+#[allow(dead_code)]
 pub struct GetBucketLifecycleConfigurationOutputDeserializer;
 impl GetBucketLifecycleConfigurationOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4267,8 +4515,10 @@ pub struct GetBucketLifecycleConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketLifecycleConfigurationRequestDeserializer;
 impl GetBucketLifecycleConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4297,8 +4547,10 @@ pub struct GetBucketLifecycleOutput {
     #[serde(rename = "Rules")]
     pub rules: Option<Rules>,
 }
+#[allow(dead_code)]
 pub struct GetBucketLifecycleOutputDeserializer;
 impl GetBucketLifecycleOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4328,8 +4580,10 @@ pub struct GetBucketLifecycleRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketLifecycleRequestDeserializer;
 impl GetBucketLifecycleRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4358,8 +4612,10 @@ pub struct GetBucketLocationOutput {
     #[serde(rename = "LocationConstraint")]
     pub location_constraint: Option<BucketLocationConstraint>,
 }
+#[allow(dead_code)]
 pub struct GetBucketLocationOutputDeserializer;
 impl GetBucketLocationOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4387,8 +4643,10 @@ pub struct GetBucketLocationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketLocationRequestDeserializer;
 impl GetBucketLocationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4417,8 +4675,10 @@ pub struct GetBucketLoggingOutput {
     #[serde(rename = "LoggingEnabled")]
     pub logging_enabled: Option<LoggingEnabled>,
 }
+#[allow(dead_code)]
 pub struct GetBucketLoggingOutputDeserializer;
 impl GetBucketLoggingOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4446,8 +4706,10 @@ pub struct GetBucketLoggingRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketLoggingRequestDeserializer;
 impl GetBucketLoggingRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4476,8 +4738,10 @@ pub struct GetBucketMetricsConfigurationOutput {
     #[serde(rename = "MetricsConfiguration")]
     pub metrics_configuration: Option<MetricsConfiguration>,
 }
+#[allow(dead_code)]
 pub struct GetBucketMetricsConfigurationOutputDeserializer;
 impl GetBucketMetricsConfigurationOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4507,8 +4771,10 @@ pub struct GetBucketMetricsConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketMetricsConfigurationRequestDeserializer;
 impl GetBucketMetricsConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4542,8 +4808,10 @@ pub struct GetBucketNotificationConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketNotificationConfigurationRequestDeserializer;
 impl GetBucketNotificationConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4572,8 +4840,10 @@ pub struct GetBucketOwnershipControlsOutput {
     #[serde(rename = "OwnershipControls")]
     pub ownership_controls: Option<OwnershipControls>,
 }
+#[allow(dead_code)]
 pub struct GetBucketOwnershipControlsOutputDeserializer;
 impl GetBucketOwnershipControlsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4601,8 +4871,10 @@ pub struct GetBucketOwnershipControlsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketOwnershipControlsRequestDeserializer;
 impl GetBucketOwnershipControlsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4631,8 +4903,10 @@ pub struct GetBucketPolicyOutput {
     #[serde(rename = "Policy")]
     pub policy: Option<Policy>,
 }
+#[allow(dead_code)]
 pub struct GetBucketPolicyOutputDeserializer;
 impl GetBucketPolicyOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4660,8 +4934,10 @@ pub struct GetBucketPolicyRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketPolicyRequestDeserializer;
 impl GetBucketPolicyRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4690,8 +4966,10 @@ pub struct GetBucketPolicyStatusOutput {
     #[serde(rename = "PolicyStatus")]
     pub policy_status: Option<PolicyStatus>,
 }
+#[allow(dead_code)]
 pub struct GetBucketPolicyStatusOutputDeserializer;
 impl GetBucketPolicyStatusOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4719,8 +4997,10 @@ pub struct GetBucketPolicyStatusRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketPolicyStatusRequestDeserializer;
 impl GetBucketPolicyStatusRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4749,8 +5029,10 @@ pub struct GetBucketReplicationOutput {
     #[serde(rename = "ReplicationConfiguration")]
     pub replication_configuration: Option<ReplicationConfiguration>,
 }
+#[allow(dead_code)]
 pub struct GetBucketReplicationOutputDeserializer;
 impl GetBucketReplicationOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4778,8 +5060,10 @@ pub struct GetBucketReplicationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketReplicationRequestDeserializer;
 impl GetBucketReplicationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4808,8 +5092,10 @@ pub struct GetBucketRequestPaymentOutput {
     #[serde(rename = "Payer")]
     pub payer: Option<Payer>,
 }
+#[allow(dead_code)]
 pub struct GetBucketRequestPaymentOutputDeserializer;
 impl GetBucketRequestPaymentOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4837,8 +5123,10 @@ pub struct GetBucketRequestPaymentRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketRequestPaymentRequestDeserializer;
 impl GetBucketRequestPaymentRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4867,8 +5155,10 @@ pub struct GetBucketTaggingOutput {
     #[serde(rename = "TagSet")]
     pub tag_set: TagSet,
 }
+#[allow(dead_code)]
 pub struct GetBucketTaggingOutputDeserializer;
 impl GetBucketTaggingOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4897,8 +5187,10 @@ pub struct GetBucketTaggingRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketTaggingRequestDeserializer;
 impl GetBucketTaggingRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4929,8 +5221,10 @@ pub struct GetBucketVersioningOutput {
     #[serde(rename = "MFADelete")]
     pub mfa_delete: Option<MFADeleteStatus>,
 }
+#[allow(dead_code)]
 pub struct GetBucketVersioningOutputDeserializer;
 impl GetBucketVersioningOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4961,8 +5255,10 @@ pub struct GetBucketVersioningRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketVersioningRequestDeserializer;
 impl GetBucketVersioningRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4997,8 +5293,10 @@ pub struct GetBucketWebsiteOutput {
     #[serde(rename = "RoutingRules")]
     pub routing_rules: Option<RoutingRules>,
 }
+#[allow(dead_code)]
 pub struct GetBucketWebsiteOutputDeserializer;
 impl GetBucketWebsiteOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5037,8 +5335,10 @@ pub struct GetBucketWebsiteRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetBucketWebsiteRequestDeserializer;
 impl GetBucketWebsiteRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5071,8 +5371,10 @@ pub struct GetObjectAclOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct GetObjectAclOutputDeserializer;
 impl GetObjectAclOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5114,8 +5416,10 @@ pub struct GetObjectAclRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetObjectAclRequestDeserializer;
 impl GetObjectAclRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5153,8 +5457,10 @@ pub struct GetObjectLegalHoldOutput {
     #[serde(rename = "LegalHold")]
     pub legal_hold: Option<ObjectLockLegalHold>,
 }
+#[allow(dead_code)]
 pub struct GetObjectLegalHoldOutputDeserializer;
 impl GetObjectLegalHoldOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5188,8 +5494,10 @@ pub struct GetObjectLegalHoldRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetObjectLegalHoldRequestDeserializer;
 impl GetObjectLegalHoldRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5227,8 +5535,10 @@ pub struct GetObjectLockConfigurationOutput {
     #[serde(rename = "ObjectLockConfiguration")]
     pub object_lock_configuration: Option<ObjectLockConfiguration>,
 }
+#[allow(dead_code)]
 pub struct GetObjectLockConfigurationOutputDeserializer;
 impl GetObjectLockConfigurationOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5256,8 +5566,10 @@ pub struct GetObjectLockConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetObjectLockConfigurationRequestDeserializer;
 impl GetObjectLockConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5348,8 +5660,10 @@ pub struct GetObjectOutput {
     #[serde(rename = "ObjectLockLegalHoldStatus")]
     pub object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
 }
+#[allow(dead_code)]
 pub struct GetObjectOutputDeserializer;
 impl GetObjectOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5506,8 +5820,10 @@ pub struct GetObjectRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetObjectRequestDeserializer;
 impl GetObjectRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5590,8 +5906,10 @@ pub struct GetObjectRetentionOutput {
     #[serde(rename = "Retention")]
     pub retention: Option<ObjectLockRetention>,
 }
+#[allow(dead_code)]
 pub struct GetObjectRetentionOutputDeserializer;
 impl GetObjectRetentionOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5625,8 +5943,10 @@ pub struct GetObjectRetentionRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetObjectRetentionRequestDeserializer;
 impl GetObjectRetentionRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5666,8 +5986,10 @@ pub struct GetObjectTaggingOutput {
     #[serde(rename = "TagSet")]
     pub tag_set: TagSet,
 }
+#[allow(dead_code)]
 pub struct GetObjectTaggingOutputDeserializer;
 impl GetObjectTaggingOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5703,8 +6025,10 @@ pub struct GetObjectTaggingRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetObjectTaggingRequestDeserializer;
 impl GetObjectTaggingRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5741,8 +6065,10 @@ pub struct GetObjectTorrentOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct GetObjectTorrentOutputDeserializer;
 impl GetObjectTorrentOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5777,8 +6103,10 @@ pub struct GetObjectTorrentRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetObjectTorrentRequestDeserializer;
 impl GetObjectTorrentRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5813,8 +6141,10 @@ pub struct GetPublicAccessBlockOutput {
     #[serde(rename = "PublicAccessBlockConfiguration")]
     pub public_access_block_configuration: Option<PublicAccessBlockConfiguration>,
 }
+#[allow(dead_code)]
 pub struct GetPublicAccessBlockOutputDeserializer;
 impl GetPublicAccessBlockOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5842,8 +6172,10 @@ pub struct GetPublicAccessBlockRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct GetPublicAccessBlockRequestDeserializer;
 impl GetPublicAccessBlockRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5872,8 +6204,10 @@ pub struct GlacierJobParameters {
     #[serde(rename = "Tier")]
     pub tier: Tier,
 }
+#[allow(dead_code)]
 pub struct GlacierJobParametersDeserializer;
 impl GlacierJobParametersDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5901,8 +6235,10 @@ pub struct Grant {
     #[serde(rename = "Permission")]
     pub permission: Option<Permission>,
 }
+#[allow(dead_code)]
 pub struct GrantDeserializer;
 impl GrantDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5939,8 +6275,10 @@ pub struct Grantee {
     #[serde(rename = "URI")]
     pub uri: Option<URI>,
 }
+#[allow(dead_code)]
 pub struct GranteeDeserializer;
 impl GranteeDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5980,8 +6318,10 @@ pub struct HeadBucketRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct HeadBucketRequestDeserializer;
 impl HeadBucketRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6068,8 +6408,10 @@ pub struct HeadObjectOutput {
     #[serde(rename = "ObjectLockLegalHoldStatus")]
     pub object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
 }
+#[allow(dead_code)]
 pub struct HeadObjectOutputDeserializer;
 impl HeadObjectOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6208,8 +6550,10 @@ pub struct HeadObjectRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct HeadObjectRequestDeserializer;
 impl HeadObjectRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6274,8 +6618,10 @@ pub struct IndexDocument {
     #[serde(rename = "Suffix")]
     pub suffix: Suffix,
 }
+#[allow(dead_code)]
 pub struct IndexDocumentDeserializer;
 impl IndexDocumentDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6303,8 +6649,10 @@ pub struct Initiator {
     #[serde(rename = "DisplayName")]
     pub display_name: Option<DisplayName>,
 }
+#[allow(dead_code)]
 pub struct InitiatorDeserializer;
 impl InitiatorDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6339,8 +6687,10 @@ pub struct InputSerialization {
     #[serde(rename = "Parquet")]
     pub parquet: Option<ParquetInput>,
 }
+#[allow(dead_code)]
 pub struct InputSerializationDeserializer;
 impl InputSerializationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6377,8 +6727,10 @@ pub struct IntelligentTieringAndOperator {
     #[serde(rename = "Tags")]
     pub tags: Option<TagSet>,
 }
+#[allow(dead_code)]
 pub struct IntelligentTieringAndOperatorDeserializer;
 impl IntelligentTieringAndOperatorDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6415,8 +6767,10 @@ pub struct IntelligentTieringConfiguration {
     #[serde(rename = "Tierings")]
     pub tierings: TieringList,
 }
+#[allow(dead_code)]
 pub struct IntelligentTieringConfigurationDeserializer;
 impl IntelligentTieringConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6456,8 +6810,10 @@ pub struct IntelligentTieringFilter {
     #[serde(rename = "And")]
     pub and: Option<IntelligentTieringAndOperator>,
 }
+#[allow(dead_code)]
 pub struct IntelligentTieringFilterDeserializer;
 impl IntelligentTieringFilterDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6491,8 +6847,10 @@ pub struct InvalidObjectState {
     #[serde(rename = "AccessTier")]
     pub access_tier: Option<IntelligentTieringAccessTier>,
 }
+#[allow(dead_code)]
 pub struct InvalidObjectStateDeserializer;
 impl InvalidObjectStateDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6533,8 +6891,10 @@ pub struct InventoryConfiguration {
     #[serde(rename = "Schedule")]
     pub schedule: InventorySchedule,
 }
+#[allow(dead_code)]
 pub struct InventoryConfigurationDeserializer;
 impl InventoryConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6580,8 +6940,10 @@ pub struct InventoryDestination {
     #[serde(rename = "S3BucketDestination")]
     pub s3_bucket_destination: InventoryS3BucketDestination,
 }
+#[allow(dead_code)]
 pub struct InventoryDestinationDeserializer;
 impl InventoryDestinationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6609,8 +6971,10 @@ pub struct InventoryEncryption {
     #[serde(rename = "SSEKMS")]
     pub ssekms: Option<SSEKMS>,
 }
+#[allow(dead_code)]
 pub struct InventoryEncryptionDeserializer;
 impl InventoryEncryptionDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6639,8 +7003,10 @@ pub struct InventoryFilter {
     #[serde(rename = "Prefix")]
     pub prefix: Prefix,
 }
+#[allow(dead_code)]
 pub struct InventoryFilterDeserializer;
 impl InventoryFilterDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6674,8 +7040,10 @@ pub struct InventoryS3BucketDestination {
     #[serde(rename = "Encryption")]
     pub encryption: Option<InventoryEncryption>,
 }
+#[allow(dead_code)]
 pub struct InventoryS3BucketDestinationDeserializer;
 impl InventoryS3BucketDestinationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6713,8 +7081,10 @@ pub struct InventorySchedule {
     #[serde(rename = "Frequency")]
     pub frequency: InventoryFrequency,
 }
+#[allow(dead_code)]
 pub struct InventoryScheduleDeserializer;
 impl InventoryScheduleDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6740,8 +7110,10 @@ pub struct JSONInput {
     #[serde(rename = "Type")]
     pub r#type: Option<JSONType>,
 }
+#[allow(dead_code)]
 pub struct JSONInputDeserializer;
 impl JSONInputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6767,8 +7139,10 @@ pub struct JSONOutput {
     #[serde(rename = "RecordDelimiter")]
     pub record_delimiter: Option<RecordDelimiter>,
 }
+#[allow(dead_code)]
 pub struct JSONOutputDeserializer;
 impl JSONOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6800,8 +7174,10 @@ pub struct LambdaFunctionConfiguration {
     #[serde(rename = "Filter")]
     pub filter: Option<NotificationConfigurationFilter>,
 }
+#[allow(dead_code)]
 pub struct LambdaFunctionConfigurationDeserializer;
 impl LambdaFunctionConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6837,8 +7213,10 @@ pub struct LifecycleConfiguration {
     #[serde(rename = "Rules")]
     pub rules: Rules,
 }
+#[allow(dead_code)]
 pub struct LifecycleConfigurationDeserializer;
 impl LifecycleConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6869,8 +7247,10 @@ pub struct LifecycleExpiration {
     #[serde(rename = "ExpiredObjectDeleteMarker")]
     pub expired_object_delete_marker: Option<ExpiredObjectDeleteMarker>,
 }
+#[allow(dead_code)]
 pub struct LifecycleExpirationDeserializer;
 impl LifecycleExpirationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6918,8 +7298,10 @@ pub struct LifecycleRule {
     #[serde(rename = "AbortIncompleteMultipartUpload")]
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
 }
+#[allow(dead_code)]
 pub struct LifecycleRuleDeserializer;
 impl LifecycleRuleDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6975,8 +7357,10 @@ pub struct LifecycleRuleAndOperator {
     #[serde(rename = "Tags")]
     pub tags: Option<TagSet>,
 }
+#[allow(dead_code)]
 pub struct LifecycleRuleAndOperatorDeserializer;
 impl LifecycleRuleAndOperatorDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7011,8 +7395,10 @@ pub struct LifecycleRuleFilter {
     #[serde(rename = "And")]
     pub and: Option<LifecycleRuleAndOperator>,
 }
+#[allow(dead_code)]
 pub struct LifecycleRuleFilterDeserializer;
 impl LifecycleRuleFilterDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7050,8 +7436,10 @@ pub struct ListBucketAnalyticsConfigurationsOutput {
     #[serde(rename = "AnalyticsConfigurationList")]
     pub analytics_configuration_list: Option<AnalyticsConfigurationList>,
 }
+#[allow(dead_code)]
 pub struct ListBucketAnalyticsConfigurationsOutputDeserializer;
 impl ListBucketAnalyticsConfigurationsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7092,8 +7480,10 @@ pub struct ListBucketAnalyticsConfigurationsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct ListBucketAnalyticsConfigurationsRequestDeserializer;
 impl ListBucketAnalyticsConfigurationsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7131,8 +7521,10 @@ pub struct ListBucketIntelligentTieringConfigurationsOutput {
     #[serde(rename = "IntelligentTieringConfigurationList")]
     pub intelligent_tiering_configuration_list: Option<IntelligentTieringConfigurationList>,
 }
+#[allow(dead_code)]
 pub struct ListBucketIntelligentTieringConfigurationsOutputDeserializer;
 impl ListBucketIntelligentTieringConfigurationsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7171,8 +7563,10 @@ pub struct ListBucketIntelligentTieringConfigurationsRequest {
     #[serde(rename = "ContinuationToken")]
     pub continuation_token: Option<Token>,
 }
+#[allow(dead_code)]
 pub struct ListBucketIntelligentTieringConfigurationsRequestDeserializer;
 impl ListBucketIntelligentTieringConfigurationsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7207,8 +7601,10 @@ pub struct ListBucketInventoryConfigurationsOutput {
     #[serde(rename = "NextContinuationToken")]
     pub next_continuation_token: Option<NextToken>,
 }
+#[allow(dead_code)]
 pub struct ListBucketInventoryConfigurationsOutputDeserializer;
 impl ListBucketInventoryConfigurationsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7249,8 +7645,10 @@ pub struct ListBucketInventoryConfigurationsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct ListBucketInventoryConfigurationsRequestDeserializer;
 impl ListBucketInventoryConfigurationsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7288,8 +7686,10 @@ pub struct ListBucketMetricsConfigurationsOutput {
     #[serde(rename = "MetricsConfigurationList")]
     pub metrics_configuration_list: Option<MetricsConfigurationList>,
 }
+#[allow(dead_code)]
 pub struct ListBucketMetricsConfigurationsOutputDeserializer;
 impl ListBucketMetricsConfigurationsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7330,8 +7730,10 @@ pub struct ListBucketMetricsConfigurationsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct ListBucketMetricsConfigurationsRequestDeserializer;
 impl ListBucketMetricsConfigurationsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7365,8 +7767,10 @@ pub struct ListBucketsOutput {
     #[serde(rename = "Owner")]
     pub owner: Option<Owner>,
 }
+#[allow(dead_code)]
 pub struct ListBucketsOutputDeserializer;
 impl ListBucketsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7419,8 +7823,10 @@ pub struct ListMultipartUploadsOutput {
     #[serde(rename = "EncodingType")]
     pub encoding_type: Option<EncodingType>,
 }
+#[allow(dead_code)]
 pub struct ListMultipartUploadsOutputDeserializer;
 impl ListMultipartUploadsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7497,8 +7903,10 @@ pub struct ListMultipartUploadsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct ListMultipartUploadsRequestDeserializer;
 impl ListMultipartUploadsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7569,8 +7977,10 @@ pub struct ListObjectVersionsOutput {
     #[serde(rename = "EncodingType")]
     pub encoding_type: Option<EncodingType>,
 }
+#[allow(dead_code)]
 pub struct ListObjectVersionsOutputDeserializer;
 impl ListObjectVersionsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7652,8 +8062,10 @@ pub struct ListObjectVersionsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct ListObjectVersionsRequestDeserializer;
 impl ListObjectVersionsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7718,8 +8130,10 @@ pub struct ListObjectsOutput {
     #[serde(rename = "EncodingType")]
     pub encoding_type: Option<EncodingType>,
 }
+#[allow(dead_code)]
 pub struct ListObjectsOutputDeserializer;
 impl ListObjectsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7790,8 +8204,10 @@ pub struct ListObjectsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct ListObjectsRequestDeserializer;
 impl ListObjectsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7860,8 +8276,10 @@ pub struct ListObjectsV2Output {
     #[serde(rename = "StartAfter")]
     pub start_after: Option<StartAfter>,
 }
+#[allow(dead_code)]
 pub struct ListObjectsV2OutputDeserializer;
 impl ListObjectsV2OutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7942,8 +8360,10 @@ pub struct ListObjectsV2Request {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct ListObjectsV2RequestDeserializer;
 impl ListObjectsV2RequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8022,8 +8442,10 @@ pub struct ListPartsOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct ListPartsOutputDeserializer;
 impl ListPartsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8102,8 +8524,10 @@ pub struct ListPartsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct ListPartsRequestDeserializer;
 impl ListPartsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8151,8 +8575,10 @@ pub struct LoggingEnabled {
     #[serde(rename = "TargetPrefix")]
     pub target_prefix: TargetPrefix,
 }
+#[allow(dead_code)]
 pub struct LoggingEnabledDeserializer;
 impl LoggingEnabledDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8188,8 +8614,10 @@ pub struct MetadataEntry {
     #[serde(rename = "Value")]
     pub value: Option<MetadataValue>,
 }
+#[allow(dead_code)]
 pub struct MetadataEntryDeserializer;
 impl MetadataEntryDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8220,8 +8648,10 @@ pub struct Metrics {
     #[serde(rename = "EventThreshold")]
     pub event_threshold: Option<ReplicationTimeValue>,
 }
+#[allow(dead_code)]
 pub struct MetricsDeserializer;
 impl MetricsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8252,8 +8682,10 @@ pub struct MetricsAndOperator {
     #[serde(rename = "Tags")]
     pub tags: Option<TagSet>,
 }
+#[allow(dead_code)]
 pub struct MetricsAndOperatorDeserializer;
 impl MetricsAndOperatorDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8286,8 +8718,10 @@ pub struct MetricsConfiguration {
     #[serde(rename = "Filter")]
     pub filter: Option<MetricsFilter>,
 }
+#[allow(dead_code)]
 pub struct MetricsConfigurationDeserializer;
 impl MetricsConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8320,8 +8754,10 @@ pub struct MetricsFilter {
     #[serde(rename = "And")]
     pub and: Option<MetricsAndOperator>,
 }
+#[allow(dead_code)]
 pub struct MetricsFilterDeserializer;
 impl MetricsFilterDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8363,8 +8799,10 @@ pub struct MultipartUpload {
     #[serde(rename = "Initiator")]
     pub initiator: Option<Initiator>,
 }
+#[allow(dead_code)]
 pub struct MultipartUploadDeserializer;
 impl MultipartUploadDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8403,8 +8841,10 @@ impl MultipartUploadDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct NoSuchBucket {
 }
+#[allow(dead_code)]
 pub struct NoSuchBucketDeserializer;
 impl NoSuchBucketDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8425,8 +8865,10 @@ impl NoSuchBucketDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct NoSuchKey {
 }
+#[allow(dead_code)]
 pub struct NoSuchKeyDeserializer;
 impl NoSuchKeyDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8447,8 +8889,10 @@ impl NoSuchKeyDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct NoSuchUpload {
 }
+#[allow(dead_code)]
 pub struct NoSuchUploadDeserializer;
 impl NoSuchUploadDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8471,8 +8915,10 @@ pub struct NoncurrentVersionExpiration {
     #[serde(rename = "NoncurrentDays")]
     pub noncurrent_days: Option<Days>,
 }
+#[allow(dead_code)]
 pub struct NoncurrentVersionExpirationDeserializer;
 impl NoncurrentVersionExpirationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8500,8 +8946,10 @@ pub struct NoncurrentVersionTransition {
     #[serde(rename = "StorageClass")]
     pub storage_class: Option<TransitionStorageClass>,
 }
+#[allow(dead_code)]
 pub struct NoncurrentVersionTransitionDeserializer;
 impl NoncurrentVersionTransitionDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8534,8 +8982,10 @@ pub struct NotificationConfiguration {
     #[serde(rename = "LambdaFunctionConfigurations")]
     pub lambda_function_configurations: Option<LambdaFunctionConfigurationList>,
 }
+#[allow(dead_code)]
 pub struct NotificationConfigurationDeserializer;
 impl NotificationConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8577,8 +9027,10 @@ pub struct NotificationConfigurationDeprecated {
     #[serde(rename = "CloudFunctionConfiguration")]
     pub cloud_function_configuration: Option<CloudFunctionConfiguration>,
 }
+#[allow(dead_code)]
 pub struct NotificationConfigurationDeprecatedDeserializer;
 impl NotificationConfigurationDeprecatedDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8610,8 +9062,10 @@ pub struct NotificationConfigurationFilter {
     #[serde(rename = "Key")]
     pub key: Option<S3KeyFilter>,
 }
+#[allow(dead_code)]
 pub struct NotificationConfigurationFilterDeserializer;
 impl NotificationConfigurationFilterDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8647,8 +9101,10 @@ pub struct Object {
     #[serde(rename = "Owner")]
     pub owner: Option<Owner>,
 }
+#[allow(dead_code)]
 pub struct ObjectDeserializer;
 impl ObjectDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8687,8 +9143,10 @@ impl ObjectDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ObjectAlreadyInActiveTierError {
 }
+#[allow(dead_code)]
 pub struct ObjectAlreadyInActiveTierErrorDeserializer;
 impl ObjectAlreadyInActiveTierErrorDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8713,8 +9171,10 @@ pub struct ObjectIdentifier {
     #[serde(rename = "VersionId")]
     pub version_id: Option<ObjectVersionId>,
 }
+#[allow(dead_code)]
 pub struct ObjectIdentifierDeserializer;
 impl ObjectIdentifierDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8745,8 +9205,10 @@ pub struct ObjectLockConfiguration {
     #[serde(rename = "Rule")]
     pub rule: Option<ObjectLockRule>,
 }
+#[allow(dead_code)]
 pub struct ObjectLockConfigurationDeserializer;
 impl ObjectLockConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8775,8 +9237,10 @@ pub struct ObjectLockLegalHold {
     #[serde(rename = "Status")]
     pub status: Option<ObjectLockLegalHoldStatus>,
 }
+#[allow(dead_code)]
 pub struct ObjectLockLegalHoldDeserializer;
 impl ObjectLockLegalHoldDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8804,8 +9268,10 @@ pub struct ObjectLockRetention {
     #[serde(rename = "RetainUntilDate")]
     pub retain_until_date: Option<Date>,
 }
+#[allow(dead_code)]
 pub struct ObjectLockRetentionDeserializer;
 impl ObjectLockRetentionDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8834,8 +9300,10 @@ pub struct ObjectLockRule {
     #[serde(rename = "DefaultRetention")]
     pub default_retention: Option<DefaultRetention>,
 }
+#[allow(dead_code)]
 pub struct ObjectLockRuleDeserializer;
 impl ObjectLockRuleDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8859,8 +9327,10 @@ impl ObjectLockRuleDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ObjectNotInActiveTierError {
 }
+#[allow(dead_code)]
 pub struct ObjectNotInActiveTierErrorDeserializer;
 impl ObjectNotInActiveTierErrorDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8897,8 +9367,10 @@ pub struct ObjectVersion {
     #[serde(rename = "Owner")]
     pub owner: Option<Owner>,
 }
+#[allow(dead_code)]
 pub struct ObjectVersionDeserializer;
 impl ObjectVersionDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8945,8 +9417,10 @@ pub struct OutputLocation {
     #[serde(rename = "S3")]
     pub s3: Option<S3Location>,
 }
+#[allow(dead_code)]
 pub struct OutputLocationDeserializer;
 impl OutputLocationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -8974,8 +9448,10 @@ pub struct OutputSerialization {
     #[serde(rename = "JSON")]
     pub json: Option<JSONOutput>,
 }
+#[allow(dead_code)]
 pub struct OutputSerializationDeserializer;
 impl OutputSerializationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9006,8 +9482,10 @@ pub struct Owner {
     #[serde(rename = "ID")]
     pub id: Option<ID>,
 }
+#[allow(dead_code)]
 pub struct OwnerDeserializer;
 impl OwnerDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9036,8 +9514,10 @@ pub struct OwnershipControls {
     #[serde(rename = "Rules")]
     pub rules: OwnershipControlsRules,
 }
+#[allow(dead_code)]
 pub struct OwnershipControlsDeserializer;
 impl OwnershipControlsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9064,8 +9544,10 @@ pub struct OwnershipControlsRule {
     #[serde(rename = "ObjectOwnership")]
     pub object_ownership: ObjectOwnership,
 }
+#[allow(dead_code)]
 pub struct OwnershipControlsRuleDeserializer;
 impl OwnershipControlsRuleDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9089,8 +9571,10 @@ impl OwnershipControlsRuleDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ParquetInput {
 }
+#[allow(dead_code)]
 pub struct ParquetInputDeserializer;
 impl ParquetInputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9119,8 +9603,10 @@ pub struct Part {
     #[serde(rename = "Size")]
     pub size: Option<Size>,
 }
+#[allow(dead_code)]
 pub struct PartDeserializer;
 impl PartDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9155,8 +9641,10 @@ pub struct PolicyStatus {
     #[serde(rename = "IsPublic")]
     pub is_public: Option<IsPublic>,
 }
+#[allow(dead_code)]
 pub struct PolicyStatusDeserializer;
 impl PolicyStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9186,8 +9674,10 @@ pub struct Progress {
     #[serde(rename = "BytesReturned")]
     pub bytes_returned: Option<BytesReturned>,
 }
+#[allow(dead_code)]
 pub struct ProgressDeserializer;
 impl ProgressDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9219,8 +9709,10 @@ pub struct ProgressEvent {
     #[serde(rename = "Details")]
     pub details: Option<Progress>,
 }
+#[allow(dead_code)]
 pub struct ProgressEventDeserializer;
 impl ProgressEventDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9252,8 +9744,10 @@ pub struct PublicAccessBlockConfiguration {
     #[serde(rename = "RestrictPublicBuckets")]
     pub restrict_public_buckets: Option<Setting>,
 }
+#[allow(dead_code)]
 pub struct PublicAccessBlockConfigurationDeserializer;
 impl PublicAccessBlockConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9292,8 +9786,10 @@ pub struct PutBucketAccelerateConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketAccelerateConfigurationRequestDeserializer;
 impl PutBucketAccelerateConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9343,8 +9839,10 @@ pub struct PutBucketAclRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketAclRequestDeserializer;
 impl PutBucketAclRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9403,8 +9901,10 @@ pub struct PutBucketAnalyticsConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketAnalyticsConfigurationRequestDeserializer;
 impl PutBucketAnalyticsConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9445,8 +9945,10 @@ pub struct PutBucketCorsRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketCorsRequestDeserializer;
 impl PutBucketCorsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9487,8 +9989,10 @@ pub struct PutBucketEncryptionRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketEncryptionRequestDeserializer;
 impl PutBucketEncryptionRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9527,8 +10031,10 @@ pub struct PutBucketIntelligentTieringConfigurationRequest {
     #[serde(rename = "IntelligentTieringConfiguration")]
     pub intelligent_tiering_configuration: IntelligentTieringConfiguration,
 }
+#[allow(dead_code)]
 pub struct PutBucketIntelligentTieringConfigurationRequestDeserializer;
 impl PutBucketIntelligentTieringConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9566,8 +10072,10 @@ pub struct PutBucketInventoryConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketInventoryConfigurationRequestDeserializer;
 impl PutBucketInventoryConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9606,8 +10114,10 @@ pub struct PutBucketLifecycleConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketLifecycleConfigurationRequestDeserializer;
 impl PutBucketLifecycleConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9645,8 +10155,10 @@ pub struct PutBucketLifecycleRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketLifecycleRequestDeserializer;
 impl PutBucketLifecycleRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9687,8 +10199,10 @@ pub struct PutBucketLoggingRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketLoggingRequestDeserializer;
 impl PutBucketLoggingRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9729,8 +10243,10 @@ pub struct PutBucketMetricsConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketMetricsConfigurationRequestDeserializer;
 impl PutBucketMetricsConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9769,8 +10285,10 @@ pub struct PutBucketNotificationConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketNotificationConfigurationRequestDeserializer;
 impl PutBucketNotificationConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9808,8 +10326,10 @@ pub struct PutBucketNotificationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketNotificationRequestDeserializer;
 impl PutBucketNotificationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9850,8 +10370,10 @@ pub struct PutBucketOwnershipControlsRequest {
     #[serde(rename = "OwnershipControls")]
     pub ownership_controls: OwnershipControls,
 }
+#[allow(dead_code)]
 pub struct PutBucketOwnershipControlsRequestDeserializer;
 impl PutBucketOwnershipControlsRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9894,8 +10416,10 @@ pub struct PutBucketPolicyRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketPolicyRequestDeserializer;
 impl PutBucketPolicyRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9941,8 +10465,10 @@ pub struct PutBucketReplicationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketReplicationRequestDeserializer;
 impl PutBucketReplicationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9986,8 +10512,10 @@ pub struct PutBucketRequestPaymentRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketRequestPaymentRequestDeserializer;
 impl PutBucketRequestPaymentRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10028,8 +10556,10 @@ pub struct PutBucketTaggingRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketTaggingRequestDeserializer;
 impl PutBucketTaggingRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10072,8 +10602,10 @@ pub struct PutBucketVersioningRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketVersioningRequestDeserializer;
 impl PutBucketVersioningRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10117,8 +10649,10 @@ pub struct PutBucketWebsiteRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutBucketWebsiteRequestDeserializer;
 impl PutBucketWebsiteRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10153,8 +10687,10 @@ pub struct PutObjectAclOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct PutObjectAclOutputDeserializer;
 impl PutObjectAclOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10204,8 +10740,10 @@ pub struct PutObjectAclRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutObjectAclRequestDeserializer;
 impl PutObjectAclRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10267,8 +10805,10 @@ pub struct PutObjectLegalHoldOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct PutObjectLegalHoldOutputDeserializer;
 impl PutObjectLegalHoldOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10306,8 +10846,10 @@ pub struct PutObjectLegalHoldRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutObjectLegalHoldRequestDeserializer;
 impl PutObjectLegalHoldRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10351,8 +10893,10 @@ pub struct PutObjectLockConfigurationOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct PutObjectLockConfigurationOutputDeserializer;
 impl PutObjectLockConfigurationOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10388,8 +10932,10 @@ pub struct PutObjectLockConfigurationRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutObjectLockConfigurationRequestDeserializer;
 impl PutObjectLockConfigurationRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10448,8 +10994,10 @@ pub struct PutObjectOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct PutObjectOutputDeserializer;
 impl PutObjectOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10564,8 +11112,10 @@ pub struct PutObjectRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutObjectRequestDeserializer;
 impl PutObjectRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10684,8 +11234,10 @@ pub struct PutObjectRetentionOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct PutObjectRetentionOutputDeserializer;
 impl PutObjectRetentionOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10725,8 +11277,10 @@ pub struct PutObjectRetentionRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutObjectRetentionRequestDeserializer;
 impl PutObjectRetentionRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10773,8 +11327,10 @@ pub struct PutObjectTaggingOutput {
     #[serde(rename = "VersionId")]
     pub version_id: Option<ObjectVersionId>,
 }
+#[allow(dead_code)]
 pub struct PutObjectTaggingOutputDeserializer;
 impl PutObjectTaggingOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10810,8 +11366,10 @@ pub struct PutObjectTaggingRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutObjectTaggingRequestDeserializer;
 impl PutObjectTaggingRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10858,8 +11416,10 @@ pub struct PutPublicAccessBlockRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct PutPublicAccessBlockRequestDeserializer;
 impl PutPublicAccessBlockRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10900,8 +11460,10 @@ pub struct QueueConfiguration {
     #[serde(rename = "Filter")]
     pub filter: Option<NotificationConfigurationFilter>,
 }
+#[allow(dead_code)]
 pub struct QueueConfigurationDeserializer;
 impl QueueConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10943,8 +11505,10 @@ pub struct QueueConfigurationDeprecated {
     #[serde(rename = "Queue")]
     pub queue: Option<QueueArn>,
 }
+#[allow(dead_code)]
 pub struct QueueConfigurationDeprecatedDeserializer;
 impl QueueConfigurationDeprecatedDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -10981,8 +11545,10 @@ pub struct RecordsEvent {
     #[serde(rename = "Payload")]
     pub payload: Option<Body>,
 }
+#[allow(dead_code)]
 pub struct RecordsEventDeserializer;
 impl RecordsEventDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11016,8 +11582,10 @@ pub struct Redirect {
     #[serde(rename = "ReplaceKeyWith")]
     pub replace_key_with: Option<ReplaceKeyWith>,
 }
+#[allow(dead_code)]
 pub struct RedirectDeserializer;
 impl RedirectDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11057,8 +11625,10 @@ pub struct RedirectAllRequestsTo {
     #[serde(rename = "Protocol")]
     pub protocol: Option<Protocol>,
 }
+#[allow(dead_code)]
 pub struct RedirectAllRequestsToDeserializer;
 impl RedirectAllRequestsToDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11087,8 +11657,10 @@ pub struct ReplicaModifications {
     #[serde(rename = "Status")]
     pub status: ReplicaModificationsStatus,
 }
+#[allow(dead_code)]
 pub struct ReplicaModificationsDeserializer;
 impl ReplicaModificationsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11116,8 +11688,10 @@ pub struct ReplicationConfiguration {
     #[serde(rename = "Rules")]
     pub rules: ReplicationRules,
 }
+#[allow(dead_code)]
 pub struct ReplicationConfigurationDeserializer;
 impl ReplicationConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11163,8 +11737,10 @@ pub struct ReplicationRule {
     #[serde(rename = "DeleteMarkerReplication")]
     pub delete_marker_replication: Option<DeleteMarkerReplication>,
 }
+#[allow(dead_code)]
 pub struct ReplicationRuleDeserializer;
 impl ReplicationRuleDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11216,8 +11792,10 @@ pub struct ReplicationRuleAndOperator {
     #[serde(rename = "Tags")]
     pub tags: Option<TagSet>,
 }
+#[allow(dead_code)]
 pub struct ReplicationRuleAndOperatorDeserializer;
 impl ReplicationRuleAndOperatorDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11252,8 +11830,10 @@ pub struct ReplicationRuleFilter {
     #[serde(rename = "And")]
     pub and: Option<ReplicationRuleAndOperator>,
 }
+#[allow(dead_code)]
 pub struct ReplicationRuleFilterDeserializer;
 impl ReplicationRuleFilterDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11287,8 +11867,10 @@ pub struct ReplicationTime {
     #[serde(rename = "Time")]
     pub time: ReplicationTimeValue,
 }
+#[allow(dead_code)]
 pub struct ReplicationTimeDeserializer;
 impl ReplicationTimeDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11317,8 +11899,10 @@ pub struct ReplicationTimeValue {
     #[serde(rename = "Minutes")]
     pub minutes: Option<Minutes>,
 }
+#[allow(dead_code)]
 pub struct ReplicationTimeValueDeserializer;
 impl ReplicationTimeValueDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11344,8 +11928,10 @@ pub struct RequestPaymentConfiguration {
     #[serde(rename = "Payer")]
     pub payer: Payer,
 }
+#[allow(dead_code)]
 pub struct RequestPaymentConfigurationDeserializer;
 impl RequestPaymentConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11371,8 +11957,10 @@ pub struct RequestProgress {
     #[serde(rename = "Enabled")]
     pub enabled: Option<EnableRequestProgress>,
 }
+#[allow(dead_code)]
 pub struct RequestProgressDeserializer;
 impl RequestProgressDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11400,8 +11988,10 @@ pub struct RestoreObjectOutput {
     #[serde(rename = "RestoreOutputPath")]
     pub restore_output_path: Option<RestoreOutputPath>,
 }
+#[allow(dead_code)]
 pub struct RestoreObjectOutputDeserializer;
 impl RestoreObjectOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11440,8 +12030,10 @@ pub struct RestoreObjectRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct RestoreObjectRequestDeserializer;
 impl RestoreObjectRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11494,8 +12086,10 @@ pub struct RestoreRequest {
     #[serde(rename = "OutputLocation")]
     pub output_location: Option<OutputLocation>,
 }
+#[allow(dead_code)]
 pub struct RestoreRequestDeserializer;
 impl RestoreRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11541,8 +12135,10 @@ pub struct RoutingRule {
     #[serde(rename = "Redirect")]
     pub redirect: Redirect,
 }
+#[allow(dead_code)]
 pub struct RoutingRuleDeserializer;
 impl RoutingRuleDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11585,8 +12181,10 @@ pub struct Rule {
     #[serde(rename = "AbortIncompleteMultipartUpload")]
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
 }
+#[allow(dead_code)]
 pub struct RuleDeserializer;
 impl RuleDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11633,8 +12231,10 @@ pub struct S3KeyFilter {
     #[serde(rename = "FilterRules")]
     pub filter_rules: Option<FilterRuleList>,
 }
+#[allow(dead_code)]
 pub struct S3KeyFilterDeserializer;
 impl S3KeyFilterDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11676,8 +12276,10 @@ pub struct S3Location {
     #[serde(rename = "StorageClass")]
     pub storage_class: Option<StorageClass>,
 }
+#[allow(dead_code)]
 pub struct S3LocationDeserializer;
 impl S3LocationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11728,8 +12330,10 @@ pub struct SSEKMS {
     #[serde(rename = "KeyId")]
     pub key_id: SSEKMSKeyId,
 }
+#[allow(dead_code)]
 pub struct SSEKMSDeserializer;
 impl SSEKMSDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11753,8 +12357,10 @@ impl SSEKMSDeserializer {
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct SSES3 {
 }
+#[allow(dead_code)]
 pub struct SSES3Deserializer;
 impl SSES3Deserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11779,8 +12385,10 @@ pub struct ScanRange {
     #[serde(rename = "End")]
     pub end: Option<End>,
 }
+#[allow(dead_code)]
 pub struct ScanRangeDeserializer;
 impl ScanRangeDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11817,8 +12425,10 @@ pub struct SelectObjectContentEventStream {
     #[serde(rename = "End")]
     pub end: Option<EndEvent>,
 }
+#[allow(dead_code)]
 pub struct SelectObjectContentEventStreamDeserializer;
 impl SelectObjectContentEventStreamDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11856,8 +12466,10 @@ pub struct SelectObjectContentOutput {
     #[serde(rename = "Payload")]
     pub payload: Option<SelectObjectContentEventStream>,
 }
+#[allow(dead_code)]
 pub struct SelectObjectContentOutputDeserializer;
 impl SelectObjectContentOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11905,8 +12517,10 @@ pub struct SelectObjectContentRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct SelectObjectContentRequestDeserializer;
 impl SelectObjectContentRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11971,8 +12585,10 @@ pub struct SelectParameters {
     #[serde(rename = "OutputSerialization")]
     pub output_serialization: OutputSerialization,
 }
+#[allow(dead_code)]
 pub struct SelectParametersDeserializer;
 impl SelectParametersDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12009,8 +12625,10 @@ pub struct ServerSideEncryptionByDefault {
     #[serde(rename = "KMSMasterKeyID")]
     pub kms_master_key_id: Option<SSEKMSKeyId>,
 }
+#[allow(dead_code)]
 pub struct ServerSideEncryptionByDefaultDeserializer;
 impl ServerSideEncryptionByDefaultDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12039,8 +12657,10 @@ pub struct ServerSideEncryptionConfiguration {
     #[serde(rename = "Rules")]
     pub rules: ServerSideEncryptionRules,
 }
+#[allow(dead_code)]
 pub struct ServerSideEncryptionConfigurationDeserializer;
 impl ServerSideEncryptionConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12069,8 +12689,10 @@ pub struct ServerSideEncryptionRule {
     #[serde(rename = "BucketKeyEnabled")]
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
 }
+#[allow(dead_code)]
 pub struct ServerSideEncryptionRuleDeserializer;
 impl ServerSideEncryptionRuleDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12101,8 +12723,10 @@ pub struct SourceSelectionCriteria {
     #[serde(rename = "ReplicaModifications")]
     pub replica_modifications: Option<ReplicaModifications>,
 }
+#[allow(dead_code)]
 pub struct SourceSelectionCriteriaDeserializer;
 impl SourceSelectionCriteriaDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12131,8 +12755,10 @@ pub struct SseKmsEncryptedObjects {
     #[serde(rename = "Status")]
     pub status: SseKmsEncryptedObjectsStatus,
 }
+#[allow(dead_code)]
 pub struct SseKmsEncryptedObjectsDeserializer;
 impl SseKmsEncryptedObjectsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12162,8 +12788,10 @@ pub struct Stats {
     #[serde(rename = "BytesReturned")]
     pub bytes_returned: Option<BytesReturned>,
 }
+#[allow(dead_code)]
 pub struct StatsDeserializer;
 impl StatsDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12195,8 +12823,10 @@ pub struct StatsEvent {
     #[serde(rename = "Details")]
     pub details: Option<Stats>,
 }
+#[allow(dead_code)]
 pub struct StatsEventDeserializer;
 impl StatsEventDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12222,8 +12852,10 @@ pub struct StorageClassAnalysis {
     #[serde(rename = "DataExport")]
     pub data_export: Option<StorageClassAnalysisDataExport>,
 }
+#[allow(dead_code)]
 pub struct StorageClassAnalysisDeserializer;
 impl StorageClassAnalysisDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12251,8 +12883,10 @@ pub struct StorageClassAnalysisDataExport {
     #[serde(rename = "Destination")]
     pub destination: AnalyticsExportDestination,
 }
+#[allow(dead_code)]
 pub struct StorageClassAnalysisDataExportDeserializer;
 impl StorageClassAnalysisDataExportDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12283,8 +12917,10 @@ pub struct Tag {
     #[serde(rename = "Value")]
     pub value: Value,
 }
+#[allow(dead_code)]
 pub struct TagDeserializer;
 impl TagDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12313,8 +12949,10 @@ pub struct Tagging {
     #[serde(rename = "TagSet")]
     pub tag_set: TagSet,
 }
+#[allow(dead_code)]
 pub struct TaggingDeserializer;
 impl TaggingDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12343,8 +12981,10 @@ pub struct TargetGrant {
     #[serde(rename = "Permission")]
     pub permission: Option<BucketLogsPermission>,
 }
+#[allow(dead_code)]
 pub struct TargetGrantDeserializer;
 impl TargetGrantDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12375,8 +13015,10 @@ pub struct Tiering {
     #[serde(rename = "AccessTier")]
     pub access_tier: IntelligentTieringAccessTier,
 }
+#[allow(dead_code)]
 pub struct TieringDeserializer;
 impl TieringDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12411,8 +13053,10 @@ pub struct TopicConfiguration {
     #[serde(rename = "Filter")]
     pub filter: Option<NotificationConfigurationFilter>,
 }
+#[allow(dead_code)]
 pub struct TopicConfigurationDeserializer;
 impl TopicConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12454,8 +13098,10 @@ pub struct TopicConfigurationDeprecated {
     #[serde(rename = "Topic")]
     pub topic: Option<TopicArn>,
 }
+#[allow(dead_code)]
 pub struct TopicConfigurationDeprecatedDeserializer;
 impl TopicConfigurationDeprecatedDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12496,8 +13142,10 @@ pub struct Transition {
     #[serde(rename = "StorageClass")]
     pub storage_class: Option<TransitionStorageClass>,
 }
+#[allow(dead_code)]
 pub struct TransitionDeserializer;
 impl TransitionDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12543,8 +13191,10 @@ pub struct UploadPartCopyOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct UploadPartCopyOutputDeserializer;
 impl UploadPartCopyOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12627,8 +13277,10 @@ pub struct UploadPartCopyRequest {
     #[serde(rename = "ExpectedSourceBucketOwner")]
     pub expected_source_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct UploadPartCopyRequestDeserializer;
 impl UploadPartCopyRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12720,8 +13372,10 @@ pub struct UploadPartOutput {
     #[serde(rename = "RequestCharged")]
     pub request_charged: Option<RequestCharged>,
 }
+#[allow(dead_code)]
 pub struct UploadPartOutputDeserializer;
 impl UploadPartOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12787,8 +13441,10 @@ pub struct UploadPartRequest {
     #[serde(rename = "ExpectedBucketOwner")]
     pub expected_bucket_owner: Option<AccountId>,
 }
+#[allow(dead_code)]
 pub struct UploadPartRequestDeserializer;
 impl UploadPartRequestDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12849,8 +13505,10 @@ pub struct VersioningConfiguration {
     #[serde(rename = "Status")]
     pub status: Option<BucketVersioningStatus>,
 }
+#[allow(dead_code)]
 pub struct VersioningConfigurationDeserializer;
 impl VersioningConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -12885,8 +13543,10 @@ pub struct WebsiteConfiguration {
     #[serde(rename = "RoutingRules")]
     pub routing_rules: Option<RoutingRules>,
 }
+#[allow(dead_code)]
 pub struct WebsiteConfigurationDeserializer;
 impl WebsiteConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
     pub fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
