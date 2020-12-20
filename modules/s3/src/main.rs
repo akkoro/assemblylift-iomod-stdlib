@@ -289,10 +289,14 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match CompleteMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: CompleteMultipartUploadOutput = match CompleteMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.location = body.location;
+                        output.bucket = body.bucket;
+                        output.key = body.key;
+                        output.e_tag = body.e_tag;
 
                         serde_json::to_vec(&Result::<CompleteMultipartUploadOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -511,10 +515,11 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match CopyObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: CopyObjectOutput = match CopyObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.copy_object_result = body.copy_object_result;
 
                         serde_json::to_vec(&Result::<CopyObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -785,10 +790,13 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: CreateMultipartUploadOutput = match CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.bucket = body.bucket;
+                        output.key = body.key;
+                        output.upload_id = body.upload_id;
 
                         serde_json::to_vec(&Result::<CreateMultipartUploadOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -1841,10 +1849,12 @@ fn __delete_objects(input: DeleteObjectsRequest) -> BoxFuture<'static, Vec<u8>> 
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match DeleteObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: DeleteObjectsOutput = match DeleteObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.deleted = body.deleted;
+                        output.errors = body.errors;
 
                         serde_json::to_vec(&Result::<DeleteObjectsOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -1975,10 +1985,11 @@ fn __get_bucket_accelerate_configuration(input: GetBucketAccelerateConfiguration
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketAccelerateConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketAccelerateConfigurationOutput = match GetBucketAccelerateConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.status = body.status;
 
                         serde_json::to_vec(&Result::<GetBucketAccelerateConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2047,10 +2058,12 @@ fn __get_bucket_acl(input: GetBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketAclOutput = match GetBucketAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.owner = body.owner;
+                        output.grants = body.grants;
 
                         serde_json::to_vec(&Result::<GetBucketAclOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2120,10 +2133,11 @@ fn __get_bucket_analytics_configuration(input: GetBucketAnalyticsConfigurationRe
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketAnalyticsConfigurationOutput = match GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.analytics_configuration = body.analytics_configuration;
 
                         serde_json::to_vec(&Result::<GetBucketAnalyticsConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2192,10 +2206,11 @@ fn __get_bucket_cors(input: GetBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketCorsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketCorsOutput = match GetBucketCorsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.cors_rules = body.cors_rules;
 
                         serde_json::to_vec(&Result::<GetBucketCorsOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2264,10 +2279,11 @@ fn __get_bucket_encryption(input: GetBucketEncryptionRequest) -> BoxFuture<'stat
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketEncryptionOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketEncryptionOutput = match GetBucketEncryptionOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.server_side_encryption_configuration = body.server_side_encryption_configuration;
 
                         serde_json::to_vec(&Result::<GetBucketEncryptionOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2334,10 +2350,11 @@ fn __get_bucket_intelligent_tiering_configuration(input: GetBucketIntelligentTie
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketIntelligentTieringConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketIntelligentTieringConfigurationOutput = match GetBucketIntelligentTieringConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.intelligent_tiering_configuration = body.intelligent_tiering_configuration;
 
                         serde_json::to_vec(&Result::<GetBucketIntelligentTieringConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2407,10 +2424,11 @@ fn __get_bucket_inventory_configuration(input: GetBucketInventoryConfigurationRe
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketInventoryConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketInventoryConfigurationOutput = match GetBucketInventoryConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.inventory_configuration = body.inventory_configuration;
 
                         serde_json::to_vec(&Result::<GetBucketInventoryConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2479,10 +2497,11 @@ fn __get_bucket_lifecycle(input: GetBucketLifecycleRequest) -> BoxFuture<'static
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketLifecycleOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketLifecycleOutput = match GetBucketLifecycleOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.rules = body.rules;
 
                         serde_json::to_vec(&Result::<GetBucketLifecycleOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2551,10 +2570,11 @@ fn __get_bucket_lifecycle_configuration(input: GetBucketLifecycleConfigurationRe
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketLifecycleConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketLifecycleConfigurationOutput = match GetBucketLifecycleConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.rules = body.rules;
 
                         serde_json::to_vec(&Result::<GetBucketLifecycleConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2623,10 +2643,11 @@ fn __get_bucket_location(input: GetBucketLocationRequest) -> BoxFuture<'static, 
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketLocationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketLocationOutput = match GetBucketLocationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.location_constraint = body.location_constraint;
 
                         serde_json::to_vec(&Result::<GetBucketLocationOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2695,10 +2716,11 @@ fn __get_bucket_logging(input: GetBucketLoggingRequest) -> BoxFuture<'static, Ve
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketLoggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketLoggingOutput = match GetBucketLoggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.logging_enabled = body.logging_enabled;
 
                         serde_json::to_vec(&Result::<GetBucketLoggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2768,10 +2790,11 @@ fn __get_bucket_metrics_configuration(input: GetBucketMetricsConfigurationReques
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketMetricsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketMetricsConfigurationOutput = match GetBucketMetricsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.metrics_configuration = body.metrics_configuration;
 
                         serde_json::to_vec(&Result::<GetBucketMetricsConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2840,10 +2863,13 @@ fn __get_bucket_notification(input: GetBucketNotificationConfigurationRequest) -
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match NotificationConfigurationDeprecatedDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: NotificationConfigurationDeprecated = match NotificationConfigurationDeprecatedDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.topic_configuration = body.topic_configuration;
+                        output.queue_configuration = body.queue_configuration;
+                        output.cloud_function_configuration = body.cloud_function_configuration;
 
                         serde_json::to_vec(&Result::<NotificationConfigurationDeprecated, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2912,10 +2938,13 @@ fn __get_bucket_notification_configuration(input: GetBucketNotificationConfigura
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match NotificationConfigurationDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: NotificationConfiguration = match NotificationConfigurationDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.topic_configurations = body.topic_configurations;
+                        output.queue_configurations = body.queue_configurations;
+                        output.lambda_function_configurations = body.lambda_function_configurations;
 
                         serde_json::to_vec(&Result::<NotificationConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2984,10 +3013,11 @@ fn __get_bucket_ownership_controls(input: GetBucketOwnershipControlsRequest) -> 
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketOwnershipControlsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketOwnershipControlsOutput = match GetBucketOwnershipControlsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.ownership_controls = body.ownership_controls;
 
                         serde_json::to_vec(&Result::<GetBucketOwnershipControlsOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3056,10 +3086,11 @@ fn __get_bucket_policy(input: GetBucketPolicyRequest) -> BoxFuture<'static, Vec<
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketPolicyOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketPolicyOutput = match GetBucketPolicyOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.policy = body.policy;
 
                         serde_json::to_vec(&Result::<GetBucketPolicyOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3128,10 +3159,11 @@ fn __get_bucket_policy_status(input: GetBucketPolicyStatusRequest) -> BoxFuture<
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketPolicyStatusOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketPolicyStatusOutput = match GetBucketPolicyStatusOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.policy_status = body.policy_status;
 
                         serde_json::to_vec(&Result::<GetBucketPolicyStatusOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3200,10 +3232,11 @@ fn __get_bucket_replication(input: GetBucketReplicationRequest) -> BoxFuture<'st
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketReplicationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketReplicationOutput = match GetBucketReplicationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.replication_configuration = body.replication_configuration;
 
                         serde_json::to_vec(&Result::<GetBucketReplicationOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3272,10 +3305,11 @@ fn __get_bucket_request_payment(input: GetBucketRequestPaymentRequest) -> BoxFut
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketRequestPaymentOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketRequestPaymentOutput = match GetBucketRequestPaymentOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.payer = body.payer;
 
                         serde_json::to_vec(&Result::<GetBucketRequestPaymentOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3344,10 +3378,11 @@ fn __get_bucket_tagging(input: GetBucketTaggingRequest) -> BoxFuture<'static, Ve
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketTaggingOutput = match GetBucketTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.tag_set = body.tag_set;
 
                         serde_json::to_vec(&Result::<GetBucketTaggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3416,10 +3451,12 @@ fn __get_bucket_versioning(input: GetBucketVersioningRequest) -> BoxFuture<'stat
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketVersioningOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketVersioningOutput = match GetBucketVersioningOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.status = body.status;
+                        output.mfa_delete = body.mfa_delete;
 
                         serde_json::to_vec(&Result::<GetBucketVersioningOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3488,10 +3525,14 @@ fn __get_bucket_website(input: GetBucketWebsiteRequest) -> BoxFuture<'static, Ve
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetBucketWebsiteOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetBucketWebsiteOutput = match GetBucketWebsiteOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.redirect_all_requests_to = body.redirect_all_requests_to;
+                        output.index_document = body.index_document;
+                        output.error_document = body.error_document;
+                        output.routing_rules = body.routing_rules;
 
                         serde_json::to_vec(&Result::<GetBucketWebsiteOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3813,10 +3854,12 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetObjectAclOutput = match GetObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.owner = body.owner;
+                        output.grants = body.grants;
 
                         serde_json::to_vec(&Result::<GetObjectAclOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3895,10 +3938,11 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetObjectLegalHoldOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetObjectLegalHoldOutput = match GetObjectLegalHoldOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.legal_hold = body.legal_hold;
 
                         serde_json::to_vec(&Result::<GetObjectLegalHoldOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3967,10 +4011,11 @@ fn __get_object_lock_configuration(input: GetObjectLockConfigurationRequest) -> 
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetObjectLockConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetObjectLockConfigurationOutput = match GetObjectLockConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.object_lock_configuration = body.object_lock_configuration;
 
                         serde_json::to_vec(&Result::<GetObjectLockConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -4049,10 +4094,11 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetObjectRetentionOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetObjectRetentionOutput = match GetObjectRetentionOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.retention = body.retention;
 
                         serde_json::to_vec(&Result::<GetObjectRetentionOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -4132,10 +4178,11 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetObjectTaggingOutput = match GetObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.tag_set = body.tag_set;
 
                         serde_json::to_vec(&Result::<GetObjectTaggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -4279,10 +4326,11 @@ fn __get_public_access_block(input: GetPublicAccessBlockRequest) -> BoxFuture<'s
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetPublicAccessBlockOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: GetPublicAccessBlockOutput = match GetPublicAccessBlockOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.public_access_block_configuration = body.public_access_block_configuration;
 
                         serde_json::to_vec(&Result::<GetPublicAccessBlockOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -4631,10 +4679,14 @@ fn __list_bucket_analytics_configurations(input: ListBucketAnalyticsConfiguratio
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: ListBucketAnalyticsConfigurationsOutput = match ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.is_truncated = body.is_truncated;
+                        output.continuation_token = body.continuation_token;
+                        output.next_continuation_token = body.next_continuation_token;
+                        output.analytics_configuration_list = body.analytics_configuration_list;
 
                         serde_json::to_vec(&Result::<ListBucketAnalyticsConfigurationsOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -4703,10 +4755,14 @@ fn __list_bucket_intelligent_tiering_configurations(input: ListBucketIntelligent
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match ListBucketIntelligentTieringConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: ListBucketIntelligentTieringConfigurationsOutput = match ListBucketIntelligentTieringConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.is_truncated = body.is_truncated;
+                        output.continuation_token = body.continuation_token;
+                        output.next_continuation_token = body.next_continuation_token;
+                        output.intelligent_tiering_configuration_list = body.intelligent_tiering_configuration_list;
 
                         serde_json::to_vec(&Result::<ListBucketIntelligentTieringConfigurationsOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -4778,10 +4834,14 @@ fn __list_bucket_inventory_configurations(input: ListBucketInventoryConfiguratio
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match ListBucketInventoryConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: ListBucketInventoryConfigurationsOutput = match ListBucketInventoryConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.continuation_token = body.continuation_token;
+                        output.inventory_configuration_list = body.inventory_configuration_list;
+                        output.is_truncated = body.is_truncated;
+                        output.next_continuation_token = body.next_continuation_token;
 
                         serde_json::to_vec(&Result::<ListBucketInventoryConfigurationsOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -4853,10 +4913,14 @@ fn __list_bucket_metrics_configurations(input: ListBucketMetricsConfigurationsRe
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match ListBucketMetricsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: ListBucketMetricsConfigurationsOutput = match ListBucketMetricsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.is_truncated = body.is_truncated;
+                        output.continuation_token = body.continuation_token;
+                        output.next_continuation_token = body.next_continuation_token;
+                        output.metrics_configuration_list = body.metrics_configuration_list;
 
                         serde_json::to_vec(&Result::<ListBucketMetricsConfigurationsOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -4918,10 +4982,12 @@ fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match ListBucketsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: ListBucketsOutput = match ListBucketsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.buckets = body.buckets;
+                        output.owner = body.owner;
 
                         serde_json::to_vec(&Result::<ListBucketsOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -5008,10 +5074,22 @@ fn __list_multipart_uploads(input: ListMultipartUploadsRequest) -> BoxFuture<'st
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match ListMultipartUploadsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: ListMultipartUploadsOutput = match ListMultipartUploadsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.bucket = body.bucket;
+                        output.key_marker = body.key_marker;
+                        output.upload_id_marker = body.upload_id_marker;
+                        output.next_key_marker = body.next_key_marker;
+                        output.prefix = body.prefix;
+                        output.delimiter = body.delimiter;
+                        output.next_upload_id_marker = body.next_upload_id_marker;
+                        output.max_uploads = body.max_uploads;
+                        output.is_truncated = body.is_truncated;
+                        output.uploads = body.uploads;
+                        output.common_prefixes = body.common_prefixes;
+                        output.encoding_type = body.encoding_type;
 
                         serde_json::to_vec(&Result::<ListMultipartUploadsOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -5098,10 +5176,23 @@ fn __list_object_versions(input: ListObjectVersionsRequest) -> BoxFuture<'static
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match ListObjectVersionsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: ListObjectVersionsOutput = match ListObjectVersionsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.is_truncated = body.is_truncated;
+                        output.key_marker = body.key_marker;
+                        output.version_id_marker = body.version_id_marker;
+                        output.next_key_marker = body.next_key_marker;
+                        output.next_version_id_marker = body.next_version_id_marker;
+                        output.versions = body.versions;
+                        output.delete_markers = body.delete_markers;
+                        output.name = body.name;
+                        output.prefix = body.prefix;
+                        output.delimiter = body.delimiter;
+                        output.max_keys = body.max_keys;
+                        output.common_prefixes = body.common_prefixes;
+                        output.encoding_type = body.encoding_type;
 
                         serde_json::to_vec(&Result::<ListObjectVersionsOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -5188,10 +5279,20 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match ListObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: ListObjectsOutput = match ListObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.is_truncated = body.is_truncated;
+                        output.marker = body.marker;
+                        output.next_marker = body.next_marker;
+                        output.contents = body.contents;
+                        output.name = body.name;
+                        output.prefix = body.prefix;
+                        output.delimiter = body.delimiter;
+                        output.max_keys = body.max_keys;
+                        output.common_prefixes = body.common_prefixes;
+                        output.encoding_type = body.encoding_type;
 
                         serde_json::to_vec(&Result::<ListObjectsOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -5284,10 +5385,22 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match ListObjectsV2OutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: ListObjectsV2Output = match ListObjectsV2OutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.is_truncated = body.is_truncated;
+                        output.contents = body.contents;
+                        output.name = body.name;
+                        output.prefix = body.prefix;
+                        output.delimiter = body.delimiter;
+                        output.max_keys = body.max_keys;
+                        output.common_prefixes = body.common_prefixes;
+                        output.encoding_type = body.encoding_type;
+                        output.key_count = body.key_count;
+                        output.continuation_token = body.continuation_token;
+                        output.next_continuation_token = body.next_continuation_token;
+                        output.start_after = body.start_after;
 
                         serde_json::to_vec(&Result::<ListObjectsV2Output, guest::Error>::Ok(output)).unwrap()
                     }
@@ -5382,10 +5495,21 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match ListPartsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: ListPartsOutput = match ListPartsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.bucket = body.bucket;
+                        output.key = body.key;
+                        output.upload_id = body.upload_id;
+                        output.part_number_marker = body.part_number_marker;
+                        output.next_part_number_marker = body.next_part_number_marker;
+                        output.max_parts = body.max_parts;
+                        output.is_truncated = body.is_truncated;
+                        output.parts = body.parts;
+                        output.initiator = body.initiator;
+                        output.owner = body.owner;
+                        output.storage_class = body.storage_class;
 
                         serde_json::to_vec(&Result::<ListPartsOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -7563,10 +7687,11 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match SelectObjectContentOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: SelectObjectContentOutput = match SelectObjectContentOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.payload = body.payload;
 
                         serde_json::to_vec(&Result::<SelectObjectContentOutput, guest::Error>::Ok(output)).unwrap()
                     }
@@ -7818,10 +7943,11 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
                         let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match UploadPartCopyOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                        let body: UploadPartCopyOutput = match UploadPartCopyOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+                        output.copy_part_result = body.copy_part_result;
 
                         serde_json::to_vec(&Result::<UploadPartCopyOutput, guest::Error>::Ok(output)).unwrap()
                     }
