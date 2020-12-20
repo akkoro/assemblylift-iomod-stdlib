@@ -1,0 +1,38 @@
+[package]
+name = "assemblylift-iomod-s3"
+version = "0.1.0"
+description = "AssemblyLift S3 IOmod (host)"
+authors = ["Akkoro and the AssemblyLift contributors <assemblylift@akkoro.io>"]
+edition = "2018"
+license-file = "../LICENSE.md"
+repository = "https://github.com/akkoro/assemblylift-iomod-stdlib"
+readme = "README.md"
+
+[[bin]]
+name = "akkoro-aws-s3"
+path = "src/main.rs"
+
+[dependencies]
+guest = { package = "assemblylift-iomod-s3-guest", version = "0.1.0", path = "guest" }
+
+xml-rs = "0.8"
+http = "0.2.1"
+hyper = "0.13.9"
+hyper-tls = "0.4.3"
+tokio = { version = "0.2.22", features = ["full"] }
+tokio-util = { version = "0.3.1", features = ["compat"] }
+futures = "0.3.5"
+futures-util = "0.3.5"
+
+rusoto_signature = "0.45.0"
+
+capnp = "0.13.3"
+capnp-rpc = "0.13.1"
+
+assemblylift_core_iomod = { version = "0.2.1", package = "assemblylift-core-iomod" }
+
+once_cell = "1.4.1"
+serde = "1.0.116"
+serde_json = "1.0.58"
+serde_xml_rs = { version = "0.4.0", package = "serde-xml-rs" }
+paste = "1.0.1"
