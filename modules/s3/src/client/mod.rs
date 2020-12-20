@@ -2,7 +2,7 @@ use std::fmt;
 
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use hyper;
-use hyper::{Request, Response};
+use hyper::Response;
 use hyper_tls::HttpsConnector;
 use rusoto_signature::credential::AwsCredentials;
 use rusoto_signature::SignedRequest;
