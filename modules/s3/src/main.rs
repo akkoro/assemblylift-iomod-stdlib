@@ -177,7 +177,6 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -186,6 +185,8 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<AbortMultipartUploadOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -253,19 +254,10 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: CompleteMultipartUploadOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match CompleteMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.expiration = match response.headers().get("x-amz-expiration") {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
@@ -290,6 +282,18 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
+                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
+                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
+                        output = match CompleteMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                            Ok(response) => response,
+                            _ => panic!("Unhandled XML parse error"),
+                        };
+
                         serde_json::to_vec(&Result::<CompleteMultipartUploadOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -456,19 +460,10 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: CopyObjectOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match CopyObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.expiration = match response.headers().get("x-amz-expiration") {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
@@ -509,6 +504,18 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
+                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
+                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
+                        output = match CopyObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                            Ok(response) => response,
+                            _ => panic!("Unhandled XML parse error"),
+                        };
+
                         serde_json::to_vec(&Result::<CopyObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -586,7 +593,6 @@ fn __create_bucket(input: CreateBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -595,6 +601,8 @@ fn __create_bucket(input: CreateBucketRequest) -> BoxFuture<'static, Vec<u8>> {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<CreateBucketOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -730,19 +738,10 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: CreateMultipartUploadOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.abort_date = match response.headers().get("x-amz-abort-date") {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
@@ -779,6 +778,18 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
+                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
+                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
+                        output = match CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                            Ok(response) => response,
+                            _ => panic!("Unhandled XML parse error"),
+                        };
+
                         serde_json::to_vec(&Result::<CreateMultipartUploadOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -835,11 +846,12 @@ fn __delete_bucket(input: DeleteBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -897,11 +909,12 @@ fn __delete_bucket_analytics_configuration(input: DeleteBucketAnalyticsConfigura
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -958,11 +971,12 @@ fn __delete_bucket_cors(input: DeleteBucketCorsRequest) -> BoxFuture<'static, Ve
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1019,11 +1033,12 @@ fn __delete_bucket_encryption(input: DeleteBucketEncryptionRequest) -> BoxFuture
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1078,11 +1093,12 @@ fn __delete_bucket_intelligent_tiering_configuration(input: DeleteBucketIntellig
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1140,11 +1156,12 @@ fn __delete_bucket_inventory_configuration(input: DeleteBucketInventoryConfigura
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1201,11 +1218,12 @@ fn __delete_bucket_lifecycle(input: DeleteBucketLifecycleRequest) -> BoxFuture<'
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1263,11 +1281,12 @@ fn __delete_bucket_metrics_configuration(input: DeleteBucketMetricsConfiguration
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1324,11 +1343,12 @@ fn __delete_bucket_ownership_controls(input: DeleteBucketOwnershipControlsReques
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1385,11 +1405,12 @@ fn __delete_bucket_policy(input: DeleteBucketPolicyRequest) -> BoxFuture<'static
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1446,11 +1467,12 @@ fn __delete_bucket_replication(input: DeleteBucketReplicationRequest) -> BoxFutu
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1507,11 +1529,12 @@ fn __delete_bucket_tagging(input: DeleteBucketTaggingRequest) -> BoxFuture<'stat
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1568,11 +1591,12 @@ fn __delete_bucket_website(input: DeleteBucketWebsiteRequest) -> BoxFuture<'stat
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1645,7 +1669,6 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -1662,6 +1685,8 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<DeleteObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1725,7 +1750,6 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -1734,6 +1758,8 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<DeleteObjectTaggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1800,11 +1826,17 @@ fn __delete_objects(input: DeleteObjectsRequest) -> BoxFuture<'static, Vec<u8>> 
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: DeleteObjectsOutput = Default::default();
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -1813,10 +1845,7 @@ fn __delete_objects(input: DeleteObjectsRequest) -> BoxFuture<'static, Vec<u8>> 
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.request_charged = match response.headers().get("x-amz-request-charged") {
-                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
-                            None => None,
-                        };
+
                         serde_json::to_vec(&Result::<DeleteObjectsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1873,11 +1902,12 @@ fn __delete_public_access_block(input: DeletePublicAccessBlockRequest) -> BoxFut
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1934,11 +1964,13 @@ fn __get_bucket_accelerate_configuration(input: GetBucketAccelerateConfiguration
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketAccelerateConfigurationOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -1947,6 +1979,7 @@ fn __get_bucket_accelerate_configuration(input: GetBucketAccelerateConfiguration
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketAccelerateConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2003,11 +2036,13 @@ fn __get_bucket_acl(input: GetBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketAclOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2016,6 +2051,7 @@ fn __get_bucket_acl(input: GetBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketAclOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2073,11 +2109,13 @@ fn __get_bucket_analytics_configuration(input: GetBucketAnalyticsConfigurationRe
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketAnalyticsConfigurationOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2086,6 +2124,7 @@ fn __get_bucket_analytics_configuration(input: GetBucketAnalyticsConfigurationRe
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketAnalyticsConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2142,11 +2181,13 @@ fn __get_bucket_cors(input: GetBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketCorsOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2155,6 +2196,7 @@ fn __get_bucket_cors(input: GetBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketCorsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2211,11 +2253,13 @@ fn __get_bucket_encryption(input: GetBucketEncryptionRequest) -> BoxFuture<'stat
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketEncryptionOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2224,6 +2268,7 @@ fn __get_bucket_encryption(input: GetBucketEncryptionRequest) -> BoxFuture<'stat
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketEncryptionOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2278,11 +2323,13 @@ fn __get_bucket_intelligent_tiering_configuration(input: GetBucketIntelligentTie
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketIntelligentTieringConfigurationOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2291,6 +2338,7 @@ fn __get_bucket_intelligent_tiering_configuration(input: GetBucketIntelligentTie
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketIntelligentTieringConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2348,11 +2396,13 @@ fn __get_bucket_inventory_configuration(input: GetBucketInventoryConfigurationRe
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketInventoryConfigurationOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2361,6 +2411,7 @@ fn __get_bucket_inventory_configuration(input: GetBucketInventoryConfigurationRe
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketInventoryConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2417,11 +2468,13 @@ fn __get_bucket_lifecycle(input: GetBucketLifecycleRequest) -> BoxFuture<'static
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketLifecycleOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2430,6 +2483,7 @@ fn __get_bucket_lifecycle(input: GetBucketLifecycleRequest) -> BoxFuture<'static
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketLifecycleOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2486,11 +2540,13 @@ fn __get_bucket_lifecycle_configuration(input: GetBucketLifecycleConfigurationRe
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketLifecycleConfigurationOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2499,6 +2555,7 @@ fn __get_bucket_lifecycle_configuration(input: GetBucketLifecycleConfigurationRe
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketLifecycleConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2555,11 +2612,13 @@ fn __get_bucket_location(input: GetBucketLocationRequest) -> BoxFuture<'static, 
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketLocationOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2568,6 +2627,7 @@ fn __get_bucket_location(input: GetBucketLocationRequest) -> BoxFuture<'static, 
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketLocationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2624,11 +2684,13 @@ fn __get_bucket_logging(input: GetBucketLoggingRequest) -> BoxFuture<'static, Ve
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketLoggingOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2637,6 +2699,7 @@ fn __get_bucket_logging(input: GetBucketLoggingRequest) -> BoxFuture<'static, Ve
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketLoggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2694,11 +2757,13 @@ fn __get_bucket_metrics_configuration(input: GetBucketMetricsConfigurationReques
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketMetricsConfigurationOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2707,6 +2772,7 @@ fn __get_bucket_metrics_configuration(input: GetBucketMetricsConfigurationReques
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketMetricsConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2763,11 +2829,13 @@ fn __get_bucket_notification(input: GetBucketNotificationConfigurationRequest) -
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: NotificationConfigurationDeprecated = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2776,6 +2844,7 @@ fn __get_bucket_notification(input: GetBucketNotificationConfigurationRequest) -
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<NotificationConfigurationDeprecated, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2832,11 +2901,13 @@ fn __get_bucket_notification_configuration(input: GetBucketNotificationConfigura
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: NotificationConfiguration = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2845,6 +2916,7 @@ fn __get_bucket_notification_configuration(input: GetBucketNotificationConfigura
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<NotificationConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2901,11 +2973,13 @@ fn __get_bucket_ownership_controls(input: GetBucketOwnershipControlsRequest) -> 
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketOwnershipControlsOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2914,6 +2988,7 @@ fn __get_bucket_ownership_controls(input: GetBucketOwnershipControlsRequest) -> 
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketOwnershipControlsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2970,11 +3045,13 @@ fn __get_bucket_policy(input: GetBucketPolicyRequest) -> BoxFuture<'static, Vec<
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketPolicyOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -2983,6 +3060,7 @@ fn __get_bucket_policy(input: GetBucketPolicyRequest) -> BoxFuture<'static, Vec<
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketPolicyOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3039,11 +3117,13 @@ fn __get_bucket_policy_status(input: GetBucketPolicyStatusRequest) -> BoxFuture<
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketPolicyStatusOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -3052,6 +3132,7 @@ fn __get_bucket_policy_status(input: GetBucketPolicyStatusRequest) -> BoxFuture<
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketPolicyStatusOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3108,11 +3189,13 @@ fn __get_bucket_replication(input: GetBucketReplicationRequest) -> BoxFuture<'st
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketReplicationOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -3121,6 +3204,7 @@ fn __get_bucket_replication(input: GetBucketReplicationRequest) -> BoxFuture<'st
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketReplicationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3177,11 +3261,13 @@ fn __get_bucket_request_payment(input: GetBucketRequestPaymentRequest) -> BoxFut
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketRequestPaymentOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -3190,6 +3276,7 @@ fn __get_bucket_request_payment(input: GetBucketRequestPaymentRequest) -> BoxFut
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketRequestPaymentOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3246,11 +3333,13 @@ fn __get_bucket_tagging(input: GetBucketTaggingRequest) -> BoxFuture<'static, Ve
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketTaggingOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -3259,6 +3348,7 @@ fn __get_bucket_tagging(input: GetBucketTaggingRequest) -> BoxFuture<'static, Ve
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketTaggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3315,11 +3405,13 @@ fn __get_bucket_versioning(input: GetBucketVersioningRequest) -> BoxFuture<'stat
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketVersioningOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -3328,6 +3420,7 @@ fn __get_bucket_versioning(input: GetBucketVersioningRequest) -> BoxFuture<'stat
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketVersioningOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3384,11 +3477,13 @@ fn __get_bucket_website(input: GetBucketWebsiteRequest) -> BoxFuture<'static, Ve
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetBucketWebsiteOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -3397,6 +3492,7 @@ fn __get_bucket_website(input: GetBucketWebsiteRequest) -> BoxFuture<'static, Ve
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetBucketWebsiteOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3508,19 +3604,10 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetObjectOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.delete_marker = match response.headers().get("x-amz-delete-marker") {
                             Some(v) => Some(bool::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
@@ -3641,6 +3728,10 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        output.body = Some(Vec::from(body));
+
                         serde_json::to_vec(&Result::<GetObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3707,11 +3798,17 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetObjectAclOutput = Default::default();
+                        output.request_charged = match response.headers().get("x-amz-request-charged") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -3720,10 +3817,7 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.request_charged = match response.headers().get("x-amz-request-charged") {
-                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
-                            None => None,
-                        };
+
                         serde_json::to_vec(&Result::<GetObjectAclOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3790,11 +3884,13 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetObjectLegalHoldOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -3803,6 +3899,7 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetObjectLegalHoldOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3859,11 +3956,13 @@ fn __get_object_lock_configuration(input: GetObjectLockConfigurationRequest) -> 
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetObjectLockConfigurationOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -3872,6 +3971,7 @@ fn __get_object_lock_configuration(input: GetObjectLockConfigurationRequest) -> 
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetObjectLockConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3938,11 +4038,13 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetObjectRetentionOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -3951,6 +4053,7 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetObjectRetentionOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4014,11 +4117,17 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetObjectTaggingOutput = Default::default();
+                        output.version_id = match response.headers().get("x-amz-version-id") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -4027,10 +4136,7 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
-                        output.version_id = match response.headers().get("x-amz-version-id") {
-                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
-                            None => None,
-                        };
+
                         serde_json::to_vec(&Result::<GetObjectTaggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4094,23 +4200,18 @@ fn __get_object_torrent(input: GetObjectTorrentRequest) -> BoxFuture<'static, Ve
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetObjectTorrentOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match GetObjectTorrentOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.request_charged = match response.headers().get("x-amz-request-charged") {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        output.body = Some(Vec::from(body));
+
                         serde_json::to_vec(&Result::<GetObjectTorrentOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4167,11 +4268,13 @@ fn __get_public_access_block(input: GetPublicAccessBlockRequest) -> BoxFuture<'s
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: GetPublicAccessBlockOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -4180,6 +4283,7 @@ fn __get_public_access_block(input: GetPublicAccessBlockRequest) -> BoxFuture<'s
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<GetPublicAccessBlockOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4236,11 +4340,12 @@ fn __head_bucket(input: HeadBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4334,7 +4439,6 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -4455,6 +4559,8 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<HeadObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4514,11 +4620,13 @@ fn __list_bucket_analytics_configurations(input: ListBucketAnalyticsConfiguratio
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: ListBucketAnalyticsConfigurationsOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -4527,6 +4635,7 @@ fn __list_bucket_analytics_configurations(input: ListBucketAnalyticsConfiguratio
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<ListBucketAnalyticsConfigurationsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4583,11 +4692,13 @@ fn __list_bucket_intelligent_tiering_configurations(input: ListBucketIntelligent
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: ListBucketIntelligentTieringConfigurationsOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -4596,6 +4707,7 @@ fn __list_bucket_intelligent_tiering_configurations(input: ListBucketIntelligent
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<ListBucketIntelligentTieringConfigurationsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4655,11 +4767,13 @@ fn __list_bucket_inventory_configurations(input: ListBucketInventoryConfiguratio
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: ListBucketInventoryConfigurationsOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -4668,6 +4782,7 @@ fn __list_bucket_inventory_configurations(input: ListBucketInventoryConfiguratio
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<ListBucketInventoryConfigurationsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4727,11 +4842,13 @@ fn __list_bucket_metrics_configurations(input: ListBucketMetricsConfigurationsRe
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: ListBucketMetricsConfigurationsOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -4740,6 +4857,7 @@ fn __list_bucket_metrics_configurations(input: ListBucketMetricsConfigurationsRe
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<ListBucketMetricsConfigurationsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4789,11 +4907,13 @@ fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: ListBucketsOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -4802,6 +4922,7 @@ fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<ListBucketsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4876,11 +4997,13 @@ fn __list_multipart_uploads(input: ListMultipartUploadsRequest) -> BoxFuture<'st
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: ListMultipartUploadsOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -4889,6 +5012,7 @@ fn __list_multipart_uploads(input: ListMultipartUploadsRequest) -> BoxFuture<'st
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<ListMultipartUploadsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -4963,11 +5087,13 @@ fn __list_object_versions(input: ListObjectVersionsRequest) -> BoxFuture<'static
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: ListObjectVersionsOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -4976,6 +5102,7 @@ fn __list_object_versions(input: ListObjectVersionsRequest) -> BoxFuture<'static
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<ListObjectVersionsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5050,11 +5177,13 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: ListObjectsOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -5063,6 +5192,7 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<ListObjectsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5143,11 +5273,13 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: ListObjectsV2Output = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -5156,6 +5288,7 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<ListObjectsV2Output, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5226,19 +5359,10 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: ListPartsOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match ListPartsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.abort_date = match response.headers().get("x-amz-abort-date") {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
@@ -5251,6 +5375,18 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
+                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
+                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
+                        output = match ListPartsOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                            Ok(response) => response,
+                            _ => panic!("Unhandled XML parse error"),
+                        };
+
                         serde_json::to_vec(&Result::<ListPartsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5308,11 +5444,12 @@ fn __put_bucket_accelerate_configuration(input: PutBucketAccelerateConfiguration
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5393,11 +5530,12 @@ fn __put_bucket_acl(input: PutBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5456,11 +5594,12 @@ fn __put_bucket_analytics_configuration(input: PutBucketAnalyticsConfigurationRe
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5521,11 +5660,12 @@ fn __put_bucket_cors(input: PutBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5586,11 +5726,12 @@ fn __put_bucket_encryption(input: PutBucketEncryptionRequest) -> BoxFuture<'stat
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5646,11 +5787,12 @@ fn __put_bucket_intelligent_tiering_configuration(input: PutBucketIntelligentTie
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5709,11 +5851,12 @@ fn __put_bucket_inventory_configuration(input: PutBucketInventoryConfigurationRe
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5776,11 +5919,12 @@ fn __put_bucket_lifecycle(input: PutBucketLifecycleRequest) -> BoxFuture<'static
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5840,11 +5984,12 @@ fn __put_bucket_lifecycle_configuration(input: PutBucketLifecycleConfigurationRe
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5905,11 +6050,12 @@ fn __put_bucket_logging(input: PutBucketLoggingRequest) -> BoxFuture<'static, Ve
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -5968,11 +6114,12 @@ fn __put_bucket_metrics_configuration(input: PutBucketMetricsConfigurationReques
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6033,11 +6180,12 @@ fn __put_bucket_notification(input: PutBucketNotificationRequest) -> BoxFuture<'
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6095,11 +6243,12 @@ fn __put_bucket_notification_configuration(input: PutBucketNotificationConfigura
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6160,11 +6309,12 @@ fn __put_bucket_ownership_controls(input: PutBucketOwnershipControlsRequest) -> 
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6228,11 +6378,12 @@ fn __put_bucket_policy(input: PutBucketPolicyRequest) -> BoxFuture<'static, Vec<
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6296,11 +6447,12 @@ fn __put_bucket_replication(input: PutBucketReplicationRequest) -> BoxFuture<'st
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6361,11 +6513,12 @@ fn __put_bucket_request_payment(input: PutBucketRequestPaymentRequest) -> BoxFut
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6426,11 +6579,12 @@ fn __put_bucket_tagging(input: PutBucketTaggingRequest) -> BoxFuture<'static, Ve
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6494,11 +6648,12 @@ fn __put_bucket_versioning(input: PutBucketVersioningRequest) -> BoxFuture<'stat
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6559,11 +6714,12 @@ fn __put_bucket_website(input: PutBucketWebsiteRequest) -> BoxFuture<'static, Ve
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6700,7 +6856,6 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -6745,6 +6900,8 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<PutObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6835,7 +6992,6 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -6844,6 +7000,8 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<PutObjectAclOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6916,7 +7074,6 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -6925,6 +7082,8 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<PutObjectLegalHoldOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -6993,7 +7152,6 @@ fn __put_object_lock_configuration(input: PutObjectLockConfigurationRequest) -> 
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -7002,6 +7160,8 @@ fn __put_object_lock_configuration(input: PutObjectLockConfigurationRequest) -> 
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<PutObjectLockConfigurationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -7077,7 +7237,6 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -7086,6 +7245,8 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<PutObjectRetentionOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -7153,7 +7314,6 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -7162,6 +7322,8 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<PutObjectTaggingOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -7222,11 +7384,12 @@ fn __put_public_access_block(input: PutPublicAccessBlockRequest) -> BoxFuture<'s
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -7296,7 +7459,6 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -7309,6 +7471,8 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<RestoreObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -7388,11 +7552,13 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: SelectObjectContentOutput = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
                         let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
                         let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
                         let _start_document = stack.next();
@@ -7401,6 +7567,7 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
                             Ok(response) => response,
                             _ => panic!("Unhandled XML parse error"),
                         };
+
                         serde_json::to_vec(&Result::<SelectObjectContentOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -7476,7 +7643,6 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
@@ -7509,6 +7675,8 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+
                         serde_json::to_vec(&Result::<UploadPartOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -7611,19 +7779,10 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-                let body = response.body();
 
                 match status {
                     StatusCode::OK => {
                         let mut output: UploadPartCopyOutput = Default::default();
-                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
-                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
-                        output = match UploadPartCopyOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
-                            Ok(response) => response,
-                            _ => panic!("Unhandled XML parse error"),
-                        };
                         output.copy_source_version_id = match response.headers().get("x-amz-copy-source-version-id") {
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
@@ -7652,6 +7811,18 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
                             Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
                             None => None,
                         };
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
+                        let reader = EventReader::new_with_config(body.as_ref(), ParserConfig::new().trim_whitespace(false));
+                        let mut stack = xml_util::util::XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = xml_util::util::peek_at_name(&mut stack).unwrap();
+                        output = match UploadPartCopyOutputDeserializer::deserialize(&actual_tag_name, &mut stack) {
+                            Ok(response) => response,
+                            _ => panic!("Unhandled XML parse error"),
+                        };
+
                         serde_json::to_vec(&Result::<UploadPartCopyOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {

@@ -43,7 +43,7 @@ impl Client {
         self.aws_key = Some((id, key, token));
     }
 
-    pub async fn call(&self, mut request: SignedRequest) -> Result<Response<String>, ClientError> {
+    pub async fn call(&self, mut request: SignedRequest) -> Result<Response<hyper::Body>, ClientError> {
         if let Some(key) = &self.aws_key {
             let token = key.2.clone();
             request.sign(&AwsCredentials::new(&key.0, &key.1, token, None));
@@ -79,37 +79,8 @@ impl Client {
             .unwrap();
         *http_req.headers_mut() = headers;
 
-        match self.call_internal(http_req).await {
+        match self.client.request(http_req).await {
             Ok(resp) => Ok(resp),
-            Err(err) => Err(ClientError {
-                why: err.to_string(),
-                data: Default::default(),
-            }),
-        }
-    }
-
-    async fn call_internal(
-        &self,
-        request: Request<hyper::Body>,
-    ) -> Result<Response<String>, ClientError> {
-        match self.client.request(request).await {
-            Ok(resp) => {
-                let status = resp.status();
-                let mut headers = HeaderMap::new();
-                for h in resp.headers().iter() {
-                    let name = &*h.0;
-                    let value = &*h.1;
-                    headers.append(name, HeaderValue::from(value));
-                }
-                let body = &*hyper::body::to_bytes(resp.into_body()).await.unwrap();
-                let body = String::from(std::str::from_utf8(body).unwrap());
-                let mut response = Response::builder()
-                    .status(status)
-                    .body(body)
-                    .unwrap();
-                *response.headers_mut() = headers;
-                Ok(response)
-            }
             Err(err) => Err(ClientError {
                 why: err.to_string(),
                 data: Default::default(),
