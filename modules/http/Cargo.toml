@@ -9,6 +9,8 @@ name = "akkoro-std-http"
 path = "src/main.rs"
 
 [dependencies]
+guest = { package = "assemblylift-iomod-http-guest", version = "0.1.0", path = "guest" }
+
 http = "0.2.1"
 hyper = "0.13.9"
 hyper-tls = "0.4.3"

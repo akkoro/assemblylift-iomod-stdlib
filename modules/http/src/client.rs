@@ -9,6 +9,8 @@ use rusoto_signature::SignedRequest;
 use serde::export::Formatter;
 use serde::{Deserialize, Serialize};
 
+use guest::structs::*;
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClientError {
     pub why: String,
@@ -43,10 +45,20 @@ impl Client {
         self.aws_key = Some((id, key, token));
     }
 
-    pub async fn call(&self, mut request: SignedRequest) -> Result<Response<hyper::Body>, ClientError> {
-        if let Some(key) = &self.aws_key {
-            let token = key.2.clone();
-            request.sign(&AwsCredentials::new(&key.0, &key.1, token, None));
+    pub async fn call(&self, mut request: SignedRequest, auth: Option<&HttpAuth>) -> Result<Response<hyper::Body>, ClientError> {
+        match auth {
+            Some(auth) => {
+                match auth.r#type.as_str() {
+                    "iam" => {
+                        if let Some(key) = &self.aws_key {
+                            let token = key.2.clone();
+                            request.sign(&AwsCredentials::new(&key.0, &key.1, token, None));
+                        }
+                    }
+                    _ => println!("Warning: unknown auth type"),
+                }
+            }
+            None => {}
         }
 
         let mut headers = HeaderMap::new();

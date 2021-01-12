@@ -176,6 +176,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "assemblylift-iomod-http-guest"
+version = "0.1.0"
+dependencies = [
+ "assemblylift-core-io-guest",
+ "assemblylift-core-iomod-guest",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "assemblylift-iomod-s3"
 version = "0.1.0"
 dependencies = [
@@ -921,6 +931,7 @@ name = "http"
 version = "0.1.0"
 dependencies = [
  "assemblylift-core-iomod",
+ "assemblylift-iomod-http-guest",
  "capnp",
  "capnp-rpc",
  "futures",
