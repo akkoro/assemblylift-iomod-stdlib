@@ -5,7 +5,6 @@ use std::str::FromStr;
 use assemblylift_core_iomod::iomod;
 use futures::future::BoxFuture;
 use once_cell::sync::Lazy;
-use hyper::StatusCode;
 use rusoto_signature::{Region, SignedRequest};
 
 use guest::structs::*;
@@ -49,10 +48,16 @@ pub fn request(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
                 match status {
                     status => {
+                        let code = status.as_u16();
+                        let headers = response
+                                .headers()
+                                .iter()
+                                .map(|(k,v)| (String::from(k.as_str()), String::from(v.to_str().unwrap())))
+                                .collect();
                         let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let res = HttpResponse {
-                            code: status.as_u16(),
-                            headers: Default::default(),
+                            code,
+                            headers,
                             body: match body.len() == 0 {
                                 true => None,
                                 false => Some(Vec::from(body)),
