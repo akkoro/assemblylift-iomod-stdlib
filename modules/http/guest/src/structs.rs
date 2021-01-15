@@ -17,7 +17,8 @@ pub struct HttpRequest {
     pub host: String,
     pub path: String,
     pub query_parameters: Option<HashMap<String, String>>,
-    pub headers: Headers,
+    pub content_type: String,
+    pub headers: Option<Headers>,
     pub body: Option<Body>,
 }
 

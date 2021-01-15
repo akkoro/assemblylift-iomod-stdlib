@@ -41,6 +41,8 @@ pub fn request(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
         &deserialized.path.clone(),
     );
     http_request.set_hostname(Some(deserialized.host.clone()));
+    http_request.set_content_type(deserialized.content_type.clone());
+    http_request.set_payload(deserialized.body.to_owned());
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request, deserialized.auth.as_ref()).await {
