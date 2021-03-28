@@ -116,7 +116,7 @@ dependencies = [
 
 [[package]]
 name = "assemblylift-core-iomod"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "assemblylift-core-io-common 0.2.0",
  "capnp",
@@ -1047,7 +1047,7 @@ dependencies = [
 name = "http"
 version = "0.1.0"
 dependencies = [
- "assemblylift-core-iomod 0.2.3",
+ "assemblylift-core-iomod 0.3.0",
  "assemblylift-iomod-http-guest",
  "capnp",
  "capnp-rpc",
