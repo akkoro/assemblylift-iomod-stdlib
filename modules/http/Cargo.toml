@@ -26,7 +26,7 @@ rusoto_signature = "0.46.0"
 serde = "1.0.116"
 serde_json = "1.0.58"
 
-assemblylift_core_iomod = { version = "0.3.0", package = "assemblylift-core-iomod", path = "../../../assemblylift/core/iomod" }
+assemblylift_core_iomod = { version = "0.3.0", package = "assemblylift-core-iomod" }
 
 capnp = "0.13.3"
 capnp-rpc = "0.13.1"
