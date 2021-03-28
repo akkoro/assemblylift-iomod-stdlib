@@ -124,13 +124,22 @@ dynamodb!(delete_item, DeleteItemOutput);
 dynamodb!(delete_table, DeleteTableOutput);
 dynamodb!(describe_backup, DescribeBackupOutput);
 dynamodb!(describe_continuous_backups, DescribeContinuousBackupsOutput);
-dynamodb!(describe_contributor_insights, DescribeContributorInsightsOutput);
+dynamodb!(
+    describe_contributor_insights,
+    DescribeContributorInsightsOutput
+);
 dynamodb_noinput!(describe_endpoints, DescribeEndpointsResponse);
 dynamodb!(describe_global_table, DescribeGlobalTableOutput);
-dynamodb!(describe_global_table_settings, DescribeGlobalTableSettingsOutput);
+dynamodb!(
+    describe_global_table_settings,
+    DescribeGlobalTableSettingsOutput
+);
 dynamodb_noinput!(describe_limits, DescribeLimitsOutput);
 dynamodb!(describe_table, DescribeTableOutput);
-dynamodb!(describe_table_replica_auto_scaling, DescribeTableReplicaAutoScalingOutput);
+dynamodb!(
+    describe_table_replica_auto_scaling,
+    DescribeTableReplicaAutoScalingOutput
+);
 dynamodb!(describe_time_to_live, DescribeTimeToLiveOutput);
 dynamodb!(get_item, GetItemOutput);
 dynamodb!(list_backups, ListBackupsOutput);
@@ -141,7 +150,10 @@ dynamodb!(list_tags_of_resource, ListTagsOfResourceOutput);
 dynamodb!(put_item, PutItemOutput);
 dynamodb!(query, QueryOutput);
 dynamodb!(restore_table_from_backup, RestoreTableFromBackupOutput);
-dynamodb!(restore_table_to_point_in_time, RestoreTableToPointInTimeOutput);
+dynamodb!(
+    restore_table_to_point_in_time,
+    RestoreTableToPointInTimeOutput
+);
 dynamodb!(scan, ScanOutput);
 dynamodb!(tag_resource, ());
 dynamodb!(transact_get_items, TransactGetItemsOutput);
@@ -150,8 +162,14 @@ dynamodb!(untag_resource, ());
 dynamodb!(update_continuous_backups, UpdateContinuousBackupsOutput);
 dynamodb!(update_contributor_insights, UpdateContributorInsightsOutput);
 dynamodb!(update_global_table, UpdateGlobalTableOutput);
-dynamodb!(update_global_table_settings, UpdateGlobalTableSettingsOutput);
+dynamodb!(
+    update_global_table_settings,
+    UpdateGlobalTableSettingsOutput
+);
 dynamodb!(update_item, UpdateItemOutput);
 dynamodb!(update_table, UpdateTableOutput);
-dynamodb!(update_table_replica_auto_scaling, UpdateTableReplicaAutoScalingOutput);
+dynamodb!(
+    update_table_replica_auto_scaling,
+    UpdateTableReplicaAutoScalingOutput
+);
 dynamodb!(update_time_to_live, UpdateTimeToLiveOutput);

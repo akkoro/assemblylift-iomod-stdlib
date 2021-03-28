@@ -45,17 +45,22 @@ pub fn request(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     http_request.set_payload(deserialized.body.to_owned());
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request, deserialized.auth.as_ref()).await {
+        match crate::CLIENT
+            .call(http_request, deserialized.auth.as_ref())
+            .await
+        {
             Ok(response) => {
                 let status = response.status();
                 match status {
                     status => {
                         let code = status.as_u16();
                         let headers = response
-                                .headers()
-                                .iter()
-                                .map(|(k,v)| (String::from(k.as_str()), String::from(v.to_str().unwrap())))
-                                .collect();
+                            .headers()
+                            .iter()
+                            .map(|(k, v)| {
+                                (String::from(k.as_str()), String::from(v.to_str().unwrap()))
+                            })
+                            .collect();
                         let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let res = HttpResponse {
                             code,
@@ -63,7 +68,7 @@ pub fn request(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
                             body: match body.len() == 0 {
                                 true => None,
                                 false => Some(Vec::from(body)),
-                            }, 
+                            },
                         };
                         serde_json::to_vec(&Result::<HttpResponse, guest::Error>::Ok(res)).unwrap()
                     }

@@ -1,14 +1,13 @@
 use bytes;
 use serde::{Deserialize, Serialize};
-use std::fmt;
 use std::error::Error;
+use std::fmt;
 
 // FIXME these structs are copied from rusoto -- we can't pull it in as a dependency
 //   since we get a bunch of wasm-incompatible stuff with the generated structs
 
 /// <p>Contains details of a table archival operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArchivalSummary {
     /// <p>The Amazon Resource Name (ARN) of the backup the table was archived to, when applicable in the archival reason. If you wish to restore this backup to the same table name, you will need to delete the original table.</p>
     #[serde(rename = "ArchivalBackupArn")]
@@ -41,9 +40,9 @@ pub struct AttributeValue {
     /// <p>An attribute of type Binary. For example:</p> <p> <code>"B": "dGhpcyB0ZXh0IGlzIGJhc2U2NC1lbmNvZGVk"</code> </p>
     #[serde(rename = "B")]
     #[serde(
-    deserialize_with = "crate::serialization::SerdeBlob::deserialize_blob",
-    serialize_with = "crate::serialization::SerdeBlob::serialize_blob",
-    default
+        deserialize_with = "crate::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "crate::serialization::SerdeBlob::serialize_blob",
+        default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub b: Option<bytes::Bytes>,
@@ -54,9 +53,9 @@ pub struct AttributeValue {
     /// <p>An attribute of type Binary Set. For example:</p> <p> <code>"BS": ["U3Vubnk=", "UmFpbnk=", "U25vd3k="]</code> </p>
     #[serde(rename = "BS")]
     #[serde(
-    deserialize_with = "crate::serialization::SerdeBlobList::deserialize_blob_list",
-    serialize_with = "crate::serialization::SerdeBlobList::serialize_blob_list",
-    default
+        deserialize_with = "crate::serialization::SerdeBlobList::deserialize_blob_list",
+        serialize_with = "crate::serialization::SerdeBlobList::serialize_blob_list",
+        default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bs: Option<Vec<bytes::Bytes>>,
@@ -91,8 +90,7 @@ pub struct AttributeValue {
 }
 
 /// <p>For the <code>UpdateItem</code> operation, represents the attributes to be modified, the action to perform on each, and the new value for each.</p> <note> <p>You cannot use <code>UpdateItem</code> to update any primary key attributes. Instead, you will need to delete the item, and then use <code>PutItem</code> to create a new item with new attributes.</p> </note> <p>Attribute values cannot be null; string and binary type attributes must have lengths greater than zero; and set type attributes must not be empty. Requests with empty values will be rejected with a <code>ValidationException</code> exception.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct AttributeValueUpdate {
     /// <p><p>Specifies how to perform the update. Valid values are <code>PUT</code> (default), <code>DELETE</code>, and <code>ADD</code>. The behavior depends on whether the specified primary key already exists in the table.</p> <p> <b>If an item with the specified <i>Key</i> is found in the table:</b> </p> <ul> <li> <p> <code>PUT</code> - Adds the specified attribute to the item. If the attribute already exists, it is replaced by the new value. </p> </li> <li> <p> <code>DELETE</code> - If no value is specified, the attribute and its value are removed from the item. The data type of the specified value must match the existing value&#39;s data type.</p> <p>If a <i>set</i> of values is specified, then those values are subtracted from the old set. For example, if the attribute value was the set <code>[a,b,c]</code> and the <code>DELETE</code> action specified <code>[a,c]</code>, then the final attribute value would be <code>[b]</code>. Specifying an empty set is an error.</p> </li> <li> <p> <code>ADD</code> - If the attribute does not already exist, then the attribute and its values are added to the item. If the attribute does exist, then the behavior of <code>ADD</code> depends on the data type of the attribute:</p> <ul> <li> <p>If the existing attribute is a number, and if <code>Value</code> is also a number, then the <code>Value</code> is mathematically added to the existing attribute. If <code>Value</code> is a negative number, then it is subtracted from the existing attribute.</p> <note> <p> If you use <code>ADD</code> to increment or decrement a number value for an item that doesn&#39;t exist before the update, DynamoDB uses 0 as the initial value.</p> <p>In addition, if you use <code>ADD</code> to update an existing item, and intend to increment or decrement an attribute value which does not yet exist, DynamoDB uses <code>0</code> as the initial value. For example, suppose that the item you want to update does not yet have an attribute named <i>itemcount</i>, but you decide to <code>ADD</code> the number <code>3</code> to this attribute anyway, even though it currently does not exist. DynamoDB will create the <i>itemcount</i> attribute, set its initial value to <code>0</code>, and finally add <code>3</code> to it. The result will be a new <i>itemcount</i> attribute in the item, with a value of <code>3</code>.</p> </note> </li> <li> <p>If the existing data type is a set, and if the <code>Value</code> is also a set, then the <code>Value</code> is added to the existing set. (This is a <i>set</i> operation, not mathematical addition.) For example, if the attribute value was the set <code>[1,2]</code>, and the <code>ADD</code> action specified <code>[3]</code>, then the final attribute value would be <code>[1,2,3]</code>. An error occurs if an Add action is specified for a set attribute and the attribute type specified does not match the existing set type. </p> <p>Both sets must have the same primitive data type. For example, if the existing data type is a set of strings, the <code>Value</code> must also be a set of strings. The same holds true for number sets and binary sets.</p> </li> </ul> <p>This action is only valid for an existing attribute whose data type is number or is a set. Do not use <code>ADD</code> for any other data types.</p> </li> </ul> <p> <b>If no item with the specified <i>Key</i> is found:</b> </p> <ul> <li> <p> <code>PUT</code> - DynamoDB creates a new item with the specified primary key, and then adds the attribute. </p> </li> <li> <p> <code>DELETE</code> - Nothing happens; there is no attribute to delete.</p> </li> <li> <p> <code>ADD</code> - DynamoDB creates an item with the supplied primary key and number (or set of numbers) for the attribute value. The only data types allowed are number and number set; no other data types can be specified.</p> </li> </ul></p>
     #[serde(rename = "Action")]
@@ -105,8 +103,7 @@ pub struct AttributeValueUpdate {
 }
 
 /// <p>Represents the properties of the scaling policy.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutoScalingPolicyDescription {
     /// <p>The name of the scaling policy.</p>
     #[serde(rename = "PolicyName")]
@@ -116,12 +113,11 @@ pub struct AutoScalingPolicyDescription {
     #[serde(rename = "TargetTrackingScalingPolicyConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_tracking_scaling_policy_configuration:
-    Option<AutoScalingTargetTrackingScalingPolicyConfigurationDescription>,
+        Option<AutoScalingTargetTrackingScalingPolicyConfigurationDescription>,
 }
 
 /// <p>Represents the auto scaling policy to be modified.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct AutoScalingPolicyUpdate {
     /// <p>The name of the scaling policy.</p>
     #[serde(rename = "PolicyName")]
@@ -130,12 +126,11 @@ pub struct AutoScalingPolicyUpdate {
     /// <p>Represents a target tracking scaling policy configuration.</p>
     #[serde(rename = "TargetTrackingScalingPolicyConfiguration")]
     pub target_tracking_scaling_policy_configuration:
-    AutoScalingTargetTrackingScalingPolicyConfigurationUpdate,
+        AutoScalingTargetTrackingScalingPolicyConfigurationUpdate,
 }
 
 /// <p>Represents the auto scaling settings for a global table or global secondary index.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutoScalingSettingsDescription {
     /// <p>Disabled auto scaling for this global table or global secondary index.</p>
     #[serde(rename = "AutoScalingDisabled")]
@@ -160,8 +155,7 @@ pub struct AutoScalingSettingsDescription {
 }
 
 /// <p>Represents the auto scaling settings to be modified for a global table or global secondary index.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct AutoScalingSettingsUpdate {
     /// <p>Disabled auto scaling for this global table or global secondary index.</p>
     #[serde(rename = "AutoScalingDisabled")]
@@ -186,8 +180,7 @@ pub struct AutoScalingSettingsUpdate {
 }
 
 /// <p>Represents the properties of a target tracking scaling policy.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutoScalingTargetTrackingScalingPolicyConfigurationDescription {
     /// <p>Indicates whether scale in by the target tracking policy is disabled. If the value is true, scale in is disabled and the target tracking policy won't remove capacity from the scalable resource. Otherwise, scale in is enabled and the target tracking policy can remove capacity from the scalable resource. The default value is false.</p>
     #[serde(rename = "DisableScaleIn")]
@@ -207,8 +200,7 @@ pub struct AutoScalingTargetTrackingScalingPolicyConfigurationDescription {
 }
 
 /// <p>Represents the settings of a target tracking scaling policy that will be modified.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct AutoScalingTargetTrackingScalingPolicyConfigurationUpdate {
     /// <p>Indicates whether scale in by the target tracking policy is disabled. If the value is true, scale in is disabled and the target tracking policy won't remove capacity from the scalable resource. Otherwise, scale in is enabled and the target tracking policy can remove capacity from the scalable resource. The default value is false.</p>
     #[serde(rename = "DisableScaleIn")]
@@ -228,8 +220,7 @@ pub struct AutoScalingTargetTrackingScalingPolicyConfigurationUpdate {
 }
 
 /// <p>Contains the description of the backup created for the table.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BackupDescription {
     /// <p>Contains the details of the backup created for the table. </p>
     #[serde(rename = "BackupDetails")]
@@ -246,8 +237,7 @@ pub struct BackupDescription {
 }
 
 /// <p>Contains the details of the backup created for the table.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BackupDetails {
     /// <p>ARN associated with the backup.</p>
     #[serde(rename = "BackupArn")]
@@ -275,8 +265,7 @@ pub struct BackupDetails {
 }
 
 /// <p>Contains details for the backup.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BackupSummary {
     /// <p>ARN associated with the backup.</p>
     #[serde(rename = "BackupArn")]
@@ -321,8 +310,7 @@ pub struct BackupSummary {
 }
 
 /// <p>Represents the input of a <code>BatchGetItem</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct BatchGetItemInput {
     /// <p><p>A map of one or more table names and, for each table, a map that describes one or more items to retrieve from that table. Each table name can be used only once per <code>BatchGetItem</code> request.</p> <p>Each element in the map of items to retrieve consists of the following:</p> <ul> <li> <p> <code>ConsistentRead</code> - If <code>true</code>, a strongly consistent read is used; if <code>false</code> (the default), an eventually consistent read is used.</p> </li> <li> <p> <code>ExpressionAttributeNames</code> - One or more substitution tokens for attribute names in the <code>ProjectionExpression</code> parameter. The following are some use cases for using <code>ExpressionAttributeNames</code>:</p> <ul> <li> <p>To access an attribute whose name conflicts with a DynamoDB reserved word.</p> </li> <li> <p>To create a placeholder for repeating occurrences of an attribute name in an expression.</p> </li> <li> <p>To prevent special characters in an attribute name from being misinterpreted in an expression.</p> </li> </ul> <p>Use the <b>#</b> character in an expression to dereference an attribute name. For example, consider the following attribute name:</p> <ul> <li> <p> <code>Percentile</code> </p> </li> </ul> <p>The name of this attribute conflicts with a reserved word, so it cannot be used directly in an expression. (For the complete list of reserved words, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html">Reserved Words</a> in the <i>Amazon DynamoDB Developer Guide</i>). To work around this, you could specify the following for <code>ExpressionAttributeNames</code>:</p> <ul> <li> <p> <code>{&quot;#P&quot;:&quot;Percentile&quot;}</code> </p> </li> </ul> <p>You could then use this substitution in an expression, as in this example:</p> <ul> <li> <p> <code>#P = :val</code> </p> </li> </ul> <note> <p>Tokens that begin with the <b>:</b> character are <i>expression attribute values</i>, which are placeholders for the actual value at runtime.</p> </note> <p>For more information about expression attribute names, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.AccessingItemAttributes.html">Accessing Item Attributes</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> </li> <li> <p> <code>Keys</code> - An array of primary key attribute values that define specific items in the table. For each primary key, you must provide <i>all</i> of the key attributes. For example, with a simple primary key, you only need to provide the partition key value. For a composite key, you must provide <i>both</i> the partition key value and the sort key value.</p> </li> <li> <p> <code>ProjectionExpression</code> - A string that identifies one or more attributes to retrieve from the table. These attributes can include scalars, sets, or elements of a JSON document. The attributes in the expression must be separated by commas.</p> <p>If no attribute names are specified, then all attributes are returned. If any of the requested attributes are not found, they do not appear in the result.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.AccessingItemAttributes.html">Accessing Item Attributes</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> </li> <li> <p> <code>AttributesToGet</code> - This is a legacy parameter. Use <code>ProjectionExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.AttributesToGet.html">AttributesToGet</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p> </li> </ul></p>
     #[serde(rename = "RequestItems")]
@@ -333,8 +321,7 @@ pub struct BatchGetItemInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetItem</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BatchGetItemOutput {
     /// <p><p>The read capacity units consumed by the entire <code>BatchGetItem</code> operation.</p> <p>Each element consists of:</p> <ul> <li> <p> <code>TableName</code> - The table that consumed the provisioned throughput.</p> </li> <li> <p> <code>CapacityUnits</code> - The total number of capacity units consumed.</p> </li> </ul></p>
     #[serde(rename = "ConsumedCapacity")]
@@ -356,8 +343,7 @@ pub struct BatchGetItemOutput {
 }
 
 /// <p>Represents the input of a <code>BatchWriteItem</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct BatchWriteItemInput {
     /// <p><p>A map of one or more table names and, for each table, a list of operations to be performed (<code>DeleteRequest</code> or <code>PutRequest</code>). Each element in the map consists of the following:</p> <ul> <li> <p> <code>DeleteRequest</code> - Perform a <code>DeleteItem</code> operation on the specified item. The item to be deleted is identified by a <code>Key</code> subelement:</p> <ul> <li> <p> <code>Key</code> - A map of primary key attribute values that uniquely identify the item. Each entry in this map consists of an attribute name and an attribute value. For each primary key, you must provide <i>all</i> of the key attributes. For example, with a simple primary key, you only need to provide a value for the partition key. For a composite primary key, you must provide values for <i>both</i> the partition key and the sort key.</p> </li> </ul> </li> <li> <p> <code>PutRequest</code> - Perform a <code>PutItem</code> operation on the specified item. The item to be put is identified by an <code>Item</code> subelement:</p> <ul> <li> <p> <code>Item</code> - A map of attributes and their values. Each entry in this map consists of an attribute name and an attribute value. Attribute values must not be null; string and binary type attributes must have lengths greater than zero; and set type attributes must not be empty. Requests that contain empty values are rejected with a <code>ValidationException</code> exception.</p> <p>If you specify any attributes that are part of an index key, then the data types for those attributes must match those of the schema in the table&#39;s attribute definition.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "RequestItems")]
@@ -372,8 +358,7 @@ pub struct BatchWriteItemInput {
 }
 
 /// <p>Represents the output of a <code>BatchWriteItem</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BatchWriteItemOutput {
     /// <p><p>The capacity units consumed by the entire <code>BatchWriteItem</code> operation.</p> <p>Each element consists of:</p> <ul> <li> <p> <code>TableName</code> - The table that consumed the provisioned throughput.</p> </li> <li> <p> <code>CapacityUnits</code> - The total number of capacity units consumed.</p> </li> </ul></p>
     #[serde(rename = "ConsumedCapacity")]
@@ -383,7 +368,7 @@ pub struct BatchWriteItemOutput {
     #[serde(rename = "ItemCollectionMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_collection_metrics:
-    Option<::std::collections::HashMap<String, Vec<ItemCollectionMetrics>>>,
+        Option<::std::collections::HashMap<String, Vec<ItemCollectionMetrics>>>,
     /// <p>A map of tables and requests against those tables that were not processed. The <code>UnprocessedItems</code> value is in the same form as <code>RequestItems</code>, so you can provide this value directly to a subsequent <code>BatchGetItem</code> operation. For more information, see <code>RequestItems</code> in the Request Parameters section.</p> <p>Each <code>UnprocessedItems</code> entry consists of a table name and, for that table, a list of operations to perform (<code>DeleteRequest</code> or <code>PutRequest</code>).</p> <ul> <li> <p> <code>DeleteRequest</code> - Perform a <code>DeleteItem</code> operation on the specified item. The item to be deleted is identified by a <code>Key</code> subelement:</p> <ul> <li> <p> <code>Key</code> - A map of primary key attribute values that uniquely identify the item. Each entry in this map consists of an attribute name and an attribute value.</p> </li> </ul> </li> <li> <p> <code>PutRequest</code> - Perform a <code>PutItem</code> operation on the specified item. The item to be put is identified by an <code>Item</code> subelement:</p> <ul> <li> <p> <code>Item</code> - A map of attributes and their values. Each entry in this map consists of an attribute name and an attribute value. Attribute values must not be null; string and binary type attributes must have lengths greater than zero; and set type attributes must not be empty. Requests that contain empty values will be rejected with a <code>ValidationException</code> exception.</p> <p>If you specify any attributes that are part of an index key, then the data types for those attributes must match those of the schema in the table's attribute definition.</p> </li> </ul> </li> </ul> <p>If there are no unprocessed items remaining, the response contains an empty <code>UnprocessedItems</code> map.</p>
     #[serde(rename = "UnprocessedItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -391,8 +376,7 @@ pub struct BatchWriteItemOutput {
 }
 
 /// <p>Contains the details for the read/write capacity mode.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BillingModeSummary {
     /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. This setting can be changed later.</p> <ul> <li> <p> <code>PROVISIONED</code> - Sets the read/write capacity mode to <code>PROVISIONED</code>. We recommend using <code>PROVISIONED</code> for predictable workloads.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - Sets the read/write capacity mode to <code>PAY<em>PER</em>REQUEST</code>. We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. </p> </li> </ul></p>
     #[serde(rename = "BillingMode")]
@@ -416,8 +400,7 @@ pub struct CancellationReason {
 }
 
 /// <p>Represents the amount of provisioned throughput capacity consumed on a table or an index.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Capacity {
     /// <p>The total number of capacity units consumed on a table or an index.</p>
     #[serde(rename = "CapacityUnits")]
@@ -434,8 +417,7 @@ pub struct Capacity {
 }
 
 /// <p><p>Represents the selection criteria for a <code>Query</code> or <code>Scan</code> operation:</p> <ul> <li> <p>For a <code>Query</code> operation, <code>Condition</code> is used for specifying the <code>KeyConditions</code> to use when querying a table or an index. For <code>KeyConditions</code>, only the following comparison operators are supported:</p> <p> <code>EQ | LE | LT | GE | GT | BEGINS_WITH | BETWEEN</code> </p> <p> <code>Condition</code> is also used in a <code>QueryFilter</code>, which evaluates the query results and returns only the desired values.</p> </li> <li> <p>For a <code>Scan</code> operation, <code>Condition</code> is used in a <code>ScanFilter</code>, which evaluates the scan results and returns only the desired values.</p> </li> </ul></p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct Condition {
     /// <p>One or more values to evaluate against the supplied attribute. The number of values in the list depends on the <code>ComparisonOperator</code> being used.</p> <p>For type Number, value comparisons are numeric.</p> <p>String value comparisons for greater than, equals, or less than are based on ASCII character code values. For example, <code>a</code> is greater than <code>A</code>, and <code>a</code> is greater than <code>B</code>. For a list of code values, see <a href="http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters">http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters</a>.</p> <p>For Binary, DynamoDB treats each byte of the binary data as unsigned when it compares binary values.</p>
     #[serde(rename = "AttributeValueList")]
@@ -447,8 +429,7 @@ pub struct Condition {
 }
 
 /// <p>Represents a request to perform a check that an item exists or to check the condition of specific attributes of the item.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ConditionCheck {
     /// <p>A condition that must be satisfied in order for a conditional update to succeed.</p>
     #[serde(rename = "ConditionExpression")]
@@ -474,8 +455,7 @@ pub struct ConditionCheck {
 }
 
 /// <p>The capacity units consumed by an operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the request asked for it. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConsumedCapacity {
     /// <p>The total number of capacity units consumed by the operation.</p>
     #[serde(rename = "CapacityUnits")]
@@ -508,8 +488,7 @@ pub struct ConsumedCapacity {
 }
 
 /// <p>Represents the continuous backups and point in time recovery settings on the table.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ContinuousBackupsDescription {
     /// <p> <code>ContinuousBackupsStatus</code> can be one of the following states: ENABLED, DISABLED</p>
     #[serde(rename = "ContinuousBackupsStatus")]
@@ -521,8 +500,7 @@ pub struct ContinuousBackupsDescription {
 }
 
 /// <p>Represents a Contributor Insights summary entry..</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ContributorInsightsSummary {
     /// <p>Describes the current status for contributor insights for the given table and index, if applicable.</p>
     #[serde(rename = "ContributorInsightsStatus")]
@@ -538,8 +516,7 @@ pub struct ContributorInsightsSummary {
     pub table_name: Option<String>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct CreateBackupInput {
     /// <p>Specified name for the backup.</p>
     #[serde(rename = "BackupName")]
@@ -549,8 +526,7 @@ pub struct CreateBackupInput {
     pub table_name: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CreateBackupOutput {
     /// <p>Contains the details of the backup created for the table.</p>
     #[serde(rename = "BackupDetails")]
@@ -559,8 +535,7 @@ pub struct CreateBackupOutput {
 }
 
 /// <p>Represents a new global secondary index to be added to an existing table.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct CreateGlobalSecondaryIndexAction {
     /// <p>The name of the global secondary index to be created.</p>
     #[serde(rename = "IndexName")]
@@ -577,8 +552,7 @@ pub struct CreateGlobalSecondaryIndexAction {
     pub provisioned_throughput: Option<ProvisionedThroughput>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct CreateGlobalTableInput {
     /// <p>The global table name.</p>
     #[serde(rename = "GlobalTableName")]
@@ -588,8 +562,7 @@ pub struct CreateGlobalTableInput {
     pub replication_group: Vec<Replica>,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CreateGlobalTableOutput {
     /// <p>Contains the details of the global table.</p>
     #[serde(rename = "GlobalTableDescription")]
@@ -598,8 +571,7 @@ pub struct CreateGlobalTableOutput {
 }
 
 /// <p>Represents a replica to be added.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct CreateReplicaAction {
     /// <p>The Region of the replica to be added.</p>
     #[serde(rename = "RegionName")]
@@ -607,8 +579,7 @@ pub struct CreateReplicaAction {
 }
 
 /// <p>Represents a replica to be created.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct CreateReplicationGroupMemberAction {
     /// <p>Replica-specific global secondary index settings.</p>
     #[serde(rename = "GlobalSecondaryIndexes")]
@@ -628,8 +599,7 @@ pub struct CreateReplicationGroupMemberAction {
 }
 
 /// <p>Represents the input of a <code>CreateTable</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct CreateTableInput {
     /// <p>An array of attributes that describe the key schema for the table and indexes.</p>
     #[serde(rename = "AttributeDefinitions")]
@@ -671,8 +641,7 @@ pub struct CreateTableInput {
 }
 
 /// <p>Represents the output of a <code>CreateTable</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CreateTableOutput {
     /// <p>Represents the properties of the table.</p>
     #[serde(rename = "TableDescription")]
@@ -681,8 +650,7 @@ pub struct CreateTableOutput {
 }
 
 /// <p>Represents a request to perform a <code>DeleteItem</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct Delete {
     /// <p>A condition that must be satisfied in order for a conditional delete to succeed.</p>
     #[serde(rename = "ConditionExpression")]
@@ -708,16 +676,14 @@ pub struct Delete {
     pub table_name: String,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DeleteBackupInput {
     /// <p>The ARN associated with the backup.</p>
     #[serde(rename = "BackupArn")]
     pub backup_arn: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeleteBackupOutput {
     /// <p>Contains the description of the backup created for the table.</p>
     #[serde(rename = "BackupDescription")]
@@ -726,8 +692,7 @@ pub struct DeleteBackupOutput {
 }
 
 /// <p>Represents a global secondary index to be deleted from an existing table.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DeleteGlobalSecondaryIndexAction {
     /// <p>The name of the global secondary index to be deleted.</p>
     #[serde(rename = "IndexName")]
@@ -735,8 +700,7 @@ pub struct DeleteGlobalSecondaryIndexAction {
 }
 
 /// <p>Represents the input of a <code>DeleteItem</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DeleteItemInput {
     /// <p>A condition that must be satisfied in order for a conditional <code>DeleteItem</code> to succeed.</p> <p>An expression can contain any of the following:</p> <ul> <li> <p>Functions: <code>attribute_exists | attribute_not_exists | attribute_type | contains | begins_with | size</code> </p> <p>These function names are case-sensitive.</p> </li> <li> <p>Comparison operators: <code>= | &lt;&gt; | &lt; | &gt; | &lt;= | &gt;= | BETWEEN | IN </code> </p> </li> <li> <p> Logical operators: <code>AND | OR | NOT</code> </p> </li> </ul> <p>For more information about condition expressions, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.SpecifyingConditions.html">Condition Expressions</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConditionExpression")]
@@ -778,8 +742,7 @@ pub struct DeleteItemInput {
 }
 
 /// <p>Represents the output of a <code>DeleteItem</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeleteItemOutput {
     /// <p>A map of attribute names to <code>AttributeValue</code> objects, representing the item as it appeared before the <code>DeleteItem</code> operation. This map appears in the response only if <code>ReturnValues</code> was specified as <code>ALL_OLD</code> in the request.</p>
     #[serde(rename = "Attributes")]
@@ -796,8 +759,7 @@ pub struct DeleteItemOutput {
 }
 
 /// <p>Represents a replica to be removed.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DeleteReplicaAction {
     /// <p>The Region of the replica to be removed.</p>
     #[serde(rename = "RegionName")]
@@ -805,8 +767,7 @@ pub struct DeleteReplicaAction {
 }
 
 /// <p>Represents a replica to be deleted.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DeleteReplicationGroupMemberAction {
     /// <p>The Region where the replica exists.</p>
     #[serde(rename = "RegionName")]
@@ -822,8 +783,7 @@ pub struct DeleteRequest {
 }
 
 /// <p>Represents the input of a <code>DeleteTable</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DeleteTableInput {
     /// <p>The name of the table to delete.</p>
     #[serde(rename = "TableName")]
@@ -831,8 +791,7 @@ pub struct DeleteTableInput {
 }
 
 /// <p>Represents the output of a <code>DeleteTable</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeleteTableOutput {
     /// <p>Represents the properties of a table.</p>
     #[serde(rename = "TableDescription")]
@@ -840,16 +799,14 @@ pub struct DeleteTableOutput {
     pub table_description: Option<TableDescription>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DescribeBackupInput {
     /// <p>The Amazon Resource Name (ARN) associated with the backup.</p>
     #[serde(rename = "BackupArn")]
     pub backup_arn: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DescribeBackupOutput {
     /// <p>Contains the description of the backup created for the table.</p>
     #[serde(rename = "BackupDescription")]
@@ -857,16 +814,14 @@ pub struct DescribeBackupOutput {
     pub backup_description: Option<BackupDescription>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DescribeContinuousBackupsInput {
     /// <p>Name of the table for which the customer wants to check the continuous backups and point in time recovery settings.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DescribeContinuousBackupsOutput {
     /// <p>Represents the continuous backups and point in time recovery settings on the table.</p>
     #[serde(rename = "ContinuousBackupsDescription")]
@@ -874,8 +829,7 @@ pub struct DescribeContinuousBackupsOutput {
     pub continuous_backups_description: Option<ContinuousBackupsDescription>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DescribeContributorInsightsInput {
     /// <p>The name of the global secondary index to describe, if applicable.</p>
     #[serde(rename = "IndexName")]
@@ -886,8 +840,7 @@ pub struct DescribeContributorInsightsInput {
     pub table_name: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DescribeContributorInsightsOutput {
     /// <p>List of names of the associated Alpine rules.</p>
     #[serde(rename = "ContributorInsightsRuleList")]
@@ -915,28 +868,24 @@ pub struct DescribeContributorInsightsOutput {
     pub table_name: Option<String>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DescribeEndpointsRequest {}
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DescribeEndpointsResponse {
     /// <p>List of endpoints.</p>
     #[serde(rename = "Endpoints")]
     pub endpoints: Vec<Endpoint>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DescribeGlobalTableInput {
     /// <p>The name of the global table.</p>
     #[serde(rename = "GlobalTableName")]
     pub global_table_name: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DescribeGlobalTableOutput {
     /// <p>Contains the details of the global table.</p>
     #[serde(rename = "GlobalTableDescription")]
@@ -944,16 +893,14 @@ pub struct DescribeGlobalTableOutput {
     pub global_table_description: Option<GlobalTableDescription>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DescribeGlobalTableSettingsInput {
     /// <p>The name of the global table to describe.</p>
     #[serde(rename = "GlobalTableName")]
     pub global_table_name: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DescribeGlobalTableSettingsOutput {
     /// <p>The name of the global table.</p>
     #[serde(rename = "GlobalTableName")]
@@ -966,13 +913,11 @@ pub struct DescribeGlobalTableSettingsOutput {
 }
 
 /// <p>Represents the input of a <code>DescribeLimits</code> operation. Has no content.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DescribeLimitsInput {}
 
 /// <p>Represents the output of a <code>DescribeLimits</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DescribeLimitsOutput {
     /// <p>The maximum total read capacity units that your account allows you to provision across all of your tables in this Region.</p>
     #[serde(rename = "AccountMaxReadCapacityUnits")]
@@ -993,8 +938,7 @@ pub struct DescribeLimitsOutput {
 }
 
 /// <p>Represents the input of a <code>DescribeTable</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DescribeTableInput {
     /// <p>The name of the table to describe.</p>
     #[serde(rename = "TableName")]
@@ -1002,8 +946,7 @@ pub struct DescribeTableInput {
 }
 
 /// <p>Represents the output of a <code>DescribeTable</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DescribeTableOutput {
     /// <p>The properties of the table.</p>
     #[serde(rename = "Table")]
@@ -1011,16 +954,14 @@ pub struct DescribeTableOutput {
     pub table: Option<TableDescription>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DescribeTableReplicaAutoScalingInput {
     /// <p>The name of the table.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DescribeTableReplicaAutoScalingOutput {
     /// <p>Represents the auto scaling properties of the table.</p>
     #[serde(rename = "TableAutoScalingDescription")]
@@ -1028,16 +969,14 @@ pub struct DescribeTableReplicaAutoScalingOutput {
     pub table_auto_scaling_description: Option<TableAutoScalingDescription>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct DescribeTimeToLiveInput {
     /// <p>The name of the table to be described.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DescribeTimeToLiveOutput {
     /// <p><p/></p>
     #[serde(rename = "TimeToLiveDescription")]
@@ -1046,8 +985,7 @@ pub struct DescribeTimeToLiveOutput {
 }
 
 /// <p>An endpoint information details.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Endpoint {
     /// <p>IP address of the endpoint.</p>
     #[serde(rename = "Address")]
@@ -1058,8 +996,7 @@ pub struct Endpoint {
 }
 
 /// <p>Represents a condition to be compared with an attribute value. This condition can be used with <code>DeleteItem</code>, <code>PutItem</code>, or <code>UpdateItem</code> operations; if the comparison evaluates to true, the operation succeeds; if not, the operation fails. You can use <code>ExpectedAttributeValue</code> in one of two different ways:</p> <ul> <li> <p>Use <code>AttributeValueList</code> to specify one or more values to compare against an attribute. Use <code>ComparisonOperator</code> to specify how you want to perform the comparison. If the comparison evaluates to true, then the conditional operation succeeds.</p> </li> <li> <p>Use <code>Value</code> to specify a value that DynamoDB will compare against an attribute. If the values match, then <code>ExpectedAttributeValue</code> evaluates to true and the conditional operation succeeds. Optionally, you can also set <code>Exists</code> to false, indicating that you <i>do not</i> expect to find the attribute value in the table. In this case, the conditional operation succeeds only if the comparison evaluates to false.</p> </li> </ul> <p> <code>Value</code> and <code>Exists</code> are incompatible with <code>AttributeValueList</code> and <code>ComparisonOperator</code>. Note that if you use both sets of parameters at once, DynamoDB will return a <code>ValidationException</code> exception.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ExpectedAttributeValue {
     /// <p>One or more values to evaluate against the supplied attribute. The number of values in the list depends on the <code>ComparisonOperator</code> being used.</p> <p>For type Number, value comparisons are numeric.</p> <p>String value comparisons for greater than, equals, or less than are based on ASCII character code values. For example, <code>a</code> is greater than <code>A</code>, and <code>a</code> is greater than <code>B</code>. For a list of code values, see <a href="http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters">http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters</a>.</p> <p>For Binary, DynamoDB treats each byte of the binary data as unsigned when it compares binary values.</p> <p>For information on specifying data types in JSON, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DataFormat.html">JSON Data Format</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "AttributeValueList")]
@@ -1080,8 +1017,7 @@ pub struct ExpectedAttributeValue {
 }
 
 /// <p>Represents a failure a contributor insights operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FailureException {
     /// <p>Description of the failure.</p>
     #[serde(rename = "ExceptionDescription")]
@@ -1094,8 +1030,7 @@ pub struct FailureException {
 }
 
 /// <p>Specifies an item and related attribute values to retrieve in a <code>TransactGetItem</code> object.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct Get {
     /// <p>One or more substitution tokens for attribute names in the ProjectionExpression parameter.</p>
     #[serde(rename = "ExpressionAttributeNames")]
@@ -1114,8 +1049,7 @@ pub struct Get {
 }
 
 /// <p>Represents the input of a <code>GetItem</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct GetItemInput {
     /// <p>This is a legacy parameter. Use <code>ProjectionExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.AttributesToGet.html">AttributesToGet</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "AttributesToGet")]
@@ -1145,8 +1079,7 @@ pub struct GetItemInput {
 }
 
 /// <p>Represents the output of a <code>GetItem</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GetItemOutput {
     /// <p>The capacity units consumed by the <code>GetItem</code> operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the <code>ReturnConsumedCapacity</code> parameter was specified. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Read/Write Capacity Mode</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConsumedCapacity")]
@@ -1159,8 +1092,7 @@ pub struct GetItemOutput {
 }
 
 /// <p>Represents the properties of a global secondary index.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct GlobalSecondaryIndex {
     /// <p>The name of the global secondary index. The name must be unique among all other indexes on this table.</p>
     #[serde(rename = "IndexName")]
@@ -1178,8 +1110,7 @@ pub struct GlobalSecondaryIndex {
 }
 
 /// <p>Represents the auto scaling settings of a global secondary index for a global table that will be modified.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct GlobalSecondaryIndexAutoScalingUpdate {
     /// <p>The name of the global secondary index.</p>
     #[serde(rename = "IndexName")]
@@ -1191,8 +1122,7 @@ pub struct GlobalSecondaryIndexAutoScalingUpdate {
 }
 
 /// <p>Represents the properties of a global secondary index.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GlobalSecondaryIndexDescription {
     /// <p><p>Indicates whether the index is currently backfilling. <i>Backfilling</i> is the process of reading items from the table and determining whether they can be added to the index. (Not all items will qualify: For example, a partition key cannot have any duplicate values.) If an item can be added to the index, DynamoDB will do so. After all items have been processed, the backfilling operation is complete and <code>Backfilling</code> is false.</p> <p>You can delete an index that is being created during the <code>Backfilling</code> phase when <code>IndexStatus</code> is set to CREATING and <code>Backfilling</code> is true. You can&#39;t delete the index that is being created when <code>IndexStatus</code> is set to CREATING and <code>Backfilling</code> is false. </p> <note> <p>For indexes that were created during a <code>CreateTable</code> operation, the <code>Backfilling</code> attribute does not appear in the <code>DescribeTable</code> output.</p> </note></p>
     #[serde(rename = "Backfilling")]
@@ -1233,8 +1163,7 @@ pub struct GlobalSecondaryIndexDescription {
 }
 
 /// <p>Represents the properties of a global secondary index for the table when the backup was created.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GlobalSecondaryIndexInfo {
     /// <p>The name of the global secondary index.</p>
     #[serde(rename = "IndexName")]
@@ -1255,8 +1184,7 @@ pub struct GlobalSecondaryIndexInfo {
 }
 
 /// <p><p>Represents one of the following:</p> <ul> <li> <p>A new global secondary index to be added to an existing table.</p> </li> <li> <p>New provisioned throughput parameters for an existing global secondary index.</p> </li> <li> <p>An existing global secondary index to be removed from an existing table.</p> </li> </ul></p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct GlobalSecondaryIndexUpdate {
     /// <p><p>The parameters required for creating a global secondary index on an existing table:</p> <ul> <li> <p> <code>IndexName </code> </p> </li> <li> <p> <code>KeySchema </code> </p> </li> <li> <p> <code>AttributeDefinitions </code> </p> </li> <li> <p> <code>Projection </code> </p> </li> <li> <p> <code>ProvisionedThroughput </code> </p> </li> </ul></p>
     #[serde(rename = "Create")]
@@ -1273,8 +1201,7 @@ pub struct GlobalSecondaryIndexUpdate {
 }
 
 /// <p>Represents the properties of a global table.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GlobalTable {
     /// <p>The global table name.</p>
     #[serde(rename = "GlobalTableName")]
@@ -1287,8 +1214,7 @@ pub struct GlobalTable {
 }
 
 /// <p>Contains details about the global table.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GlobalTableDescription {
     /// <p>The creation time of the global table.</p>
     #[serde(rename = "CreationDateTime")]
@@ -1313,8 +1239,7 @@ pub struct GlobalTableDescription {
 }
 
 /// <p>Represents the settings of a global secondary index for a global table that will be modified.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct GlobalTableGlobalSecondaryIndexSettingsUpdate {
     /// <p>The name of the global secondary index. The name must be unique among all other indexes on this table.</p>
     #[serde(rename = "IndexName")]
@@ -1330,8 +1255,7 @@ pub struct GlobalTableGlobalSecondaryIndexSettingsUpdate {
 }
 
 /// <p>Information about item collections, if any, that were affected by the operation. <code>ItemCollectionMetrics</code> is only returned if the request asked for it. If the table does not have any local secondary indexes, this information is not returned in the response.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ItemCollectionMetrics {
     /// <p>The partition key value of the item collection. This value is the same as the partition key value of the item.</p>
     #[serde(rename = "ItemCollectionKey")]
@@ -1344,8 +1268,7 @@ pub struct ItemCollectionMetrics {
 }
 
 /// <p>Details for the requested item.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ItemResponse {
     /// <p>Map of attribute data consisting of the data type and attribute value.</p>
     #[serde(rename = "Item")]
@@ -1388,8 +1311,7 @@ pub struct KeysAndAttributes {
     pub projection_expression: Option<String>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ListBackupsInput {
     /// <p><p>The backups from the table specified by <code>BackupType</code> are listed.</p> <p>Where <code>BackupType</code> can be:</p> <ul> <li> <p> <code>USER</code> - On-demand backup created by you.</p> </li> <li> <p> <code>SYSTEM</code> - On-demand backup automatically created by DynamoDB.</p> </li> <li> <p> <code>ALL</code> - All types of on-demand backups (USER and SYSTEM).</p> </li> </ul></p>
     #[serde(rename = "BackupType")]
@@ -1417,8 +1339,7 @@ pub struct ListBackupsInput {
     pub time_range_upper_bound: Option<f64>,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ListBackupsOutput {
     /// <p>List of <code>BackupSummary</code> objects.</p>
     #[serde(rename = "BackupSummaries")]
@@ -1430,8 +1351,7 @@ pub struct ListBackupsOutput {
     pub last_evaluated_backup_arn: Option<String>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ListContributorInsightsInput {
     /// <p>Maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
@@ -1447,8 +1367,7 @@ pub struct ListContributorInsightsInput {
     pub table_name: Option<String>,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ListContributorInsightsOutput {
     /// <p>A list of ContributorInsightsSummary.</p>
     #[serde(rename = "ContributorInsightsSummaries")]
@@ -1460,8 +1379,7 @@ pub struct ListContributorInsightsOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ListGlobalTablesInput {
     /// <p>The first global table name that this operation will evaluate.</p>
     #[serde(rename = "ExclusiveStartGlobalTableName")]
@@ -1477,8 +1395,7 @@ pub struct ListGlobalTablesInput {
     pub region_name: Option<String>,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ListGlobalTablesOutput {
     /// <p>List of global table names.</p>
     #[serde(rename = "GlobalTables")]
@@ -1491,8 +1408,7 @@ pub struct ListGlobalTablesOutput {
 }
 
 /// <p>Represents the input of a <code>ListTables</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ListTablesInput {
     /// <p>The first table name that this operation will evaluate. Use the value that was returned for <code>LastEvaluatedTableName</code> in a previous operation, so that you can obtain the next page of results.</p>
     #[serde(rename = "ExclusiveStartTableName")]
@@ -1505,8 +1421,7 @@ pub struct ListTablesInput {
 }
 
 /// <p>Represents the output of a <code>ListTables</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ListTablesOutput {
     /// <p>The name of the last table in the current page of results. Use this value as the <code>ExclusiveStartTableName</code> in a new request to obtain the next page of results, until all the table names are returned.</p> <p>If you do not receive a <code>LastEvaluatedTableName</code> value in the response, this means that there are no more table names to be retrieved.</p>
     #[serde(rename = "LastEvaluatedTableName")]
@@ -1518,8 +1433,7 @@ pub struct ListTablesOutput {
     pub table_names: Option<Vec<String>>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ListTagsOfResourceInput {
     /// <p>An optional string that, if supplied, must be copied from the output of a previous call to ListTagOfResource. When provided in this manner, this API fetches the next page of results.</p>
     #[serde(rename = "NextToken")]
@@ -1530,8 +1444,7 @@ pub struct ListTagsOfResourceInput {
     pub resource_arn: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ListTagsOfResourceOutput {
     /// <p>If this value is returned, there are additional results to be displayed. To retrieve them, call ListTagsOfResource again, with NextToken set to this value.</p>
     #[serde(rename = "NextToken")]
@@ -1544,8 +1457,7 @@ pub struct ListTagsOfResourceOutput {
 }
 
 /// <p>Represents the properties of a local secondary index.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct LocalSecondaryIndex {
     /// <p>The name of the local secondary index. The name must be unique among all other indexes on this table.</p>
     #[serde(rename = "IndexName")]
@@ -1559,8 +1471,7 @@ pub struct LocalSecondaryIndex {
 }
 
 /// <p>Represents the properties of a local secondary index.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LocalSecondaryIndexDescription {
     /// <p>The Amazon Resource Name (ARN) that uniquely identifies the index.</p>
     #[serde(rename = "IndexArn")]
@@ -1589,8 +1500,7 @@ pub struct LocalSecondaryIndexDescription {
 }
 
 /// <p>Represents the properties of a local secondary index for the table when the backup was created.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LocalSecondaryIndexInfo {
     /// <p>Represents the name of the local secondary index.</p>
     #[serde(rename = "IndexName")]
@@ -1607,8 +1517,7 @@ pub struct LocalSecondaryIndexInfo {
 }
 
 /// <p>The description of the point in time settings applied to the table.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PointInTimeRecoveryDescription {
     /// <p>Specifies the earliest point in time you can restore your table to. You can restore your table to any point in time during the last 35 days. </p>
     #[serde(rename = "EarliestRestorableDateTime")]
@@ -1625,8 +1534,7 @@ pub struct PointInTimeRecoveryDescription {
 }
 
 /// <p>Represents the settings used to enable point in time recovery.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct PointInTimeRecoverySpecification {
     /// <p>Indicates whether point in time recovery is enabled (true) or disabled (false) on the table.</p>
     #[serde(rename = "PointInTimeRecoveryEnabled")]
@@ -1658,8 +1566,7 @@ pub struct ProvisionedThroughput {
 }
 
 /// <p>Represents the provisioned throughput settings for the table, consisting of read and write capacity units, along with data about increases and decreases.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProvisionedThroughputDescription {
     /// <p>The date and time of the last provisioned throughput decrease for this table.</p>
     #[serde(rename = "LastDecreaseDateTime")]
@@ -1693,8 +1600,7 @@ pub struct ProvisionedThroughputOverride {
 }
 
 /// <p>Represents a request to perform a <code>PutItem</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct Put {
     /// <p>A condition that must be satisfied in order for a conditional update to succeed.</p>
     #[serde(rename = "ConditionExpression")]
@@ -1721,8 +1627,7 @@ pub struct Put {
 }
 
 /// <p>Represents the input of a <code>PutItem</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct PutItemInput {
     /// <p>A condition that must be satisfied in order for a conditional <code>PutItem</code> operation to succeed.</p> <p>An expression can contain any of the following:</p> <ul> <li> <p>Functions: <code>attribute_exists | attribute_not_exists | attribute_type | contains | begins_with | size</code> </p> <p>These function names are case-sensitive.</p> </li> <li> <p>Comparison operators: <code>= | &lt;&gt; | &lt; | &gt; | &lt;= | &gt;= | BETWEEN | IN </code> </p> </li> <li> <p> Logical operators: <code>AND | OR | NOT</code> </p> </li> </ul> <p>For more information on condition expressions, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.SpecifyingConditions.html">Condition Expressions</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConditionExpression")]
@@ -1764,8 +1669,7 @@ pub struct PutItemInput {
 }
 
 /// <p>Represents the output of a <code>PutItem</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PutItemOutput {
     /// <p>The attribute values as they appeared before the <code>PutItem</code> operation, but only if <code>ReturnValues</code> is specified as <code>ALL_OLD</code> in the request. Each element consists of an attribute name and an attribute value.</p>
     #[serde(rename = "Attributes")]
@@ -1790,8 +1694,7 @@ pub struct PutRequest {
 }
 
 /// <p>Represents the input of a <code>Query</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct QueryInput {
     /// <p>This is a legacy parameter. Use <code>ProjectionExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.AttributesToGet.html">AttributesToGet</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "AttributesToGet")]
@@ -1862,8 +1765,7 @@ pub struct QueryInput {
 }
 
 /// <p>Represents the output of a <code>Query</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct QueryOutput {
     /// <p>The capacity units consumed by the <code>Query</code> operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the <code>ReturnConsumedCapacity</code> parameter was specified. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConsumedCapacity")]
@@ -1897,8 +1799,7 @@ pub struct Replica {
 }
 
 /// <p>Represents the auto scaling settings of the replica.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ReplicaAutoScalingDescription {
     /// <p>Replica-specific global secondary index auto scaling settings.</p>
     #[serde(rename = "GlobalSecondaryIndexes")]
@@ -1911,11 +1812,11 @@ pub struct ReplicaAutoScalingDescription {
     #[serde(rename = "ReplicaProvisionedReadCapacityAutoScalingSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_provisioned_read_capacity_auto_scaling_settings:
-    Option<AutoScalingSettingsDescription>,
+        Option<AutoScalingSettingsDescription>,
     #[serde(rename = "ReplicaProvisionedWriteCapacityAutoScalingSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_provisioned_write_capacity_auto_scaling_settings:
-    Option<AutoScalingSettingsDescription>,
+        Option<AutoScalingSettingsDescription>,
     /// <p><p>The current state of the replica:</p> <ul> <li> <p> <code>CREATING</code> - The replica is being created.</p> </li> <li> <p> <code>UPDATING</code> - The replica is being updated.</p> </li> <li> <p> <code>DELETING</code> - The replica is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The replica is ready for use.</p> </li> </ul></p>
     #[serde(rename = "ReplicaStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1923,8 +1824,7 @@ pub struct ReplicaAutoScalingDescription {
 }
 
 /// <p>Represents the auto scaling settings of a replica that will be modified.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ReplicaAutoScalingUpdate {
     /// <p>The Region where the replica exists.</p>
     #[serde(rename = "RegionName")]
@@ -1933,15 +1833,14 @@ pub struct ReplicaAutoScalingUpdate {
     #[serde(rename = "ReplicaGlobalSecondaryIndexUpdates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_global_secondary_index_updates:
-    Option<Vec<ReplicaGlobalSecondaryIndexAutoScalingUpdate>>,
+        Option<Vec<ReplicaGlobalSecondaryIndexAutoScalingUpdate>>,
     #[serde(rename = "ReplicaProvisionedReadCapacityAutoScalingUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_provisioned_read_capacity_auto_scaling_update: Option<AutoScalingSettingsUpdate>,
 }
 
 /// <p>Contains the details of the replica.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ReplicaDescription {
     /// <p>Replica-specific global secondary index settings.</p>
     #[serde(rename = "GlobalSecondaryIndexes")]
@@ -1974,8 +1873,7 @@ pub struct ReplicaDescription {
 }
 
 /// <p>Represents the properties of a replica global secondary index.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ReplicaGlobalSecondaryIndex {
     /// <p>The name of the global secondary index.</p>
     #[serde(rename = "IndexName")]
@@ -1987,8 +1885,7 @@ pub struct ReplicaGlobalSecondaryIndex {
 }
 
 /// <p>Represents the auto scaling configuration for a replica global secondary index.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ReplicaGlobalSecondaryIndexAutoScalingDescription {
     /// <p>The name of the global secondary index.</p>
     #[serde(rename = "IndexName")]
@@ -2007,8 +1904,7 @@ pub struct ReplicaGlobalSecondaryIndexAutoScalingDescription {
 }
 
 /// <p>Represents the auto scaling settings of a global secondary index for a replica that will be modified.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ReplicaGlobalSecondaryIndexAutoScalingUpdate {
     /// <p>The name of the global secondary index.</p>
     #[serde(rename = "IndexName")]
@@ -2020,8 +1916,7 @@ pub struct ReplicaGlobalSecondaryIndexAutoScalingUpdate {
 }
 
 /// <p>Represents the properties of a replica global secondary index.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ReplicaGlobalSecondaryIndexDescription {
     /// <p>The name of the global secondary index.</p>
     #[serde(rename = "IndexName")]
@@ -2034,8 +1929,7 @@ pub struct ReplicaGlobalSecondaryIndexDescription {
 }
 
 /// <p>Represents the properties of a global secondary index.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ReplicaGlobalSecondaryIndexSettingsDescription {
     /// <p>The name of the global secondary index. The name must be unique among all other indexes on this table.</p>
     #[serde(rename = "IndexName")]
@@ -2063,8 +1957,7 @@ pub struct ReplicaGlobalSecondaryIndexSettingsDescription {
 }
 
 /// <p>Represents the settings of a global secondary index for a global table that will be modified.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ReplicaGlobalSecondaryIndexSettingsUpdate {
     /// <p>The name of the global secondary index. The name must be unique among all other indexes on this table.</p>
     #[serde(rename = "IndexName")]
@@ -2080,8 +1973,7 @@ pub struct ReplicaGlobalSecondaryIndexSettingsUpdate {
 }
 
 /// <p>Represents the properties of a replica.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ReplicaSettingsDescription {
     /// <p>The Region name of the replica.</p>
     #[serde(rename = "RegionName")]
@@ -2094,12 +1986,12 @@ pub struct ReplicaSettingsDescription {
     #[serde(rename = "ReplicaGlobalSecondaryIndexSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_global_secondary_index_settings:
-    Option<Vec<ReplicaGlobalSecondaryIndexSettingsDescription>>,
+        Option<Vec<ReplicaGlobalSecondaryIndexSettingsDescription>>,
     /// <p>Auto scaling settings for a global table replica's read capacity units.</p>
     #[serde(rename = "ReplicaProvisionedReadCapacityAutoScalingSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_provisioned_read_capacity_auto_scaling_settings:
-    Option<AutoScalingSettingsDescription>,
+        Option<AutoScalingSettingsDescription>,
     /// <p>The maximum number of strongly consistent reads consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p>
     #[serde(rename = "ReplicaProvisionedReadCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2108,7 +2000,7 @@ pub struct ReplicaSettingsDescription {
     #[serde(rename = "ReplicaProvisionedWriteCapacityAutoScalingSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_provisioned_write_capacity_auto_scaling_settings:
-    Option<AutoScalingSettingsDescription>,
+        Option<AutoScalingSettingsDescription>,
     /// <p>The maximum number of writes consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ReplicaProvisionedWriteCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2120,8 +2012,7 @@ pub struct ReplicaSettingsDescription {
 }
 
 /// <p>Represents the settings for a global table in a Region that will be modified.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ReplicaSettingsUpdate {
     /// <p>The Region of the replica to be added.</p>
     #[serde(rename = "RegionName")]
@@ -2130,12 +2021,12 @@ pub struct ReplicaSettingsUpdate {
     #[serde(rename = "ReplicaGlobalSecondaryIndexSettingsUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_global_secondary_index_settings_update:
-    Option<Vec<ReplicaGlobalSecondaryIndexSettingsUpdate>>,
+        Option<Vec<ReplicaGlobalSecondaryIndexSettingsUpdate>>,
     /// <p>Auto scaling settings for managing a global table replica's read capacity units.</p>
     #[serde(rename = "ReplicaProvisionedReadCapacityAutoScalingSettingsUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_provisioned_read_capacity_auto_scaling_settings_update:
-    Option<AutoScalingSettingsUpdate>,
+        Option<AutoScalingSettingsUpdate>,
     /// <p>The maximum number of strongly consistent reads consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p>
     #[serde(rename = "ReplicaProvisionedReadCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2143,8 +2034,7 @@ pub struct ReplicaSettingsUpdate {
 }
 
 /// <p><p>Represents one of the following:</p> <ul> <li> <p>A new replica to be added to an existing global table.</p> </li> <li> <p>New parameters for an existing replica.</p> </li> <li> <p>An existing replica to be removed from an existing global table.</p> </li> </ul></p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ReplicaUpdate {
     /// <p>The parameters required for creating a replica on an existing global table.</p>
     #[serde(rename = "Create")]
@@ -2157,8 +2047,7 @@ pub struct ReplicaUpdate {
 }
 
 /// <p><p>Represents one of the following:</p> <ul> <li> <p>A new replica to be added to an existing regional table or global table. This request invokes the <code>CreateTableReplica</code> action in the destination Region.</p> </li> <li> <p>New parameters for an existing replica. This request invokes the <code>UpdateTable</code> action in the destination Region.</p> </li> <li> <p>An existing replica to be deleted. The request invokes the <code>DeleteTableReplica</code> action in the destination Region, deleting the replica and all if its items in the destination Region.</p> </li> </ul></p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ReplicationGroupUpdate {
     /// <p>The parameters required for creating a replica for the table.</p>
     #[serde(rename = "Create")]
@@ -2175,8 +2064,7 @@ pub struct ReplicationGroupUpdate {
 }
 
 /// <p>Contains details for the restore.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RestoreSummary {
     /// <p>Point in time or source backup time.</p>
     #[serde(rename = "RestoreDateTime")]
@@ -2194,8 +2082,7 @@ pub struct RestoreSummary {
     pub source_table_arn: Option<String>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct RestoreTableFromBackupInput {
     /// <p>The Amazon Resource Name (ARN) associated with the backup.</p>
     #[serde(rename = "BackupArn")]
@@ -2225,8 +2112,7 @@ pub struct RestoreTableFromBackupInput {
     pub target_table_name: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RestoreTableFromBackupOutput {
     /// <p>The description of the table created from an existing backup.</p>
     #[serde(rename = "TableDescription")]
@@ -2234,8 +2120,7 @@ pub struct RestoreTableFromBackupOutput {
     pub table_description: Option<TableDescription>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct RestoreTableToPointInTimeInput {
     /// <p>The billing mode of the restored table.</p>
     #[serde(rename = "BillingModeOverride")]
@@ -2278,8 +2163,7 @@ pub struct RestoreTableToPointInTimeInput {
     pub use_latest_restorable_time: Option<bool>,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RestoreTableToPointInTimeOutput {
     /// <p>Represents the properties of a table.</p>
     #[serde(rename = "TableDescription")]
@@ -2288,8 +2172,7 @@ pub struct RestoreTableToPointInTimeOutput {
 }
 
 /// <p>The description of the server-side encryption status on the specified table.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SSEDescription {
     /// <p>Indicates the time, in UNIX epoch date format, when DynamoDB detected that the table's AWS KMS key was inaccessible. This attribute will automatically be cleared when DynamoDB detects that the table's AWS KMS key is accessible again. DynamoDB will initiate the table archival process when table's AWS KMS key remains inaccessible for more than seven days from this date.</p>
     #[serde(rename = "InaccessibleEncryptionDateTime")]
@@ -2310,8 +2193,7 @@ pub struct SSEDescription {
 }
 
 /// <p>Represents the settings used to enable server-side encryption.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct SSESpecification {
     /// <p>Indicates whether server-side encryption is done using an AWS managed CMK or an AWS owned CMK. If enabled (true), server-side encryption type is set to <code>KMS</code> and an AWS managed CMK is used (AWS KMS charges apply). If disabled (false) or not specified, server-side encryption is set to AWS owned CMK.</p>
     #[serde(rename = "Enabled")]
@@ -2328,8 +2210,7 @@ pub struct SSESpecification {
 }
 
 /// <p>Represents the input of a <code>Scan</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ScanInput {
     /// <p>This is a legacy parameter. Use <code>ProjectionExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.AttributesToGet.html">AttributesToGet</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "AttributesToGet")]
@@ -2396,8 +2277,7 @@ pub struct ScanInput {
 }
 
 /// <p>Represents the output of a <code>Scan</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ScanOutput {
     /// <p>The capacity units consumed by the <code>Scan</code> operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the <code>ReturnConsumedCapacity</code> parameter was specified. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConsumedCapacity")]
@@ -2422,8 +2302,7 @@ pub struct ScanOutput {
 }
 
 /// <p>Contains the details of the table when the backup was created. </p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SourceTableDetails {
     /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. This setting can be changed later.</p> <ul> <li> <p> <code>PROVISIONED</code> - Sets the read/write capacity mode to <code>PROVISIONED</code>. We recommend using <code>PROVISIONED</code> for predictable workloads.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - Sets the read/write capacity mode to <code>PAY<em>PER</em>REQUEST</code>. We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. </p> </li> </ul></p>
     #[serde(rename = "BillingMode")]
@@ -2459,8 +2338,7 @@ pub struct SourceTableDetails {
 }
 
 /// <p>Contains the details of the features enabled on the table when the backup was created. For example, LSIs, GSIs, streams, TTL. </p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SourceTableFeatureDetails {
     /// <p>Represents the GSI properties for the table when the backup was created. It includes the IndexName, KeySchema, Projection, and ProvisionedThroughput for the GSIs on the table at the time of backup. </p>
     #[serde(rename = "GlobalSecondaryIndexes")]
@@ -2497,8 +2375,7 @@ pub struct StreamSpecification {
 }
 
 /// <p>Represents the auto scaling configuration for a global table.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TableAutoScalingDescription {
     /// <p>Represents replicas of the global table.</p>
     #[serde(rename = "Replicas")]
@@ -2515,8 +2392,7 @@ pub struct TableAutoScalingDescription {
 }
 
 /// <p>Represents the properties of a table.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TableDescription {
     /// <p>Contains information about the table archive.</p>
     #[serde(rename = "ArchivalSummary")]
@@ -2615,8 +2491,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct TagResourceInput {
     /// <p>Identifies the Amazon DynamoDB resource to which tags should be added. This value is an Amazon Resource Name (ARN).</p>
     #[serde(rename = "ResourceArn")]
@@ -2627,8 +2502,7 @@ pub struct TagResourceInput {
 }
 
 /// <p>The description of the Time to Live (TTL) status on the specified table. </p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TimeToLiveDescription {
     /// <p> The name of the TTL attribute for items in the table.</p>
     #[serde(rename = "AttributeName")]
@@ -2652,16 +2526,14 @@ pub struct TimeToLiveSpecification {
 }
 
 /// <p>Specifies an item to be retrieved as part of the transaction.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct TransactGetItem {
     /// <p>Contains the primary key that identifies the item to get, together with the name of the table that contains the item, and optionally the specific attributes of the item to retrieve.</p>
     #[serde(rename = "Get")]
     pub get: Get,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct TransactGetItemsInput {
     /// <p>A value of <code>TOTAL</code> causes consumed capacity information to be returned, and a value of <code>NONE</code> prevents that information from being returned. No other value is valid.</p>
     #[serde(rename = "ReturnConsumedCapacity")]
@@ -2672,8 +2544,7 @@ pub struct TransactGetItemsInput {
     pub transact_items: Vec<TransactGetItem>,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TransactGetItemsOutput {
     /// <p>If the <i>ReturnConsumedCapacity</i> value was <code>TOTAL</code>, this is an array of <code>ConsumedCapacity</code> objects, one for each table addressed by <code>TransactGetItem</code> objects in the <i>TransactItems</i> parameter. These <code>ConsumedCapacity</code> objects report the read-capacity units consumed by the <code>TransactGetItems</code> call in that table.</p>
     #[serde(rename = "ConsumedCapacity")]
@@ -2686,8 +2557,7 @@ pub struct TransactGetItemsOutput {
 }
 
 /// <p>A list of requests that can perform update, put, delete, or check operations on multiple items in one or more tables atomically.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct TransactWriteItem {
     /// <p>A request to perform a check item operation.</p>
     #[serde(rename = "ConditionCheck")]
@@ -2707,8 +2577,7 @@ pub struct TransactWriteItem {
     pub update: Option<Update>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct TransactWriteItemsInput {
     /// <p>Providing a <code>ClientRequestToken</code> makes the call to <code>TransactWriteItems</code> idempotent, meaning that multiple identical calls have the same effect as one single call.</p> <p>Although multiple identical calls using the same client request token produce the same result on the server (no side effects), the responses to the calls might not be the same. If the <code>ReturnConsumedCapacity&gt;</code> parameter is set, then the initial <code>TransactWriteItems</code> call returns the amount of write capacity units consumed in making the changes. Subsequent <code>TransactWriteItems</code> calls with the same client token return the number of read capacity units consumed in reading the item.</p> <p>A client request token is valid for 10 minutes after the first request that uses it is completed. After 10 minutes, any request with the same client token is treated as a new request. Do not resubmit the same request with the same client token for more than 10 minutes, or the result might not be idempotent.</p> <p>If you submit a request with the same client token but a change in other parameters within the 10-minute idempotency window, DynamoDB returns an <code>IdempotentParameterMismatch</code> exception.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -2726,8 +2595,7 @@ pub struct TransactWriteItemsInput {
     pub transact_items: Vec<TransactWriteItem>,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TransactWriteItemsOutput {
     /// <p>The capacity units consumed by the entire <code>TransactWriteItems</code> operation. The values of the list are ordered according to the ordering of the <code>TransactItems</code> request parameter. </p>
     #[serde(rename = "ConsumedCapacity")]
@@ -2737,11 +2605,10 @@ pub struct TransactWriteItemsOutput {
     #[serde(rename = "ItemCollectionMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_collection_metrics:
-    Option<::std::collections::HashMap<String, Vec<ItemCollectionMetrics>>>,
+        Option<::std::collections::HashMap<String, Vec<ItemCollectionMetrics>>>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct UntagResourceInput {
     /// <p>The DynamoDB resource that the tags will be removed from. This value is an Amazon Resource Name (ARN).</p>
     #[serde(rename = "ResourceArn")]
@@ -2752,8 +2619,7 @@ pub struct UntagResourceInput {
 }
 
 /// <p>Represents a request to perform an <code>UpdateItem</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct Update {
     /// <p>A condition that must be satisfied in order for a conditional update to succeed.</p>
     #[serde(rename = "ConditionExpression")]
@@ -2782,8 +2648,7 @@ pub struct Update {
     pub update_expression: String,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct UpdateContinuousBackupsInput {
     /// <p>Represents the settings used to enable point in time recovery.</p>
     #[serde(rename = "PointInTimeRecoverySpecification")]
@@ -2793,8 +2658,7 @@ pub struct UpdateContinuousBackupsInput {
     pub table_name: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UpdateContinuousBackupsOutput {
     /// <p>Represents the continuous backups and point in time recovery settings on the table.</p>
     #[serde(rename = "ContinuousBackupsDescription")]
@@ -2802,8 +2666,7 @@ pub struct UpdateContinuousBackupsOutput {
     pub continuous_backups_description: Option<ContinuousBackupsDescription>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct UpdateContributorInsightsInput {
     /// <p>Represents the contributor insights action.</p>
     #[serde(rename = "ContributorInsightsAction")]
@@ -2817,8 +2680,7 @@ pub struct UpdateContributorInsightsInput {
     pub table_name: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UpdateContributorInsightsOutput {
     /// <p>The status of contributor insights</p>
     #[serde(rename = "ContributorInsightsStatus")]
@@ -2835,8 +2697,7 @@ pub struct UpdateContributorInsightsOutput {
 }
 
 /// <p>Represents the new provisioned throughput settings to be applied to a global secondary index.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct UpdateGlobalSecondaryIndexAction {
     /// <p>The name of the global secondary index to be updated.</p>
     #[serde(rename = "IndexName")]
@@ -2846,8 +2707,7 @@ pub struct UpdateGlobalSecondaryIndexAction {
     pub provisioned_throughput: ProvisionedThroughput,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct UpdateGlobalTableInput {
     /// <p>The global table name.</p>
     #[serde(rename = "GlobalTableName")]
@@ -2857,8 +2717,7 @@ pub struct UpdateGlobalTableInput {
     pub replica_updates: Vec<ReplicaUpdate>,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UpdateGlobalTableOutput {
     /// <p>Contains the details of the global table.</p>
     #[serde(rename = "GlobalTableDescription")]
@@ -2866,8 +2725,7 @@ pub struct UpdateGlobalTableOutput {
     pub global_table_description: Option<GlobalTableDescription>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct UpdateGlobalTableSettingsInput {
     /// <p><p>The billing mode of the global table. If <code>GlobalTableBillingMode</code> is not specified, the global table defaults to <code>PROVISIONED</code> capacity billing mode.</p> <ul> <li> <p> <code>PROVISIONED</code> - We recommend using <code>PROVISIONED</code> for predictable workloads. <code>PROVISIONED</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.ProvisionedThroughput.Manual">Provisioned Mode</a>.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. <code>PAY<em>PER</em>REQUEST</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.OnDemand">On-Demand Mode</a>. </p> </li> </ul></p>
     #[serde(rename = "GlobalTableBillingMode")]
@@ -2877,7 +2735,7 @@ pub struct UpdateGlobalTableSettingsInput {
     #[serde(rename = "GlobalTableGlobalSecondaryIndexSettingsUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_table_global_secondary_index_settings_update:
-    Option<Vec<GlobalTableGlobalSecondaryIndexSettingsUpdate>>,
+        Option<Vec<GlobalTableGlobalSecondaryIndexSettingsUpdate>>,
     /// <p>The name of the global table</p>
     #[serde(rename = "GlobalTableName")]
     pub global_table_name: String,
@@ -2885,7 +2743,7 @@ pub struct UpdateGlobalTableSettingsInput {
     #[serde(rename = "GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_table_provisioned_write_capacity_auto_scaling_settings_update:
-    Option<AutoScalingSettingsUpdate>,
+        Option<AutoScalingSettingsUpdate>,
     /// <p>The maximum number of writes consumed per second before DynamoDB returns a <code>ThrottlingException.</code> </p>
     #[serde(rename = "GlobalTableProvisionedWriteCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2896,8 +2754,7 @@ pub struct UpdateGlobalTableSettingsInput {
     pub replica_settings_update: Option<Vec<ReplicaSettingsUpdate>>,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UpdateGlobalTableSettingsOutput {
     /// <p>The name of the global table.</p>
     #[serde(rename = "GlobalTableName")]
@@ -2910,8 +2767,7 @@ pub struct UpdateGlobalTableSettingsOutput {
 }
 
 /// <p>Represents the input of an <code>UpdateItem</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct UpdateItemInput {
     /// <p>This is a legacy parameter. Use <code>UpdateExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.AttributeUpdates.html">AttributeUpdates</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "AttributeUpdates")]
@@ -2961,8 +2817,7 @@ pub struct UpdateItemInput {
 }
 
 /// <p>Represents the output of an <code>UpdateItem</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UpdateItemOutput {
     /// <p>A map of attribute values as they appear before or after the <code>UpdateItem</code> operation, as determined by the <code>ReturnValues</code> parameter.</p> <p>The <code>Attributes</code> map is only present if <code>ReturnValues</code> was specified as something other than <code>NONE</code> in the request. Each element represents one attribute.</p>
     #[serde(rename = "Attributes")]
@@ -2979,8 +2834,7 @@ pub struct UpdateItemOutput {
 }
 
 /// <p>Represents a replica to be modified.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct UpdateReplicationGroupMemberAction {
     /// <p>Replica-specific global secondary index settings.</p>
     #[serde(rename = "GlobalSecondaryIndexes")]
@@ -3000,8 +2854,7 @@ pub struct UpdateReplicationGroupMemberAction {
 }
 
 /// <p>Represents the input of an <code>UpdateTable</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct UpdateTableInput {
     /// <p>An array of attributes that describe the key schema for the table and indexes. If you are adding a new global secondary index to the table, <code>AttributeDefinitions</code> must include the key element(s) of the new index.</p>
     #[serde(rename = "AttributeDefinitions")]
@@ -3037,8 +2890,7 @@ pub struct UpdateTableInput {
 }
 
 /// <p>Represents the output of an <code>UpdateTable</code> operation.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UpdateTableOutput {
     /// <p>Represents the properties of the table.</p>
     #[serde(rename = "TableDescription")]
@@ -3046,8 +2898,7 @@ pub struct UpdateTableOutput {
     pub table_description: Option<TableDescription>,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct UpdateTableReplicaAutoScalingInput {
     /// <p>Represents the auto scaling settings of the global secondary indexes of the replica to be updated.</p>
     #[serde(rename = "GlobalSecondaryIndexUpdates")]
@@ -3065,8 +2916,7 @@ pub struct UpdateTableReplicaAutoScalingInput {
     pub table_name: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UpdateTableReplicaAutoScalingOutput {
     /// <p>Returns information about the auto scaling settings of a table with replicas.</p>
     #[serde(rename = "TableAutoScalingDescription")]
@@ -3075,8 +2925,7 @@ pub struct UpdateTableReplicaAutoScalingOutput {
 }
 
 /// <p>Represents the input of an <code>UpdateTimeToLive</code> operation.</p>
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[derive(Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct UpdateTimeToLiveInput {
     /// <p>The name of the table to be configured.</p>
     #[serde(rename = "TableName")]
@@ -3086,8 +2935,7 @@ pub struct UpdateTimeToLiveInput {
     pub time_to_live_specification: TimeToLiveSpecification,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[derive(Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UpdateTimeToLiveOutput {
     /// <p>Represents the output of an <code>UpdateTimeToLive</code> operation.</p>
     #[serde(rename = "TimeToLiveSpecification")]
@@ -3393,7 +3241,9 @@ pub enum DescribeEndpointsError {}
 impl fmt::Display for DescribeEndpointsError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self { _ => Ok(()) }
+        match *self {
+            _ => Ok(()),
+        }
     }
 }
 impl Error for DescribeEndpointsError {}

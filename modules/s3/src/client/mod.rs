@@ -43,7 +43,10 @@ impl Client {
         self.aws_key = Some((id, key, token));
     }
 
-    pub async fn call(&self, mut request: SignedRequest) -> Result<Response<hyper::Body>, ClientError> {
+    pub async fn call(
+        &self,
+        mut request: SignedRequest,
+    ) -> Result<Response<hyper::Body>, ClientError> {
         if let Some(key) = &self.aws_key {
             let token = key.2.clone();
             request.sign(&AwsCredentials::new(&key.0, &key.1, token, None));
