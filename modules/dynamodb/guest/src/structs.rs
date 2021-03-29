@@ -2,7 +2,6 @@
 // See https://github.com/akkoro/asml-aws-codegen
 
 use std::collections::HashMap;
-use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
 
