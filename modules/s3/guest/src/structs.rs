@@ -9,7 +9,8 @@ use xml;
 
 use crate::xml_util::error::*;
 use crate::xml_util::util::{
-    deserialize_elements, find_start_element, skip_tree, write_characters_element, deserialize_primitive
+    deserialize_elements, deserialize_primitive, find_start_element, skip_tree,
+    write_characters_element,
 };
 use crate::xml_util::util::{Next, Peek, XmlParseError, XmlResponse};
 
@@ -89,7 +90,10 @@ impl AnalyticsConfigurationListDeserializer {
     ) -> Result<Vec<AnalyticsConfiguration>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "AnalyticsConfiguration" {
-                obj.push(AnalyticsConfigurationDeserializer::deserialize("AnalyticsConfiguration", stack)?);
+                obj.push(AnalyticsConfigurationDeserializer::deserialize(
+                    "AnalyticsConfiguration",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -166,7 +170,10 @@ impl CommonPrefixListDeserializer {
     ) -> Result<Vec<CommonPrefix>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CommonPrefix" {
-                obj.push(CommonPrefixDeserializer::deserialize("CommonPrefix", stack)?);
+                obj.push(CommonPrefixDeserializer::deserialize(
+                    "CommonPrefix",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -185,7 +192,10 @@ impl CompletedPartListDeserializer {
     ) -> Result<Vec<CompletedPart>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "CompletedPart" {
-                obj.push(CompletedPartDeserializer::deserialize("CompletedPart", stack)?);
+                obj.push(CompletedPartDeserializer::deserialize(
+                    "CompletedPart",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -230,7 +240,10 @@ impl DeleteMarkersDeserializer {
     ) -> Result<Vec<DeleteMarkerEntry>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DeleteMarkerEntry" {
-                obj.push(DeleteMarkerEntryDeserializer::deserialize("DeleteMarkerEntry", stack)?);
+                obj.push(DeleteMarkerEntryDeserializer::deserialize(
+                    "DeleteMarkerEntry",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -249,7 +262,10 @@ impl DeletedObjectsDeserializer {
     ) -> Result<Vec<DeletedObject>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "DeletedObject" {
-                obj.push(DeletedObjectDeserializer::deserialize("DeletedObject", stack)?);
+                obj.push(DeletedObjectDeserializer::deserialize(
+                    "DeletedObject",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -400,7 +416,10 @@ impl IntelligentTieringConfigurationListDeserializer {
     ) -> Result<Vec<IntelligentTieringConfiguration>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "IntelligentTieringConfiguration" {
-                obj.push(IntelligentTieringConfigurationDeserializer::deserialize("IntelligentTieringConfiguration", stack)?);
+                obj.push(IntelligentTieringConfigurationDeserializer::deserialize(
+                    "IntelligentTieringConfiguration",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -422,7 +441,10 @@ impl InventoryConfigurationListDeserializer {
     ) -> Result<Vec<InventoryConfiguration>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "InventoryConfiguration" {
-                obj.push(InventoryConfigurationDeserializer::deserialize("InventoryConfiguration", stack)?);
+                obj.push(InventoryConfigurationDeserializer::deserialize(
+                    "InventoryConfiguration",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -475,7 +497,10 @@ impl LambdaFunctionConfigurationListDeserializer {
     ) -> Result<Vec<LambdaFunctionConfiguration>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "LambdaFunctionConfiguration" {
-                obj.push(LambdaFunctionConfigurationDeserializer::deserialize("LambdaFunctionConfiguration", stack)?);
+                obj.push(LambdaFunctionConfigurationDeserializer::deserialize(
+                    "LambdaFunctionConfiguration",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -495,7 +520,10 @@ impl LifecycleRulesDeserializer {
     ) -> Result<Vec<LifecycleRule>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "LifecycleRule" {
-                obj.push(LifecycleRuleDeserializer::deserialize("LifecycleRule", stack)?);
+                obj.push(LifecycleRuleDeserializer::deserialize(
+                    "LifecycleRule",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -529,7 +557,10 @@ impl MetricsConfigurationListDeserializer {
     ) -> Result<Vec<MetricsConfiguration>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "MetricsConfiguration" {
-                obj.push(MetricsConfigurationDeserializer::deserialize("MetricsConfiguration", stack)?);
+                obj.push(MetricsConfigurationDeserializer::deserialize(
+                    "MetricsConfiguration",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -553,7 +584,10 @@ impl MultipartUploadListDeserializer {
     ) -> Result<Vec<MultipartUpload>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "MultipartUpload" {
-                obj.push(MultipartUploadDeserializer::deserialize("MultipartUpload", stack)?);
+                obj.push(MultipartUploadDeserializer::deserialize(
+                    "MultipartUpload",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -578,7 +612,10 @@ impl NoncurrentVersionTransitionListDeserializer {
     ) -> Result<Vec<NoncurrentVersionTransition>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "NoncurrentVersionTransition" {
-                obj.push(NoncurrentVersionTransitionDeserializer::deserialize("NoncurrentVersionTransition", stack)?);
+                obj.push(NoncurrentVersionTransitionDeserializer::deserialize(
+                    "NoncurrentVersionTransition",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -599,7 +636,10 @@ impl ObjectIdentifierListDeserializer {
     ) -> Result<Vec<ObjectIdentifier>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ObjectIdentifier" {
-                obj.push(ObjectIdentifierDeserializer::deserialize("ObjectIdentifier", stack)?);
+                obj.push(ObjectIdentifierDeserializer::deserialize(
+                    "ObjectIdentifier",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -648,7 +688,10 @@ impl ObjectVersionListDeserializer {
     ) -> Result<Vec<ObjectVersion>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ObjectVersion" {
-                obj.push(ObjectVersionDeserializer::deserialize("ObjectVersion", stack)?);
+                obj.push(ObjectVersionDeserializer::deserialize(
+                    "ObjectVersion",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -669,7 +712,10 @@ impl OwnershipControlsRulesDeserializer {
     ) -> Result<Vec<OwnershipControlsRule>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "OwnershipControlsRule" {
-                obj.push(OwnershipControlsRuleDeserializer::deserialize("OwnershipControlsRule", stack)?);
+                obj.push(OwnershipControlsRuleDeserializer::deserialize(
+                    "OwnershipControlsRule",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -717,7 +763,10 @@ impl QueueConfigurationListDeserializer {
     ) -> Result<Vec<QueueConfiguration>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "QueueConfiguration" {
-                obj.push(QueueConfigurationDeserializer::deserialize("QueueConfiguration", stack)?);
+                obj.push(QueueConfigurationDeserializer::deserialize(
+                    "QueueConfiguration",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -747,7 +796,10 @@ impl ReplicationRulesDeserializer {
     ) -> Result<Vec<ReplicationRule>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ReplicationRule" {
-                obj.push(ReplicationRuleDeserializer::deserialize("ReplicationRule", stack)?);
+                obj.push(ReplicationRuleDeserializer::deserialize(
+                    "ReplicationRule",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -824,7 +876,10 @@ impl ServerSideEncryptionRulesDeserializer {
     ) -> Result<Vec<ServerSideEncryptionRule>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "ServerSideEncryptionRule" {
-                obj.push(ServerSideEncryptionRuleDeserializer::deserialize("ServerSideEncryptionRule", stack)?);
+                obj.push(ServerSideEncryptionRuleDeserializer::deserialize(
+                    "ServerSideEncryptionRule",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -916,7 +971,10 @@ impl TopicConfigurationListDeserializer {
     ) -> Result<Vec<TopicConfiguration>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "TopicConfiguration" {
-                obj.push(TopicConfigurationDeserializer::deserialize("TopicConfiguration", stack)?);
+                obj.push(TopicConfigurationDeserializer::deserialize(
+                    "TopicConfiguration",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -958,7 +1016,10 @@ impl UserMetadataDeserializer {
     ) -> Result<Vec<MetadataEntry>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "MetadataEntry" {
-                obj.push(MetadataEntryDeserializer::deserialize("MetadataEntry", stack)?);
+                obj.push(MetadataEntryDeserializer::deserialize(
+                    "MetadataEntry",
+                    stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -990,7 +1051,10 @@ impl AbortIncompleteMultipartUploadDeserializer {
             |name, stack, obj| {
                 match name {
                     "DaysAfterInitiation" => {
-                        obj.days_after_initiation = Some(deserialize_primitive("DaysAfterInitiation", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
+                        obj.days_after_initiation =
+                            Some(deserialize_primitive("DaysAfterInitiation", stack, |s| {
+                                Ok(i64::from_str(&s).unwrap())
+                            })?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -1019,7 +1083,8 @@ impl AbortMultipartUploadOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                        obj.request_charged =
+                            Some(deserialize_primitive("RequestCharged", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -1068,7 +1133,8 @@ impl AbortMultipartUploadRequestDeserializer {
                         obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -1122,24 +1188,20 @@ impl AccessControlPolicyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccessControlPolicy, XmlParseError> {
-        deserialize_elements::<_, AccessControlPolicy, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Grants" => {
-                        obj.grants
-                            .get_or_insert(vec![])
-                            .extend(GrantsDeserializer::deserialize("Grants", stack)?);
-                    }
-                    "Owner" => {
-                        obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, AccessControlPolicy, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Grants" => {
+                    obj.grants
+                        .get_or_insert(vec![])
+                        .extend(GrantsDeserializer::deserialize("Grants", stack)?);
                 }
-                Ok(())
-            },
-        )
+                "Owner" => {
+                    obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -1187,24 +1249,20 @@ impl AnalyticsAndOperatorDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalyticsAndOperator, XmlParseError> {
-        deserialize_elements::<_, AnalyticsAndOperator, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    "Tags" => {
-                        obj.tags
-                            .get_or_insert(vec![])
-                            .extend(TagSetDeserializer::deserialize("Tags", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, AnalyticsAndOperator, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Tags" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagSetDeserializer::deserialize("Tags", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -1225,25 +1283,24 @@ impl AnalyticsConfigurationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalyticsConfiguration, XmlParseError> {
-        deserialize_elements::<_, AnalyticsConfiguration, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Id" => {
-                        obj.id = deserialize_primitive("Id", stack, Ok)?;
-                    }
-                    "Filter" => {
-                        obj.filter = Some(AnalyticsFilterDeserializer::deserialize("Filter", stack)?);
-                    }
-                    "StorageClassAnalysis" => {
-                        obj.storage_class_analysis = StorageClassAnalysisDeserializer::deserialize("StorageClassAnalysis", stack)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, AnalyticsConfiguration, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Id" => {
+                    obj.id = deserialize_primitive("Id", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Filter" => {
+                    obj.filter = Some(AnalyticsFilterDeserializer::deserialize("Filter", stack)?);
+                }
+                "StorageClassAnalysis" => {
+                    obj.storage_class_analysis = StorageClassAnalysisDeserializer::deserialize(
+                        "StorageClassAnalysis",
+                        stack,
+                    )?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -1266,7 +1323,11 @@ impl AnalyticsExportDestinationDeserializer {
             |name, stack, obj| {
                 match name {
                     "S3BucketDestination" => {
-                        obj.s3_bucket_destination = AnalyticsS3BucketDestinationDeserializer::deserialize("S3BucketDestination", stack)?;
+                        obj.s3_bucket_destination =
+                            AnalyticsS3BucketDestinationDeserializer::deserialize(
+                                "S3BucketDestination",
+                                stack,
+                            )?;
                     }
                     _ => skip_tree(stack),
                 }
@@ -1293,25 +1354,21 @@ impl AnalyticsFilterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalyticsFilter, XmlParseError> {
-        deserialize_elements::<_, AnalyticsFilter, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    "Tag" => {
-                        obj.tag = Some(TagDeserializer::deserialize("Tag", stack)?);
-                    }
-                    "And" => {
-                        obj.and = Some(AnalyticsAndOperatorDeserializer::deserialize("And", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, AnalyticsFilter, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Tag" => {
+                    obj.tag = Some(TagDeserializer::deserialize("Tag", stack)?);
+                }
+                "And" => {
+                    obj.and = Some(AnalyticsAndOperatorDeserializer::deserialize("And", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -1343,7 +1400,8 @@ impl AnalyticsS3BucketDestinationDeserializer {
                         obj.format = deserialize_primitive("Format", stack, Ok)?;
                     }
                     "BucketAccountId" => {
-                        obj.bucket_account_id = Some(deserialize_primitive("BucketAccountId", stack, Ok)?);
+                        obj.bucket_account_id =
+                            Some(deserialize_primitive("BucketAccountId", stack, Ok)?);
                     }
                     "Bucket" => {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
@@ -1374,28 +1432,25 @@ impl BucketDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Bucket, XmlParseError> {
-        deserialize_elements::<_, Bucket, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Name" => {
-                        obj.name = Some(deserialize_primitive("Name", stack, Ok)?);
-                    }
-                    "CreationDate" => {
-                        obj.creation_date = Some(deserialize_primitive("CreationDate", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Bucket, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Name" => {
+                    obj.name = Some(deserialize_primitive("Name", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "CreationDate" => {
+                    obj.creation_date = Some(deserialize_primitive("CreationDate", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct BucketAlreadyExists {
-}
+pub struct BucketAlreadyExists {}
 #[allow(dead_code)]
 pub struct BucketAlreadyExistsDeserializer;
 impl BucketAlreadyExistsDeserializer {
@@ -1404,22 +1459,17 @@ impl BucketAlreadyExistsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BucketAlreadyExists, XmlParseError> {
-        deserialize_elements::<_, BucketAlreadyExists, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
+        deserialize_elements::<_, BucketAlreadyExists, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct BucketAlreadyOwnedByYou {
-}
+pub struct BucketAlreadyOwnedByYou {}
 #[allow(dead_code)]
 pub struct BucketAlreadyOwnedByYouDeserializer;
 impl BucketAlreadyOwnedByYouDeserializer {
@@ -1484,19 +1534,18 @@ impl BucketLoggingStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BucketLoggingStatus, XmlParseError> {
-        deserialize_elements::<_, BucketLoggingStatus, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "LoggingEnabled" => {
-                        obj.logging_enabled = Some(LoggingEnabledDeserializer::deserialize("LoggingEnabled", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, BucketLoggingStatus, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "LoggingEnabled" => {
+                    obj.logging_enabled = Some(LoggingEnabledDeserializer::deserialize(
+                        "LoggingEnabled",
+                        stack,
+                    )?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -1513,20 +1562,16 @@ impl CORSConfigurationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CORSConfiguration, XmlParseError> {
-        deserialize_elements::<_, CORSConfiguration, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CORSRules" => {
-                        obj.cors_rules
-                            .extend(CORSRulesDeserializer::deserialize("CORSRules", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, CORSConfiguration, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CORSRules" => {
+                    obj.cors_rules
+                        .extend(CORSRulesDeserializer::deserialize("CORSRules", stack)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -1551,37 +1596,42 @@ impl CORSRuleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CORSRule, XmlParseError> {
-        deserialize_elements::<_, CORSRule, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "AllowedHeaders" => {
-                        obj.allowed_headers
-                            .get_or_insert(vec![])
-                            .extend(AllowedHeadersDeserializer::deserialize("AllowedHeaders", stack)?);
-                    }
-                    "AllowedMethods" => {
-                        obj.allowed_methods
-                            .extend(AllowedMethodsDeserializer::deserialize("AllowedMethods", stack)?);
-                    }
-                    "AllowedOrigins" => {
-                        obj.allowed_origins
-                            .extend(AllowedOriginsDeserializer::deserialize("AllowedOrigins", stack)?);
-                    }
-                    "ExposeHeaders" => {
-                        obj.expose_headers
-                            .get_or_insert(vec![])
-                            .extend(ExposeHeadersDeserializer::deserialize("ExposeHeaders", stack)?);
-                    }
-                    "MaxAgeSeconds" => {
-                        obj.max_age_seconds = Some(deserialize_primitive("MaxAgeSeconds", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, CORSRule, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AllowedHeaders" => {
+                    obj.allowed_headers.get_or_insert(vec![]).extend(
+                        AllowedHeadersDeserializer::deserialize("AllowedHeaders", stack)?,
+                    );
                 }
-                Ok(())
-            },
-        )
+                "AllowedMethods" => {
+                    obj.allowed_methods
+                        .extend(AllowedMethodsDeserializer::deserialize(
+                            "AllowedMethods",
+                            stack,
+                        )?);
+                }
+                "AllowedOrigins" => {
+                    obj.allowed_origins
+                        .extend(AllowedOriginsDeserializer::deserialize(
+                            "AllowedOrigins",
+                            stack,
+                        )?);
+                }
+                "ExposeHeaders" => {
+                    obj.expose_headers.get_or_insert(vec![]).extend(
+                        ExposeHeadersDeserializer::deserialize("ExposeHeaders", stack)?,
+                    );
+                }
+                "MaxAgeSeconds" => {
+                    obj.max_age_seconds =
+                        Some(deserialize_primitive("MaxAgeSeconds", stack, |s| {
+                            Ok(i64::from_str(&s).unwrap())
+                        })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -1610,37 +1660,40 @@ impl CSVInputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CSVInput, XmlParseError> {
-        deserialize_elements::<_, CSVInput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "FileHeaderInfo" => {
-                        obj.file_header_info = Some(deserialize_primitive("FileHeaderInfo", stack, Ok)?);
-                    }
-                    "Comments" => {
-                        obj.comments = Some(deserialize_primitive("Comments", stack, Ok)?);
-                    }
-                    "QuoteEscapeCharacter" => {
-                        obj.quote_escape_character = Some(deserialize_primitive("QuoteEscapeCharacter", stack, Ok)?);
-                    }
-                    "RecordDelimiter" => {
-                        obj.record_delimiter = Some(deserialize_primitive("RecordDelimiter", stack, Ok)?);
-                    }
-                    "FieldDelimiter" => {
-                        obj.field_delimiter = Some(deserialize_primitive("FieldDelimiter", stack, Ok)?);
-                    }
-                    "QuoteCharacter" => {
-                        obj.quote_character = Some(deserialize_primitive("QuoteCharacter", stack, Ok)?);
-                    }
-                    "AllowQuotedRecordDelimiter" => {
-                        obj.allow_quoted_record_delimiter = Some(deserialize_primitive("AllowQuotedRecordDelimiter", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, CSVInput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "FileHeaderInfo" => {
+                    obj.file_header_info =
+                        Some(deserialize_primitive("FileHeaderInfo", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Comments" => {
+                    obj.comments = Some(deserialize_primitive("Comments", stack, Ok)?);
+                }
+                "QuoteEscapeCharacter" => {
+                    obj.quote_escape_character =
+                        Some(deserialize_primitive("QuoteEscapeCharacter", stack, Ok)?);
+                }
+                "RecordDelimiter" => {
+                    obj.record_delimiter =
+                        Some(deserialize_primitive("RecordDelimiter", stack, Ok)?);
+                }
+                "FieldDelimiter" => {
+                    obj.field_delimiter = Some(deserialize_primitive("FieldDelimiter", stack, Ok)?);
+                }
+                "QuoteCharacter" => {
+                    obj.quote_character = Some(deserialize_primitive("QuoteCharacter", stack, Ok)?);
+                }
+                "AllowQuotedRecordDelimiter" => {
+                    obj.allow_quoted_record_delimiter = Some(deserialize_primitive(
+                        "AllowQuotedRecordDelimiter",
+                        stack,
+                        |s| Ok(bool::from_str(&s).unwrap()),
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -1665,31 +1718,29 @@ impl CSVOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CSVOutput, XmlParseError> {
-        deserialize_elements::<_, CSVOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "QuoteFields" => {
-                        obj.quote_fields = Some(deserialize_primitive("QuoteFields", stack, Ok)?);
-                    }
-                    "QuoteEscapeCharacter" => {
-                        obj.quote_escape_character = Some(deserialize_primitive("QuoteEscapeCharacter", stack, Ok)?);
-                    }
-                    "RecordDelimiter" => {
-                        obj.record_delimiter = Some(deserialize_primitive("RecordDelimiter", stack, Ok)?);
-                    }
-                    "FieldDelimiter" => {
-                        obj.field_delimiter = Some(deserialize_primitive("FieldDelimiter", stack, Ok)?);
-                    }
-                    "QuoteCharacter" => {
-                        obj.quote_character = Some(deserialize_primitive("QuoteCharacter", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, CSVOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "QuoteFields" => {
+                    obj.quote_fields = Some(deserialize_primitive("QuoteFields", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "QuoteEscapeCharacter" => {
+                    obj.quote_escape_character =
+                        Some(deserialize_primitive("QuoteEscapeCharacter", stack, Ok)?);
+                }
+                "RecordDelimiter" => {
+                    obj.record_delimiter =
+                        Some(deserialize_primitive("RecordDelimiter", stack, Ok)?);
+                }
+                "FieldDelimiter" => {
+                    obj.field_delimiter = Some(deserialize_primitive("FieldDelimiter", stack, Ok)?);
+                }
+                "QuoteCharacter" => {
+                    obj.quote_character = Some(deserialize_primitive("QuoteCharacter", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -1731,10 +1782,12 @@ impl CloudFunctionConfigurationDeserializer {
                             .extend(EventListDeserializer::deserialize("Events", stack)?);
                     }
                     "CloudFunction" => {
-                        obj.cloud_function = Some(deserialize_primitive("CloudFunction", stack, Ok)?);
+                        obj.cloud_function =
+                            Some(deserialize_primitive("CloudFunction", stack, Ok)?);
                     }
                     "InvocationRole" => {
-                        obj.invocation_role = Some(deserialize_primitive("InvocationRole", stack, Ok)?);
+                        obj.invocation_role =
+                            Some(deserialize_primitive("InvocationRole", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -1757,19 +1810,15 @@ impl CommonPrefixDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CommonPrefix, XmlParseError> {
-        deserialize_elements::<_, CommonPrefix, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, CommonPrefix, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -1825,7 +1874,8 @@ impl CompleteMultipartUploadOutputDeserializer {
                         obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
                     }
                     "ServerSideEncryption" => {
-                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
+                        obj.server_side_encryption =
+                            Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
                     }
                     "VersionId" => {
                         obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
@@ -1834,10 +1884,14 @@ impl CompleteMultipartUploadOutputDeserializer {
                         obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
                     }
                     "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.bucket_key_enabled =
+                            Some(deserialize_primitive("BucketKeyEnabled", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                        obj.request_charged =
+                            Some(deserialize_primitive("RequestCharged", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -1882,7 +1936,11 @@ impl CompleteMultipartUploadRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "MultipartUpload" => {
-                        obj.multipart_upload = Some(CompletedMultipartUploadDeserializer::deserialize("MultipartUpload", stack)?);
+                        obj.multipart_upload =
+                            Some(CompletedMultipartUploadDeserializer::deserialize(
+                                "MultipartUpload",
+                                stack,
+                            )?);
                     }
                     "UploadId" => {
                         obj.upload_id = deserialize_primitive("UploadId", stack, Ok)?;
@@ -1891,7 +1949,8 @@ impl CompleteMultipartUploadRequestDeserializer {
                         obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -1947,22 +2006,20 @@ impl CompletedPartDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CompletedPart, XmlParseError> {
-        deserialize_elements::<_, CompletedPart, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ETag" => {
-                        obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
-                    }
-                    "PartNumber" => {
-                        obj.part_number = Some(deserialize_primitive("PartNumber", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, CompletedPart, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ETag" => {
+                    obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "PartNumber" => {
+                    obj.part_number = Some(deserialize_primitive("PartNumber", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -1981,28 +2038,28 @@ impl ConditionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Condition, XmlParseError> {
-        deserialize_elements::<_, Condition, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "HttpErrorCodeReturnedEquals" => {
-                        obj.http_error_code_returned_equals = Some(deserialize_primitive("HttpErrorCodeReturnedEquals", stack, Ok)?);
-                    }
-                    "KeyPrefixEquals" => {
-                        obj.key_prefix_equals = Some(deserialize_primitive("KeyPrefixEquals", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Condition, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "HttpErrorCodeReturnedEquals" => {
+                    obj.http_error_code_returned_equals = Some(deserialize_primitive(
+                        "HttpErrorCodeReturnedEquals",
+                        stack,
+                        Ok,
+                    )?);
                 }
-                Ok(())
-            },
-        )
+                "KeyPrefixEquals" => {
+                    obj.key_prefix_equals =
+                        Some(deserialize_primitive("KeyPrefixEquals", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct ContinuationEvent {
-}
+pub struct ContinuationEvent {}
 #[allow(dead_code)]
 pub struct ContinuationEventDeserializer;
 impl ContinuationEventDeserializer {
@@ -2011,16 +2068,12 @@ impl ContinuationEventDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ContinuationEvent, XmlParseError> {
-        deserialize_elements::<_, ContinuationEvent, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
+        deserialize_elements::<_, ContinuationEvent, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -2057,49 +2110,56 @@ impl CopyObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyObjectOutput, XmlParseError> {
-        deserialize_elements::<_, CopyObjectOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CopyObjectResult" => {
-                        obj.copy_object_result = Some(CopyObjectResultDeserializer::deserialize("CopyObjectResult", stack)?);
-                    }
-                    "Expiration" => {
-                        obj.expiration = Some(deserialize_primitive("Expiration", stack, Ok)?);
-                    }
-                    "CopySourceVersionId" => {
-                        obj.copy_source_version_id = Some(deserialize_primitive("CopySourceVersionId", stack, Ok)?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "ServerSideEncryption" => {
-                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
-                    }
-                    "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "SSEKMSKeyId" => {
-                        obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
-                    }
-                    "SSEKMSEncryptionContext" => {
-                        obj.ssekms_encryption_context = Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
-                    }
-                    "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, CopyObjectOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CopyObjectResult" => {
+                    obj.copy_object_result = Some(CopyObjectResultDeserializer::deserialize(
+                        "CopyObjectResult",
+                        stack,
+                    )?);
                 }
-                Ok(())
-            },
-        )
+                "Expiration" => {
+                    obj.expiration = Some(deserialize_primitive("Expiration", stack, Ok)?);
+                }
+                "CopySourceVersionId" => {
+                    obj.copy_source_version_id =
+                        Some(deserialize_primitive("CopySourceVersionId", stack, Ok)?);
+                }
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "ServerSideEncryption" => {
+                    obj.server_side_encryption =
+                        Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
+                }
+                "SSECustomerAlgorithm" => {
+                    obj.sse_customer_algorithm =
+                        Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                }
+                "SSECustomerKeyMD5" => {
+                    obj.sse_customer_key_md5 =
+                        Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                }
+                "SSEKMSKeyId" => {
+                    obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
+                }
+                "SSEKMSEncryptionContext" => {
+                    obj.ssekms_encryption_context =
+                        Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
+                }
+                "BucketKeyEnabled" => {
+                    obj.bucket_key_enabled =
+                        Some(deserialize_primitive("BucketKeyEnabled", stack, |s| {
+                            Ok(bool::from_str(&s).unwrap())
+                        })?);
+                }
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -2194,136 +2254,185 @@ impl CopyObjectRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyObjectRequest, XmlParseError> {
-        deserialize_elements::<_, CopyObjectRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ACL" => {
-                        obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
-                    }
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "CacheControl" => {
-                        obj.cache_control = Some(deserialize_primitive("CacheControl", stack, Ok)?);
-                    }
-                    "ContentDisposition" => {
-                        obj.content_disposition = Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
-                    }
-                    "ContentEncoding" => {
-                        obj.content_encoding = Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
-                    }
-                    "ContentLanguage" => {
-                        obj.content_language = Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
-                    }
-                    "ContentType" => {
-                        obj.content_type = Some(deserialize_primitive("ContentType", stack, Ok)?);
-                    }
-                    "CopySource" => {
-                        obj.copy_source = deserialize_primitive("CopySource", stack, Ok)?;
-                    }
-                    "CopySourceIfMatch" => {
-                        obj.copy_source_if_match = Some(deserialize_primitive("CopySourceIfMatch", stack, Ok)?);
-                    }
-                    "CopySourceIfModifiedSince" => {
-                        obj.copy_source_if_modified_since = Some(deserialize_primitive("CopySourceIfModifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "CopySourceIfNoneMatch" => {
-                        obj.copy_source_if_none_match = Some(deserialize_primitive("CopySourceIfNoneMatch", stack, Ok)?);
-                    }
-                    "CopySourceIfUnmodifiedSince" => {
-                        obj.copy_source_if_unmodified_since = Some(deserialize_primitive("CopySourceIfUnmodifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "Expires" => {
-                        obj.expires = Some(deserialize_primitive("Expires", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "GrantFullControl" => {
-                        obj.grant_full_control = Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
-                    }
-                    "GrantRead" => {
-                        obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
-                    }
-                    "GrantReadACP" => {
-                        obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
-                    }
-                    "GrantWriteACP" => {
-                        obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
-                    }
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "Metadata" => {
-                        obj.metadata = Some(Default::default());
-                    }
-                    "MetadataDirective" => {
-                        obj.metadata_directive = Some(deserialize_primitive("MetadataDirective", stack, Ok)?);
-                    }
-                    "TaggingDirective" => {
-                        obj.tagging_directive = Some(deserialize_primitive("TaggingDirective", stack, Ok)?);
-                    }
-                    "ServerSideEncryption" => {
-                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
-                    }
-                    "StorageClass" => {
-                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
-                    }
-                    "WebsiteRedirectLocation" => {
-                        obj.website_redirect_location = Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
-                    }
-                    "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "SSECustomerKey" => {
-                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
-                    }
-                    "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "SSEKMSKeyId" => {
-                        obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
-                    }
-                    "SSEKMSEncryptionContext" => {
-                        obj.ssekms_encryption_context = Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
-                    }
-                    "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "CopySourceSSECustomerAlgorithm" => {
-                        obj.copy_source_sse_customer_algorithm = Some(deserialize_primitive("CopySourceSSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "CopySourceSSECustomerKey" => {
-                        obj.copy_source_sse_customer_key = Some(deserialize_primitive("CopySourceSSECustomerKey", stack, Ok)?);
-                    }
-                    "CopySourceSSECustomerKeyMD5" => {
-                        obj.copy_source_sse_customer_key_md5 = Some(deserialize_primitive("CopySourceSSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "Tagging" => {
-                        obj.tagging = Some(deserialize_primitive("Tagging", stack, Ok)?);
-                    }
-                    "ObjectLockMode" => {
-                        obj.object_lock_mode = Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
-                    }
-                    "ObjectLockRetainUntilDate" => {
-                        obj.object_lock_retain_until_date = Some(deserialize_primitive("ObjectLockRetainUntilDate", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "ObjectLockLegalHoldStatus" => {
-                        obj.object_lock_legal_hold_status = Some(deserialize_primitive("ObjectLockLegalHoldStatus", stack, Ok)?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    "ExpectedSourceBucketOwner" => {
-                        obj.expected_source_bucket_owner = Some(deserialize_primitive("ExpectedSourceBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, CopyObjectRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ACL" => {
+                    obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
+                }
+                "CacheControl" => {
+                    obj.cache_control = Some(deserialize_primitive("CacheControl", stack, Ok)?);
+                }
+                "ContentDisposition" => {
+                    obj.content_disposition =
+                        Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
+                }
+                "ContentEncoding" => {
+                    obj.content_encoding =
+                        Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
+                }
+                "ContentLanguage" => {
+                    obj.content_language =
+                        Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
+                }
+                "ContentType" => {
+                    obj.content_type = Some(deserialize_primitive("ContentType", stack, Ok)?);
+                }
+                "CopySource" => {
+                    obj.copy_source = deserialize_primitive("CopySource", stack, Ok)?;
+                }
+                "CopySourceIfMatch" => {
+                    obj.copy_source_if_match =
+                        Some(deserialize_primitive("CopySourceIfMatch", stack, Ok)?);
+                }
+                "CopySourceIfModifiedSince" => {
+                    obj.copy_source_if_modified_since = Some(deserialize_primitive(
+                        "CopySourceIfModifiedSince",
+                        stack,
+                        |s| Ok(String::from_str(&s).unwrap()),
+                    )?);
+                }
+                "CopySourceIfNoneMatch" => {
+                    obj.copy_source_if_none_match =
+                        Some(deserialize_primitive("CopySourceIfNoneMatch", stack, Ok)?);
+                }
+                "CopySourceIfUnmodifiedSince" => {
+                    obj.copy_source_if_unmodified_since = Some(deserialize_primitive(
+                        "CopySourceIfUnmodifiedSince",
+                        stack,
+                        |s| Ok(String::from_str(&s).unwrap()),
+                    )?);
+                }
+                "Expires" => {
+                    obj.expires = Some(deserialize_primitive("Expires", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                "GrantFullControl" => {
+                    obj.grant_full_control =
+                        Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
+                }
+                "GrantRead" => {
+                    obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
+                }
+                "GrantReadACP" => {
+                    obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
+                }
+                "GrantWriteACP" => {
+                    obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
+                }
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
+                }
+                "Metadata" => {
+                    obj.metadata = Some(Default::default());
+                }
+                "MetadataDirective" => {
+                    obj.metadata_directive =
+                        Some(deserialize_primitive("MetadataDirective", stack, Ok)?);
+                }
+                "TaggingDirective" => {
+                    obj.tagging_directive =
+                        Some(deserialize_primitive("TaggingDirective", stack, Ok)?);
+                }
+                "ServerSideEncryption" => {
+                    obj.server_side_encryption =
+                        Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
+                }
+                "StorageClass" => {
+                    obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
+                }
+                "WebsiteRedirectLocation" => {
+                    obj.website_redirect_location =
+                        Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
+                }
+                "SSECustomerAlgorithm" => {
+                    obj.sse_customer_algorithm =
+                        Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                }
+                "SSECustomerKey" => {
+                    obj.sse_customer_key =
+                        Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
+                }
+                "SSECustomerKeyMD5" => {
+                    obj.sse_customer_key_md5 =
+                        Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                }
+                "SSEKMSKeyId" => {
+                    obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
+                }
+                "SSEKMSEncryptionContext" => {
+                    obj.ssekms_encryption_context =
+                        Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
+                }
+                "BucketKeyEnabled" => {
+                    obj.bucket_key_enabled =
+                        Some(deserialize_primitive("BucketKeyEnabled", stack, |s| {
+                            Ok(bool::from_str(&s).unwrap())
+                        })?);
+                }
+                "CopySourceSSECustomerAlgorithm" => {
+                    obj.copy_source_sse_customer_algorithm = Some(deserialize_primitive(
+                        "CopySourceSSECustomerAlgorithm",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                "CopySourceSSECustomerKey" => {
+                    obj.copy_source_sse_customer_key = Some(deserialize_primitive(
+                        "CopySourceSSECustomerKey",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                "CopySourceSSECustomerKeyMD5" => {
+                    obj.copy_source_sse_customer_key_md5 = Some(deserialize_primitive(
+                        "CopySourceSSECustomerKeyMD5",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "Tagging" => {
+                    obj.tagging = Some(deserialize_primitive("Tagging", stack, Ok)?);
+                }
+                "ObjectLockMode" => {
+                    obj.object_lock_mode =
+                        Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
+                }
+                "ObjectLockRetainUntilDate" => {
+                    obj.object_lock_retain_until_date = Some(deserialize_primitive(
+                        "ObjectLockRetainUntilDate",
+                        stack,
+                        |s| Ok(String::from_str(&s).unwrap()),
+                    )?);
+                }
+                "ObjectLockLegalHoldStatus" => {
+                    obj.object_lock_legal_hold_status = Some(deserialize_primitive(
+                        "ObjectLockLegalHoldStatus",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                "ExpectedSourceBucketOwner" => {
+                    obj.expected_source_bucket_owner = Some(deserialize_primitive(
+                        "ExpectedSourceBucketOwner",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -2342,22 +2451,20 @@ impl CopyObjectResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyObjectResult, XmlParseError> {
-        deserialize_elements::<_, CopyObjectResult, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ETag" => {
-                        obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
-                    }
-                    "LastModified" => {
-                        obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, CopyObjectResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ETag" => {
+                    obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "LastModified" => {
+                    obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -2376,22 +2483,20 @@ impl CopyPartResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyPartResult, XmlParseError> {
-        deserialize_elements::<_, CopyPartResult, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ETag" => {
-                        obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
-                    }
-                    "LastModified" => {
-                        obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, CopyPartResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ETag" => {
+                    obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "LastModified" => {
+                    obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -2414,7 +2519,8 @@ impl CreateBucketConfigurationDeserializer {
             |name, stack, obj| {
                 match name {
                     "LocationConstraint" => {
-                        obj.location_constraint = Some(deserialize_primitive("LocationConstraint", stack, Ok)?);
+                        obj.location_constraint =
+                            Some(deserialize_primitive("LocationConstraint", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2437,19 +2543,15 @@ impl CreateBucketOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateBucketOutput, XmlParseError> {
-        deserialize_elements::<_, CreateBucketOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Location" => {
-                        obj.location = Some(deserialize_primitive("Location", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, CreateBucketOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Location" => {
+                    obj.location = Some(deserialize_primitive("Location", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -2482,43 +2584,48 @@ impl CreateBucketRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateBucketRequest, XmlParseError> {
-        deserialize_elements::<_, CreateBucketRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ACL" => {
-                        obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
-                    }
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "CreateBucketConfiguration" => {
-                        obj.create_bucket_configuration = Some(CreateBucketConfigurationDeserializer::deserialize("CreateBucketConfiguration", stack)?);
-                    }
-                    "GrantFullControl" => {
-                        obj.grant_full_control = Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
-                    }
-                    "GrantRead" => {
-                        obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
-                    }
-                    "GrantReadACP" => {
-                        obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
-                    }
-                    "GrantWrite" => {
-                        obj.grant_write = Some(deserialize_primitive("GrantWrite", stack, Ok)?);
-                    }
-                    "GrantWriteACP" => {
-                        obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
-                    }
-                    "ObjectLockEnabledForBucket" => {
-                        obj.object_lock_enabled_for_bucket = Some(deserialize_primitive("ObjectLockEnabledForBucket", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, CreateBucketRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ACL" => {
+                    obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
+                }
+                "CreateBucketConfiguration" => {
+                    obj.create_bucket_configuration =
+                        Some(CreateBucketConfigurationDeserializer::deserialize(
+                            "CreateBucketConfiguration",
+                            stack,
+                        )?);
+                }
+                "GrantFullControl" => {
+                    obj.grant_full_control =
+                        Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
+                }
+                "GrantRead" => {
+                    obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
+                }
+                "GrantReadACP" => {
+                    obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
+                }
+                "GrantWrite" => {
+                    obj.grant_write = Some(deserialize_primitive("GrantWrite", stack, Ok)?);
+                }
+                "GrantWriteACP" => {
+                    obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
+                }
+                "ObjectLockEnabledForBucket" => {
+                    obj.object_lock_enabled_for_bucket = Some(deserialize_primitive(
+                        "ObjectLockEnabledForBucket",
+                        stack,
+                        |s| Ok(bool::from_str(&s).unwrap()),
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -2563,7 +2670,9 @@ impl CreateMultipartUploadOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "AbortDate" => {
-                        obj.abort_date = Some(deserialize_primitive("AbortDate", stack, |s| Ok(String::from_str(&s).unwrap()))?);
+                        obj.abort_date = Some(deserialize_primitive("AbortDate", stack, |s| {
+                            Ok(String::from_str(&s).unwrap())
+                        })?);
                     }
                     "AbortRuleId" => {
                         obj.abort_rule_id = Some(deserialize_primitive("AbortRuleId", stack, Ok)?);
@@ -2578,25 +2687,33 @@ impl CreateMultipartUploadOutputDeserializer {
                         obj.upload_id = Some(deserialize_primitive("UploadId", stack, Ok)?);
                     }
                     "ServerSideEncryption" => {
-                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
+                        obj.server_side_encryption =
+                            Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
                     }
                     "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                        obj.sse_customer_algorithm =
+                            Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
                     }
                     "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                        obj.sse_customer_key_md5 =
+                            Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
                     }
                     "SSEKMSKeyId" => {
                         obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
                     }
                     "SSEKMSEncryptionContext" => {
-                        obj.ssekms_encryption_context = Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
+                        obj.ssekms_encryption_context =
+                            Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
                     }
                     "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.bucket_key_enabled =
+                            Some(deserialize_primitive("BucketKeyEnabled", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                        obj.request_charged =
+                            Some(deserialize_primitive("RequestCharged", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2690,31 +2807,39 @@ impl CreateMultipartUploadRequestDeserializer {
                         obj.cache_control = Some(deserialize_primitive("CacheControl", stack, Ok)?);
                     }
                     "ContentDisposition" => {
-                        obj.content_disposition = Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
+                        obj.content_disposition =
+                            Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
                     }
                     "ContentEncoding" => {
-                        obj.content_encoding = Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
+                        obj.content_encoding =
+                            Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
                     }
                     "ContentLanguage" => {
-                        obj.content_language = Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
+                        obj.content_language =
+                            Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
                     }
                     "ContentType" => {
                         obj.content_type = Some(deserialize_primitive("ContentType", stack, Ok)?);
                     }
                     "Expires" => {
-                        obj.expires = Some(deserialize_primitive("Expires", stack, |s| Ok(String::from_str(&s).unwrap()))?);
+                        obj.expires = Some(deserialize_primitive("Expires", stack, |s| {
+                            Ok(String::from_str(&s).unwrap())
+                        })?);
                     }
                     "GrantFullControl" => {
-                        obj.grant_full_control = Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
+                        obj.grant_full_control =
+                            Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
                     }
                     "GrantRead" => {
                         obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
                     }
                     "GrantReadACP" => {
-                        obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
+                        obj.grant_read_acp =
+                            Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
                     }
                     "GrantWriteACP" => {
-                        obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
+                        obj.grant_write_acp =
+                            Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
                     }
                     "Key" => {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
@@ -2723,31 +2848,40 @@ impl CreateMultipartUploadRequestDeserializer {
                         obj.metadata = Some(Default::default());
                     }
                     "ServerSideEncryption" => {
-                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
+                        obj.server_side_encryption =
+                            Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
                     }
                     "StorageClass" => {
                         obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
                     }
                     "WebsiteRedirectLocation" => {
-                        obj.website_redirect_location = Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
+                        obj.website_redirect_location =
+                            Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
                     }
                     "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                        obj.sse_customer_algorithm =
+                            Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
                     }
                     "SSECustomerKey" => {
-                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
+                        obj.sse_customer_key =
+                            Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
                     }
                     "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                        obj.sse_customer_key_md5 =
+                            Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
                     }
                     "SSEKMSKeyId" => {
                         obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
                     }
                     "SSEKMSEncryptionContext" => {
-                        obj.ssekms_encryption_context = Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
+                        obj.ssekms_encryption_context =
+                            Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
                     }
                     "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.bucket_key_enabled =
+                            Some(deserialize_primitive("BucketKeyEnabled", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     "RequestPayer" => {
                         obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
@@ -2756,16 +2890,26 @@ impl CreateMultipartUploadRequestDeserializer {
                         obj.tagging = Some(deserialize_primitive("Tagging", stack, Ok)?);
                     }
                     "ObjectLockMode" => {
-                        obj.object_lock_mode = Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
+                        obj.object_lock_mode =
+                            Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
                     }
                     "ObjectLockRetainUntilDate" => {
-                        obj.object_lock_retain_until_date = Some(deserialize_primitive("ObjectLockRetainUntilDate", stack, |s| Ok(String::from_str(&s).unwrap()))?);
+                        obj.object_lock_retain_until_date = Some(deserialize_primitive(
+                            "ObjectLockRetainUntilDate",
+                            stack,
+                            |s| Ok(String::from_str(&s).unwrap()),
+                        )?);
                     }
                     "ObjectLockLegalHoldStatus" => {
-                        obj.object_lock_legal_hold_status = Some(deserialize_primitive("ObjectLockLegalHoldStatus", stack, Ok)?);
+                        obj.object_lock_legal_hold_status = Some(deserialize_primitive(
+                            "ObjectLockLegalHoldStatus",
+                            stack,
+                            Ok,
+                        )?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2792,25 +2936,25 @@ impl DefaultRetentionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DefaultRetention, XmlParseError> {
-        deserialize_elements::<_, DefaultRetention, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Mode" => {
-                        obj.mode = Some(deserialize_primitive("Mode", stack, Ok)?);
-                    }
-                    "Days" => {
-                        obj.days = Some(deserialize_primitive("Days", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "Years" => {
-                        obj.years = Some(deserialize_primitive("Years", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, DefaultRetention, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Mode" => {
+                    obj.mode = Some(deserialize_primitive("Mode", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Days" => {
+                    obj.days = Some(deserialize_primitive("Days", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "Years" => {
+                    obj.years = Some(deserialize_primitive("Years", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -2829,23 +2973,23 @@ impl DeleteDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Delete, XmlParseError> {
-        deserialize_elements::<_, Delete, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Objects" => {
-                        obj.objects
-                            .extend(ObjectIdentifierListDeserializer::deserialize("Objects", stack)?);
-                    }
-                    "Quiet" => {
-                        obj.quiet = Some(deserialize_primitive("Quiet", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Delete, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Objects" => {
+                    obj.objects
+                        .extend(ObjectIdentifierListDeserializer::deserialize(
+                            "Objects", stack,
+                        )?);
                 }
-                Ok(())
-            },
-        )
+                "Quiet" => {
+                    obj.quiet = Some(deserialize_primitive("Quiet", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -2878,7 +3022,8 @@ impl DeleteBucketAnalyticsConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2912,7 +3057,8 @@ impl DeleteBucketCorsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -2946,7 +3092,8 @@ impl DeleteBucketEncryptionRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3019,7 +3166,8 @@ impl DeleteBucketInventoryConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3053,7 +3201,8 @@ impl DeleteBucketLifecycleRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3092,7 +3241,8 @@ impl DeleteBucketMetricsConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3126,7 +3276,8 @@ impl DeleteBucketOwnershipControlsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3160,7 +3311,8 @@ impl DeleteBucketPolicyRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3194,7 +3346,8 @@ impl DeleteBucketReplicationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3219,22 +3372,19 @@ impl DeleteBucketRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteBucketRequest, XmlParseError> {
-        deserialize_elements::<_, DeleteBucketRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, DeleteBucketRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -3262,7 +3412,8 @@ impl DeleteBucketTaggingRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3296,7 +3447,8 @@ impl DeleteBucketWebsiteRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3327,31 +3479,31 @@ impl DeleteMarkerEntryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteMarkerEntry, XmlParseError> {
-        deserialize_elements::<_, DeleteMarkerEntry, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Owner" => {
-                        obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
-                    }
-                    "Key" => {
-                        obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "IsLatest" => {
-                        obj.is_latest = Some(deserialize_primitive("IsLatest", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "LastModified" => {
-                        obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, DeleteMarkerEntry, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Owner" => {
+                    obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
                 }
-                Ok(())
-            },
-        )
+                "Key" => {
+                    obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
+                }
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "IsLatest" => {
+                    obj.is_latest = Some(deserialize_primitive("IsLatest", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
+                }
+                "LastModified" => {
+                    obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -3401,25 +3553,23 @@ impl DeleteObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteObjectOutput, XmlParseError> {
-        deserialize_elements::<_, DeleteObjectOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DeleteMarker" => {
-                        obj.delete_marker = Some(deserialize_primitive("DeleteMarker", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, DeleteObjectOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DeleteMarker" => {
+                    obj.delete_marker = Some(deserialize_primitive("DeleteMarker", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -3448,37 +3598,38 @@ impl DeleteObjectRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteObjectRequest, XmlParseError> {
-        deserialize_elements::<_, DeleteObjectRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "MFA" => {
-                        obj.mfa = Some(deserialize_primitive("MFA", stack, Ok)?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "BypassGovernanceRetention" => {
-                        obj.bypass_governance_retention = Some(deserialize_primitive("BypassGovernanceRetention", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, DeleteObjectRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
+                }
+                "MFA" => {
+                    obj.mfa = Some(deserialize_primitive("MFA", stack, Ok)?);
+                }
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "BypassGovernanceRetention" => {
+                    obj.bypass_governance_retention = Some(deserialize_primitive(
+                        "BypassGovernanceRetention",
+                        stack,
+                        |s| Ok(bool::from_str(&s).unwrap()),
+                    )?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -3545,7 +3696,8 @@ impl DeleteObjectTaggingRequestDeserializer {
                         obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3572,29 +3724,25 @@ impl DeleteObjectsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteObjectsOutput, XmlParseError> {
-        deserialize_elements::<_, DeleteObjectsOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Deleted" => {
-                        obj.deleted
-                            .get_or_insert(vec![])
-                            .extend(DeletedObjectsDeserializer::deserialize("Deleted", stack)?);
-                    }
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    "Errors" => {
-                        obj.errors
-                            .get_or_insert(vec![])
-                            .extend(ErrorsDeserializer::deserialize("Errors", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, DeleteObjectsOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Deleted" => {
+                    obj.deleted
+                        .get_or_insert(vec![])
+                        .extend(DeletedObjectsDeserializer::deserialize("Deleted", stack)?);
                 }
-                Ok(())
-            },
-        )
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                }
+                "Errors" => {
+                    obj.errors
+                        .get_or_insert(vec![])
+                        .extend(ErrorsDeserializer::deserialize("Errors", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -3621,34 +3769,35 @@ impl DeleteObjectsRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteObjectsRequest, XmlParseError> {
-        deserialize_elements::<_, DeleteObjectsRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "Delete" => {
-                        obj.delete = DeleteDeserializer::deserialize("Delete", stack)?;
-                    }
-                    "MFA" => {
-                        obj.mfa = Some(deserialize_primitive("MFA", stack, Ok)?);
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "BypassGovernanceRetention" => {
-                        obj.bypass_governance_retention = Some(deserialize_primitive("BypassGovernanceRetention", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, DeleteObjectsRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Delete" => {
+                    obj.delete = DeleteDeserializer::deserialize("Delete", stack)?;
+                }
+                "MFA" => {
+                    obj.mfa = Some(deserialize_primitive("MFA", stack, Ok)?);
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "BypassGovernanceRetention" => {
+                    obj.bypass_governance_retention = Some(deserialize_primitive(
+                        "BypassGovernanceRetention",
+                        stack,
+                        |s| Ok(bool::from_str(&s).unwrap()),
+                    )?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -3676,7 +3825,8 @@ impl DeletePublicAccessBlockRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3705,28 +3855,27 @@ impl DeletedObjectDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeletedObject, XmlParseError> {
-        deserialize_elements::<_, DeletedObject, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Key" => {
-                        obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "DeleteMarker" => {
-                        obj.delete_marker = Some(deserialize_primitive("DeleteMarker", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "DeleteMarkerVersionId" => {
-                        obj.delete_marker_version_id = Some(deserialize_primitive("DeleteMarkerVersionId", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, DeletedObject, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Key" => {
+                    obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "DeleteMarker" => {
+                    obj.delete_marker = Some(deserialize_primitive("DeleteMarker", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
+                }
+                "DeleteMarkerVersionId" => {
+                    obj.delete_marker_version_id =
+                        Some(deserialize_primitive("DeleteMarkerVersionId", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -3755,37 +3904,44 @@ impl DestinationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Destination, XmlParseError> {
-        deserialize_elements::<_, Destination, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "Account" => {
-                        obj.account = Some(deserialize_primitive("Account", stack, Ok)?);
-                    }
-                    "StorageClass" => {
-                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
-                    }
-                    "AccessControlTranslation" => {
-                        obj.access_control_translation = Some(AccessControlTranslationDeserializer::deserialize("AccessControlTranslation", stack)?);
-                    }
-                    "EncryptionConfiguration" => {
-                        obj.encryption_configuration = Some(EncryptionConfigurationDeserializer::deserialize("EncryptionConfiguration", stack)?);
-                    }
-                    "ReplicationTime" => {
-                        obj.replication_time = Some(ReplicationTimeDeserializer::deserialize("ReplicationTime", stack)?);
-                    }
-                    "Metrics" => {
-                        obj.metrics = Some(MetricsDeserializer::deserialize("Metrics", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Destination, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Account" => {
+                    obj.account = Some(deserialize_primitive("Account", stack, Ok)?);
+                }
+                "StorageClass" => {
+                    obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
+                }
+                "AccessControlTranslation" => {
+                    obj.access_control_translation =
+                        Some(AccessControlTranslationDeserializer::deserialize(
+                            "AccessControlTranslation",
+                            stack,
+                        )?);
+                }
+                "EncryptionConfiguration" => {
+                    obj.encryption_configuration =
+                        Some(EncryptionConfigurationDeserializer::deserialize(
+                            "EncryptionConfiguration",
+                            stack,
+                        )?);
+                }
+                "ReplicationTime" => {
+                    obj.replication_time = Some(ReplicationTimeDeserializer::deserialize(
+                        "ReplicationTime",
+                        stack,
+                    )?);
+                }
+                "Metrics" => {
+                    obj.metrics = Some(MetricsDeserializer::deserialize("Metrics", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -3806,25 +3962,21 @@ impl EncryptionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Encryption, XmlParseError> {
-        deserialize_elements::<_, Encryption, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "EncryptionType" => {
-                        obj.encryption_type = deserialize_primitive("EncryptionType", stack, Ok)?;
-                    }
-                    "KMSKeyId" => {
-                        obj.kms_key_id = Some(deserialize_primitive("KMSKeyId", stack, Ok)?);
-                    }
-                    "KMSContext" => {
-                        obj.kms_context = Some(deserialize_primitive("KMSContext", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Encryption, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EncryptionType" => {
+                    obj.encryption_type = deserialize_primitive("EncryptionType", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "KMSKeyId" => {
+                    obj.kms_key_id = Some(deserialize_primitive("KMSKeyId", stack, Ok)?);
+                }
+                "KMSContext" => {
+                    obj.kms_context = Some(deserialize_primitive("KMSContext", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -3847,7 +3999,8 @@ impl EncryptionConfigurationDeserializer {
             |name, stack, obj| {
                 match name {
                     "ReplicaKmsKeyID" => {
-                        obj.replica_kms_key_id = Some(deserialize_primitive("ReplicaKmsKeyID", stack, Ok)?);
+                        obj.replica_kms_key_id =
+                            Some(deserialize_primitive("ReplicaKmsKeyID", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -3858,8 +4011,7 @@ impl EncryptionConfigurationDeserializer {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct EndEvent {
-}
+pub struct EndEvent {}
 #[allow(dead_code)]
 pub struct EndEventDeserializer;
 impl EndEventDeserializer {
@@ -3868,16 +4020,12 @@ impl EndEventDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EndEvent, XmlParseError> {
-        deserialize_elements::<_, EndEvent, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
+        deserialize_elements::<_, EndEvent, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -3900,28 +4048,24 @@ impl ErrorDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Error, XmlParseError> {
-        deserialize_elements::<_, Error, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Key" => {
-                        obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "Code" => {
-                        obj.code = Some(deserialize_primitive("Code", stack, Ok)?);
-                    }
-                    "Message" => {
-                        obj.message = Some(deserialize_primitive("Message", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Error, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Key" => {
+                    obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "Code" => {
+                    obj.code = Some(deserialize_primitive("Code", stack, Ok)?);
+                }
+                "Message" => {
+                    obj.message = Some(deserialize_primitive("Message", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -3938,19 +4082,15 @@ impl ErrorDocumentDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ErrorDocument, XmlParseError> {
-        deserialize_elements::<_, ErrorDocument, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ErrorDocument, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -3998,22 +4138,18 @@ impl FilterRuleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FilterRule, XmlParseError> {
-        deserialize_elements::<_, FilterRule, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Name" => {
-                        obj.name = Some(deserialize_primitive("Name", stack, Ok)?);
-                    }
-                    "Value" => {
-                        obj.value = Some(deserialize_primitive("Value", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, FilterRule, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Name" => {
+                    obj.name = Some(deserialize_primitive("Name", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Value" => {
+                    obj.value = Some(deserialize_primitive("Value", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -4070,7 +4206,8 @@ impl GetBucketAccelerateConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4095,24 +4232,20 @@ impl GetBucketAclOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketAclOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketAclOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Owner" => {
-                        obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
-                    }
-                    "Grants" => {
-                        obj.grants
-                            .get_or_insert(vec![])
-                            .extend(GrantsDeserializer::deserialize("Grants", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetBucketAclOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Owner" => {
+                    obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
                 }
-                Ok(())
-            },
-        )
+                "Grants" => {
+                    obj.grants
+                        .get_or_insert(vec![])
+                        .extend(GrantsDeserializer::deserialize("Grants", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -4131,22 +4264,19 @@ impl GetBucketAclRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketAclRequest, XmlParseError> {
-        deserialize_elements::<_, GetBucketAclRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetBucketAclRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -4169,7 +4299,11 @@ impl GetBucketAnalyticsConfigurationOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "AnalyticsConfiguration" => {
-                        obj.analytics_configuration = Some(AnalyticsConfigurationDeserializer::deserialize("AnalyticsConfiguration", stack)?);
+                        obj.analytics_configuration =
+                            Some(AnalyticsConfigurationDeserializer::deserialize(
+                                "AnalyticsConfiguration",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4208,7 +4342,8 @@ impl GetBucketAnalyticsConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4231,21 +4366,17 @@ impl GetBucketCorsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketCorsOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketCorsOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CORSRules" => {
-                        obj.cors_rules
-                            .get_or_insert(vec![])
-                            .extend(CORSRulesDeserializer::deserialize("CORSRules", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetBucketCorsOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CORSRules" => {
+                    obj.cors_rules
+                        .get_or_insert(vec![])
+                        .extend(CORSRulesDeserializer::deserialize("CORSRules", stack)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -4264,22 +4395,19 @@ impl GetBucketCorsRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketCorsRequest, XmlParseError> {
-        deserialize_elements::<_, GetBucketCorsRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetBucketCorsRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -4302,7 +4430,11 @@ impl GetBucketEncryptionOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "ServerSideEncryptionConfiguration" => {
-                        obj.server_side_encryption_configuration = Some(ServerSideEncryptionConfigurationDeserializer::deserialize("ServerSideEncryptionConfiguration", stack)?);
+                        obj.server_side_encryption_configuration =
+                            Some(ServerSideEncryptionConfigurationDeserializer::deserialize(
+                                "ServerSideEncryptionConfiguration",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4336,7 +4468,8 @@ impl GetBucketEncryptionRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4365,7 +4498,11 @@ impl GetBucketIntelligentTieringConfigurationOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "IntelligentTieringConfiguration" => {
-                        obj.intelligent_tiering_configuration = Some(IntelligentTieringConfigurationDeserializer::deserialize("IntelligentTieringConfiguration", stack)?);
+                        obj.intelligent_tiering_configuration =
+                            Some(IntelligentTieringConfigurationDeserializer::deserialize(
+                                "IntelligentTieringConfiguration",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4428,7 +4565,11 @@ impl GetBucketInventoryConfigurationOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "InventoryConfiguration" => {
-                        obj.inventory_configuration = Some(InventoryConfigurationDeserializer::deserialize("InventoryConfiguration", stack)?);
+                        obj.inventory_configuration =
+                            Some(InventoryConfigurationDeserializer::deserialize(
+                                "InventoryConfiguration",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4467,7 +4608,8 @@ impl GetBucketInventoryConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4532,7 +4674,8 @@ impl GetBucketLifecycleConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4597,7 +4740,8 @@ impl GetBucketLifecycleRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4626,7 +4770,8 @@ impl GetBucketLocationOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "LocationConstraint" => {
-                        obj.location_constraint = Some(deserialize_primitive("LocationConstraint", stack, Ok)?);
+                        obj.location_constraint =
+                            Some(deserialize_primitive("LocationConstraint", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4660,7 +4805,8 @@ impl GetBucketLocationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4683,19 +4829,18 @@ impl GetBucketLoggingOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketLoggingOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketLoggingOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "LoggingEnabled" => {
-                        obj.logging_enabled = Some(LoggingEnabledDeserializer::deserialize("LoggingEnabled", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetBucketLoggingOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "LoggingEnabled" => {
+                    obj.logging_enabled = Some(LoggingEnabledDeserializer::deserialize(
+                        "LoggingEnabled",
+                        stack,
+                    )?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -4723,7 +4868,8 @@ impl GetBucketLoggingRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4752,7 +4898,11 @@ impl GetBucketMetricsConfigurationOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "MetricsConfiguration" => {
-                        obj.metrics_configuration = Some(MetricsConfigurationDeserializer::deserialize("MetricsConfiguration", stack)?);
+                        obj.metrics_configuration =
+                            Some(MetricsConfigurationDeserializer::deserialize(
+                                "MetricsConfiguration",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4791,7 +4941,8 @@ impl GetBucketMetricsConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4825,7 +4976,8 @@ impl GetBucketNotificationConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4854,7 +5006,10 @@ impl GetBucketOwnershipControlsOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "OwnershipControls" => {
-                        obj.ownership_controls = Some(OwnershipControlsDeserializer::deserialize("OwnershipControls", stack)?);
+                        obj.ownership_controls = Some(OwnershipControlsDeserializer::deserialize(
+                            "OwnershipControls",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4888,7 +5043,8 @@ impl GetBucketOwnershipControlsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -4911,19 +5067,15 @@ impl GetBucketPolicyOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketPolicyOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketPolicyOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Policy" => {
-                        obj.policy = Some(deserialize_primitive("Policy", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetBucketPolicyOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Policy" => {
+                    obj.policy = Some(deserialize_primitive("Policy", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -4942,22 +5094,19 @@ impl GetBucketPolicyRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketPolicyRequest, XmlParseError> {
-        deserialize_elements::<_, GetBucketPolicyRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetBucketPolicyRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -4980,7 +5129,10 @@ impl GetBucketPolicyStatusOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "PolicyStatus" => {
-                        obj.policy_status = Some(PolicyStatusDeserializer::deserialize("PolicyStatus", stack)?);
+                        obj.policy_status = Some(PolicyStatusDeserializer::deserialize(
+                            "PolicyStatus",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5014,7 +5166,8 @@ impl GetBucketPolicyStatusRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5043,7 +5196,11 @@ impl GetBucketReplicationOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "ReplicationConfiguration" => {
-                        obj.replication_configuration = Some(ReplicationConfigurationDeserializer::deserialize("ReplicationConfiguration", stack)?);
+                        obj.replication_configuration =
+                            Some(ReplicationConfigurationDeserializer::deserialize(
+                                "ReplicationConfiguration",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5077,7 +5234,8 @@ impl GetBucketReplicationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5140,7 +5298,8 @@ impl GetBucketRequestPaymentRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5163,20 +5322,16 @@ impl GetBucketTaggingOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketTaggingOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketTaggingOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "TagSet" => {
-                        obj.tag_set
-                            .extend(TagSetDeserializer::deserialize("TagSet", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetBucketTaggingOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "TagSet" => {
+                    obj.tag_set
+                        .extend(TagSetDeserializer::deserialize("TagSet", stack)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -5204,7 +5359,8 @@ impl GetBucketTaggingRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5272,7 +5428,8 @@ impl GetBucketVersioningRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5301,30 +5458,36 @@ impl GetBucketWebsiteOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketWebsiteOutput, XmlParseError> {
-        deserialize_elements::<_, GetBucketWebsiteOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "RedirectAllRequestsTo" => {
-                        obj.redirect_all_requests_to = Some(RedirectAllRequestsToDeserializer::deserialize("RedirectAllRequestsTo", stack)?);
-                    }
-                    "IndexDocument" => {
-                        obj.index_document = Some(IndexDocumentDeserializer::deserialize("IndexDocument", stack)?);
-                    }
-                    "ErrorDocument" => {
-                        obj.error_document = Some(ErrorDocumentDeserializer::deserialize("ErrorDocument", stack)?);
-                    }
-                    "RoutingRules" => {
-                        obj.routing_rules
-                            .get_or_insert(vec![])
-                            .extend(RoutingRulesDeserializer::deserialize("RoutingRules", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetBucketWebsiteOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "RedirectAllRequestsTo" => {
+                    obj.redirect_all_requests_to =
+                        Some(RedirectAllRequestsToDeserializer::deserialize(
+                            "RedirectAllRequestsTo",
+                            stack,
+                        )?);
                 }
-                Ok(())
-            },
-        )
+                "IndexDocument" => {
+                    obj.index_document = Some(IndexDocumentDeserializer::deserialize(
+                        "IndexDocument",
+                        stack,
+                    )?);
+                }
+                "ErrorDocument" => {
+                    obj.error_document = Some(ErrorDocumentDeserializer::deserialize(
+                        "ErrorDocument",
+                        stack,
+                    )?);
+                }
+                "RoutingRules" => {
+                    obj.routing_rules.get_or_insert(vec![]).extend(
+                        RoutingRulesDeserializer::deserialize("RoutingRules", stack)?,
+                    );
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -5352,7 +5515,8 @@ impl GetBucketWebsiteRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5379,27 +5543,23 @@ impl GetObjectAclOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetObjectAclOutput, XmlParseError> {
-        deserialize_elements::<_, GetObjectAclOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Owner" => {
-                        obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
-                    }
-                    "Grants" => {
-                        obj.grants
-                            .get_or_insert(vec![])
-                            .extend(GrantsDeserializer::deserialize("Grants", stack)?);
-                    }
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetObjectAclOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Owner" => {
+                    obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
                 }
-                Ok(())
-            },
-        )
+                "Grants" => {
+                    obj.grants
+                        .get_or_insert(vec![])
+                        .extend(GrantsDeserializer::deserialize("Grants", stack)?);
+                }
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -5424,31 +5584,28 @@ impl GetObjectAclRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetObjectAclRequest, XmlParseError> {
-        deserialize_elements::<_, GetObjectAclRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetObjectAclRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
+                }
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -5471,7 +5628,10 @@ impl GetObjectLegalHoldOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "LegalHold" => {
-                        obj.legal_hold = Some(ObjectLockLegalHoldDeserializer::deserialize("LegalHold", stack)?);
+                        obj.legal_hold = Some(ObjectLockLegalHoldDeserializer::deserialize(
+                            "LegalHold",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5520,7 +5680,8 @@ impl GetObjectLegalHoldRequestDeserializer {
                         obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5549,7 +5710,11 @@ impl GetObjectLockConfigurationOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "ObjectLockConfiguration" => {
-                        obj.object_lock_configuration = Some(ObjectLockConfigurationDeserializer::deserialize("ObjectLockConfiguration", stack)?);
+                        obj.object_lock_configuration =
+                            Some(ObjectLockConfigurationDeserializer::deserialize(
+                                "ObjectLockConfiguration",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5583,7 +5748,8 @@ impl GetObjectLockConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5668,112 +5834,143 @@ impl GetObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetObjectOutput, XmlParseError> {
-        deserialize_elements::<_, GetObjectOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Body" => {
-                        obj.body = Some(Default::default());
-                    }
-                    "DeleteMarker" => {
-                        obj.delete_marker = Some(deserialize_primitive("DeleteMarker", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "AcceptRanges" => {
-                        obj.accept_ranges = Some(deserialize_primitive("AcceptRanges", stack, Ok)?);
-                    }
-                    "Expiration" => {
-                        obj.expiration = Some(deserialize_primitive("Expiration", stack, Ok)?);
-                    }
-                    "Restore" => {
-                        obj.restore = Some(deserialize_primitive("Restore", stack, Ok)?);
-                    }
-                    "LastModified" => {
-                        obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "ContentLength" => {
-                        obj.content_length = Some(deserialize_primitive("ContentLength", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
-                    }
-                    "ETag" => {
-                        obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
-                    }
-                    "MissingMeta" => {
-                        obj.missing_meta = Some(deserialize_primitive("MissingMeta", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "CacheControl" => {
-                        obj.cache_control = Some(deserialize_primitive("CacheControl", stack, Ok)?);
-                    }
-                    "ContentDisposition" => {
-                        obj.content_disposition = Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
-                    }
-                    "ContentEncoding" => {
-                        obj.content_encoding = Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
-                    }
-                    "ContentLanguage" => {
-                        obj.content_language = Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
-                    }
-                    "ContentRange" => {
-                        obj.content_range = Some(deserialize_primitive("ContentRange", stack, Ok)?);
-                    }
-                    "ContentType" => {
-                        obj.content_type = Some(deserialize_primitive("ContentType", stack, Ok)?);
-                    }
-                    "Expires" => {
-                        obj.expires = Some(deserialize_primitive("Expires", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "WebsiteRedirectLocation" => {
-                        obj.website_redirect_location = Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
-                    }
-                    "ServerSideEncryption" => {
-                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
-                    }
-                    "Metadata" => {
-                        obj.metadata = Some(Default::default());
-                    }
-                    "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "SSEKMSKeyId" => {
-                        obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
-                    }
-                    "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "StorageClass" => {
-                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
-                    }
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    "ReplicationStatus" => {
-                        obj.replication_status = Some(deserialize_primitive("ReplicationStatus", stack, Ok)?);
-                    }
-                    "PartsCount" => {
-                        obj.parts_count = Some(deserialize_primitive("PartsCount", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "TagCount" => {
-                        obj.tag_count = Some(deserialize_primitive("TagCount", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "ObjectLockMode" => {
-                        obj.object_lock_mode = Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
-                    }
-                    "ObjectLockRetainUntilDate" => {
-                        obj.object_lock_retain_until_date = Some(deserialize_primitive("ObjectLockRetainUntilDate", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "ObjectLockLegalHoldStatus" => {
-                        obj.object_lock_legal_hold_status = Some(deserialize_primitive("ObjectLockLegalHoldStatus", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetObjectOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Body" => {
+                    obj.body = Some(Default::default());
                 }
-                Ok(())
-            },
-        )
+                "DeleteMarker" => {
+                    obj.delete_marker = Some(deserialize_primitive("DeleteMarker", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
+                }
+                "AcceptRanges" => {
+                    obj.accept_ranges = Some(deserialize_primitive("AcceptRanges", stack, Ok)?);
+                }
+                "Expiration" => {
+                    obj.expiration = Some(deserialize_primitive("Expiration", stack, Ok)?);
+                }
+                "Restore" => {
+                    obj.restore = Some(deserialize_primitive("Restore", stack, Ok)?);
+                }
+                "LastModified" => {
+                    obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                "ContentLength" => {
+                    obj.content_length =
+                        Some(deserialize_primitive("ContentLength", stack, |s| {
+                            Ok(u64::from_str(&s).unwrap())
+                        })?);
+                }
+                "ETag" => {
+                    obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
+                }
+                "MissingMeta" => {
+                    obj.missing_meta = Some(deserialize_primitive("MissingMeta", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "CacheControl" => {
+                    obj.cache_control = Some(deserialize_primitive("CacheControl", stack, Ok)?);
+                }
+                "ContentDisposition" => {
+                    obj.content_disposition =
+                        Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
+                }
+                "ContentEncoding" => {
+                    obj.content_encoding =
+                        Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
+                }
+                "ContentLanguage" => {
+                    obj.content_language =
+                        Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
+                }
+                "ContentRange" => {
+                    obj.content_range = Some(deserialize_primitive("ContentRange", stack, Ok)?);
+                }
+                "ContentType" => {
+                    obj.content_type = Some(deserialize_primitive("ContentType", stack, Ok)?);
+                }
+                "Expires" => {
+                    obj.expires = Some(deserialize_primitive("Expires", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                "WebsiteRedirectLocation" => {
+                    obj.website_redirect_location =
+                        Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
+                }
+                "ServerSideEncryption" => {
+                    obj.server_side_encryption =
+                        Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
+                }
+                "Metadata" => {
+                    obj.metadata = Some(Default::default());
+                }
+                "SSECustomerAlgorithm" => {
+                    obj.sse_customer_algorithm =
+                        Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                }
+                "SSECustomerKeyMD5" => {
+                    obj.sse_customer_key_md5 =
+                        Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                }
+                "SSEKMSKeyId" => {
+                    obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
+                }
+                "BucketKeyEnabled" => {
+                    obj.bucket_key_enabled =
+                        Some(deserialize_primitive("BucketKeyEnabled", stack, |s| {
+                            Ok(bool::from_str(&s).unwrap())
+                        })?);
+                }
+                "StorageClass" => {
+                    obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
+                }
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                }
+                "ReplicationStatus" => {
+                    obj.replication_status =
+                        Some(deserialize_primitive("ReplicationStatus", stack, Ok)?);
+                }
+                "PartsCount" => {
+                    obj.parts_count = Some(deserialize_primitive("PartsCount", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "TagCount" => {
+                    obj.tag_count = Some(deserialize_primitive("TagCount", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "ObjectLockMode" => {
+                    obj.object_lock_mode =
+                        Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
+                }
+                "ObjectLockRetainUntilDate" => {
+                    obj.object_lock_retain_until_date = Some(deserialize_primitive(
+                        "ObjectLockRetainUntilDate",
+                        stack,
+                        |s| Ok(String::from_str(&s).unwrap()),
+                    )?);
+                }
+                "ObjectLockLegalHoldStatus" => {
+                    obj.object_lock_legal_hold_status = Some(deserialize_primitive(
+                        "ObjectLockLegalHoldStatus",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -5828,76 +6025,95 @@ impl GetObjectRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetObjectRequest, XmlParseError> {
-        deserialize_elements::<_, GetObjectRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "IfMatch" => {
-                        obj.if_match = Some(deserialize_primitive("IfMatch", stack, Ok)?);
-                    }
-                    "IfModifiedSince" => {
-                        obj.if_modified_since = Some(deserialize_primitive("IfModifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "IfNoneMatch" => {
-                        obj.if_none_match = Some(deserialize_primitive("IfNoneMatch", stack, Ok)?);
-                    }
-                    "IfUnmodifiedSince" => {
-                        obj.if_unmodified_since = Some(deserialize_primitive("IfUnmodifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "Range" => {
-                        obj.range = Some(deserialize_primitive("Range", stack, Ok)?);
-                    }
-                    "ResponseCacheControl" => {
-                        obj.response_cache_control = Some(deserialize_primitive("ResponseCacheControl", stack, Ok)?);
-                    }
-                    "ResponseContentDisposition" => {
-                        obj.response_content_disposition = Some(deserialize_primitive("ResponseContentDisposition", stack, Ok)?);
-                    }
-                    "ResponseContentEncoding" => {
-                        obj.response_content_encoding = Some(deserialize_primitive("ResponseContentEncoding", stack, Ok)?);
-                    }
-                    "ResponseContentLanguage" => {
-                        obj.response_content_language = Some(deserialize_primitive("ResponseContentLanguage", stack, Ok)?);
-                    }
-                    "ResponseContentType" => {
-                        obj.response_content_type = Some(deserialize_primitive("ResponseContentType", stack, Ok)?);
-                    }
-                    "ResponseExpires" => {
-                        obj.response_expires = Some(deserialize_primitive("ResponseExpires", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "SSECustomerKey" => {
-                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
-                    }
-                    "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "PartNumber" => {
-                        obj.part_number = Some(deserialize_primitive("PartNumber", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetObjectRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "IfMatch" => {
+                    obj.if_match = Some(deserialize_primitive("IfMatch", stack, Ok)?);
+                }
+                "IfModifiedSince" => {
+                    obj.if_modified_since =
+                        Some(deserialize_primitive("IfModifiedSince", stack, |s| {
+                            Ok(String::from_str(&s).unwrap())
+                        })?);
+                }
+                "IfNoneMatch" => {
+                    obj.if_none_match = Some(deserialize_primitive("IfNoneMatch", stack, Ok)?);
+                }
+                "IfUnmodifiedSince" => {
+                    obj.if_unmodified_since =
+                        Some(deserialize_primitive("IfUnmodifiedSince", stack, |s| {
+                            Ok(String::from_str(&s).unwrap())
+                        })?);
+                }
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
+                }
+                "Range" => {
+                    obj.range = Some(deserialize_primitive("Range", stack, Ok)?);
+                }
+                "ResponseCacheControl" => {
+                    obj.response_cache_control =
+                        Some(deserialize_primitive("ResponseCacheControl", stack, Ok)?);
+                }
+                "ResponseContentDisposition" => {
+                    obj.response_content_disposition = Some(deserialize_primitive(
+                        "ResponseContentDisposition",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                "ResponseContentEncoding" => {
+                    obj.response_content_encoding =
+                        Some(deserialize_primitive("ResponseContentEncoding", stack, Ok)?);
+                }
+                "ResponseContentLanguage" => {
+                    obj.response_content_language =
+                        Some(deserialize_primitive("ResponseContentLanguage", stack, Ok)?);
+                }
+                "ResponseContentType" => {
+                    obj.response_content_type =
+                        Some(deserialize_primitive("ResponseContentType", stack, Ok)?);
+                }
+                "ResponseExpires" => {
+                    obj.response_expires =
+                        Some(deserialize_primitive("ResponseExpires", stack, |s| {
+                            Ok(String::from_str(&s).unwrap())
+                        })?);
+                }
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "SSECustomerAlgorithm" => {
+                    obj.sse_customer_algorithm =
+                        Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                }
+                "SSECustomerKey" => {
+                    obj.sse_customer_key =
+                        Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
+                }
+                "SSECustomerKeyMD5" => {
+                    obj.sse_customer_key_md5 =
+                        Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "PartNumber" => {
+                    obj.part_number = Some(deserialize_primitive("PartNumber", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -5920,7 +6136,10 @@ impl GetObjectRetentionOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "Retention" => {
-                        obj.retention = Some(ObjectLockRetentionDeserializer::deserialize("Retention", stack)?);
+                        obj.retention = Some(ObjectLockRetentionDeserializer::deserialize(
+                            "Retention",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5969,7 +6188,8 @@ impl GetObjectRetentionRequestDeserializer {
                         obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5994,23 +6214,19 @@ impl GetObjectTaggingOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetObjectTaggingOutput, XmlParseError> {
-        deserialize_elements::<_, GetObjectTaggingOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "TagSet" => {
-                        obj.tag_set
-                            .extend(TagSetDeserializer::deserialize("TagSet", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetObjectTaggingOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "TagSet" => {
+                    obj.tag_set
+                        .extend(TagSetDeserializer::deserialize("TagSet", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6048,7 +6264,8 @@ impl GetObjectTaggingRequestDeserializer {
                         obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -6073,22 +6290,18 @@ impl GetObjectTorrentOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetObjectTorrentOutput, XmlParseError> {
-        deserialize_elements::<_, GetObjectTorrentOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Body" => {
-                        obj.body = Some(Default::default());
-                    }
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GetObjectTorrentOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Body" => {
+                    obj.body = Some(Default::default());
                 }
-                Ok(())
-            },
-        )
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6126,7 +6339,8 @@ impl GetObjectTorrentRequestDeserializer {
                         obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -6155,7 +6369,11 @@ impl GetPublicAccessBlockOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "PublicAccessBlockConfiguration" => {
-                        obj.public_access_block_configuration = Some(PublicAccessBlockConfigurationDeserializer::deserialize("PublicAccessBlockConfiguration", stack)?);
+                        obj.public_access_block_configuration =
+                            Some(PublicAccessBlockConfigurationDeserializer::deserialize(
+                                "PublicAccessBlockConfiguration",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -6189,7 +6407,8 @@ impl GetPublicAccessBlockRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -6212,19 +6431,15 @@ impl GlacierJobParametersDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GlacierJobParameters, XmlParseError> {
-        deserialize_elements::<_, GlacierJobParameters, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Tier" => {
-                        obj.tier = deserialize_primitive("Tier", stack, Ok)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, GlacierJobParameters, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Tier" => {
+                    obj.tier = deserialize_primitive("Tier", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6243,22 +6458,18 @@ impl GrantDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Grant, XmlParseError> {
-        deserialize_elements::<_, Grant, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Grantee" => {
-                        obj.grantee = Some(GranteeDeserializer::deserialize("Grantee", stack)?);
-                    }
-                    "Permission" => {
-                        obj.permission = Some(deserialize_primitive("Permission", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Grant, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Grantee" => {
+                    obj.grantee = Some(GranteeDeserializer::deserialize("Grantee", stack)?);
                 }
-                Ok(())
-            },
-        )
+                "Permission" => {
+                    obj.permission = Some(deserialize_primitive("Permission", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6283,31 +6494,27 @@ impl GranteeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Grantee, XmlParseError> {
-        deserialize_elements::<_, Grantee, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DisplayName" => {
-                        obj.display_name = Some(deserialize_primitive("DisplayName", stack, Ok)?);
-                    }
-                    "EmailAddress" => {
-                        obj.email_address = Some(deserialize_primitive("EmailAddress", stack, Ok)?);
-                    }
-                    "ID" => {
-                        obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
-                    }
-                    "Type" => {
-                        obj.r#type = deserialize_primitive("Type", stack, Ok)?;
-                    }
-                    "URI" => {
-                        obj.uri = Some(deserialize_primitive("URI", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Grantee, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DisplayName" => {
+                    obj.display_name = Some(deserialize_primitive("DisplayName", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "EmailAddress" => {
+                    obj.email_address = Some(deserialize_primitive("EmailAddress", stack, Ok)?);
+                }
+                "ID" => {
+                    obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
+                }
+                "Type" => {
+                    obj.r#type = deserialize_primitive("Type", stack, Ok)?;
+                }
+                "URI" => {
+                    obj.uri = Some(deserialize_primitive("URI", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6326,22 +6533,19 @@ impl HeadBucketRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HeadBucketRequest, XmlParseError> {
-        deserialize_elements::<_, HeadBucketRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, HeadBucketRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6416,106 +6620,135 @@ impl HeadObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HeadObjectOutput, XmlParseError> {
-        deserialize_elements::<_, HeadObjectOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DeleteMarker" => {
-                        obj.delete_marker = Some(deserialize_primitive("DeleteMarker", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "AcceptRanges" => {
-                        obj.accept_ranges = Some(deserialize_primitive("AcceptRanges", stack, Ok)?);
-                    }
-                    "Expiration" => {
-                        obj.expiration = Some(deserialize_primitive("Expiration", stack, Ok)?);
-                    }
-                    "Restore" => {
-                        obj.restore = Some(deserialize_primitive("Restore", stack, Ok)?);
-                    }
-                    "ArchiveStatus" => {
-                        obj.archive_status = Some(deserialize_primitive("ArchiveStatus", stack, Ok)?);
-                    }
-                    "LastModified" => {
-                        obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "ContentLength" => {
-                        obj.content_length = Some(deserialize_primitive("ContentLength", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
-                    }
-                    "ETag" => {
-                        obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
-                    }
-                    "MissingMeta" => {
-                        obj.missing_meta = Some(deserialize_primitive("MissingMeta", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "CacheControl" => {
-                        obj.cache_control = Some(deserialize_primitive("CacheControl", stack, Ok)?);
-                    }
-                    "ContentDisposition" => {
-                        obj.content_disposition = Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
-                    }
-                    "ContentEncoding" => {
-                        obj.content_encoding = Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
-                    }
-                    "ContentLanguage" => {
-                        obj.content_language = Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
-                    }
-                    "ContentType" => {
-                        obj.content_type = Some(deserialize_primitive("ContentType", stack, Ok)?);
-                    }
-                    "Expires" => {
-                        obj.expires = Some(deserialize_primitive("Expires", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "WebsiteRedirectLocation" => {
-                        obj.website_redirect_location = Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
-                    }
-                    "ServerSideEncryption" => {
-                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
-                    }
-                    "Metadata" => {
-                        obj.metadata = Some(Default::default());
-                    }
-                    "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "SSEKMSKeyId" => {
-                        obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
-                    }
-                    "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "StorageClass" => {
-                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
-                    }
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    "ReplicationStatus" => {
-                        obj.replication_status = Some(deserialize_primitive("ReplicationStatus", stack, Ok)?);
-                    }
-                    "PartsCount" => {
-                        obj.parts_count = Some(deserialize_primitive("PartsCount", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "ObjectLockMode" => {
-                        obj.object_lock_mode = Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
-                    }
-                    "ObjectLockRetainUntilDate" => {
-                        obj.object_lock_retain_until_date = Some(deserialize_primitive("ObjectLockRetainUntilDate", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "ObjectLockLegalHoldStatus" => {
-                        obj.object_lock_legal_hold_status = Some(deserialize_primitive("ObjectLockLegalHoldStatus", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, HeadObjectOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DeleteMarker" => {
+                    obj.delete_marker = Some(deserialize_primitive("DeleteMarker", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                "AcceptRanges" => {
+                    obj.accept_ranges = Some(deserialize_primitive("AcceptRanges", stack, Ok)?);
+                }
+                "Expiration" => {
+                    obj.expiration = Some(deserialize_primitive("Expiration", stack, Ok)?);
+                }
+                "Restore" => {
+                    obj.restore = Some(deserialize_primitive("Restore", stack, Ok)?);
+                }
+                "ArchiveStatus" => {
+                    obj.archive_status = Some(deserialize_primitive("ArchiveStatus", stack, Ok)?);
+                }
+                "LastModified" => {
+                    obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                "ContentLength" => {
+                    obj.content_length =
+                        Some(deserialize_primitive("ContentLength", stack, |s| {
+                            Ok(u64::from_str(&s).unwrap())
+                        })?);
+                }
+                "ETag" => {
+                    obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
+                }
+                "MissingMeta" => {
+                    obj.missing_meta = Some(deserialize_primitive("MissingMeta", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "CacheControl" => {
+                    obj.cache_control = Some(deserialize_primitive("CacheControl", stack, Ok)?);
+                }
+                "ContentDisposition" => {
+                    obj.content_disposition =
+                        Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
+                }
+                "ContentEncoding" => {
+                    obj.content_encoding =
+                        Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
+                }
+                "ContentLanguage" => {
+                    obj.content_language =
+                        Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
+                }
+                "ContentType" => {
+                    obj.content_type = Some(deserialize_primitive("ContentType", stack, Ok)?);
+                }
+                "Expires" => {
+                    obj.expires = Some(deserialize_primitive("Expires", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                "WebsiteRedirectLocation" => {
+                    obj.website_redirect_location =
+                        Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
+                }
+                "ServerSideEncryption" => {
+                    obj.server_side_encryption =
+                        Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
+                }
+                "Metadata" => {
+                    obj.metadata = Some(Default::default());
+                }
+                "SSECustomerAlgorithm" => {
+                    obj.sse_customer_algorithm =
+                        Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                }
+                "SSECustomerKeyMD5" => {
+                    obj.sse_customer_key_md5 =
+                        Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                }
+                "SSEKMSKeyId" => {
+                    obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
+                }
+                "BucketKeyEnabled" => {
+                    obj.bucket_key_enabled =
+                        Some(deserialize_primitive("BucketKeyEnabled", stack, |s| {
+                            Ok(bool::from_str(&s).unwrap())
+                        })?);
+                }
+                "StorageClass" => {
+                    obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
+                }
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                }
+                "ReplicationStatus" => {
+                    obj.replication_status =
+                        Some(deserialize_primitive("ReplicationStatus", stack, Ok)?);
+                }
+                "PartsCount" => {
+                    obj.parts_count = Some(deserialize_primitive("PartsCount", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "ObjectLockMode" => {
+                    obj.object_lock_mode =
+                        Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
+                }
+                "ObjectLockRetainUntilDate" => {
+                    obj.object_lock_retain_until_date = Some(deserialize_primitive(
+                        "ObjectLockRetainUntilDate",
+                        stack,
+                        |s| Ok(String::from_str(&s).unwrap()),
+                    )?);
+                }
+                "ObjectLockLegalHoldStatus" => {
+                    obj.object_lock_legal_hold_status = Some(deserialize_primitive(
+                        "ObjectLockLegalHoldStatus",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6558,58 +6791,66 @@ impl HeadObjectRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HeadObjectRequest, XmlParseError> {
-        deserialize_elements::<_, HeadObjectRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "IfMatch" => {
-                        obj.if_match = Some(deserialize_primitive("IfMatch", stack, Ok)?);
-                    }
-                    "IfModifiedSince" => {
-                        obj.if_modified_since = Some(deserialize_primitive("IfModifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "IfNoneMatch" => {
-                        obj.if_none_match = Some(deserialize_primitive("IfNoneMatch", stack, Ok)?);
-                    }
-                    "IfUnmodifiedSince" => {
-                        obj.if_unmodified_since = Some(deserialize_primitive("IfUnmodifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "Range" => {
-                        obj.range = Some(deserialize_primitive("Range", stack, Ok)?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "SSECustomerKey" => {
-                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
-                    }
-                    "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "PartNumber" => {
-                        obj.part_number = Some(deserialize_primitive("PartNumber", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, HeadObjectRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "IfMatch" => {
+                    obj.if_match = Some(deserialize_primitive("IfMatch", stack, Ok)?);
+                }
+                "IfModifiedSince" => {
+                    obj.if_modified_since =
+                        Some(deserialize_primitive("IfModifiedSince", stack, |s| {
+                            Ok(String::from_str(&s).unwrap())
+                        })?);
+                }
+                "IfNoneMatch" => {
+                    obj.if_none_match = Some(deserialize_primitive("IfNoneMatch", stack, Ok)?);
+                }
+                "IfUnmodifiedSince" => {
+                    obj.if_unmodified_since =
+                        Some(deserialize_primitive("IfUnmodifiedSince", stack, |s| {
+                            Ok(String::from_str(&s).unwrap())
+                        })?);
+                }
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
+                }
+                "Range" => {
+                    obj.range = Some(deserialize_primitive("Range", stack, Ok)?);
+                }
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "SSECustomerAlgorithm" => {
+                    obj.sse_customer_algorithm =
+                        Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                }
+                "SSECustomerKey" => {
+                    obj.sse_customer_key =
+                        Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
+                }
+                "SSECustomerKeyMD5" => {
+                    obj.sse_customer_key_md5 =
+                        Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "PartNumber" => {
+                    obj.part_number = Some(deserialize_primitive("PartNumber", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6626,19 +6867,15 @@ impl IndexDocumentDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IndexDocument, XmlParseError> {
-        deserialize_elements::<_, IndexDocument, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Suffix" => {
-                        obj.suffix = deserialize_primitive("Suffix", stack, Ok)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, IndexDocument, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Suffix" => {
+                    obj.suffix = deserialize_primitive("Suffix", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6657,22 +6894,18 @@ impl InitiatorDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Initiator, XmlParseError> {
-        deserialize_elements::<_, Initiator, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ID" => {
-                        obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
-                    }
-                    "DisplayName" => {
-                        obj.display_name = Some(deserialize_primitive("DisplayName", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Initiator, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ID" => {
+                    obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "DisplayName" => {
+                    obj.display_name = Some(deserialize_primitive("DisplayName", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6695,28 +6928,25 @@ impl InputSerializationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InputSerialization, XmlParseError> {
-        deserialize_elements::<_, InputSerialization, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CSV" => {
-                        obj.csv = Some(CSVInputDeserializer::deserialize("CSV", stack)?);
-                    }
-                    "CompressionType" => {
-                        obj.compression_type = Some(deserialize_primitive("CompressionType", stack, Ok)?);
-                    }
-                    "JSON" => {
-                        obj.json = Some(JSONInputDeserializer::deserialize("JSON", stack)?);
-                    }
-                    "Parquet" => {
-                        obj.parquet = Some(ParquetInputDeserializer::deserialize("Parquet", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, InputSerialization, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CSV" => {
+                    obj.csv = Some(CSVInputDeserializer::deserialize("CSV", stack)?);
                 }
-                Ok(())
-            },
-        )
+                "CompressionType" => {
+                    obj.compression_type =
+                        Some(deserialize_primitive("CompressionType", stack, Ok)?);
+                }
+                "JSON" => {
+                    obj.json = Some(JSONInputDeserializer::deserialize("JSON", stack)?);
+                }
+                "Parquet" => {
+                    obj.parquet = Some(ParquetInputDeserializer::deserialize("Parquet", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6784,7 +7014,9 @@ impl IntelligentTieringConfigurationDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "Filter" => {
-                        obj.filter = Some(IntelligentTieringFilterDeserializer::deserialize("Filter", stack)?);
+                        obj.filter = Some(IntelligentTieringFilterDeserializer::deserialize(
+                            "Filter", stack,
+                        )?);
                     }
                     "Status" => {
                         obj.status = deserialize_primitive("Status", stack, Ok)?;
@@ -6830,7 +7062,9 @@ impl IntelligentTieringFilterDeserializer {
                         obj.tag = Some(TagDeserializer::deserialize("Tag", stack)?);
                     }
                     "And" => {
-                        obj.and = Some(IntelligentTieringAndOperatorDeserializer::deserialize("And", stack)?);
+                        obj.and = Some(IntelligentTieringAndOperatorDeserializer::deserialize(
+                            "And", stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -6855,22 +7089,18 @@ impl InvalidObjectStateDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InvalidObjectState, XmlParseError> {
-        deserialize_elements::<_, InvalidObjectState, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "StorageClass" => {
-                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
-                    }
-                    "AccessTier" => {
-                        obj.access_tier = Some(deserialize_primitive("AccessTier", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, InvalidObjectState, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "StorageClass" => {
+                    obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "AccessTier" => {
+                    obj.access_tier = Some(deserialize_primitive("AccessTier", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6899,39 +7129,39 @@ impl InventoryConfigurationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InventoryConfiguration, XmlParseError> {
-        deserialize_elements::<_, InventoryConfiguration, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Destination" => {
-                        obj.destination = InventoryDestinationDeserializer::deserialize("Destination", stack)?;
-                    }
-                    "IsEnabled" => {
-                        obj.is_enabled = deserialize_primitive("IsEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?;
-                    }
-                    "Filter" => {
-                        obj.filter = Some(InventoryFilterDeserializer::deserialize("Filter", stack)?);
-                    }
-                    "Id" => {
-                        obj.id = deserialize_primitive("Id", stack, Ok)?;
-                    }
-                    "IncludedObjectVersions" => {
-                        obj.included_object_versions = deserialize_primitive("IncludedObjectVersions", stack, Ok)?;
-                    }
-                    "OptionalFields" => {
-                        obj.optional_fields
-                            .get_or_insert(vec![])
-                            .extend(InventoryOptionalFieldsDeserializer::deserialize("OptionalFields", stack)?);
-                    }
-                    "Schedule" => {
-                        obj.schedule = InventoryScheduleDeserializer::deserialize("Schedule", stack)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, InventoryConfiguration, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Destination" => {
+                    obj.destination =
+                        InventoryDestinationDeserializer::deserialize("Destination", stack)?;
                 }
-                Ok(())
-            },
-        )
+                "IsEnabled" => {
+                    obj.is_enabled = deserialize_primitive("IsEnabled", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?;
+                }
+                "Filter" => {
+                    obj.filter = Some(InventoryFilterDeserializer::deserialize("Filter", stack)?);
+                }
+                "Id" => {
+                    obj.id = deserialize_primitive("Id", stack, Ok)?;
+                }
+                "IncludedObjectVersions" => {
+                    obj.included_object_versions =
+                        deserialize_primitive("IncludedObjectVersions", stack, Ok)?;
+                }
+                "OptionalFields" => {
+                    obj.optional_fields.get_or_insert(vec![]).extend(
+                        InventoryOptionalFieldsDeserializer::deserialize("OptionalFields", stack)?,
+                    );
+                }
+                "Schedule" => {
+                    obj.schedule = InventoryScheduleDeserializer::deserialize("Schedule", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6948,19 +7178,19 @@ impl InventoryDestinationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InventoryDestination, XmlParseError> {
-        deserialize_elements::<_, InventoryDestination, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "S3BucketDestination" => {
-                        obj.s3_bucket_destination = InventoryS3BucketDestinationDeserializer::deserialize("S3BucketDestination", stack)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, InventoryDestination, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "S3BucketDestination" => {
+                    obj.s3_bucket_destination =
+                        InventoryS3BucketDestinationDeserializer::deserialize(
+                            "S3BucketDestination",
+                            stack,
+                        )?;
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -6979,22 +7209,18 @@ impl InventoryEncryptionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InventoryEncryption, XmlParseError> {
-        deserialize_elements::<_, InventoryEncryption, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "SSES3" => {
-                        obj.sses3 = Some(SSES3Deserializer::deserialize("SSES3", stack)?);
-                    }
-                    "SSEKMS" => {
-                        obj.ssekms = Some(SSEKMSDeserializer::deserialize("SSEKMS", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, InventoryEncryption, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "SSES3" => {
+                    obj.sses3 = Some(SSES3Deserializer::deserialize("SSES3", stack)?);
                 }
-                Ok(())
-            },
-        )
+                "SSEKMS" => {
+                    obj.ssekms = Some(SSEKMSDeserializer::deserialize("SSEKMS", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -7011,19 +7237,15 @@ impl InventoryFilterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InventoryFilter, XmlParseError> {
-        deserialize_elements::<_, InventoryFilter, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Prefix" => {
-                        obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, InventoryFilter, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Prefix" => {
+                    obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -7066,7 +7288,10 @@ impl InventoryS3BucketDestinationDeserializer {
                         obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                     }
                     "Encryption" => {
-                        obj.encryption = Some(InventoryEncryptionDeserializer::deserialize("Encryption", stack)?);
+                        obj.encryption = Some(InventoryEncryptionDeserializer::deserialize(
+                            "Encryption",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7089,19 +7314,15 @@ impl InventoryScheduleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InventorySchedule, XmlParseError> {
-        deserialize_elements::<_, InventorySchedule, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Frequency" => {
-                        obj.frequency = deserialize_primitive("Frequency", stack, Ok)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, InventorySchedule, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Frequency" => {
+                    obj.frequency = deserialize_primitive("Frequency", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -7118,19 +7339,15 @@ impl JSONInputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<JSONInput, XmlParseError> {
-        deserialize_elements::<_, JSONInput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Type" => {
-                        obj.r#type = Some(deserialize_primitive("Type", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, JSONInput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Type" => {
+                    obj.r#type = Some(deserialize_primitive("Type", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -7147,19 +7364,16 @@ impl JSONOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<JSONOutput, XmlParseError> {
-        deserialize_elements::<_, JSONOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "RecordDelimiter" => {
-                        obj.record_delimiter = Some(deserialize_primitive("RecordDelimiter", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, JSONOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "RecordDelimiter" => {
+                    obj.record_delimiter =
+                        Some(deserialize_primitive("RecordDelimiter", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -7191,14 +7405,18 @@ impl LambdaFunctionConfigurationDeserializer {
                         obj.id = Some(deserialize_primitive("Id", stack, Ok)?);
                     }
                     "LambdaFunctionArn" => {
-                        obj.lambda_function_arn = deserialize_primitive("LambdaFunctionArn", stack, Ok)?;
+                        obj.lambda_function_arn =
+                            deserialize_primitive("LambdaFunctionArn", stack, Ok)?;
                     }
                     "Events" => {
                         obj.events
                             .extend(EventListDeserializer::deserialize("Events", stack)?);
                     }
                     "Filter" => {
-                        obj.filter = Some(NotificationConfigurationFilterDeserializer::deserialize("Filter", stack)?);
+                        obj.filter =
+                            Some(NotificationConfigurationFilterDeserializer::deserialize(
+                                "Filter", stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7221,20 +7439,16 @@ impl LifecycleConfigurationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LifecycleConfiguration, XmlParseError> {
-        deserialize_elements::<_, LifecycleConfiguration, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Rules" => {
-                        obj.rules
-                            .extend(RulesDeserializer::deserialize("Rules", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, LifecycleConfiguration, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Rules" => {
+                    obj.rules
+                        .extend(RulesDeserializer::deserialize("Rules", stack)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -7255,25 +7469,29 @@ impl LifecycleExpirationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LifecycleExpiration, XmlParseError> {
-        deserialize_elements::<_, LifecycleExpiration, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Date" => {
-                        obj.date = Some(deserialize_primitive("Date", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "Days" => {
-                        obj.days = Some(deserialize_primitive("Days", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "ExpiredObjectDeleteMarker" => {
-                        obj.expired_object_delete_marker = Some(deserialize_primitive("ExpiredObjectDeleteMarker", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, LifecycleExpiration, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Date" => {
+                    obj.date = Some(deserialize_primitive("Date", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                "Days" => {
+                    obj.days = Some(deserialize_primitive("Days", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "ExpiredObjectDeleteMarker" => {
+                    obj.expired_object_delete_marker = Some(deserialize_primitive(
+                        "ExpiredObjectDeleteMarker",
+                        stack,
+                        |s| Ok(bool::from_str(&s).unwrap()),
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -7306,47 +7524,59 @@ impl LifecycleRuleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LifecycleRule, XmlParseError> {
-        deserialize_elements::<_, LifecycleRule, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Expiration" => {
-                        obj.expiration = Some(LifecycleExpirationDeserializer::deserialize("Expiration", stack)?);
-                    }
-                    "ID" => {
-                        obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
-                    }
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    "Filter" => {
-                        obj.filter = Some(LifecycleRuleFilterDeserializer::deserialize("Filter", stack)?);
-                    }
-                    "Status" => {
-                        obj.status = deserialize_primitive("Status", stack, Ok)?;
-                    }
-                    "Transitions" => {
-                        obj.transitions
-                            .get_or_insert(vec![])
-                            .extend(TransitionListDeserializer::deserialize("Transitions", stack)?);
-                    }
-                    "NoncurrentVersionTransitions" => {
-                        obj.noncurrent_version_transitions
-                            .get_or_insert(vec![])
-                            .extend(NoncurrentVersionTransitionListDeserializer::deserialize("NoncurrentVersionTransitions", stack)?);
-                    }
-                    "NoncurrentVersionExpiration" => {
-                        obj.noncurrent_version_expiration = Some(NoncurrentVersionExpirationDeserializer::deserialize("NoncurrentVersionExpiration", stack)?);
-                    }
-                    "AbortIncompleteMultipartUpload" => {
-                        obj.abort_incomplete_multipart_upload = Some(AbortIncompleteMultipartUploadDeserializer::deserialize("AbortIncompleteMultipartUpload", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, LifecycleRule, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Expiration" => {
+                    obj.expiration = Some(LifecycleExpirationDeserializer::deserialize(
+                        "Expiration",
+                        stack,
+                    )?);
                 }
-                Ok(())
-            },
-        )
+                "ID" => {
+                    obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
+                }
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
+                }
+                "Filter" => {
+                    obj.filter = Some(LifecycleRuleFilterDeserializer::deserialize(
+                        "Filter", stack,
+                    )?);
+                }
+                "Status" => {
+                    obj.status = deserialize_primitive("Status", stack, Ok)?;
+                }
+                "Transitions" => {
+                    obj.transitions.get_or_insert(vec![]).extend(
+                        TransitionListDeserializer::deserialize("Transitions", stack)?,
+                    );
+                }
+                "NoncurrentVersionTransitions" => {
+                    obj.noncurrent_version_transitions
+                        .get_or_insert(vec![])
+                        .extend(NoncurrentVersionTransitionListDeserializer::deserialize(
+                            "NoncurrentVersionTransitions",
+                            stack,
+                        )?);
+                }
+                "NoncurrentVersionExpiration" => {
+                    obj.noncurrent_version_expiration =
+                        Some(NoncurrentVersionExpirationDeserializer::deserialize(
+                            "NoncurrentVersionExpiration",
+                            stack,
+                        )?);
+                }
+                "AbortIncompleteMultipartUpload" => {
+                    obj.abort_incomplete_multipart_upload =
+                        Some(AbortIncompleteMultipartUploadDeserializer::deserialize(
+                            "AbortIncompleteMultipartUpload",
+                            stack,
+                        )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -7403,25 +7633,23 @@ impl LifecycleRuleFilterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LifecycleRuleFilter, XmlParseError> {
-        deserialize_elements::<_, LifecycleRuleFilter, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    "Tag" => {
-                        obj.tag = Some(TagDeserializer::deserialize("Tag", stack)?);
-                    }
-                    "And" => {
-                        obj.and = Some(LifecycleRuleAndOperatorDeserializer::deserialize("And", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, LifecycleRuleFilter, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Tag" => {
+                    obj.tag = Some(TagDeserializer::deserialize("Tag", stack)?);
+                }
+                "And" => {
+                    obj.and = Some(LifecycleRuleAndOperatorDeserializer::deserialize(
+                        "And", stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -7450,18 +7678,26 @@ impl ListBucketAnalyticsConfigurationsOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "IsTruncated" => {
-                        obj.is_truncated = Some(deserialize_primitive("IsTruncated", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.is_truncated =
+                            Some(deserialize_primitive("IsTruncated", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     "ContinuationToken" => {
-                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
+                        obj.continuation_token =
+                            Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     "NextContinuationToken" => {
-                        obj.next_continuation_token = Some(deserialize_primitive("NextContinuationToken", stack, Ok)?);
+                        obj.next_continuation_token =
+                            Some(deserialize_primitive("NextContinuationToken", stack, Ok)?);
                     }
                     "AnalyticsConfigurationList" => {
                         obj.analytics_configuration_list
                             .get_or_insert(vec![])
-                            .extend(AnalyticsConfigurationListDeserializer::deserialize("AnalyticsConfigurationList", stack)?);
+                            .extend(AnalyticsConfigurationListDeserializer::deserialize(
+                                "AnalyticsConfigurationList",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7497,10 +7733,12 @@ impl ListBucketAnalyticsConfigurationsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContinuationToken" => {
-                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
+                        obj.continuation_token =
+                            Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7535,18 +7773,28 @@ impl ListBucketIntelligentTieringConfigurationsOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "IsTruncated" => {
-                        obj.is_truncated = Some(deserialize_primitive("IsTruncated", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.is_truncated =
+                            Some(deserialize_primitive("IsTruncated", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     "ContinuationToken" => {
-                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
+                        obj.continuation_token =
+                            Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     "NextContinuationToken" => {
-                        obj.next_continuation_token = Some(deserialize_primitive("NextContinuationToken", stack, Ok)?);
+                        obj.next_continuation_token =
+                            Some(deserialize_primitive("NextContinuationToken", stack, Ok)?);
                     }
                     "IntelligentTieringConfigurationList" => {
                         obj.intelligent_tiering_configuration_list
                             .get_or_insert(vec![])
-                            .extend(IntelligentTieringConfigurationListDeserializer::deserialize("IntelligentTieringConfigurationList", stack)?);
+                            .extend(
+                                IntelligentTieringConfigurationListDeserializer::deserialize(
+                                    "IntelligentTieringConfigurationList",
+                                    stack,
+                                )?,
+                            );
                     }
                     _ => skip_tree(stack),
                 }
@@ -7580,7 +7828,8 @@ impl ListBucketIntelligentTieringConfigurationsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContinuationToken" => {
-                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
+                        obj.continuation_token =
+                            Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7615,18 +7864,26 @@ impl ListBucketInventoryConfigurationsOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "ContinuationToken" => {
-                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
+                        obj.continuation_token =
+                            Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     "InventoryConfigurationList" => {
                         obj.inventory_configuration_list
                             .get_or_insert(vec![])
-                            .extend(InventoryConfigurationListDeserializer::deserialize("InventoryConfigurationList", stack)?);
+                            .extend(InventoryConfigurationListDeserializer::deserialize(
+                                "InventoryConfigurationList",
+                                stack,
+                            )?);
                     }
                     "IsTruncated" => {
-                        obj.is_truncated = Some(deserialize_primitive("IsTruncated", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.is_truncated =
+                            Some(deserialize_primitive("IsTruncated", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     "NextContinuationToken" => {
-                        obj.next_continuation_token = Some(deserialize_primitive("NextContinuationToken", stack, Ok)?);
+                        obj.next_continuation_token =
+                            Some(deserialize_primitive("NextContinuationToken", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7662,10 +7919,12 @@ impl ListBucketInventoryConfigurationsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContinuationToken" => {
-                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
+                        obj.continuation_token =
+                            Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7700,18 +7959,26 @@ impl ListBucketMetricsConfigurationsOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "IsTruncated" => {
-                        obj.is_truncated = Some(deserialize_primitive("IsTruncated", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.is_truncated =
+                            Some(deserialize_primitive("IsTruncated", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     "ContinuationToken" => {
-                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
+                        obj.continuation_token =
+                            Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     "NextContinuationToken" => {
-                        obj.next_continuation_token = Some(deserialize_primitive("NextContinuationToken", stack, Ok)?);
+                        obj.next_continuation_token =
+                            Some(deserialize_primitive("NextContinuationToken", stack, Ok)?);
                     }
                     "MetricsConfigurationList" => {
-                        obj.metrics_configuration_list
-                            .get_or_insert(vec![])
-                            .extend(MetricsConfigurationListDeserializer::deserialize("MetricsConfigurationList", stack)?);
+                        obj.metrics_configuration_list.get_or_insert(vec![]).extend(
+                            MetricsConfigurationListDeserializer::deserialize(
+                                "MetricsConfigurationList",
+                                stack,
+                            )?,
+                        );
                     }
                     _ => skip_tree(stack),
                 }
@@ -7747,10 +8014,12 @@ impl ListBucketMetricsConfigurationsRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ContinuationToken" => {
-                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
+                        obj.continuation_token =
+                            Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7775,24 +8044,20 @@ impl ListBucketsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListBucketsOutput, XmlParseError> {
-        deserialize_elements::<_, ListBucketsOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Buckets" => {
-                        obj.buckets
-                            .get_or_insert(vec![])
-                            .extend(BucketsDeserializer::deserialize("Buckets", stack)?);
-                    }
-                    "Owner" => {
-                        obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ListBucketsOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Buckets" => {
+                    obj.buckets
+                        .get_or_insert(vec![])
+                        .extend(BucketsDeserializer::deserialize("Buckets", stack)?);
                 }
-                Ok(())
-            },
-        )
+                "Owner" => {
+                    obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -7843,10 +8108,12 @@ impl ListMultipartUploadsOutputDeserializer {
                         obj.key_marker = Some(deserialize_primitive("KeyMarker", stack, Ok)?);
                     }
                     "UploadIdMarker" => {
-                        obj.upload_id_marker = Some(deserialize_primitive("UploadIdMarker", stack, Ok)?);
+                        obj.upload_id_marker =
+                            Some(deserialize_primitive("UploadIdMarker", stack, Ok)?);
                     }
                     "NextKeyMarker" => {
-                        obj.next_key_marker = Some(deserialize_primitive("NextKeyMarker", stack, Ok)?);
+                        obj.next_key_marker =
+                            Some(deserialize_primitive("NextKeyMarker", stack, Ok)?);
                     }
                     "Prefix" => {
                         obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
@@ -7855,23 +8122,29 @@ impl ListMultipartUploadsOutputDeserializer {
                         obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
                     }
                     "NextUploadIdMarker" => {
-                        obj.next_upload_id_marker = Some(deserialize_primitive("NextUploadIdMarker", stack, Ok)?);
+                        obj.next_upload_id_marker =
+                            Some(deserialize_primitive("NextUploadIdMarker", stack, Ok)?);
                     }
                     "MaxUploads" => {
-                        obj.max_uploads = Some(deserialize_primitive("MaxUploads", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
+                        obj.max_uploads = Some(deserialize_primitive("MaxUploads", stack, |s| {
+                            Ok(i64::from_str(&s).unwrap())
+                        })?);
                     }
                     "IsTruncated" => {
-                        obj.is_truncated = Some(deserialize_primitive("IsTruncated", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.is_truncated =
+                            Some(deserialize_primitive("IsTruncated", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     "Uploads" => {
-                        obj.uploads
-                            .get_or_insert(vec![])
-                            .extend(MultipartUploadListDeserializer::deserialize("Uploads", stack)?);
+                        obj.uploads.get_or_insert(vec![]).extend(
+                            MultipartUploadListDeserializer::deserialize("Uploads", stack)?,
+                        );
                     }
                     "CommonPrefixes" => {
-                        obj.common_prefixes
-                            .get_or_insert(vec![])
-                            .extend(CommonPrefixListDeserializer::deserialize("CommonPrefixes", stack)?);
+                        obj.common_prefixes.get_or_insert(vec![]).extend(
+                            CommonPrefixListDeserializer::deserialize("CommonPrefixes", stack)?,
+                        );
                     }
                     "EncodingType" => {
                         obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
@@ -7929,16 +8202,20 @@ impl ListMultipartUploadsRequestDeserializer {
                         obj.key_marker = Some(deserialize_primitive("KeyMarker", stack, Ok)?);
                     }
                     "MaxUploads" => {
-                        obj.max_uploads = Some(deserialize_primitive("MaxUploads", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
+                        obj.max_uploads = Some(deserialize_primitive("MaxUploads", stack, |s| {
+                            Ok(i64::from_str(&s).unwrap())
+                        })?);
                     }
                     "Prefix" => {
                         obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                     }
                     "UploadIdMarker" => {
-                        obj.upload_id_marker = Some(deserialize_primitive("UploadIdMarker", stack, Ok)?);
+                        obj.upload_id_marker =
+                            Some(deserialize_primitive("UploadIdMarker", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -7991,29 +8268,35 @@ impl ListObjectVersionsOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "IsTruncated" => {
-                        obj.is_truncated = Some(deserialize_primitive("IsTruncated", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.is_truncated =
+                            Some(deserialize_primitive("IsTruncated", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     "KeyMarker" => {
                         obj.key_marker = Some(deserialize_primitive("KeyMarker", stack, Ok)?);
                     }
                     "VersionIdMarker" => {
-                        obj.version_id_marker = Some(deserialize_primitive("VersionIdMarker", stack, Ok)?);
+                        obj.version_id_marker =
+                            Some(deserialize_primitive("VersionIdMarker", stack, Ok)?);
                     }
                     "NextKeyMarker" => {
-                        obj.next_key_marker = Some(deserialize_primitive("NextKeyMarker", stack, Ok)?);
+                        obj.next_key_marker =
+                            Some(deserialize_primitive("NextKeyMarker", stack, Ok)?);
                     }
                     "NextVersionIdMarker" => {
-                        obj.next_version_id_marker = Some(deserialize_primitive("NextVersionIdMarker", stack, Ok)?);
+                        obj.next_version_id_marker =
+                            Some(deserialize_primitive("NextVersionIdMarker", stack, Ok)?);
                     }
                     "Versions" => {
-                        obj.versions
-                            .get_or_insert(vec![])
-                            .extend(ObjectVersionListDeserializer::deserialize("Versions", stack)?);
+                        obj.versions.get_or_insert(vec![]).extend(
+                            ObjectVersionListDeserializer::deserialize("Versions", stack)?,
+                        );
                     }
                     "DeleteMarkers" => {
-                        obj.delete_markers
-                            .get_or_insert(vec![])
-                            .extend(DeleteMarkersDeserializer::deserialize("DeleteMarkers", stack)?);
+                        obj.delete_markers.get_or_insert(vec![]).extend(
+                            DeleteMarkersDeserializer::deserialize("DeleteMarkers", stack)?,
+                        );
                     }
                     "Name" => {
                         obj.name = Some(deserialize_primitive("Name", stack, Ok)?);
@@ -8025,12 +8308,14 @@ impl ListObjectVersionsOutputDeserializer {
                         obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
                     }
                     "MaxKeys" => {
-                        obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
+                        obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| {
+                            Ok(i64::from_str(&s).unwrap())
+                        })?);
                     }
                     "CommonPrefixes" => {
-                        obj.common_prefixes
-                            .get_or_insert(vec![])
-                            .extend(CommonPrefixListDeserializer::deserialize("CommonPrefixes", stack)?);
+                        obj.common_prefixes.get_or_insert(vec![]).extend(
+                            CommonPrefixListDeserializer::deserialize("CommonPrefixes", stack)?,
+                        );
                     }
                     "EncodingType" => {
                         obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
@@ -8088,16 +8373,20 @@ impl ListObjectVersionsRequestDeserializer {
                         obj.key_marker = Some(deserialize_primitive("KeyMarker", stack, Ok)?);
                     }
                     "MaxKeys" => {
-                        obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
+                        obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| {
+                            Ok(i64::from_str(&s).unwrap())
+                        })?);
                     }
                     "Prefix" => {
                         obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                     }
                     "VersionIdMarker" => {
-                        obj.version_id_marker = Some(deserialize_primitive("VersionIdMarker", stack, Ok)?);
+                        obj.version_id_marker =
+                            Some(deserialize_primitive("VersionIdMarker", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -8138,50 +8427,50 @@ impl ListObjectsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListObjectsOutput, XmlParseError> {
-        deserialize_elements::<_, ListObjectsOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "IsTruncated" => {
-                        obj.is_truncated = Some(deserialize_primitive("IsTruncated", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(deserialize_primitive("Marker", stack, Ok)?);
-                    }
-                    "NextMarker" => {
-                        obj.next_marker = Some(deserialize_primitive("NextMarker", stack, Ok)?);
-                    }
-                    "Contents" => {
-                        obj.contents
-                            .get_or_insert(vec![])
-                            .extend(ObjectListDeserializer::deserialize("Contents", stack)?);
-                    }
-                    "Name" => {
-                        obj.name = Some(deserialize_primitive("Name", stack, Ok)?);
-                    }
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    "Delimiter" => {
-                        obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
-                    }
-                    "MaxKeys" => {
-                        obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "CommonPrefixes" => {
-                        obj.common_prefixes
-                            .get_or_insert(vec![])
-                            .extend(CommonPrefixListDeserializer::deserialize("CommonPrefixes", stack)?);
-                    }
-                    "EncodingType" => {
-                        obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ListObjectsOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IsTruncated" => {
+                    obj.is_truncated = Some(deserialize_primitive("IsTruncated", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                "Marker" => {
+                    obj.marker = Some(deserialize_primitive("Marker", stack, Ok)?);
+                }
+                "NextMarker" => {
+                    obj.next_marker = Some(deserialize_primitive("NextMarker", stack, Ok)?);
+                }
+                "Contents" => {
+                    obj.contents
+                        .get_or_insert(vec![])
+                        .extend(ObjectListDeserializer::deserialize("Contents", stack)?);
+                }
+                "Name" => {
+                    obj.name = Some(deserialize_primitive("Name", stack, Ok)?);
+                }
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
+                }
+                "Delimiter" => {
+                    obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
+                }
+                "MaxKeys" => {
+                    obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "CommonPrefixes" => {
+                    obj.common_prefixes.get_or_insert(vec![]).extend(
+                        CommonPrefixListDeserializer::deserialize("CommonPrefixes", stack)?,
+                    );
+                }
+                "EncodingType" => {
+                    obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8212,40 +8501,39 @@ impl ListObjectsRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListObjectsRequest, XmlParseError> {
-        deserialize_elements::<_, ListObjectsRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "Delimiter" => {
-                        obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
-                    }
-                    "EncodingType" => {
-                        obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(deserialize_primitive("Marker", stack, Ok)?);
-                    }
-                    "MaxKeys" => {
-                        obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ListObjectsRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Delimiter" => {
+                    obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
+                }
+                "EncodingType" => {
+                    obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
+                }
+                "Marker" => {
+                    obj.marker = Some(deserialize_primitive("Marker", stack, Ok)?);
+                }
+                "MaxKeys" => {
+                    obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8284,56 +8572,60 @@ impl ListObjectsV2OutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListObjectsV2Output, XmlParseError> {
-        deserialize_elements::<_, ListObjectsV2Output, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "IsTruncated" => {
-                        obj.is_truncated = Some(deserialize_primitive("IsTruncated", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "Contents" => {
-                        obj.contents
-                            .get_or_insert(vec![])
-                            .extend(ObjectListDeserializer::deserialize("Contents", stack)?);
-                    }
-                    "Name" => {
-                        obj.name = Some(deserialize_primitive("Name", stack, Ok)?);
-                    }
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    "Delimiter" => {
-                        obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
-                    }
-                    "MaxKeys" => {
-                        obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "CommonPrefixes" => {
-                        obj.common_prefixes
-                            .get_or_insert(vec![])
-                            .extend(CommonPrefixListDeserializer::deserialize("CommonPrefixes", stack)?);
-                    }
-                    "EncodingType" => {
-                        obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
-                    }
-                    "KeyCount" => {
-                        obj.key_count = Some(deserialize_primitive("KeyCount", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "ContinuationToken" => {
-                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
-                    }
-                    "NextContinuationToken" => {
-                        obj.next_continuation_token = Some(deserialize_primitive("NextContinuationToken", stack, Ok)?);
-                    }
-                    "StartAfter" => {
-                        obj.start_after = Some(deserialize_primitive("StartAfter", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ListObjectsV2Output, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IsTruncated" => {
+                    obj.is_truncated = Some(deserialize_primitive("IsTruncated", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                "Contents" => {
+                    obj.contents
+                        .get_or_insert(vec![])
+                        .extend(ObjectListDeserializer::deserialize("Contents", stack)?);
+                }
+                "Name" => {
+                    obj.name = Some(deserialize_primitive("Name", stack, Ok)?);
+                }
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
+                }
+                "Delimiter" => {
+                    obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
+                }
+                "MaxKeys" => {
+                    obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "CommonPrefixes" => {
+                    obj.common_prefixes.get_or_insert(vec![]).extend(
+                        CommonPrefixListDeserializer::deserialize("CommonPrefixes", stack)?,
+                    );
+                }
+                "EncodingType" => {
+                    obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
+                }
+                "KeyCount" => {
+                    obj.key_count = Some(deserialize_primitive("KeyCount", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "ContinuationToken" => {
+                    obj.continuation_token =
+                        Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
+                }
+                "NextContinuationToken" => {
+                    obj.next_continuation_token =
+                        Some(deserialize_primitive("NextContinuationToken", stack, Ok)?);
+                }
+                "StartAfter" => {
+                    obj.start_after = Some(deserialize_primitive("StartAfter", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8368,46 +8660,48 @@ impl ListObjectsV2RequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListObjectsV2Request, XmlParseError> {
-        deserialize_elements::<_, ListObjectsV2Request, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "Delimiter" => {
-                        obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
-                    }
-                    "EncodingType" => {
-                        obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
-                    }
-                    "MaxKeys" => {
-                        obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    "ContinuationToken" => {
-                        obj.continuation_token = Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
-                    }
-                    "FetchOwner" => {
-                        obj.fetch_owner = Some(deserialize_primitive("FetchOwner", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "StartAfter" => {
-                        obj.start_after = Some(deserialize_primitive("StartAfter", stack, Ok)?);
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ListObjectsV2Request, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Delimiter" => {
+                    obj.delimiter = Some(deserialize_primitive("Delimiter", stack, Ok)?);
+                }
+                "EncodingType" => {
+                    obj.encoding_type = Some(deserialize_primitive("EncodingType", stack, Ok)?);
+                }
+                "MaxKeys" => {
+                    obj.max_keys = Some(deserialize_primitive("MaxKeys", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
+                }
+                "ContinuationToken" => {
+                    obj.continuation_token =
+                        Some(deserialize_primitive("ContinuationToken", stack, Ok)?);
+                }
+                "FetchOwner" => {
+                    obj.fetch_owner = Some(deserialize_primitive("FetchOwner", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
+                }
+                "StartAfter" => {
+                    obj.start_after = Some(deserialize_primitive("StartAfter", stack, Ok)?);
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8450,60 +8744,68 @@ impl ListPartsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPartsOutput, XmlParseError> {
-        deserialize_elements::<_, ListPartsOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "AbortDate" => {
-                        obj.abort_date = Some(deserialize_primitive("AbortDate", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "AbortRuleId" => {
-                        obj.abort_rule_id = Some(deserialize_primitive("AbortRuleId", stack, Ok)?);
-                    }
-                    "Bucket" => {
-                        obj.bucket = Some(deserialize_primitive("Bucket", stack, Ok)?);
-                    }
-                    "Key" => {
-                        obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
-                    }
-                    "UploadId" => {
-                        obj.upload_id = Some(deserialize_primitive("UploadId", stack, Ok)?);
-                    }
-                    "PartNumberMarker" => {
-                        obj.part_number_marker = Some(deserialize_primitive("PartNumberMarker", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "NextPartNumberMarker" => {
-                        obj.next_part_number_marker = Some(deserialize_primitive("NextPartNumberMarker", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "MaxParts" => {
-                        obj.max_parts = Some(deserialize_primitive("MaxParts", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "IsTruncated" => {
-                        obj.is_truncated = Some(deserialize_primitive("IsTruncated", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "Parts" => {
-                        obj.parts
-                            .get_or_insert(vec![])
-                            .extend(PartsDeserializer::deserialize("Parts", stack)?);
-                    }
-                    "Initiator" => {
-                        obj.initiator = Some(InitiatorDeserializer::deserialize("Initiator", stack)?);
-                    }
-                    "Owner" => {
-                        obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
-                    }
-                    "StorageClass" => {
-                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
-                    }
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ListPartsOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AbortDate" => {
+                    obj.abort_date = Some(deserialize_primitive("AbortDate", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                "AbortRuleId" => {
+                    obj.abort_rule_id = Some(deserialize_primitive("AbortRuleId", stack, Ok)?);
+                }
+                "Bucket" => {
+                    obj.bucket = Some(deserialize_primitive("Bucket", stack, Ok)?);
+                }
+                "Key" => {
+                    obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
+                }
+                "UploadId" => {
+                    obj.upload_id = Some(deserialize_primitive("UploadId", stack, Ok)?);
+                }
+                "PartNumberMarker" => {
+                    obj.part_number_marker =
+                        Some(deserialize_primitive("PartNumberMarker", stack, |s| {
+                            Ok(i64::from_str(&s).unwrap())
+                        })?);
+                }
+                "NextPartNumberMarker" => {
+                    obj.next_part_number_marker =
+                        Some(deserialize_primitive("NextPartNumberMarker", stack, |s| {
+                            Ok(i64::from_str(&s).unwrap())
+                        })?);
+                }
+                "MaxParts" => {
+                    obj.max_parts = Some(deserialize_primitive("MaxParts", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "IsTruncated" => {
+                    obj.is_truncated = Some(deserialize_primitive("IsTruncated", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
+                }
+                "Parts" => {
+                    obj.parts
+                        .get_or_insert(vec![])
+                        .extend(PartsDeserializer::deserialize("Parts", stack)?);
+                }
+                "Initiator" => {
+                    obj.initiator = Some(InitiatorDeserializer::deserialize("Initiator", stack)?);
+                }
+                "Owner" => {
+                    obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
+                }
+                "StorageClass" => {
+                    obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
+                }
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8532,37 +8834,39 @@ impl ListPartsRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPartsRequest, XmlParseError> {
-        deserialize_elements::<_, ListPartsRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "MaxParts" => {
-                        obj.max_parts = Some(deserialize_primitive("MaxParts", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "PartNumberMarker" => {
-                        obj.part_number_marker = Some(deserialize_primitive("PartNumberMarker", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "UploadId" => {
-                        obj.upload_id = deserialize_primitive("UploadId", stack, Ok)?;
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ListPartsRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
+                }
+                "MaxParts" => {
+                    obj.max_parts = Some(deserialize_primitive("MaxParts", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "PartNumberMarker" => {
+                    obj.part_number_marker =
+                        Some(deserialize_primitive("PartNumberMarker", stack, |s| {
+                            Ok(i64::from_str(&s).unwrap())
+                        })?);
+                }
+                "UploadId" => {
+                    obj.upload_id = deserialize_primitive("UploadId", stack, Ok)?;
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8583,27 +8887,23 @@ impl LoggingEnabledDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LoggingEnabled, XmlParseError> {
-        deserialize_elements::<_, LoggingEnabled, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "TargetBucket" => {
-                        obj.target_bucket = deserialize_primitive("TargetBucket", stack, Ok)?;
-                    }
-                    "TargetGrants" => {
-                        obj.target_grants
-                            .get_or_insert(vec![])
-                            .extend(TargetGrantsDeserializer::deserialize("TargetGrants", stack)?);
-                    }
-                    "TargetPrefix" => {
-                        obj.target_prefix = deserialize_primitive("TargetPrefix", stack, Ok)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, LoggingEnabled, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "TargetBucket" => {
+                    obj.target_bucket = deserialize_primitive("TargetBucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "TargetGrants" => {
+                    obj.target_grants.get_or_insert(vec![]).extend(
+                        TargetGrantsDeserializer::deserialize("TargetGrants", stack)?,
+                    );
+                }
+                "TargetPrefix" => {
+                    obj.target_prefix = deserialize_primitive("TargetPrefix", stack, Ok)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8622,22 +8922,18 @@ impl MetadataEntryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetadataEntry, XmlParseError> {
-        deserialize_elements::<_, MetadataEntry, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Name" => {
-                        obj.name = Some(deserialize_primitive("Name", stack, Ok)?);
-                    }
-                    "Value" => {
-                        obj.value = Some(deserialize_primitive("Value", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, MetadataEntry, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Name" => {
+                    obj.name = Some(deserialize_primitive("Name", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Value" => {
+                    obj.value = Some(deserialize_primitive("Value", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8656,22 +8952,21 @@ impl MetricsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Metrics, XmlParseError> {
-        deserialize_elements::<_, Metrics, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Status" => {
-                        obj.status = deserialize_primitive("Status", stack, Ok)?;
-                    }
-                    "EventThreshold" => {
-                        obj.event_threshold = Some(ReplicationTimeValueDeserializer::deserialize("EventThreshold", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Metrics, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Status" => {
+                    obj.status = deserialize_primitive("Status", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "EventThreshold" => {
+                    obj.event_threshold = Some(ReplicationTimeValueDeserializer::deserialize(
+                        "EventThreshold",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8690,24 +8985,20 @@ impl MetricsAndOperatorDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricsAndOperator, XmlParseError> {
-        deserialize_elements::<_, MetricsAndOperator, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    "Tags" => {
-                        obj.tags
-                            .get_or_insert(vec![])
-                            .extend(TagSetDeserializer::deserialize("Tags", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, MetricsAndOperator, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Tags" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagSetDeserializer::deserialize("Tags", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8726,22 +9017,18 @@ impl MetricsConfigurationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricsConfiguration, XmlParseError> {
-        deserialize_elements::<_, MetricsConfiguration, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Id" => {
-                        obj.id = deserialize_primitive("Id", stack, Ok)?;
-                    }
-                    "Filter" => {
-                        obj.filter = Some(MetricsFilterDeserializer::deserialize("Filter", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, MetricsConfiguration, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Id" => {
+                    obj.id = deserialize_primitive("Id", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Filter" => {
+                    obj.filter = Some(MetricsFilterDeserializer::deserialize("Filter", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8762,25 +9049,21 @@ impl MetricsFilterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricsFilter, XmlParseError> {
-        deserialize_elements::<_, MetricsFilter, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    "Tag" => {
-                        obj.tag = Some(TagDeserializer::deserialize("Tag", stack)?);
-                    }
-                    "And" => {
-                        obj.and = Some(MetricsAndOperatorDeserializer::deserialize("And", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, MetricsFilter, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Tag" => {
+                    obj.tag = Some(TagDeserializer::deserialize("Tag", stack)?);
+                }
+                "And" => {
+                    obj.and = Some(MetricsAndOperatorDeserializer::deserialize("And", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8807,40 +9090,37 @@ impl MultipartUploadDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MultipartUpload, XmlParseError> {
-        deserialize_elements::<_, MultipartUpload, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "UploadId" => {
-                        obj.upload_id = Some(deserialize_primitive("UploadId", stack, Ok)?);
-                    }
-                    "Key" => {
-                        obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
-                    }
-                    "Initiated" => {
-                        obj.initiated = Some(deserialize_primitive("Initiated", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "StorageClass" => {
-                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
-                    }
-                    "Owner" => {
-                        obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
-                    }
-                    "Initiator" => {
-                        obj.initiator = Some(InitiatorDeserializer::deserialize("Initiator", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, MultipartUpload, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "UploadId" => {
+                    obj.upload_id = Some(deserialize_primitive("UploadId", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Key" => {
+                    obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
+                }
+                "Initiated" => {
+                    obj.initiated = Some(deserialize_primitive("Initiated", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                "StorageClass" => {
+                    obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
+                }
+                "Owner" => {
+                    obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
+                }
+                "Initiator" => {
+                    obj.initiator = Some(InitiatorDeserializer::deserialize("Initiator", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct NoSuchBucket {
-}
+pub struct NoSuchBucket {}
 #[allow(dead_code)]
 pub struct NoSuchBucketDeserializer;
 impl NoSuchBucketDeserializer {
@@ -8849,22 +9129,17 @@ impl NoSuchBucketDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NoSuchBucket, XmlParseError> {
-        deserialize_elements::<_, NoSuchBucket, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
+        deserialize_elements::<_, NoSuchBucket, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct NoSuchKey {
-}
+pub struct NoSuchKey {}
 #[allow(dead_code)]
 pub struct NoSuchKeyDeserializer;
 impl NoSuchKeyDeserializer {
@@ -8873,22 +9148,17 @@ impl NoSuchKeyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NoSuchKey, XmlParseError> {
-        deserialize_elements::<_, NoSuchKey, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
+        deserialize_elements::<_, NoSuchKey, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct NoSuchUpload {
-}
+pub struct NoSuchUpload {}
 #[allow(dead_code)]
 pub struct NoSuchUploadDeserializer;
 impl NoSuchUploadDeserializer {
@@ -8897,16 +9167,12 @@ impl NoSuchUploadDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NoSuchUpload, XmlParseError> {
-        deserialize_elements::<_, NoSuchUpload, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
+        deserialize_elements::<_, NoSuchUpload, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -8929,7 +9195,10 @@ impl NoncurrentVersionExpirationDeserializer {
             |name, stack, obj| {
                 match name {
                     "NoncurrentDays" => {
-                        obj.noncurrent_days = Some(deserialize_primitive("NoncurrentDays", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
+                        obj.noncurrent_days =
+                            Some(deserialize_primitive("NoncurrentDays", stack, |s| {
+                                Ok(i64::from_str(&s).unwrap())
+                            })?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -8960,7 +9229,10 @@ impl NoncurrentVersionTransitionDeserializer {
             |name, stack, obj| {
                 match name {
                     "NoncurrentDays" => {
-                        obj.noncurrent_days = Some(deserialize_primitive("NoncurrentDays", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
+                        obj.noncurrent_days =
+                            Some(deserialize_primitive("NoncurrentDays", stack, |s| {
+                                Ok(i64::from_str(&s).unwrap())
+                            })?);
                     }
                     "StorageClass" => {
                         obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
@@ -8996,19 +9268,28 @@ impl NotificationConfigurationDeserializer {
             |name, stack, obj| {
                 match name {
                     "TopicConfigurations" => {
-                        obj.topic_configurations
-                            .get_or_insert(vec![])
-                            .extend(TopicConfigurationListDeserializer::deserialize("TopicConfigurations", stack)?);
+                        obj.topic_configurations.get_or_insert(vec![]).extend(
+                            TopicConfigurationListDeserializer::deserialize(
+                                "TopicConfigurations",
+                                stack,
+                            )?,
+                        );
                     }
                     "QueueConfigurations" => {
-                        obj.queue_configurations
-                            .get_or_insert(vec![])
-                            .extend(QueueConfigurationListDeserializer::deserialize("QueueConfigurations", stack)?);
+                        obj.queue_configurations.get_or_insert(vec![]).extend(
+                            QueueConfigurationListDeserializer::deserialize(
+                                "QueueConfigurations",
+                                stack,
+                            )?,
+                        );
                     }
                     "LambdaFunctionConfigurations" => {
                         obj.lambda_function_configurations
                             .get_or_insert(vec![])
-                            .extend(LambdaFunctionConfigurationListDeserializer::deserialize("LambdaFunctionConfigurations", stack)?);
+                            .extend(LambdaFunctionConfigurationListDeserializer::deserialize(
+                                "LambdaFunctionConfigurations",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9041,13 +9322,25 @@ impl NotificationConfigurationDeprecatedDeserializer {
             |name, stack, obj| {
                 match name {
                     "TopicConfiguration" => {
-                        obj.topic_configuration = Some(TopicConfigurationDeprecatedDeserializer::deserialize("TopicConfiguration", stack)?);
+                        obj.topic_configuration =
+                            Some(TopicConfigurationDeprecatedDeserializer::deserialize(
+                                "TopicConfiguration",
+                                stack,
+                            )?);
                     }
                     "QueueConfiguration" => {
-                        obj.queue_configuration = Some(QueueConfigurationDeprecatedDeserializer::deserialize("QueueConfiguration", stack)?);
+                        obj.queue_configuration =
+                            Some(QueueConfigurationDeprecatedDeserializer::deserialize(
+                                "QueueConfiguration",
+                                stack,
+                            )?);
                     }
                     "CloudFunctionConfiguration" => {
-                        obj.cloud_function_configuration = Some(CloudFunctionConfigurationDeserializer::deserialize("CloudFunctionConfiguration", stack)?);
+                        obj.cloud_function_configuration =
+                            Some(CloudFunctionConfigurationDeserializer::deserialize(
+                                "CloudFunctionConfiguration",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9109,40 +9402,39 @@ impl ObjectDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Object, XmlParseError> {
-        deserialize_elements::<_, Object, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Key" => {
-                        obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
-                    }
-                    "LastModified" => {
-                        obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "ETag" => {
-                        obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
-                    }
-                    "Size" => {
-                        obj.size = Some(deserialize_primitive("Size", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "StorageClass" => {
-                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
-                    }
-                    "Owner" => {
-                        obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Object, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Key" => {
+                    obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "LastModified" => {
+                    obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                "ETag" => {
+                    obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
+                }
+                "Size" => {
+                    obj.size = Some(deserialize_primitive("Size", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "StorageClass" => {
+                    obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
+                }
+                "Owner" => {
+                    obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct ObjectAlreadyInActiveTierError {
-}
+pub struct ObjectAlreadyInActiveTierError {}
 #[allow(dead_code)]
 pub struct ObjectAlreadyInActiveTierErrorDeserializer;
 impl ObjectAlreadyInActiveTierErrorDeserializer {
@@ -9179,22 +9471,18 @@ impl ObjectIdentifierDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ObjectIdentifier, XmlParseError> {
-        deserialize_elements::<_, ObjectIdentifier, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ObjectIdentifier, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9219,7 +9507,8 @@ impl ObjectLockConfigurationDeserializer {
             |name, stack, obj| {
                 match name {
                     "ObjectLockEnabled" => {
-                        obj.object_lock_enabled = Some(deserialize_primitive("ObjectLockEnabled", stack, Ok)?);
+                        obj.object_lock_enabled =
+                            Some(deserialize_primitive("ObjectLockEnabled", stack, Ok)?);
                     }
                     "Rule" => {
                         obj.rule = Some(ObjectLockRuleDeserializer::deserialize("Rule", stack)?);
@@ -9245,19 +9534,15 @@ impl ObjectLockLegalHoldDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ObjectLockLegalHold, XmlParseError> {
-        deserialize_elements::<_, ObjectLockLegalHold, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Status" => {
-                        obj.status = Some(deserialize_primitive("Status", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ObjectLockLegalHold, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Status" => {
+                    obj.status = Some(deserialize_primitive("Status", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9276,22 +9561,21 @@ impl ObjectLockRetentionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ObjectLockRetention, XmlParseError> {
-        deserialize_elements::<_, ObjectLockRetention, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Mode" => {
-                        obj.mode = Some(deserialize_primitive("Mode", stack, Ok)?);
-                    }
-                    "RetainUntilDate" => {
-                        obj.retain_until_date = Some(deserialize_primitive("RetainUntilDate", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ObjectLockRetention, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Mode" => {
+                    obj.mode = Some(deserialize_primitive("Mode", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "RetainUntilDate" => {
+                    obj.retain_until_date =
+                        Some(deserialize_primitive("RetainUntilDate", stack, |s| {
+                            Ok(String::from_str(&s).unwrap())
+                        })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9308,25 +9592,23 @@ impl ObjectLockRuleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ObjectLockRule, XmlParseError> {
-        deserialize_elements::<_, ObjectLockRule, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DefaultRetention" => {
-                        obj.default_retention = Some(DefaultRetentionDeserializer::deserialize("DefaultRetention", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ObjectLockRule, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DefaultRetention" => {
+                    obj.default_retention = Some(DefaultRetentionDeserializer::deserialize(
+                        "DefaultRetention",
+                        stack,
+                    )?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct ObjectNotInActiveTierError {
-}
+pub struct ObjectNotInActiveTierError {}
 #[allow(dead_code)]
 pub struct ObjectNotInActiveTierErrorDeserializer;
 impl ObjectNotInActiveTierErrorDeserializer {
@@ -9375,40 +9657,42 @@ impl ObjectVersionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ObjectVersion, XmlParseError> {
-        deserialize_elements::<_, ObjectVersion, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ETag" => {
-                        obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
-                    }
-                    "Size" => {
-                        obj.size = Some(deserialize_primitive("Size", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "StorageClass" => {
-                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
-                    }
-                    "Key" => {
-                        obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "IsLatest" => {
-                        obj.is_latest = Some(deserialize_primitive("IsLatest", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "LastModified" => {
-                        obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "Owner" => {
-                        obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ObjectVersion, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ETag" => {
+                    obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Size" => {
+                    obj.size = Some(deserialize_primitive("Size", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "StorageClass" => {
+                    obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
+                }
+                "Key" => {
+                    obj.key = Some(deserialize_primitive("Key", stack, Ok)?);
+                }
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "IsLatest" => {
+                    obj.is_latest = Some(deserialize_primitive("IsLatest", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
+                }
+                "LastModified" => {
+                    obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                "Owner" => {
+                    obj.owner = Some(OwnerDeserializer::deserialize("Owner", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9425,19 +9709,15 @@ impl OutputLocationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OutputLocation, XmlParseError> {
-        deserialize_elements::<_, OutputLocation, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "S3" => {
-                        obj.s3 = Some(S3LocationDeserializer::deserialize("S3", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, OutputLocation, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "S3" => {
+                    obj.s3 = Some(S3LocationDeserializer::deserialize("S3", stack)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9456,22 +9736,18 @@ impl OutputSerializationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OutputSerialization, XmlParseError> {
-        deserialize_elements::<_, OutputSerialization, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CSV" => {
-                        obj.csv = Some(CSVOutputDeserializer::deserialize("CSV", stack)?);
-                    }
-                    "JSON" => {
-                        obj.json = Some(JSONOutputDeserializer::deserialize("JSON", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, OutputSerialization, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CSV" => {
+                    obj.csv = Some(CSVOutputDeserializer::deserialize("CSV", stack)?);
                 }
-                Ok(())
-            },
-        )
+                "JSON" => {
+                    obj.json = Some(JSONOutputDeserializer::deserialize("JSON", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9490,22 +9766,18 @@ impl OwnerDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Owner, XmlParseError> {
-        deserialize_elements::<_, Owner, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DisplayName" => {
-                        obj.display_name = Some(deserialize_primitive("DisplayName", stack, Ok)?);
-                    }
-                    "ID" => {
-                        obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Owner, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DisplayName" => {
+                    obj.display_name = Some(deserialize_primitive("DisplayName", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "ID" => {
+                    obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9522,20 +9794,18 @@ impl OwnershipControlsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OwnershipControls, XmlParseError> {
-        deserialize_elements::<_, OwnershipControls, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Rules" => {
-                        obj.rules
-                            .extend(OwnershipControlsRulesDeserializer::deserialize("Rules", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, OwnershipControls, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Rules" => {
+                    obj.rules
+                        .extend(OwnershipControlsRulesDeserializer::deserialize(
+                            "Rules", stack,
+                        )?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9552,25 +9822,20 @@ impl OwnershipControlsRuleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OwnershipControlsRule, XmlParseError> {
-        deserialize_elements::<_, OwnershipControlsRule, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ObjectOwnership" => {
-                        obj.object_ownership = deserialize_primitive("ObjectOwnership", stack, Ok)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, OwnershipControlsRule, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ObjectOwnership" => {
+                    obj.object_ownership = deserialize_primitive("ObjectOwnership", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct ParquetInput {
-}
+pub struct ParquetInput {}
 #[allow(dead_code)]
 pub struct ParquetInputDeserializer;
 impl ParquetInputDeserializer {
@@ -9579,16 +9844,12 @@ impl ParquetInputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ParquetInput, XmlParseError> {
-        deserialize_elements::<_, ParquetInput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
+        deserialize_elements::<_, ParquetInput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9611,28 +9872,30 @@ impl PartDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Part, XmlParseError> {
-        deserialize_elements::<_, Part, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "PartNumber" => {
-                        obj.part_number = Some(deserialize_primitive("PartNumber", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "LastModified" => {
-                        obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "ETag" => {
-                        obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
-                    }
-                    "Size" => {
-                        obj.size = Some(deserialize_primitive("Size", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Part, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "PartNumber" => {
+                    obj.part_number = Some(deserialize_primitive("PartNumber", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                "LastModified" => {
+                    obj.last_modified = Some(deserialize_primitive("LastModified", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                "ETag" => {
+                    obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
+                }
+                "Size" => {
+                    obj.size = Some(deserialize_primitive("Size", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9649,19 +9912,17 @@ impl PolicyStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyStatus, XmlParseError> {
-        deserialize_elements::<_, PolicyStatus, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "IsPublic" => {
-                        obj.is_public = Some(deserialize_primitive("IsPublic", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, PolicyStatus, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IsPublic" => {
+                    obj.is_public = Some(deserialize_primitive("IsPublic", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9682,25 +9943,29 @@ impl ProgressDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Progress, XmlParseError> {
-        deserialize_elements::<_, Progress, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "BytesScanned" => {
-                        obj.bytes_scanned = Some(deserialize_primitive("BytesScanned", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
-                    }
-                    "BytesProcessed" => {
-                        obj.bytes_processed = Some(deserialize_primitive("BytesProcessed", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
-                    }
-                    "BytesReturned" => {
-                        obj.bytes_returned = Some(deserialize_primitive("BytesReturned", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Progress, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "BytesScanned" => {
+                    obj.bytes_scanned = Some(deserialize_primitive("BytesScanned", stack, |s| {
+                        Ok(u64::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                "BytesProcessed" => {
+                    obj.bytes_processed =
+                        Some(deserialize_primitive("BytesProcessed", stack, |s| {
+                            Ok(u64::from_str(&s).unwrap())
+                        })?);
+                }
+                "BytesReturned" => {
+                    obj.bytes_returned =
+                        Some(deserialize_primitive("BytesReturned", stack, |s| {
+                            Ok(u64::from_str(&s).unwrap())
+                        })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9717,19 +9982,15 @@ impl ProgressEventDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ProgressEvent, XmlParseError> {
-        deserialize_elements::<_, ProgressEvent, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Details" => {
-                        obj.details = Some(ProgressDeserializer::deserialize("Details", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ProgressEvent, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Details" => {
+                    obj.details = Some(ProgressDeserializer::deserialize("Details", stack)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9758,16 +10019,29 @@ impl PublicAccessBlockConfigurationDeserializer {
             |name, stack, obj| {
                 match name {
                     "BlockPublicAcls" => {
-                        obj.block_public_acls = Some(deserialize_primitive("BlockPublicAcls", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.block_public_acls =
+                            Some(deserialize_primitive("BlockPublicAcls", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     "IgnorePublicAcls" => {
-                        obj.ignore_public_acls = Some(deserialize_primitive("IgnorePublicAcls", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.ignore_public_acls =
+                            Some(deserialize_primitive("IgnorePublicAcls", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     "BlockPublicPolicy" => {
-                        obj.block_public_policy = Some(deserialize_primitive("BlockPublicPolicy", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.block_public_policy =
+                            Some(deserialize_primitive("BlockPublicPolicy", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     "RestrictPublicBuckets" => {
-                        obj.restrict_public_buckets = Some(deserialize_primitive("RestrictPublicBuckets", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.restrict_public_buckets = Some(deserialize_primitive(
+                            "RestrictPublicBuckets",
+                            stack,
+                            |s| Ok(bool::from_str(&s).unwrap()),
+                        )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9803,10 +10077,15 @@ impl PutBucketAccelerateConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "AccelerateConfiguration" => {
-                        obj.accelerate_configuration = AccelerateConfigurationDeserializer::deserialize("AccelerateConfiguration", stack)?;
+                        obj.accelerate_configuration =
+                            AccelerateConfigurationDeserializer::deserialize(
+                                "AccelerateConfiguration",
+                                stack,
+                            )?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9847,46 +10126,47 @@ impl PutBucketAclRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutBucketAclRequest, XmlParseError> {
-        deserialize_elements::<_, PutBucketAclRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ACL" => {
-                        obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
-                    }
-                    "AccessControlPolicy" => {
-                        obj.access_control_policy = Some(AccessControlPolicyDeserializer::deserialize("AccessControlPolicy", stack)?);
-                    }
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "ContentMD5" => {
-                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
-                    }
-                    "GrantFullControl" => {
-                        obj.grant_full_control = Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
-                    }
-                    "GrantRead" => {
-                        obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
-                    }
-                    "GrantReadACP" => {
-                        obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
-                    }
-                    "GrantWrite" => {
-                        obj.grant_write = Some(deserialize_primitive("GrantWrite", stack, Ok)?);
-                    }
-                    "GrantWriteACP" => {
-                        obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, PutBucketAclRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ACL" => {
+                    obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "AccessControlPolicy" => {
+                    obj.access_control_policy = Some(AccessControlPolicyDeserializer::deserialize(
+                        "AccessControlPolicy",
+                        stack,
+                    )?);
+                }
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
+                }
+                "ContentMD5" => {
+                    obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
+                }
+                "GrantFullControl" => {
+                    obj.grant_full_control =
+                        Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
+                }
+                "GrantRead" => {
+                    obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
+                }
+                "GrantReadACP" => {
+                    obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
+                }
+                "GrantWrite" => {
+                    obj.grant_write = Some(deserialize_primitive("GrantWrite", stack, Ok)?);
+                }
+                "GrantWriteACP" => {
+                    obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -9921,10 +10201,15 @@ impl PutBucketAnalyticsConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "AnalyticsConfiguration" => {
-                        obj.analytics_configuration = AnalyticsConfigurationDeserializer::deserialize("AnalyticsConfiguration", stack)?;
+                        obj.analytics_configuration =
+                            AnalyticsConfigurationDeserializer::deserialize(
+                                "AnalyticsConfiguration",
+                                stack,
+                            )?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -9953,28 +10238,26 @@ impl PutBucketCorsRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutBucketCorsRequest, XmlParseError> {
-        deserialize_elements::<_, PutBucketCorsRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "CORSConfiguration" => {
-                        obj.cors_configuration = CORSConfigurationDeserializer::deserialize("CORSConfiguration", stack)?;
-                    }
-                    "ContentMD5" => {
-                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, PutBucketCorsRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "CORSConfiguration" => {
+                    obj.cors_configuration =
+                        CORSConfigurationDeserializer::deserialize("CORSConfiguration", stack)?;
+                }
+                "ContentMD5" => {
+                    obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -10009,10 +10292,15 @@ impl PutBucketEncryptionRequestDeserializer {
                         obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ServerSideEncryptionConfiguration" => {
-                        obj.server_side_encryption_configuration = ServerSideEncryptionConfigurationDeserializer::deserialize("ServerSideEncryptionConfiguration", stack)?;
+                        obj.server_side_encryption_configuration =
+                            ServerSideEncryptionConfigurationDeserializer::deserialize(
+                                "ServerSideEncryptionConfiguration",
+                                stack,
+                            )?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10051,7 +10339,11 @@ impl PutBucketIntelligentTieringConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "IntelligentTieringConfiguration" => {
-                        obj.intelligent_tiering_configuration = IntelligentTieringConfigurationDeserializer::deserialize("IntelligentTieringConfiguration", stack)?;
+                        obj.intelligent_tiering_configuration =
+                            IntelligentTieringConfigurationDeserializer::deserialize(
+                                "IntelligentTieringConfiguration",
+                                stack,
+                            )?;
                     }
                     _ => skip_tree(stack),
                 }
@@ -10092,10 +10384,15 @@ impl PutBucketInventoryConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "InventoryConfiguration" => {
-                        obj.inventory_configuration = InventoryConfigurationDeserializer::deserialize("InventoryConfiguration", stack)?;
+                        obj.inventory_configuration =
+                            InventoryConfigurationDeserializer::deserialize(
+                                "InventoryConfiguration",
+                                stack,
+                            )?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10131,10 +10428,15 @@ impl PutBucketLifecycleConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "LifecycleConfiguration" => {
-                        obj.lifecycle_configuration = Some(BucketLifecycleConfigurationDeserializer::deserialize("LifecycleConfiguration", stack)?);
+                        obj.lifecycle_configuration =
+                            Some(BucketLifecycleConfigurationDeserializer::deserialize(
+                                "LifecycleConfiguration",
+                                stack,
+                            )?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10175,10 +10477,15 @@ impl PutBucketLifecycleRequestDeserializer {
                         obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "LifecycleConfiguration" => {
-                        obj.lifecycle_configuration = Some(LifecycleConfigurationDeserializer::deserialize("LifecycleConfiguration", stack)?);
+                        obj.lifecycle_configuration =
+                            Some(LifecycleConfigurationDeserializer::deserialize(
+                                "LifecycleConfiguration",
+                                stack,
+                            )?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10216,13 +10523,17 @@ impl PutBucketLoggingRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "BucketLoggingStatus" => {
-                        obj.bucket_logging_status = BucketLoggingStatusDeserializer::deserialize("BucketLoggingStatus", stack)?;
+                        obj.bucket_logging_status = BucketLoggingStatusDeserializer::deserialize(
+                            "BucketLoggingStatus",
+                            stack,
+                        )?;
                     }
                     "ContentMD5" => {
                         obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10263,10 +10574,14 @@ impl PutBucketMetricsConfigurationRequestDeserializer {
                         obj.id = deserialize_primitive("Id", stack, Ok)?;
                     }
                     "MetricsConfiguration" => {
-                        obj.metrics_configuration = MetricsConfigurationDeserializer::deserialize("MetricsConfiguration", stack)?;
+                        obj.metrics_configuration = MetricsConfigurationDeserializer::deserialize(
+                            "MetricsConfiguration",
+                            stack,
+                        )?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10302,10 +10617,15 @@ impl PutBucketNotificationConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "NotificationConfiguration" => {
-                        obj.notification_configuration = NotificationConfigurationDeserializer::deserialize("NotificationConfiguration", stack)?;
+                        obj.notification_configuration =
+                            NotificationConfigurationDeserializer::deserialize(
+                                "NotificationConfiguration",
+                                stack,
+                            )?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10346,10 +10666,15 @@ impl PutBucketNotificationRequestDeserializer {
                         obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "NotificationConfiguration" => {
-                        obj.notification_configuration = NotificationConfigurationDeprecatedDeserializer::deserialize("NotificationConfiguration", stack)?;
+                        obj.notification_configuration =
+                            NotificationConfigurationDeprecatedDeserializer::deserialize(
+                                "NotificationConfiguration",
+                                stack,
+                            )?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10390,10 +10715,12 @@ impl PutBucketOwnershipControlsRequestDeserializer {
                         obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     "OwnershipControls" => {
-                        obj.ownership_controls = OwnershipControlsDeserializer::deserialize("OwnershipControls", stack)?;
+                        obj.ownership_controls =
+                            OwnershipControlsDeserializer::deserialize("OwnershipControls", stack)?;
                     }
                     _ => skip_tree(stack),
                 }
@@ -10424,31 +10751,32 @@ impl PutBucketPolicyRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutBucketPolicyRequest, XmlParseError> {
-        deserialize_elements::<_, PutBucketPolicyRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "ContentMD5" => {
-                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
-                    }
-                    "ConfirmRemoveSelfBucketAccess" => {
-                        obj.confirm_remove_self_bucket_access = Some(deserialize_primitive("ConfirmRemoveSelfBucketAccess", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "Policy" => {
-                        obj.policy = deserialize_primitive("Policy", stack, Ok)?;
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, PutBucketPolicyRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "ContentMD5" => {
+                    obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
+                }
+                "ConfirmRemoveSelfBucketAccess" => {
+                    obj.confirm_remove_self_bucket_access = Some(deserialize_primitive(
+                        "ConfirmRemoveSelfBucketAccess",
+                        stack,
+                        |s| Ok(bool::from_str(&s).unwrap()),
+                    )?);
+                }
+                "Policy" => {
+                    obj.policy = deserialize_primitive("Policy", stack, Ok)?;
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -10485,13 +10813,18 @@ impl PutBucketReplicationRequestDeserializer {
                         obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ReplicationConfiguration" => {
-                        obj.replication_configuration = ReplicationConfigurationDeserializer::deserialize("ReplicationConfiguration", stack)?;
+                        obj.replication_configuration =
+                            ReplicationConfigurationDeserializer::deserialize(
+                                "ReplicationConfiguration",
+                                stack,
+                            )?;
                     }
                     "Token" => {
                         obj.token = Some(deserialize_primitive("Token", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10532,10 +10865,15 @@ impl PutBucketRequestPaymentRequestDeserializer {
                         obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "RequestPaymentConfiguration" => {
-                        obj.request_payment_configuration = RequestPaymentConfigurationDeserializer::deserialize("RequestPaymentConfiguration", stack)?;
+                        obj.request_payment_configuration =
+                            RequestPaymentConfigurationDeserializer::deserialize(
+                                "RequestPaymentConfiguration",
+                                stack,
+                            )?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10579,7 +10917,8 @@ impl PutBucketTaggingRequestDeserializer {
                         obj.tagging = TaggingDeserializer::deserialize("Tagging", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10625,10 +10964,15 @@ impl PutBucketVersioningRequestDeserializer {
                         obj.mfa = Some(deserialize_primitive("MFA", stack, Ok)?);
                     }
                     "VersioningConfiguration" => {
-                        obj.versioning_configuration = VersioningConfigurationDeserializer::deserialize("VersioningConfiguration", stack)?;
+                        obj.versioning_configuration =
+                            VersioningConfigurationDeserializer::deserialize(
+                                "VersioningConfiguration",
+                                stack,
+                            )?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10669,10 +11013,14 @@ impl PutBucketWebsiteRequestDeserializer {
                         obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "WebsiteConfiguration" => {
-                        obj.website_configuration = WebsiteConfigurationDeserializer::deserialize("WebsiteConfiguration", stack)?;
+                        obj.website_configuration = WebsiteConfigurationDeserializer::deserialize(
+                            "WebsiteConfiguration",
+                            stack,
+                        )?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10695,19 +11043,15 @@ impl PutObjectAclOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectAclOutput, XmlParseError> {
-        deserialize_elements::<_, PutObjectAclOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, PutObjectAclOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -10748,55 +11092,56 @@ impl PutObjectAclRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectAclRequest, XmlParseError> {
-        deserialize_elements::<_, PutObjectAclRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ACL" => {
-                        obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
-                    }
-                    "AccessControlPolicy" => {
-                        obj.access_control_policy = Some(AccessControlPolicyDeserializer::deserialize("AccessControlPolicy", stack)?);
-                    }
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "ContentMD5" => {
-                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
-                    }
-                    "GrantFullControl" => {
-                        obj.grant_full_control = Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
-                    }
-                    "GrantRead" => {
-                        obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
-                    }
-                    "GrantReadACP" => {
-                        obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
-                    }
-                    "GrantWrite" => {
-                        obj.grant_write = Some(deserialize_primitive("GrantWrite", stack, Ok)?);
-                    }
-                    "GrantWriteACP" => {
-                        obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
-                    }
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, PutObjectAclRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ACL" => {
+                    obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "AccessControlPolicy" => {
+                    obj.access_control_policy = Some(AccessControlPolicyDeserializer::deserialize(
+                        "AccessControlPolicy",
+                        stack,
+                    )?);
+                }
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
+                }
+                "ContentMD5" => {
+                    obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
+                }
+                "GrantFullControl" => {
+                    obj.grant_full_control =
+                        Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
+                }
+                "GrantRead" => {
+                    obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
+                }
+                "GrantReadACP" => {
+                    obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
+                }
+                "GrantWrite" => {
+                    obj.grant_write = Some(deserialize_primitive("GrantWrite", stack, Ok)?);
+                }
+                "GrantWriteACP" => {
+                    obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
+                }
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -10819,7 +11164,8 @@ impl PutObjectLegalHoldOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                        obj.request_charged =
+                            Some(deserialize_primitive("RequestCharged", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10866,7 +11212,10 @@ impl PutObjectLegalHoldRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "LegalHold" => {
-                        obj.legal_hold = Some(ObjectLockLegalHoldDeserializer::deserialize("LegalHold", stack)?);
+                        obj.legal_hold = Some(ObjectLockLegalHoldDeserializer::deserialize(
+                            "LegalHold",
+                            stack,
+                        )?);
                     }
                     "RequestPayer" => {
                         obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
@@ -10878,7 +11227,8 @@ impl PutObjectLegalHoldRequestDeserializer {
                         obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10907,7 +11257,8 @@ impl PutObjectLockConfigurationOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                        obj.request_charged =
+                            Some(deserialize_primitive("RequestCharged", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -10949,7 +11300,11 @@ impl PutObjectLockConfigurationRequestDeserializer {
                         obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                     }
                     "ObjectLockConfiguration" => {
-                        obj.object_lock_configuration = Some(ObjectLockConfigurationDeserializer::deserialize("ObjectLockConfiguration", stack)?);
+                        obj.object_lock_configuration =
+                            Some(ObjectLockConfigurationDeserializer::deserialize(
+                                "ObjectLockConfiguration",
+                                stack,
+                            )?);
                     }
                     "RequestPayer" => {
                         obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
@@ -10961,7 +11316,8 @@ impl PutObjectLockConfigurationRequestDeserializer {
                         obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -11002,46 +11358,49 @@ impl PutObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectOutput, XmlParseError> {
-        deserialize_elements::<_, PutObjectOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Expiration" => {
-                        obj.expiration = Some(deserialize_primitive("Expiration", stack, Ok)?);
-                    }
-                    "ETag" => {
-                        obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
-                    }
-                    "ServerSideEncryption" => {
-                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "SSEKMSKeyId" => {
-                        obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
-                    }
-                    "SSEKMSEncryptionContext" => {
-                        obj.ssekms_encryption_context = Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
-                    }
-                    "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, PutObjectOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Expiration" => {
+                    obj.expiration = Some(deserialize_primitive("Expiration", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "ETag" => {
+                    obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
+                }
+                "ServerSideEncryption" => {
+                    obj.server_side_encryption =
+                        Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
+                }
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "SSECustomerAlgorithm" => {
+                    obj.sse_customer_algorithm =
+                        Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                }
+                "SSECustomerKeyMD5" => {
+                    obj.sse_customer_key_md5 =
+                        Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                }
+                "SSEKMSKeyId" => {
+                    obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
+                }
+                "SSEKMSEncryptionContext" => {
+                    obj.ssekms_encryption_context =
+                        Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
+                }
+                "BucketKeyEnabled" => {
+                    obj.bucket_key_enabled =
+                        Some(deserialize_primitive("BucketKeyEnabled", stack, |s| {
+                            Ok(bool::from_str(&s).unwrap())
+                        })?);
+                }
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11120,112 +11479,136 @@ impl PutObjectRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectRequest, XmlParseError> {
-        deserialize_elements::<_, PutObjectRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ACL" => {
-                        obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
-                    }
-                    "Body" => {
-                        obj.body = Some(Default::default());
-                    }
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "CacheControl" => {
-                        obj.cache_control = Some(deserialize_primitive("CacheControl", stack, Ok)?);
-                    }
-                    "ContentDisposition" => {
-                        obj.content_disposition = Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
-                    }
-                    "ContentEncoding" => {
-                        obj.content_encoding = Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
-                    }
-                    "ContentLanguage" => {
-                        obj.content_language = Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
-                    }
-                    "ContentLength" => {
-                        obj.content_length = Some(deserialize_primitive("ContentLength", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
-                    }
-                    "ContentMD5" => {
-                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
-                    }
-                    "ContentType" => {
-                        obj.content_type = Some(deserialize_primitive("ContentType", stack, Ok)?);
-                    }
-                    "Expires" => {
-                        obj.expires = Some(deserialize_primitive("Expires", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "GrantFullControl" => {
-                        obj.grant_full_control = Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
-                    }
-                    "GrantRead" => {
-                        obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
-                    }
-                    "GrantReadACP" => {
-                        obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
-                    }
-                    "GrantWriteACP" => {
-                        obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
-                    }
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "Metadata" => {
-                        obj.metadata = Some(Default::default());
-                    }
-                    "ServerSideEncryption" => {
-                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
-                    }
-                    "StorageClass" => {
-                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
-                    }
-                    "WebsiteRedirectLocation" => {
-                        obj.website_redirect_location = Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
-                    }
-                    "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "SSECustomerKey" => {
-                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
-                    }
-                    "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "SSEKMSKeyId" => {
-                        obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
-                    }
-                    "SSEKMSEncryptionContext" => {
-                        obj.ssekms_encryption_context = Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
-                    }
-                    "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "Tagging" => {
-                        obj.tagging = Some(deserialize_primitive("Tagging", stack, Ok)?);
-                    }
-                    "ObjectLockMode" => {
-                        obj.object_lock_mode = Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
-                    }
-                    "ObjectLockRetainUntilDate" => {
-                        obj.object_lock_retain_until_date = Some(deserialize_primitive("ObjectLockRetainUntilDate", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "ObjectLockLegalHoldStatus" => {
-                        obj.object_lock_legal_hold_status = Some(deserialize_primitive("ObjectLockLegalHoldStatus", stack, Ok)?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, PutObjectRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ACL" => {
+                    obj.acl = Some(deserialize_primitive("ACL", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Body" => {
+                    obj.body = Some(Default::default());
+                }
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
+                }
+                "CacheControl" => {
+                    obj.cache_control = Some(deserialize_primitive("CacheControl", stack, Ok)?);
+                }
+                "ContentDisposition" => {
+                    obj.content_disposition =
+                        Some(deserialize_primitive("ContentDisposition", stack, Ok)?);
+                }
+                "ContentEncoding" => {
+                    obj.content_encoding =
+                        Some(deserialize_primitive("ContentEncoding", stack, Ok)?);
+                }
+                "ContentLanguage" => {
+                    obj.content_language =
+                        Some(deserialize_primitive("ContentLanguage", stack, Ok)?);
+                }
+                "ContentLength" => {
+                    obj.content_length =
+                        Some(deserialize_primitive("ContentLength", stack, |s| {
+                            Ok(u64::from_str(&s).unwrap())
+                        })?);
+                }
+                "ContentMD5" => {
+                    obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
+                }
+                "ContentType" => {
+                    obj.content_type = Some(deserialize_primitive("ContentType", stack, Ok)?);
+                }
+                "Expires" => {
+                    obj.expires = Some(deserialize_primitive("Expires", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
+                }
+                "GrantFullControl" => {
+                    obj.grant_full_control =
+                        Some(deserialize_primitive("GrantFullControl", stack, Ok)?);
+                }
+                "GrantRead" => {
+                    obj.grant_read = Some(deserialize_primitive("GrantRead", stack, Ok)?);
+                }
+                "GrantReadACP" => {
+                    obj.grant_read_acp = Some(deserialize_primitive("GrantReadACP", stack, Ok)?);
+                }
+                "GrantWriteACP" => {
+                    obj.grant_write_acp = Some(deserialize_primitive("GrantWriteACP", stack, Ok)?);
+                }
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
+                }
+                "Metadata" => {
+                    obj.metadata = Some(Default::default());
+                }
+                "ServerSideEncryption" => {
+                    obj.server_side_encryption =
+                        Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
+                }
+                "StorageClass" => {
+                    obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
+                }
+                "WebsiteRedirectLocation" => {
+                    obj.website_redirect_location =
+                        Some(deserialize_primitive("WebsiteRedirectLocation", stack, Ok)?);
+                }
+                "SSECustomerAlgorithm" => {
+                    obj.sse_customer_algorithm =
+                        Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                }
+                "SSECustomerKey" => {
+                    obj.sse_customer_key =
+                        Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
+                }
+                "SSECustomerKeyMD5" => {
+                    obj.sse_customer_key_md5 =
+                        Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                }
+                "SSEKMSKeyId" => {
+                    obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
+                }
+                "SSEKMSEncryptionContext" => {
+                    obj.ssekms_encryption_context =
+                        Some(deserialize_primitive("SSEKMSEncryptionContext", stack, Ok)?);
+                }
+                "BucketKeyEnabled" => {
+                    obj.bucket_key_enabled =
+                        Some(deserialize_primitive("BucketKeyEnabled", stack, |s| {
+                            Ok(bool::from_str(&s).unwrap())
+                        })?);
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "Tagging" => {
+                    obj.tagging = Some(deserialize_primitive("Tagging", stack, Ok)?);
+                }
+                "ObjectLockMode" => {
+                    obj.object_lock_mode =
+                        Some(deserialize_primitive("ObjectLockMode", stack, Ok)?);
+                }
+                "ObjectLockRetainUntilDate" => {
+                    obj.object_lock_retain_until_date = Some(deserialize_primitive(
+                        "ObjectLockRetainUntilDate",
+                        stack,
+                        |s| Ok(String::from_str(&s).unwrap()),
+                    )?);
+                }
+                "ObjectLockLegalHoldStatus" => {
+                    obj.object_lock_legal_hold_status = Some(deserialize_primitive(
+                        "ObjectLockLegalHoldStatus",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11248,7 +11631,8 @@ impl PutObjectRetentionOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                        obj.request_charged =
+                            Some(deserialize_primitive("RequestCharged", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -11297,7 +11681,10 @@ impl PutObjectRetentionRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "Retention" => {
-                        obj.retention = Some(ObjectLockRetentionDeserializer::deserialize("Retention", stack)?);
+                        obj.retention = Some(ObjectLockRetentionDeserializer::deserialize(
+                            "Retention",
+                            stack,
+                        )?);
                     }
                     "RequestPayer" => {
                         obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
@@ -11306,13 +11693,18 @@ impl PutObjectRetentionRequestDeserializer {
                         obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                     }
                     "BypassGovernanceRetention" => {
-                        obj.bypass_governance_retention = Some(deserialize_primitive("BypassGovernanceRetention", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.bypass_governance_retention = Some(deserialize_primitive(
+                            "BypassGovernanceRetention",
+                            stack,
+                            |s| Ok(bool::from_str(&s).unwrap()),
+                        )?);
                     }
                     "ContentMD5" => {
                         obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -11335,19 +11727,15 @@ impl PutObjectTaggingOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectTaggingOutput, XmlParseError> {
-        deserialize_elements::<_, PutObjectTaggingOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, PutObjectTaggingOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11395,7 +11783,8 @@ impl PutObjectTaggingRequestDeserializer {
                         obj.tagging = TaggingDeserializer::deserialize("Tagging", stack)?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -11436,10 +11825,15 @@ impl PutPublicAccessBlockRequestDeserializer {
                         obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
                     }
                     "PublicAccessBlockConfiguration" => {
-                        obj.public_access_block_configuration = PublicAccessBlockConfigurationDeserializer::deserialize("PublicAccessBlockConfiguration", stack)?;
+                        obj.public_access_block_configuration =
+                            PublicAccessBlockConfigurationDeserializer::deserialize(
+                                "PublicAccessBlockConfiguration",
+                                stack,
+                            )?;
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -11468,29 +11862,27 @@ impl QueueConfigurationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<QueueConfiguration, XmlParseError> {
-        deserialize_elements::<_, QueueConfiguration, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Id" => {
-                        obj.id = Some(deserialize_primitive("Id", stack, Ok)?);
-                    }
-                    "QueueArn" => {
-                        obj.queue_arn = deserialize_primitive("QueueArn", stack, Ok)?;
-                    }
-                    "Events" => {
-                        obj.events
-                            .extend(EventListDeserializer::deserialize("Events", stack)?);
-                    }
-                    "Filter" => {
-                        obj.filter = Some(NotificationConfigurationFilterDeserializer::deserialize("Filter", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, QueueConfiguration, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Id" => {
+                    obj.id = Some(deserialize_primitive("Id", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "QueueArn" => {
+                    obj.queue_arn = deserialize_primitive("QueueArn", stack, Ok)?;
+                }
+                "Events" => {
+                    obj.events
+                        .extend(EventListDeserializer::deserialize("Events", stack)?);
+                }
+                "Filter" => {
+                    obj.filter = Some(NotificationConfigurationFilterDeserializer::deserialize(
+                        "Filter", stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11553,19 +11945,15 @@ impl RecordsEventDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RecordsEvent, XmlParseError> {
-        deserialize_elements::<_, RecordsEvent, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Payload" => {
-                        obj.payload = Some(Default::default());
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, RecordsEvent, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Payload" => {
+                    obj.payload = Some(Default::default());
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11590,31 +11978,30 @@ impl RedirectDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Redirect, XmlParseError> {
-        deserialize_elements::<_, Redirect, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "HostName" => {
-                        obj.host_name = Some(deserialize_primitive("HostName", stack, Ok)?);
-                    }
-                    "HttpRedirectCode" => {
-                        obj.http_redirect_code = Some(deserialize_primitive("HttpRedirectCode", stack, Ok)?);
-                    }
-                    "Protocol" => {
-                        obj.protocol = Some(deserialize_primitive("Protocol", stack, Ok)?);
-                    }
-                    "ReplaceKeyPrefixWith" => {
-                        obj.replace_key_prefix_with = Some(deserialize_primitive("ReplaceKeyPrefixWith", stack, Ok)?);
-                    }
-                    "ReplaceKeyWith" => {
-                        obj.replace_key_with = Some(deserialize_primitive("ReplaceKeyWith", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Redirect, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "HostName" => {
+                    obj.host_name = Some(deserialize_primitive("HostName", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "HttpRedirectCode" => {
+                    obj.http_redirect_code =
+                        Some(deserialize_primitive("HttpRedirectCode", stack, Ok)?);
+                }
+                "Protocol" => {
+                    obj.protocol = Some(deserialize_primitive("Protocol", stack, Ok)?);
+                }
+                "ReplaceKeyPrefixWith" => {
+                    obj.replace_key_prefix_with =
+                        Some(deserialize_primitive("ReplaceKeyPrefixWith", stack, Ok)?);
+                }
+                "ReplaceKeyWith" => {
+                    obj.replace_key_with =
+                        Some(deserialize_primitive("ReplaceKeyWith", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11633,22 +12020,18 @@ impl RedirectAllRequestsToDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RedirectAllRequestsTo, XmlParseError> {
-        deserialize_elements::<_, RedirectAllRequestsTo, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "HostName" => {
-                        obj.host_name = deserialize_primitive("HostName", stack, Ok)?;
-                    }
-                    "Protocol" => {
-                        obj.protocol = Some(deserialize_primitive("Protocol", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, RedirectAllRequestsTo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "HostName" => {
+                    obj.host_name = deserialize_primitive("HostName", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Protocol" => {
+                    obj.protocol = Some(deserialize_primitive("Protocol", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11665,19 +12048,15 @@ impl ReplicaModificationsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicaModifications, XmlParseError> {
-        deserialize_elements::<_, ReplicaModifications, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Status" => {
-                        obj.status = deserialize_primitive("Status", stack, Ok)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ReplicaModifications, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Status" => {
+                    obj.status = deserialize_primitive("Status", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11745,43 +12124,55 @@ impl ReplicationRuleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationRule, XmlParseError> {
-        deserialize_elements::<_, ReplicationRule, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ID" => {
-                        obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
-                    }
-                    "Priority" => {
-                        obj.priority = Some(deserialize_primitive("Priority", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    "Filter" => {
-                        obj.filter = Some(ReplicationRuleFilterDeserializer::deserialize("Filter", stack)?);
-                    }
-                    "Status" => {
-                        obj.status = deserialize_primitive("Status", stack, Ok)?;
-                    }
-                    "SourceSelectionCriteria" => {
-                        obj.source_selection_criteria = Some(SourceSelectionCriteriaDeserializer::deserialize("SourceSelectionCriteria", stack)?);
-                    }
-                    "ExistingObjectReplication" => {
-                        obj.existing_object_replication = Some(ExistingObjectReplicationDeserializer::deserialize("ExistingObjectReplication", stack)?);
-                    }
-                    "Destination" => {
-                        obj.destination = DestinationDeserializer::deserialize("Destination", stack)?;
-                    }
-                    "DeleteMarkerReplication" => {
-                        obj.delete_marker_replication = Some(DeleteMarkerReplicationDeserializer::deserialize("DeleteMarkerReplication", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ReplicationRule, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ID" => {
+                    obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Priority" => {
+                    obj.priority = Some(deserialize_primitive("Priority", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
+                }
+                "Filter" => {
+                    obj.filter = Some(ReplicationRuleFilterDeserializer::deserialize(
+                        "Filter", stack,
+                    )?);
+                }
+                "Status" => {
+                    obj.status = deserialize_primitive("Status", stack, Ok)?;
+                }
+                "SourceSelectionCriteria" => {
+                    obj.source_selection_criteria =
+                        Some(SourceSelectionCriteriaDeserializer::deserialize(
+                            "SourceSelectionCriteria",
+                            stack,
+                        )?);
+                }
+                "ExistingObjectReplication" => {
+                    obj.existing_object_replication =
+                        Some(ExistingObjectReplicationDeserializer::deserialize(
+                            "ExistingObjectReplication",
+                            stack,
+                        )?);
+                }
+                "Destination" => {
+                    obj.destination = DestinationDeserializer::deserialize("Destination", stack)?;
+                }
+                "DeleteMarkerReplication" => {
+                    obj.delete_marker_replication =
+                        Some(DeleteMarkerReplicationDeserializer::deserialize(
+                            "DeleteMarkerReplication",
+                            stack,
+                        )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11838,25 +12229,23 @@ impl ReplicationRuleFilterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationRuleFilter, XmlParseError> {
-        deserialize_elements::<_, ReplicationRuleFilter, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Prefix" => {
-                        obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
-                    }
-                    "Tag" => {
-                        obj.tag = Some(TagDeserializer::deserialize("Tag", stack)?);
-                    }
-                    "And" => {
-                        obj.and = Some(ReplicationRuleAndOperatorDeserializer::deserialize("And", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ReplicationRuleFilter, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Prefix" => {
+                    obj.prefix = Some(deserialize_primitive("Prefix", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "Tag" => {
+                    obj.tag = Some(TagDeserializer::deserialize("Tag", stack)?);
+                }
+                "And" => {
+                    obj.and = Some(ReplicationRuleAndOperatorDeserializer::deserialize(
+                        "And", stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11875,22 +12264,18 @@ impl ReplicationTimeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationTime, XmlParseError> {
-        deserialize_elements::<_, ReplicationTime, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Status" => {
-                        obj.status = deserialize_primitive("Status", stack, Ok)?;
-                    }
-                    "Time" => {
-                        obj.time = ReplicationTimeValueDeserializer::deserialize("Time", stack)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ReplicationTime, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Status" => {
+                    obj.status = deserialize_primitive("Status", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Time" => {
+                    obj.time = ReplicationTimeValueDeserializer::deserialize("Time", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11907,19 +12292,17 @@ impl ReplicationTimeValueDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationTimeValue, XmlParseError> {
-        deserialize_elements::<_, ReplicationTimeValue, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Minutes" => {
-                        obj.minutes = Some(deserialize_primitive("Minutes", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ReplicationTimeValue, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Minutes" => {
+                    obj.minutes = Some(deserialize_primitive("Minutes", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11965,19 +12348,17 @@ impl RequestProgressDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RequestProgress, XmlParseError> {
-        deserialize_elements::<_, RequestProgress, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Enabled" => {
-                        obj.enabled = Some(deserialize_primitive("Enabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, RequestProgress, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Enabled" => {
+                    obj.enabled = Some(deserialize_primitive("Enabled", stack, |s| {
+                        Ok(bool::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -11996,22 +12377,19 @@ impl RestoreObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreObjectOutput, XmlParseError> {
-        deserialize_elements::<_, RestoreObjectOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    "RestoreOutputPath" => {
-                        obj.restore_output_path = Some(deserialize_primitive("RestoreOutputPath", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, RestoreObjectOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "RestoreOutputPath" => {
+                    obj.restore_output_path =
+                        Some(deserialize_primitive("RestoreOutputPath", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12038,34 +12416,34 @@ impl RestoreObjectRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreObjectRequest, XmlParseError> {
-        deserialize_elements::<_, RestoreObjectRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
-                    }
-                    "RestoreRequest" => {
-                        obj.restore_request = Some(RestoreRequestDeserializer::deserialize("RestoreRequest", stack)?);
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, RestoreObjectRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
+                }
+                "VersionId" => {
+                    obj.version_id = Some(deserialize_primitive("VersionId", stack, Ok)?);
+                }
+                "RestoreRequest" => {
+                    obj.restore_request = Some(RestoreRequestDeserializer::deserialize(
+                        "RestoreRequest",
+                        stack,
+                    )?);
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12094,37 +12472,45 @@ impl RestoreRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreRequest, XmlParseError> {
-        deserialize_elements::<_, RestoreRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Days" => {
-                        obj.days = Some(deserialize_primitive("Days", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "GlacierJobParameters" => {
-                        obj.glacier_job_parameters = Some(GlacierJobParametersDeserializer::deserialize("GlacierJobParameters", stack)?);
-                    }
-                    "Type" => {
-                        obj.r#type = Some(deserialize_primitive("Type", stack, Ok)?);
-                    }
-                    "Tier" => {
-                        obj.tier = Some(deserialize_primitive("Tier", stack, Ok)?);
-                    }
-                    "Description" => {
-                        obj.description = Some(deserialize_primitive("Description", stack, Ok)?);
-                    }
-                    "SelectParameters" => {
-                        obj.select_parameters = Some(SelectParametersDeserializer::deserialize("SelectParameters", stack)?);
-                    }
-                    "OutputLocation" => {
-                        obj.output_location = Some(OutputLocationDeserializer::deserialize("OutputLocation", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, RestoreRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Days" => {
+                    obj.days = Some(deserialize_primitive("Days", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                "GlacierJobParameters" => {
+                    obj.glacier_job_parameters =
+                        Some(GlacierJobParametersDeserializer::deserialize(
+                            "GlacierJobParameters",
+                            stack,
+                        )?);
+                }
+                "Type" => {
+                    obj.r#type = Some(deserialize_primitive("Type", stack, Ok)?);
+                }
+                "Tier" => {
+                    obj.tier = Some(deserialize_primitive("Tier", stack, Ok)?);
+                }
+                "Description" => {
+                    obj.description = Some(deserialize_primitive("Description", stack, Ok)?);
+                }
+                "SelectParameters" => {
+                    obj.select_parameters = Some(SelectParametersDeserializer::deserialize(
+                        "SelectParameters",
+                        stack,
+                    )?);
+                }
+                "OutputLocation" => {
+                    obj.output_location = Some(OutputLocationDeserializer::deserialize(
+                        "OutputLocation",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12143,22 +12529,18 @@ impl RoutingRuleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RoutingRule, XmlParseError> {
-        deserialize_elements::<_, RoutingRule, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Condition" => {
-                        obj.condition = Some(ConditionDeserializer::deserialize("Condition", stack)?);
-                    }
-                    "Redirect" => {
-                        obj.redirect = RedirectDeserializer::deserialize("Redirect", stack)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, RoutingRule, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Condition" => {
+                    obj.condition = Some(ConditionDeserializer::deserialize("Condition", stack)?);
                 }
-                Ok(())
-            },
-        )
+                "Redirect" => {
+                    obj.redirect = RedirectDeserializer::deserialize("Redirect", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12189,40 +12571,52 @@ impl RuleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Rule, XmlParseError> {
-        deserialize_elements::<_, Rule, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Expiration" => {
-                        obj.expiration = Some(LifecycleExpirationDeserializer::deserialize("Expiration", stack)?);
-                    }
-                    "ID" => {
-                        obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
-                    }
-                    "Prefix" => {
-                        obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
-                    }
-                    "Status" => {
-                        obj.status = deserialize_primitive("Status", stack, Ok)?;
-                    }
-                    "Transition" => {
-                        obj.transition = Some(TransitionDeserializer::deserialize("Transition", stack)?);
-                    }
-                    "NoncurrentVersionTransition" => {
-                        obj.noncurrent_version_transition = Some(NoncurrentVersionTransitionDeserializer::deserialize("NoncurrentVersionTransition", stack)?);
-                    }
-                    "NoncurrentVersionExpiration" => {
-                        obj.noncurrent_version_expiration = Some(NoncurrentVersionExpirationDeserializer::deserialize("NoncurrentVersionExpiration", stack)?);
-                    }
-                    "AbortIncompleteMultipartUpload" => {
-                        obj.abort_incomplete_multipart_upload = Some(AbortIncompleteMultipartUploadDeserializer::deserialize("AbortIncompleteMultipartUpload", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Rule, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Expiration" => {
+                    obj.expiration = Some(LifecycleExpirationDeserializer::deserialize(
+                        "Expiration",
+                        stack,
+                    )?);
                 }
-                Ok(())
-            },
-        )
+                "ID" => {
+                    obj.id = Some(deserialize_primitive("ID", stack, Ok)?);
+                }
+                "Prefix" => {
+                    obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
+                }
+                "Status" => {
+                    obj.status = deserialize_primitive("Status", stack, Ok)?;
+                }
+                "Transition" => {
+                    obj.transition =
+                        Some(TransitionDeserializer::deserialize("Transition", stack)?);
+                }
+                "NoncurrentVersionTransition" => {
+                    obj.noncurrent_version_transition =
+                        Some(NoncurrentVersionTransitionDeserializer::deserialize(
+                            "NoncurrentVersionTransition",
+                            stack,
+                        )?);
+                }
+                "NoncurrentVersionExpiration" => {
+                    obj.noncurrent_version_expiration =
+                        Some(NoncurrentVersionExpirationDeserializer::deserialize(
+                            "NoncurrentVersionExpiration",
+                            stack,
+                        )?);
+                }
+                "AbortIncompleteMultipartUpload" => {
+                    obj.abort_incomplete_multipart_upload =
+                        Some(AbortIncompleteMultipartUploadDeserializer::deserialize(
+                            "AbortIncompleteMultipartUpload",
+                            stack,
+                        )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12239,21 +12633,17 @@ impl S3KeyFilterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3KeyFilter, XmlParseError> {
-        deserialize_elements::<_, S3KeyFilter, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "FilterRules" => {
-                        obj.filter_rules
-                            .get_or_insert(vec![])
-                            .extend(FilterRuleListDeserializer::deserialize("FilterRules", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, S3KeyFilter, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "FilterRules" => {
+                    obj.filter_rules.get_or_insert(vec![]).extend(
+                        FilterRuleListDeserializer::deserialize("FilterRules", stack)?,
+                    );
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12284,44 +12674,41 @@ impl S3LocationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3Location, XmlParseError> {
-        deserialize_elements::<_, S3Location, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "BucketName" => {
-                        obj.bucket_name = deserialize_primitive("BucketName", stack, Ok)?;
-                    }
-                    "Prefix" => {
-                        obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
-                    }
-                    "Encryption" => {
-                        obj.encryption = Some(EncryptionDeserializer::deserialize("Encryption", stack)?);
-                    }
-                    "CannedACL" => {
-                        obj.canned_acl = Some(deserialize_primitive("CannedACL", stack, Ok)?);
-                    }
-                    "AccessControlList" => {
-                        obj.access_control_list
-                            .get_or_insert(vec![])
-                            .extend(GrantsDeserializer::deserialize("AccessControlList", stack)?);
-                    }
-                    "Tagging" => {
-                        obj.tagging = Some(TaggingDeserializer::deserialize("Tagging", stack)?);
-                    }
-                    "UserMetadata" => {
-                        obj.user_metadata
-                            .get_or_insert(vec![])
-                            .extend(UserMetadataDeserializer::deserialize("UserMetadata", stack)?);
-                    }
-                    "StorageClass" => {
-                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, S3Location, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "BucketName" => {
+                    obj.bucket_name = deserialize_primitive("BucketName", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Prefix" => {
+                    obj.prefix = deserialize_primitive("Prefix", stack, Ok)?;
+                }
+                "Encryption" => {
+                    obj.encryption =
+                        Some(EncryptionDeserializer::deserialize("Encryption", stack)?);
+                }
+                "CannedACL" => {
+                    obj.canned_acl = Some(deserialize_primitive("CannedACL", stack, Ok)?);
+                }
+                "AccessControlList" => {
+                    obj.access_control_list
+                        .get_or_insert(vec![])
+                        .extend(GrantsDeserializer::deserialize("AccessControlList", stack)?);
+                }
+                "Tagging" => {
+                    obj.tagging = Some(TaggingDeserializer::deserialize("Tagging", stack)?);
+                }
+                "UserMetadata" => {
+                    obj.user_metadata.get_or_insert(vec![]).extend(
+                        UserMetadataDeserializer::deserialize("UserMetadata", stack)?,
+                    );
+                }
+                "StorageClass" => {
+                    obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12338,25 +12725,20 @@ impl SSEKMSDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SSEKMS, XmlParseError> {
-        deserialize_elements::<_, SSEKMS, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "KeyId" => {
-                        obj.key_id = deserialize_primitive("KeyId", stack, Ok)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, SSEKMS, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "KeyId" => {
+                    obj.key_id = deserialize_primitive("KeyId", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
-pub struct SSES3 {
-}
+pub struct SSES3 {}
 #[allow(dead_code)]
 pub struct SSES3Deserializer;
 impl SSES3Deserializer {
@@ -12365,16 +12747,12 @@ impl SSES3Deserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SSES3, XmlParseError> {
-        deserialize_elements::<_, SSES3, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
+        deserialize_elements::<_, SSES3, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12393,22 +12771,22 @@ impl ScanRangeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ScanRange, XmlParseError> {
-        deserialize_elements::<_, ScanRange, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Start" => {
-                        obj.start = Some(deserialize_primitive("Start", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
-                    }
-                    "End" => {
-                        obj.end = Some(deserialize_primitive("End", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, ScanRange, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Start" => {
+                    obj.start = Some(deserialize_primitive("Start", stack, |s| {
+                        Ok(u64::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                "End" => {
+                    obj.end = Some(deserialize_primitive("End", stack, |s| {
+                        Ok(u64::from_str(&s).unwrap())
+                    })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12439,13 +12817,15 @@ impl SelectObjectContentEventStreamDeserializer {
             |name, stack, obj| {
                 match name {
                     "Records" => {
-                        obj.records = Some(RecordsEventDeserializer::deserialize("Records", stack)?);
+                        obj.records =
+                            Some(RecordsEventDeserializer::deserialize("Records", stack)?);
                     }
                     "Stats" => {
                         obj.stats = Some(StatsEventDeserializer::deserialize("Stats", stack)?);
                     }
                     "Progress" => {
-                        obj.progress = Some(ProgressEventDeserializer::deserialize("Progress", stack)?);
+                        obj.progress =
+                            Some(ProgressEventDeserializer::deserialize("Progress", stack)?);
                     }
                     "Cont" => {
                         obj.cont = Some(ContinuationEventDeserializer::deserialize("Cont", stack)?);
@@ -12480,7 +12860,10 @@ impl SelectObjectContentOutputDeserializer {
             |name, stack, obj| {
                 match name {
                     "Payload" => {
-                        obj.payload = Some(SelectObjectContentEventStreamDeserializer::deserialize("Payload", stack)?);
+                        obj.payload =
+                            Some(SelectObjectContentEventStreamDeserializer::deserialize(
+                                "Payload", stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -12537,13 +12920,16 @@ impl SelectObjectContentRequestDeserializer {
                         obj.key = deserialize_primitive("Key", stack, Ok)?;
                     }
                     "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                        obj.sse_customer_algorithm =
+                            Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
                     }
                     "SSECustomerKey" => {
-                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
+                        obj.sse_customer_key =
+                            Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
                     }
                     "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                        obj.sse_customer_key_md5 =
+                            Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
                     }
                     "Expression" => {
                         obj.expression = deserialize_primitive("Expression", stack, Ok)?;
@@ -12552,19 +12938,30 @@ impl SelectObjectContentRequestDeserializer {
                         obj.expression_type = deserialize_primitive("ExpressionType", stack, Ok)?;
                     }
                     "RequestProgress" => {
-                        obj.request_progress = Some(RequestProgressDeserializer::deserialize("RequestProgress", stack)?);
+                        obj.request_progress = Some(RequestProgressDeserializer::deserialize(
+                            "RequestProgress",
+                            stack,
+                        )?);
                     }
                     "InputSerialization" => {
-                        obj.input_serialization = InputSerializationDeserializer::deserialize("InputSerialization", stack)?;
+                        obj.input_serialization = InputSerializationDeserializer::deserialize(
+                            "InputSerialization",
+                            stack,
+                        )?;
                     }
                     "OutputSerialization" => {
-                        obj.output_serialization = OutputSerializationDeserializer::deserialize("OutputSerialization", stack)?;
+                        obj.output_serialization = OutputSerializationDeserializer::deserialize(
+                            "OutputSerialization",
+                            stack,
+                        )?;
                     }
                     "ScanRange" => {
-                        obj.scan_range = Some(ScanRangeDeserializer::deserialize("ScanRange", stack)?);
+                        obj.scan_range =
+                            Some(ScanRangeDeserializer::deserialize("ScanRange", stack)?);
                     }
                     "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                        obj.expected_bucket_owner =
+                            Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -12593,28 +12990,26 @@ impl SelectParametersDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SelectParameters, XmlParseError> {
-        deserialize_elements::<_, SelectParameters, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "InputSerialization" => {
-                        obj.input_serialization = InputSerializationDeserializer::deserialize("InputSerialization", stack)?;
-                    }
-                    "ExpressionType" => {
-                        obj.expression_type = deserialize_primitive("ExpressionType", stack, Ok)?;
-                    }
-                    "Expression" => {
-                        obj.expression = deserialize_primitive("Expression", stack, Ok)?;
-                    }
-                    "OutputSerialization" => {
-                        obj.output_serialization = OutputSerializationDeserializer::deserialize("OutputSerialization", stack)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, SelectParameters, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "InputSerialization" => {
+                    obj.input_serialization =
+                        InputSerializationDeserializer::deserialize("InputSerialization", stack)?;
                 }
-                Ok(())
-            },
-        )
+                "ExpressionType" => {
+                    obj.expression_type = deserialize_primitive("ExpressionType", stack, Ok)?;
+                }
+                "Expression" => {
+                    obj.expression = deserialize_primitive("Expression", stack, Ok)?;
+                }
+                "OutputSerialization" => {
+                    obj.output_serialization =
+                        OutputSerializationDeserializer::deserialize("OutputSerialization", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12642,7 +13037,8 @@ impl ServerSideEncryptionByDefaultDeserializer {
                         obj.sse_algorithm = deserialize_primitive("SSEAlgorithm", stack, Ok)?;
                     }
                     "KMSMasterKeyID" => {
-                        obj.kms_master_key_id = Some(deserialize_primitive("KMSMasterKeyID", stack, Ok)?);
+                        obj.kms_master_key_id =
+                            Some(deserialize_primitive("KMSMasterKeyID", stack, Ok)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -12672,7 +13068,9 @@ impl ServerSideEncryptionConfigurationDeserializer {
                 match name {
                     "Rules" => {
                         obj.rules
-                            .extend(ServerSideEncryptionRulesDeserializer::deserialize("Rules", stack)?);
+                            .extend(ServerSideEncryptionRulesDeserializer::deserialize(
+                                "Rules", stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -12703,10 +13101,17 @@ impl ServerSideEncryptionRuleDeserializer {
             |name, stack, obj| {
                 match name {
                     "ApplyServerSideEncryptionByDefault" => {
-                        obj.apply_server_side_encryption_by_default = Some(ServerSideEncryptionByDefaultDeserializer::deserialize("ApplyServerSideEncryptionByDefault", stack)?);
+                        obj.apply_server_side_encryption_by_default =
+                            Some(ServerSideEncryptionByDefaultDeserializer::deserialize(
+                                "ApplyServerSideEncryptionByDefault",
+                                stack,
+                            )?);
                     }
                     "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
+                        obj.bucket_key_enabled =
+                            Some(deserialize_primitive("BucketKeyEnabled", stack, |s| {
+                                Ok(bool::from_str(&s).unwrap())
+                            })?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -12737,10 +13142,18 @@ impl SourceSelectionCriteriaDeserializer {
             |name, stack, obj| {
                 match name {
                     "SseKmsEncryptedObjects" => {
-                        obj.sse_kms_encrypted_objects = Some(SseKmsEncryptedObjectsDeserializer::deserialize("SseKmsEncryptedObjects", stack)?);
+                        obj.sse_kms_encrypted_objects =
+                            Some(SseKmsEncryptedObjectsDeserializer::deserialize(
+                                "SseKmsEncryptedObjects",
+                                stack,
+                            )?);
                     }
                     "ReplicaModifications" => {
-                        obj.replica_modifications = Some(ReplicaModificationsDeserializer::deserialize("ReplicaModifications", stack)?);
+                        obj.replica_modifications =
+                            Some(ReplicaModificationsDeserializer::deserialize(
+                                "ReplicaModifications",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -12763,19 +13176,15 @@ impl SseKmsEncryptedObjectsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SseKmsEncryptedObjects, XmlParseError> {
-        deserialize_elements::<_, SseKmsEncryptedObjects, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Status" => {
-                        obj.status = deserialize_primitive("Status", stack, Ok)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, SseKmsEncryptedObjects, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Status" => {
+                    obj.status = deserialize_primitive("Status", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12796,25 +13205,29 @@ impl StatsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Stats, XmlParseError> {
-        deserialize_elements::<_, Stats, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "BytesScanned" => {
-                        obj.bytes_scanned = Some(deserialize_primitive("BytesScanned", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
-                    }
-                    "BytesProcessed" => {
-                        obj.bytes_processed = Some(deserialize_primitive("BytesProcessed", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
-                    }
-                    "BytesReturned" => {
-                        obj.bytes_returned = Some(deserialize_primitive("BytesReturned", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Stats, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "BytesScanned" => {
+                    obj.bytes_scanned = Some(deserialize_primitive("BytesScanned", stack, |s| {
+                        Ok(u64::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                "BytesProcessed" => {
+                    obj.bytes_processed =
+                        Some(deserialize_primitive("BytesProcessed", stack, |s| {
+                            Ok(u64::from_str(&s).unwrap())
+                        })?);
+                }
+                "BytesReturned" => {
+                    obj.bytes_returned =
+                        Some(deserialize_primitive("BytesReturned", stack, |s| {
+                            Ok(u64::from_str(&s).unwrap())
+                        })?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12831,19 +13244,15 @@ impl StatsEventDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StatsEvent, XmlParseError> {
-        deserialize_elements::<_, StatsEvent, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Details" => {
-                        obj.details = Some(StatsDeserializer::deserialize("Details", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, StatsEvent, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Details" => {
+                    obj.details = Some(StatsDeserializer::deserialize("Details", stack)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12860,19 +13269,19 @@ impl StorageClassAnalysisDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StorageClassAnalysis, XmlParseError> {
-        deserialize_elements::<_, StorageClassAnalysis, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DataExport" => {
-                        obj.data_export = Some(StorageClassAnalysisDataExportDeserializer::deserialize("DataExport", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, StorageClassAnalysis, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DataExport" => {
+                    obj.data_export =
+                        Some(StorageClassAnalysisDataExportDeserializer::deserialize(
+                            "DataExport",
+                            stack,
+                        )?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12897,10 +13306,14 @@ impl StorageClassAnalysisDataExportDeserializer {
             |name, stack, obj| {
                 match name {
                     "OutputSchemaVersion" => {
-                        obj.output_schema_version = deserialize_primitive("OutputSchemaVersion", stack, Ok)?;
+                        obj.output_schema_version =
+                            deserialize_primitive("OutputSchemaVersion", stack, Ok)?;
                     }
                     "Destination" => {
-                        obj.destination = AnalyticsExportDestinationDeserializer::deserialize("Destination", stack)?;
+                        obj.destination = AnalyticsExportDestinationDeserializer::deserialize(
+                            "Destination",
+                            stack,
+                        )?;
                     }
                     _ => skip_tree(stack),
                 }
@@ -12925,22 +13338,18 @@ impl TagDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Tag, XmlParseError> {
-        deserialize_elements::<_, Tag, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "Value" => {
-                        obj.value = deserialize_primitive("Value", stack, Ok)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "Value" => {
+                    obj.value = deserialize_primitive("Value", stack, Ok)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12957,20 +13366,16 @@ impl TaggingDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Tagging, XmlParseError> {
-        deserialize_elements::<_, Tagging, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "TagSet" => {
-                        obj.tag_set
-                            .extend(TagSetDeserializer::deserialize("TagSet", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Tagging, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "TagSet" => {
+                    obj.tag_set
+                        .extend(TagSetDeserializer::deserialize("TagSet", stack)?);
                 }
-                Ok(())
-            },
-        )
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -12989,22 +13394,18 @@ impl TargetGrantDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TargetGrant, XmlParseError> {
-        deserialize_elements::<_, TargetGrant, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Grantee" => {
-                        obj.grantee = Some(GranteeDeserializer::deserialize("Grantee", stack)?);
-                    }
-                    "Permission" => {
-                        obj.permission = Some(deserialize_primitive("Permission", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, TargetGrant, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Grantee" => {
+                    obj.grantee = Some(GranteeDeserializer::deserialize("Grantee", stack)?);
                 }
-                Ok(())
-            },
-        )
+                "Permission" => {
+                    obj.permission = Some(deserialize_primitive("Permission", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -13023,22 +13424,19 @@ impl TieringDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Tiering, XmlParseError> {
-        deserialize_elements::<_, Tiering, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Days" => {
-                        obj.days = deserialize_primitive("Days", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
-                    }
-                    "AccessTier" => {
-                        obj.access_tier = deserialize_primitive("AccessTier", stack, Ok)?;
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Tiering, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Days" => {
+                    obj.days =
+                        deserialize_primitive("Days", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
                 }
-                Ok(())
-            },
-        )
+                "AccessTier" => {
+                    obj.access_tier = deserialize_primitive("AccessTier", stack, Ok)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -13061,29 +13459,27 @@ impl TopicConfigurationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TopicConfiguration, XmlParseError> {
-        deserialize_elements::<_, TopicConfiguration, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Id" => {
-                        obj.id = Some(deserialize_primitive("Id", stack, Ok)?);
-                    }
-                    "TopicArn" => {
-                        obj.topic_arn = deserialize_primitive("TopicArn", stack, Ok)?;
-                    }
-                    "Events" => {
-                        obj.events
-                            .extend(EventListDeserializer::deserialize("Events", stack)?);
-                    }
-                    "Filter" => {
-                        obj.filter = Some(NotificationConfigurationFilterDeserializer::deserialize("Filter", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, TopicConfiguration, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Id" => {
+                    obj.id = Some(deserialize_primitive("Id", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "TopicArn" => {
+                    obj.topic_arn = deserialize_primitive("TopicArn", stack, Ok)?;
+                }
+                "Events" => {
+                    obj.events
+                        .extend(EventListDeserializer::deserialize("Events", stack)?);
+                }
+                "Filter" => {
+                    obj.filter = Some(NotificationConfigurationFilterDeserializer::deserialize(
+                        "Filter", stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -13150,25 +13546,25 @@ impl TransitionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Transition, XmlParseError> {
-        deserialize_elements::<_, Transition, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Date" => {
-                        obj.date = Some(deserialize_primitive("Date", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "Days" => {
-                        obj.days = Some(deserialize_primitive("Days", stack, |s| Ok(i64::from_str(&s).unwrap()))?);
-                    }
-                    "StorageClass" => {
-                        obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, Transition, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Date" => {
+                    obj.date = Some(deserialize_primitive("Date", stack, |s| {
+                        Ok(String::from_str(&s).unwrap())
+                    })?);
                 }
-                Ok(())
-            },
-        )
+                "Days" => {
+                    obj.days = Some(deserialize_primitive("Days", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?);
+                }
+                "StorageClass" => {
+                    obj.storage_class = Some(deserialize_primitive("StorageClass", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -13199,40 +13595,46 @@ impl UploadPartCopyOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadPartCopyOutput, XmlParseError> {
-        deserialize_elements::<_, UploadPartCopyOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CopySourceVersionId" => {
-                        obj.copy_source_version_id = Some(deserialize_primitive("CopySourceVersionId", stack, Ok)?);
-                    }
-                    "CopyPartResult" => {
-                        obj.copy_part_result = Some(CopyPartResultDeserializer::deserialize("CopyPartResult", stack)?);
-                    }
-                    "ServerSideEncryption" => {
-                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
-                    }
-                    "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "SSEKMSKeyId" => {
-                        obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
-                    }
-                    "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, UploadPartCopyOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CopySourceVersionId" => {
+                    obj.copy_source_version_id =
+                        Some(deserialize_primitive("CopySourceVersionId", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "CopyPartResult" => {
+                    obj.copy_part_result = Some(CopyPartResultDeserializer::deserialize(
+                        "CopyPartResult",
+                        stack,
+                    )?);
+                }
+                "ServerSideEncryption" => {
+                    obj.server_side_encryption =
+                        Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
+                }
+                "SSECustomerAlgorithm" => {
+                    obj.sse_customer_algorithm =
+                        Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                }
+                "SSECustomerKeyMD5" => {
+                    obj.sse_customer_key_md5 =
+                        Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                }
+                "SSEKMSKeyId" => {
+                    obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
+                }
+                "BucketKeyEnabled" => {
+                    obj.bucket_key_enabled =
+                        Some(deserialize_primitive("BucketKeyEnabled", stack, |s| {
+                            Ok(bool::from_str(&s).unwrap())
+                        })?);
+                }
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -13285,73 +13687,102 @@ impl UploadPartCopyRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadPartCopyRequest, XmlParseError> {
-        deserialize_elements::<_, UploadPartCopyRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "CopySource" => {
-                        obj.copy_source = deserialize_primitive("CopySource", stack, Ok)?;
-                    }
-                    "CopySourceIfMatch" => {
-                        obj.copy_source_if_match = Some(deserialize_primitive("CopySourceIfMatch", stack, Ok)?);
-                    }
-                    "CopySourceIfModifiedSince" => {
-                        obj.copy_source_if_modified_since = Some(deserialize_primitive("CopySourceIfModifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "CopySourceIfNoneMatch" => {
-                        obj.copy_source_if_none_match = Some(deserialize_primitive("CopySourceIfNoneMatch", stack, Ok)?);
-                    }
-                    "CopySourceIfUnmodifiedSince" => {
-                        obj.copy_source_if_unmodified_since = Some(deserialize_primitive("CopySourceIfUnmodifiedSince", stack, |s| Ok(String::from_str(&s).unwrap()))?);
-                    }
-                    "CopySourceRange" => {
-                        obj.copy_source_range = Some(deserialize_primitive("CopySourceRange", stack, Ok)?);
-                    }
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "PartNumber" => {
-                        obj.part_number = deserialize_primitive("PartNumber", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
-                    }
-                    "UploadId" => {
-                        obj.upload_id = deserialize_primitive("UploadId", stack, Ok)?;
-                    }
-                    "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "SSECustomerKey" => {
-                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
-                    }
-                    "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "CopySourceSSECustomerAlgorithm" => {
-                        obj.copy_source_sse_customer_algorithm = Some(deserialize_primitive("CopySourceSSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "CopySourceSSECustomerKey" => {
-                        obj.copy_source_sse_customer_key = Some(deserialize_primitive("CopySourceSSECustomerKey", stack, Ok)?);
-                    }
-                    "CopySourceSSECustomerKeyMD5" => {
-                        obj.copy_source_sse_customer_key_md5 = Some(deserialize_primitive("CopySourceSSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    "ExpectedSourceBucketOwner" => {
-                        obj.expected_source_bucket_owner = Some(deserialize_primitive("ExpectedSourceBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, UploadPartCopyRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
                 }
-                Ok(())
-            },
-        )
+                "CopySource" => {
+                    obj.copy_source = deserialize_primitive("CopySource", stack, Ok)?;
+                }
+                "CopySourceIfMatch" => {
+                    obj.copy_source_if_match =
+                        Some(deserialize_primitive("CopySourceIfMatch", stack, Ok)?);
+                }
+                "CopySourceIfModifiedSince" => {
+                    obj.copy_source_if_modified_since = Some(deserialize_primitive(
+                        "CopySourceIfModifiedSince",
+                        stack,
+                        |s| Ok(String::from_str(&s).unwrap()),
+                    )?);
+                }
+                "CopySourceIfNoneMatch" => {
+                    obj.copy_source_if_none_match =
+                        Some(deserialize_primitive("CopySourceIfNoneMatch", stack, Ok)?);
+                }
+                "CopySourceIfUnmodifiedSince" => {
+                    obj.copy_source_if_unmodified_since = Some(deserialize_primitive(
+                        "CopySourceIfUnmodifiedSince",
+                        stack,
+                        |s| Ok(String::from_str(&s).unwrap()),
+                    )?);
+                }
+                "CopySourceRange" => {
+                    obj.copy_source_range =
+                        Some(deserialize_primitive("CopySourceRange", stack, Ok)?);
+                }
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
+                }
+                "PartNumber" => {
+                    obj.part_number = deserialize_primitive("PartNumber", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?;
+                }
+                "UploadId" => {
+                    obj.upload_id = deserialize_primitive("UploadId", stack, Ok)?;
+                }
+                "SSECustomerAlgorithm" => {
+                    obj.sse_customer_algorithm =
+                        Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                }
+                "SSECustomerKey" => {
+                    obj.sse_customer_key =
+                        Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
+                }
+                "SSECustomerKeyMD5" => {
+                    obj.sse_customer_key_md5 =
+                        Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                }
+                "CopySourceSSECustomerAlgorithm" => {
+                    obj.copy_source_sse_customer_algorithm = Some(deserialize_primitive(
+                        "CopySourceSSECustomerAlgorithm",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                "CopySourceSSECustomerKey" => {
+                    obj.copy_source_sse_customer_key = Some(deserialize_primitive(
+                        "CopySourceSSECustomerKey",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                "CopySourceSSECustomerKeyMD5" => {
+                    obj.copy_source_sse_customer_key_md5 = Some(deserialize_primitive(
+                        "CopySourceSSECustomerKeyMD5",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                "ExpectedSourceBucketOwner" => {
+                    obj.expected_source_bucket_owner = Some(deserialize_primitive(
+                        "ExpectedSourceBucketOwner",
+                        stack,
+                        Ok,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -13380,37 +13811,39 @@ impl UploadPartOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadPartOutput, XmlParseError> {
-        deserialize_elements::<_, UploadPartOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ServerSideEncryption" => {
-                        obj.server_side_encryption = Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
-                    }
-                    "ETag" => {
-                        obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
-                    }
-                    "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "SSEKMSKeyId" => {
-                        obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
-                    }
-                    "BucketKeyEnabled" => {
-                        obj.bucket_key_enabled = Some(deserialize_primitive("BucketKeyEnabled", stack, |s| Ok(bool::from_str(&s).unwrap()))?);
-                    }
-                    "RequestCharged" => {
-                        obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, UploadPartOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ServerSideEncryption" => {
+                    obj.server_side_encryption =
+                        Some(deserialize_primitive("ServerSideEncryption", stack, Ok)?);
                 }
-                Ok(())
-            },
-        )
+                "ETag" => {
+                    obj.e_tag = Some(deserialize_primitive("ETag", stack, Ok)?);
+                }
+                "SSECustomerAlgorithm" => {
+                    obj.sse_customer_algorithm =
+                        Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                }
+                "SSECustomerKeyMD5" => {
+                    obj.sse_customer_key_md5 =
+                        Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                }
+                "SSEKMSKeyId" => {
+                    obj.ssekms_key_id = Some(deserialize_primitive("SSEKMSKeyId", stack, Ok)?);
+                }
+                "BucketKeyEnabled" => {
+                    obj.bucket_key_enabled =
+                        Some(deserialize_primitive("BucketKeyEnabled", stack, |s| {
+                            Ok(bool::from_str(&s).unwrap())
+                        })?);
+                }
+                "RequestCharged" => {
+                    obj.request_charged = Some(deserialize_primitive("RequestCharged", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -13449,52 +13882,57 @@ impl UploadPartRequestDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadPartRequest, XmlParseError> {
-        deserialize_elements::<_, UploadPartRequest, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Body" => {
-                        obj.body = Some(Default::default());
-                    }
-                    "Bucket" => {
-                        obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
-                    }
-                    "ContentLength" => {
-                        obj.content_length = Some(deserialize_primitive("ContentLength", stack, |s| Ok(u64::from_str(&s).unwrap()))?);
-                    }
-                    "ContentMD5" => {
-                        obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
-                    }
-                    "Key" => {
-                        obj.key = deserialize_primitive("Key", stack, Ok)?;
-                    }
-                    "PartNumber" => {
-                        obj.part_number = deserialize_primitive("PartNumber", stack, |s| Ok(i64::from_str(&s).unwrap()))?;
-                    }
-                    "UploadId" => {
-                        obj.upload_id = deserialize_primitive("UploadId", stack, Ok)?;
-                    }
-                    "SSECustomerAlgorithm" => {
-                        obj.sse_customer_algorithm = Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
-                    }
-                    "SSECustomerKey" => {
-                        obj.sse_customer_key = Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
-                    }
-                    "SSECustomerKeyMD5" => {
-                        obj.sse_customer_key_md5 = Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
-                    }
-                    "RequestPayer" => {
-                        obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
-                    }
-                    "ExpectedBucketOwner" => {
-                        obj.expected_bucket_owner = Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, UploadPartRequest, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Body" => {
+                    obj.body = Some(Default::default());
                 }
-                Ok(())
-            },
-        )
+                "Bucket" => {
+                    obj.bucket = deserialize_primitive("Bucket", stack, Ok)?;
+                }
+                "ContentLength" => {
+                    obj.content_length =
+                        Some(deserialize_primitive("ContentLength", stack, |s| {
+                            Ok(u64::from_str(&s).unwrap())
+                        })?);
+                }
+                "ContentMD5" => {
+                    obj.content_md5 = Some(deserialize_primitive("ContentMD5", stack, Ok)?);
+                }
+                "Key" => {
+                    obj.key = deserialize_primitive("Key", stack, Ok)?;
+                }
+                "PartNumber" => {
+                    obj.part_number = deserialize_primitive("PartNumber", stack, |s| {
+                        Ok(i64::from_str(&s).unwrap())
+                    })?;
+                }
+                "UploadId" => {
+                    obj.upload_id = deserialize_primitive("UploadId", stack, Ok)?;
+                }
+                "SSECustomerAlgorithm" => {
+                    obj.sse_customer_algorithm =
+                        Some(deserialize_primitive("SSECustomerAlgorithm", stack, Ok)?);
+                }
+                "SSECustomerKey" => {
+                    obj.sse_customer_key =
+                        Some(deserialize_primitive("SSECustomerKey", stack, Ok)?);
+                }
+                "SSECustomerKeyMD5" => {
+                    obj.sse_customer_key_md5 =
+                        Some(deserialize_primitive("SSECustomerKeyMD5", stack, Ok)?);
+                }
+                "RequestPayer" => {
+                    obj.request_payer = Some(deserialize_primitive("RequestPayer", stack, Ok)?);
+                }
+                "ExpectedBucketOwner" => {
+                    obj.expected_bucket_owner =
+                        Some(deserialize_primitive("ExpectedBucketOwner", stack, Ok)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
@@ -13551,30 +13989,35 @@ impl WebsiteConfigurationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<WebsiteConfiguration, XmlParseError> {
-        deserialize_elements::<_, WebsiteConfiguration, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ErrorDocument" => {
-                        obj.error_document = Some(ErrorDocumentDeserializer::deserialize("ErrorDocument", stack)?);
-                    }
-                    "IndexDocument" => {
-                        obj.index_document = Some(IndexDocumentDeserializer::deserialize("IndexDocument", stack)?);
-                    }
-                    "RedirectAllRequestsTo" => {
-                        obj.redirect_all_requests_to = Some(RedirectAllRequestsToDeserializer::deserialize("RedirectAllRequestsTo", stack)?);
-                    }
-                    "RoutingRules" => {
-                        obj.routing_rules
-                            .get_or_insert(vec![])
-                            .extend(RoutingRulesDeserializer::deserialize("RoutingRules", stack)?);
-                    }
-                    _ => skip_tree(stack),
+        deserialize_elements::<_, WebsiteConfiguration, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ErrorDocument" => {
+                    obj.error_document = Some(ErrorDocumentDeserializer::deserialize(
+                        "ErrorDocument",
+                        stack,
+                    )?);
                 }
-                Ok(())
-            },
-        )
+                "IndexDocument" => {
+                    obj.index_document = Some(IndexDocumentDeserializer::deserialize(
+                        "IndexDocument",
+                        stack,
+                    )?);
+                }
+                "RedirectAllRequestsTo" => {
+                    obj.redirect_all_requests_to =
+                        Some(RedirectAllRequestsToDeserializer::deserialize(
+                            "RedirectAllRequestsTo",
+                            stack,
+                        )?);
+                }
+                "RoutingRules" => {
+                    obj.routing_rules.get_or_insert(vec![]).extend(
+                        RoutingRulesDeserializer::deserialize("RoutingRules", stack)?,
+                    );
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
-
