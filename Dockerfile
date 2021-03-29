@@ -22,6 +22,10 @@ ADD modules/s3/src/client/* ./modules/s3/src/client/
 ADD modules/s3/guest/Cargo.* ./modules/s3/guest/
 ADD modules/s3/guest/src/* ./modules/s3/guest/src/
 ADD modules/s3/guest/src/xml_util/* ./modules/s3/guest/src/xml_util/
+ADD modules/http/Cargo.* ./modules/http/
+ADD modules/http/src/* ./modules/http/src/
+ADD modules/http/guest/src/* ./modules/http/guest/src/
+ADD modules/http/guest/Cargo.* ./modules/http/guest/
 ADD Cargo.* ./
 
 RUN $HOME/.cargo/bin/cargo build --release
