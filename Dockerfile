@@ -13,7 +13,6 @@ ADD modules/crypto/guest/src/* ./modules/crypto/guest/src/
 ADD modules/crypto/guest/Cargo.* ./modules/crypto/guest/
 ADD modules/dynamodb/Cargo.* ./modules/dynamodb/
 ADD modules/dynamodb/src/* ./modules/dynamodb/src/
-ADD modules/dynamodb/src/client/* ./modules/dynamodb/src/client/
 ADD modules/dynamodb/guest/src/* ./modules/dynamodb/guest/src/
 ADD modules/dynamodb/guest/Cargo.* ./modules/dynamodb/guest/
 ADD modules/s3/Cargo.* ./modules/s3/
