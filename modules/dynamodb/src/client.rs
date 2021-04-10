@@ -81,10 +81,13 @@ impl Client {
         println!("DEBUG {:?}", http_req);
         match self.client.request(http_req).await {
             Ok(resp) => Ok(resp),
-            Err(err) => Err(ClientError {
-                why: err.to_string(),
-                data: Default::default(),
-            }),
+            Err(err) => {
+                println!("ERROR: {:?}", err);
+                Err(ClientError {
+                    why: err.to_string(),
+                    data: Default::default(),
+                })
+            }
         }
     }
 }
