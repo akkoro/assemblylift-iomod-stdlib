@@ -17,7 +17,6 @@ ADD modules/dynamodb/guest/src/* ./modules/dynamodb/guest/src/
 ADD modules/dynamodb/guest/Cargo.* ./modules/dynamodb/guest/
 ADD modules/s3/Cargo.* ./modules/s3/
 ADD modules/s3/src/* ./modules/s3/src/
-ADD modules/s3/src/client/* ./modules/s3/src/client/
 ADD modules/s3/guest/Cargo.* ./modules/s3/guest/
 ADD modules/s3/guest/src/* ./modules/s3/guest/src/
 ADD modules/s3/guest/src/xml_util/* ./modules/s3/guest/src/xml_util/
