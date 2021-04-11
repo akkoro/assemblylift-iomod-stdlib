@@ -5,7 +5,7 @@ use hyper::client;
 use hyper::Response;
 //use hyper;
 //use hyper::Response;
-//use hyper_tls::HttpsConnector;
+use hyper_tls::HttpsConnector;
 use rusoto_signature::credential::AwsCredentials;
 use rusoto_signature::SignedRequest;
 use serde::export::Formatter;
@@ -25,8 +25,8 @@ impl fmt::Display for ClientError {
 }
 impl std::error::Error for ClientError {}
 
-pub type HyperClient = client::Client<hyper_rustls::HttpsConnector<client::HttpConnector>>;
-//pub type HyperClient = hyper::Client<HttpsConnector<hyper::client::HttpConnector>>;
+//pub type HyperClient = client::Client<hyper_rustls::HttpsConnector<client::HttpConnector>>;
+pub type HyperClient = hyper::Client<HttpsConnector<hyper::client::HttpConnector>>;
 
 pub struct Client {
     client: HyperClient,
@@ -35,10 +35,10 @@ pub struct Client {
 
 impl Client {
     pub fn new() -> Self {
-        let https = hyper_rustls::HttpsConnector::with_native_roots();
-        let client = client::Client::builder().build::<_, hyper::Body>(https);
-//        let https = HttpsConnector::new();
-//        let client = hyper::Client::builder().build::<_, hyper::Body>(https);
+//        let https = hyper_rustls::HttpsConnector::with_native_roots();
+//        let client = client::Client::builder().build::<_, hyper::Body>(https);
+        let https = HttpsConnector::new();
+        let client = hyper::Client::builder().build::<_, hyper::Body>(https);
 
         Self {
             client,
