@@ -999,21 +999,23 @@ dependencies = [
 name = "http"
 version = "0.1.0"
 dependencies = [
- "assemblylift-core-iomod 0.2.1",
+ "assemblylift-core-iomod 0.3.0",
  "assemblylift-iomod-http-guest",
  "capnp",
  "capnp-rpc",
  "futures",
  "futures-util",
  "http 0.2.1",
- "hyper 0.13.9",
- "hyper-tls",
+ "hyper 0.14.5",
+ "hyper-rustls",
  "once_cell",
- "rusoto_signature 0.45.0",
+ "rusoto_signature 0.46.0",
+ "rustls",
+ "rustls-native-certs",
  "serde",
  "serde_json",
- "tokio 0.2.22",
- "tokio-util 0.3.1",
+ "tokio 1.4.0",
+ "tokio-util 0.6.5",
 ]
 
 [[package]]
