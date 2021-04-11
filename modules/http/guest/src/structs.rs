@@ -4,13 +4,13 @@ use std::collections::HashMap;
 
 pub type QueryParameters = HashMap<String, String>;
 pub type Headers = HashMap<String, String>;
-pub type Body = Vec<u8>;
+pub type Body = String;
 
 #[derive(Serialize, Deserialize)]
 pub struct HttpAuth {
     pub r#type: String,
 }
-
+// TODO is_base64_encoded?
 #[derive(Serialize, Deserialize)]
 pub struct HttpRequest {
     pub auth: Option<HttpAuth>,
