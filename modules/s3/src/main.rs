@@ -6302,10 +6302,11 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
         http_request.add_param("delimiter", &delimiter);
     };
     if let Some(encoding_type) = input.encoding_type {
-        http_request.add_param(
-            "encoding-type",
-            &serde_json::to_string(&encoding_type).unwrap(),
-        );
+        // http_request.add_param(
+        //     "encoding-type",
+        //     &serde_json::to_string(&encoding_type).unwrap(),
+        // );
+        http_request.add_param("encoding-type", &encoding_type);
     };
     if let Some(marker) = input.marker {
         http_request.add_param("marker", &serde_json::to_string(&marker).unwrap());
@@ -6422,10 +6423,11 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
         http_request.add_param("delimiter", &delimiter);
     };
     if let Some(encoding_type) = input.encoding_type {
-        http_request.add_param(
-            "encoding-type",
-            &serde_json::to_string(&encoding_type).unwrap(),
-        );
+        // http_request.add_param(
+        //     "encoding-type",
+        //     &serde_json::to_string(&encoding_type).unwrap(),
+        // );
+        http_request.add_param("encoding-type", &encoding_type);
     };
     if let Some(max_keys) = input.max_keys {
         http_request.add_param("max-keys", &serde_json::to_string(&max_keys).unwrap());
