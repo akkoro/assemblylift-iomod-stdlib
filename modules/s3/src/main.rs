@@ -6313,7 +6313,8 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
         http_request.add_param("max-keys", &serde_json::to_string(&max_keys).unwrap());
     };
     if let Some(prefix) = input.prefix {
-        http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
+        // http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
+        http_request.add_param("prefix", &prefix);
     };
 
     Box::pin(async move {
