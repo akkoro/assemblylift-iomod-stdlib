@@ -6298,7 +6298,8 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
         );
     };
     if let Some(delimiter) = input.delimiter {
-        http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
+        // http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
+        http_request.add_param("delimiter", &delimiter);
     };
     if let Some(encoding_type) = input.encoding_type {
         http_request.add_param(
@@ -6417,7 +6418,8 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
         );
     };
     if let Some(delimiter) = input.delimiter {
-        http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
+        // http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
+        http_request.add_param("delimiter", &delimiter);
     };
     if let Some(encoding_type) = input.encoding_type {
         http_request.add_param(
