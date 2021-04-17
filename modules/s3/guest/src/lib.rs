@@ -2,9 +2,8 @@ pub mod structs;
 pub mod xml_util;
 
 use assemblylift_core_iomod_guest::{call, export_iomod_guest};
-use serde::export::Formatter;
 use serde::{Deserialize, Serialize};
-use std::fmt;
+use std::{fmt, fmt::Formatter};
 
 use crate::structs::*;
 
