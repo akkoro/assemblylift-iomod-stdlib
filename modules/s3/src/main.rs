@@ -6429,7 +6429,8 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
         http_request.add_param("max-keys", &serde_json::to_string(&max_keys).unwrap());
     };
     if let Some(prefix) = input.prefix {
-        http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
+        // http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
+        http_request.add_param("prefix", &prefix);
     };
     if let Some(continuation_token) = input.continuation_token {
         http_request.add_param(
