@@ -6385,7 +6385,7 @@ pub fn list_objects_v2(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 }
 #[allow(unused_assignments, unused_mut, unused_variables)]
 fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>> {
-    let mut path = String::from("/{Bucket}?list-type=2");
+    let mut path = String::from("/{Bucket}");
     path = match path.find("{Bucket}") {
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
@@ -6448,6 +6448,7 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
     if let Some(start_after) = input.start_after {
         http_request.add_param("start-after", &serde_json::to_string(&start_after).unwrap());
     };
+    http_request.add_param("list-type", "2");
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
