@@ -1908,7 +1908,6 @@ fn __query(input: QueryInput) -> BoxFuture<'static, Vec<u8>> {
     http_request.add_header("x-amz-target", "DynamoDB_20120810.Query");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
 
-
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
