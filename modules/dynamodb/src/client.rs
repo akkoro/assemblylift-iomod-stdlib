@@ -118,6 +118,7 @@ impl Client {
                     })
                     .send()
                     .await;
+                println!("DYNAMODB: {:?}", response);
                 match response {
                     Ok(res) => Ok(Response::builder()
                         .status(res.status())
