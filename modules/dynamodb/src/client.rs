@@ -10,8 +10,8 @@ use rusoto_signature::SignedRequest;
 use serde::export::Formatter;
 use serde::{Deserialize, Serialize};
 
-use reqwest;
 use hyper::body::Bytes;
+use reqwest;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClientError {
@@ -96,26 +96,33 @@ impl Client {
             "GET" => {
                 let response = client.get(final_uri).send().await;
                 match response {
-                    Ok(res) => Ok(Response::new(res.bytes().await.unwrap())),
+                    Ok(res) => Ok(Response::builder()
+                        .status(res.status())
+                        .body(res.bytes().await.unwrap())
+                        .unwrap()),
                     Err(why) => Err(ClientError {
                         why: why.to_string(),
                         data: Default::default(),
                     }),
                 }
-            },
+            }
             "POST" => {
-                let response = client.post(final_uri)
+                let response = client
+                    .post(final_uri)
                     .body(match request.payload {
                         Some(payload) => {
                             hyper::body::to_bytes(payload.into_body()).await.unwrap()
                             // std::str::from_utf8(&*bytes).unwrap()
-                        },
+                        }
                         None => Bytes::new(),
                     })
                     .send()
                     .await;
                 match response {
-                    Ok(res) => Ok(Response::new(res.bytes().await.unwrap())),
+                    Ok(res) => Ok(Response::builder()
+                        .status(res.status())
+                        .body(res.bytes().await.unwrap())
+                        .unwrap()),
                     Err(why) => Err(ClientError {
                         why: why.to_string(),
                         data: Default::default(),
