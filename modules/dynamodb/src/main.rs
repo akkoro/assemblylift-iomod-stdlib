@@ -114,7 +114,6 @@ fn __batch_execute_statement(input: BatchExecuteStatementInput) -> BoxFuture<'st
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: BatchExecuteStatementOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<BatchExecuteStatementOutput, guest::Error>::Ok(output)).unwrap()
@@ -168,7 +167,6 @@ fn __batch_get_item(input: BatchGetItemInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: BatchGetItemOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<BatchGetItemOutput, guest::Error>::Ok(output)).unwrap()
@@ -222,7 +220,6 @@ fn __batch_write_item(input: BatchWriteItemInput) -> BoxFuture<'static, Vec<u8>>
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: BatchWriteItemOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<BatchWriteItemOutput, guest::Error>::Ok(output)).unwrap()
@@ -276,7 +273,6 @@ fn __create_backup(input: CreateBackupInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: CreateBackupOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<CreateBackupOutput, guest::Error>::Ok(output)).unwrap()
@@ -330,7 +326,6 @@ fn __create_global_table(input: CreateGlobalTableInput) -> BoxFuture<'static, Ve
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: CreateGlobalTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<CreateGlobalTableOutput, guest::Error>::Ok(output)).unwrap()
@@ -384,7 +379,6 @@ fn __create_table(input: CreateTableInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: CreateTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<CreateTableOutput, guest::Error>::Ok(output)).unwrap()
@@ -438,7 +432,6 @@ fn __delete_backup(input: DeleteBackupInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DeleteBackupOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DeleteBackupOutput, guest::Error>::Ok(output)).unwrap()
@@ -492,7 +485,6 @@ fn __delete_item(input: DeleteItemInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DeleteItemOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DeleteItemOutput, guest::Error>::Ok(output)).unwrap()
@@ -546,7 +538,6 @@ fn __delete_table(input: DeleteTableInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DeleteTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DeleteTableOutput, guest::Error>::Ok(output)).unwrap()
@@ -600,7 +591,6 @@ fn __describe_backup(input: DescribeBackupInput) -> BoxFuture<'static, Vec<u8>> 
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DescribeBackupOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeBackupOutput, guest::Error>::Ok(output)).unwrap()
@@ -654,7 +644,6 @@ fn __describe_continuous_backups(input: DescribeContinuousBackupsInput) -> BoxFu
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DescribeContinuousBackupsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeContinuousBackupsOutput, guest::Error>::Ok(output)).unwrap()
@@ -708,7 +697,6 @@ fn __describe_contributor_insights(input: DescribeContributorInsightsInput) -> B
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DescribeContributorInsightsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeContributorInsightsOutput, guest::Error>::Ok(output)).unwrap()
@@ -762,7 +750,6 @@ fn __describe_endpoints(input: DescribeEndpointsRequest) -> BoxFuture<'static, V
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DescribeEndpointsResponse = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeEndpointsResponse, guest::Error>::Ok(output)).unwrap()
@@ -816,7 +803,6 @@ fn __describe_export(input: DescribeExportInput) -> BoxFuture<'static, Vec<u8>> 
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DescribeExportOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeExportOutput, guest::Error>::Ok(output)).unwrap()
@@ -870,7 +856,6 @@ fn __describe_global_table(input: DescribeGlobalTableInput) -> BoxFuture<'static
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DescribeGlobalTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeGlobalTableOutput, guest::Error>::Ok(output)).unwrap()
@@ -924,7 +909,6 @@ fn __describe_global_table_settings(input: DescribeGlobalTableSettingsInput) -> 
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DescribeGlobalTableSettingsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeGlobalTableSettingsOutput, guest::Error>::Ok(output)).unwrap()
@@ -978,7 +962,6 @@ fn __describe_kinesis_streaming_destination(input: DescribeKinesisStreamingDesti
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DescribeKinesisStreamingDestinationOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeKinesisStreamingDestinationOutput, guest::Error>::Ok(output)).unwrap()
@@ -1032,7 +1015,6 @@ fn __describe_limits(input: DescribeLimitsInput) -> BoxFuture<'static, Vec<u8>> 
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DescribeLimitsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeLimitsOutput, guest::Error>::Ok(output)).unwrap()
@@ -1086,7 +1068,6 @@ fn __describe_table(input: DescribeTableInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DescribeTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeTableOutput, guest::Error>::Ok(output)).unwrap()
@@ -1140,7 +1121,6 @@ fn __describe_table_replica_auto_scaling(input: DescribeTableReplicaAutoScalingI
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DescribeTableReplicaAutoScalingOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeTableReplicaAutoScalingOutput, guest::Error>::Ok(output)).unwrap()
@@ -1194,7 +1174,6 @@ fn __describe_time_to_live(input: DescribeTimeToLiveInput) -> BoxFuture<'static,
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: DescribeTimeToLiveOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeTimeToLiveOutput, guest::Error>::Ok(output)).unwrap()
@@ -1248,7 +1227,6 @@ fn __disable_kinesis_streaming_destination(input: KinesisStreamingDestinationInp
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: KinesisStreamingDestinationOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<KinesisStreamingDestinationOutput, guest::Error>::Ok(output)).unwrap()
@@ -1302,7 +1280,6 @@ fn __enable_kinesis_streaming_destination(input: KinesisStreamingDestinationInpu
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: KinesisStreamingDestinationOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<KinesisStreamingDestinationOutput, guest::Error>::Ok(output)).unwrap()
@@ -1356,7 +1333,6 @@ fn __execute_statement(input: ExecuteStatementInput) -> BoxFuture<'static, Vec<u
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: ExecuteStatementOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ExecuteStatementOutput, guest::Error>::Ok(output)).unwrap()
@@ -1410,7 +1386,6 @@ fn __execute_transaction(input: ExecuteTransactionInput) -> BoxFuture<'static, V
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: ExecuteTransactionOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ExecuteTransactionOutput, guest::Error>::Ok(output)).unwrap()
@@ -1464,7 +1439,6 @@ fn __export_table_to_point_in_time(input: ExportTableToPointInTimeInput) -> BoxF
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: ExportTableToPointInTimeOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ExportTableToPointInTimeOutput, guest::Error>::Ok(output)).unwrap()
@@ -1518,7 +1492,6 @@ fn __get_item(input: GetItemInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: GetItemOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<GetItemOutput, guest::Error>::Ok(output)).unwrap()
@@ -1572,7 +1545,6 @@ fn __list_backups(input: ListBackupsInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: ListBackupsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ListBackupsOutput, guest::Error>::Ok(output)).unwrap()
@@ -1626,7 +1598,6 @@ fn __list_contributor_insights(input: ListContributorInsightsInput) -> BoxFuture
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: ListContributorInsightsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ListContributorInsightsOutput, guest::Error>::Ok(output)).unwrap()
@@ -1680,7 +1651,6 @@ fn __list_exports(input: ListExportsInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: ListExportsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ListExportsOutput, guest::Error>::Ok(output)).unwrap()
@@ -1734,7 +1704,6 @@ fn __list_global_tables(input: ListGlobalTablesInput) -> BoxFuture<'static, Vec<
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: ListGlobalTablesOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ListGlobalTablesOutput, guest::Error>::Ok(output)).unwrap()
@@ -1788,7 +1757,6 @@ fn __list_tables(input: ListTablesInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: ListTablesOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ListTablesOutput, guest::Error>::Ok(output)).unwrap()
@@ -1842,7 +1810,6 @@ fn __list_tags_of_resource(input: ListTagsOfResourceInput) -> BoxFuture<'static,
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: ListTagsOfResourceOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ListTagsOfResourceOutput, guest::Error>::Ok(output)).unwrap()
@@ -1896,7 +1863,6 @@ fn __put_item(input: PutItemInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: PutItemOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<PutItemOutput, guest::Error>::Ok(output)).unwrap()
@@ -1950,11 +1916,8 @@ fn __query(input: QueryInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
-                        println!("DYNAMODB: body={:?}", body);
                         let output: QueryOutput = serde_json::from_slice(&*body).unwrap();
-                        println!("DYNAMODB: QueryOutput={:?}", output);
                         serde_json::to_vec(&Result::<QueryOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2006,7 +1969,6 @@ fn __restore_table_from_backup(input: RestoreTableFromBackupInput) -> BoxFuture<
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: RestoreTableFromBackupOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<RestoreTableFromBackupOutput, guest::Error>::Ok(output)).unwrap()
@@ -2060,7 +2022,6 @@ fn __restore_table_to_point_in_time(input: RestoreTableToPointInTimeInput) -> Bo
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: RestoreTableToPointInTimeOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<RestoreTableToPointInTimeOutput, guest::Error>::Ok(output)).unwrap()
@@ -2114,7 +2075,6 @@ fn __scan(input: ScanInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: ScanOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ScanOutput, guest::Error>::Ok(output)).unwrap()
@@ -2168,7 +2128,6 @@ fn __tag_resource(input: TagResourceInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: () = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
@@ -2222,7 +2181,6 @@ fn __transact_get_items(input: TransactGetItemsInput) -> BoxFuture<'static, Vec<
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: TransactGetItemsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<TransactGetItemsOutput, guest::Error>::Ok(output)).unwrap()
@@ -2276,7 +2234,6 @@ fn __transact_write_items(input: TransactWriteItemsInput) -> BoxFuture<'static, 
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: TransactWriteItemsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<TransactWriteItemsOutput, guest::Error>::Ok(output)).unwrap()
@@ -2330,7 +2287,6 @@ fn __untag_resource(input: UntagResourceInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: () = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
@@ -2384,7 +2340,6 @@ fn __update_continuous_backups(input: UpdateContinuousBackupsInput) -> BoxFuture
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: UpdateContinuousBackupsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateContinuousBackupsOutput, guest::Error>::Ok(output)).unwrap()
@@ -2438,7 +2393,6 @@ fn __update_contributor_insights(input: UpdateContributorInsightsInput) -> BoxFu
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: UpdateContributorInsightsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateContributorInsightsOutput, guest::Error>::Ok(output)).unwrap()
@@ -2492,7 +2446,6 @@ fn __update_global_table(input: UpdateGlobalTableInput) -> BoxFuture<'static, Ve
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: UpdateGlobalTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateGlobalTableOutput, guest::Error>::Ok(output)).unwrap()
@@ -2546,7 +2499,6 @@ fn __update_global_table_settings(input: UpdateGlobalTableSettingsInput) -> BoxF
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: UpdateGlobalTableSettingsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateGlobalTableSettingsOutput, guest::Error>::Ok(output)).unwrap()
@@ -2600,7 +2552,6 @@ fn __update_item(input: UpdateItemInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: UpdateItemOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateItemOutput, guest::Error>::Ok(output)).unwrap()
@@ -2654,7 +2605,6 @@ fn __update_table(input: UpdateTableInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: UpdateTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateTableOutput, guest::Error>::Ok(output)).unwrap()
@@ -2708,7 +2658,6 @@ fn __update_table_replica_auto_scaling(input: UpdateTableReplicaAutoScalingInput
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: UpdateTableReplicaAutoScalingOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateTableReplicaAutoScalingOutput, guest::Error>::Ok(output)).unwrap()
@@ -2762,7 +2711,6 @@ fn __update_time_to_live(input: UpdateTimeToLiveInput) -> BoxFuture<'static, Vec
 
                 match status {
                     StatusCode::OK => {
-                        //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
                         let output: UpdateTimeToLiveOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateTimeToLiveOutput, guest::Error>::Ok(output)).unwrap()

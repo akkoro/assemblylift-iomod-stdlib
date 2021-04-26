@@ -33,17 +33,24 @@ async fn main() {
 pub fn request(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: HttpRequest = serde_json::from_slice(input.as_slice()).unwrap();
 
+    let method = deserialized.method.clone();
+    // TODO only if we detect that this is really an AWS request
+    //          OR we rename this module to `apigw` or something
     let mut http_request = SignedRequest::new(
-        &deserialized.method.clone(),
+        &method.clone(),
         "execute-api",
         &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
             .unwrap_or(Region::UsEast1),
         &deserialized.path.clone(),
     );
-//    let body_vec = deserialized.body.to_owned().unwrap();
+
     http_request.set_hostname(Some(deserialized.host.clone()));
     http_request.set_content_type(deserialized.content_type.clone());
-    http_request.set_payload(Some(deserialized.body.clone().unwrap()));
+    if !method.clone().eq("GET") {
+        if let Some(body) = deserialized.body.clone() {
+            http_request.set_payload(Some(body));
+        }
+    }
 
     Box::pin(async move {
         match crate::CLIENT
