@@ -1952,7 +1952,9 @@ fn __query(input: QueryInput) -> BoxFuture<'static, Vec<u8>> {
                     StatusCode::OK => {
                         //let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let body = response.into_body();
+                        println!("DYNAMODB: body={:?}", body);
                         let output: QueryOutput = serde_json::from_slice(&*body).unwrap();
+                        println!("DYNAMODB: QueryOutput={:?}", output);
                         serde_json::to_vec(&Result::<QueryOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
