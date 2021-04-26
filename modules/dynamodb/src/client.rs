@@ -76,16 +76,6 @@ impl Client {
             final_uri = final_uri + &format!("?{}", request.canonical_query_string());
         }
 
-        // let mut http_req = hyper::Request::builder()
-        //     .method(request.method())
-        //     .uri(final_uri)
-        //     .body(match request.payload {
-        //         Some(payload) => payload.into_body(),
-        //         None => hyper::Body::empty(),
-        //     })
-        //     .unwrap();
-        // *http_req.headers_mut() = headers;
-
         let mut client = reqwest::ClientBuilder::new()
             .default_headers(headers)
             .build()
@@ -118,7 +108,7 @@ impl Client {
                     })
                     .send()
                     .await;
-                println!("DYNAMODB: {:?}", response);
+
                 match response {
                     Ok(res) => Ok(Response::builder()
                         .status(res.status())
@@ -135,30 +125,5 @@ impl Client {
                 data: Default::default(),
             }),
         }
-
-        // match reqwest::Client::new()
-        //     .request(request.method().parse().unwrap(), final_uri)
-        //     .headers(headers)
-        //     .body(match request.payload {
-        //         Some(payload) => &hyper::body::to_bytes(payload.into_body()),
-        //         None => reqwest::Body::wrap_stream(vec![]),
-        //     })
-        //     .send()
-        //     .await
-        // {
-        //     Ok(resp) => Ok(Response::new(resp.bytes().await.unwrap().to_string())),
-        //     Err(err) => Err(ClientError {
-        //         why: err.to_string(),
-        //         data: Default::default(),
-        //     }),
-        // }
-
-        // match self.client.request(http_req).await {
-        //     Ok(resp) => Ok(resp),
-        //     Err(err) => Err(ClientError {
-        //         why: err.to_string(),
-        //         data: Default::default(),
-        //     }),
-        // }
     }
 }
