@@ -1,12 +1,17 @@
 use std::fmt;
 
 use http::header::{HeaderMap, HeaderName, HeaderValue};
-use hyper::client;
 use hyper::Response;
+//use hyper;
+//use hyper::Response;
+use hyper_tls::HttpsConnector;
 use rusoto_signature::credential::AwsCredentials;
 use rusoto_signature::SignedRequest;
 use serde::export::Formatter;
 use serde::{Deserialize, Serialize};
+
+use hyper::body::Bytes;
+use reqwest;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClientError {
@@ -20,7 +25,8 @@ impl fmt::Display for ClientError {
 }
 impl std::error::Error for ClientError {}
 
-pub type HyperClient = client::Client<hyper_rustls::HttpsConnector<client::HttpConnector>>;
+// pub type HyperClient = client::Client<hyper_rustls::HttpsConnector<client::HttpConnector>>;
+pub type HyperClient = hyper::Client<HttpsConnector<hyper::client::HttpConnector>>;
 
 pub struct Client {
     client: HyperClient,
@@ -29,8 +35,10 @@ pub struct Client {
 
 impl Client {
     pub fn new() -> Self {
-        let https = hyper_rustls::HttpsConnector::with_native_roots();
-        let client = client::Client::builder().build::<_, hyper::Body>(https);
+        // let https = hyper_rustls::HttpsConnector::with_native_roots();
+        // let client = client::Client::builder().build::<_, hyper::Body>(https);
+        let https = HttpsConnector::new();
+        let client = hyper::Client::builder().build::<_, hyper::Body>(https);
 
         Self {
             client,
@@ -42,7 +50,7 @@ impl Client {
         self.aws_key = Some((id, key, token));
     }
 
-    pub async fn call(&self, mut request: SignedRequest) -> Result<Response<hyper::Body>, ClientError> {
+    pub async fn call(&self, mut request: SignedRequest) -> Result<Response<Bytes>, ClientError> {
         if let Some(key) = &self.aws_key {
             let token = key.2.clone();
             request.sign(&AwsCredentials::new(&key.0, &key.1, token, None));
@@ -68,21 +76,52 @@ impl Client {
             final_uri = final_uri + &format!("?{}", request.canonical_query_string());
         }
 
-        let mut http_req = hyper::Request::builder()
-            .method(request.method())
-            .uri(final_uri)
-            .body(match request.payload {
-                Some(payload) => payload.into_body(),
-                None => hyper::Body::empty(),
-            })
+        let mut client = reqwest::ClientBuilder::new()
+            .default_headers(headers)
+            .build()
             .unwrap();
-        *http_req.headers_mut() = headers;
 
-        println!("DEBUG {:?}", http_req);
-        match self.client.request(http_req).await {
-            Ok(resp) => Ok(resp),
-            Err(err) => Err(ClientError {
-                why: err.to_string(),
+        let method = request.method();
+        match method {
+            "GET" => {
+                let response = client.get(final_uri).send().await;
+                match response {
+                    Ok(res) => Ok(Response::builder()
+                        .status(res.status())
+                        .body(res.bytes().await.unwrap())
+                        .unwrap()),
+                    Err(why) => Err(ClientError {
+                        why: why.to_string(),
+                        data: Default::default(),
+                    }),
+                }
+            }
+            "POST" => {
+                let response = client
+                    .post(final_uri)
+                    .body(match request.payload {
+                        Some(payload) => {
+                            hyper::body::to_bytes(payload.into_body()).await.unwrap()
+                            // std::str::from_utf8(&*bytes).unwrap()
+                        }
+                        None => Bytes::new(),
+                    })
+                    .send()
+                    .await;
+
+                match response {
+                    Ok(res) => Ok(Response::builder()
+                        .status(res.status())
+                        .body(res.bytes().await.unwrap())
+                        .unwrap()),
+                    Err(why) => Err(ClientError {
+                        why: why.to_string(),
+                        data: Default::default(),
+                    }),
+                }
+            }
+            m => Err(ClientError {
+                why: format!("Unknown HTTP method {}", m),
                 data: Default::default(),
             }),
         }

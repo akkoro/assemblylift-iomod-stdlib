@@ -6298,13 +6298,15 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
         );
     };
     if let Some(delimiter) = input.delimiter {
-        http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
+        // http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
+        http_request.add_param("delimiter", &delimiter);
     };
     if let Some(encoding_type) = input.encoding_type {
-        http_request.add_param(
-            "encoding-type",
-            &serde_json::to_string(&encoding_type).unwrap(),
-        );
+        // http_request.add_param(
+        //     "encoding-type",
+        //     &serde_json::to_string(&encoding_type).unwrap(),
+        // );
+        http_request.add_param("encoding-type", &encoding_type);
     };
     if let Some(marker) = input.marker {
         http_request.add_param("marker", &serde_json::to_string(&marker).unwrap());
@@ -6313,7 +6315,8 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
         http_request.add_param("max-keys", &serde_json::to_string(&max_keys).unwrap());
     };
     if let Some(prefix) = input.prefix {
-        http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
+        // http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
+        http_request.add_param("prefix", &prefix);
     };
 
     Box::pin(async move {
@@ -6382,7 +6385,7 @@ pub fn list_objects_v2(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 }
 #[allow(unused_assignments, unused_mut, unused_variables)]
 fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>> {
-    let mut path = String::from("/{Bucket}?list-type=2");
+    let mut path = String::from("/{Bucket}");
     path = match path.find("{Bucket}") {
         Some(_) => path.replace("{Bucket}", &input.bucket),
         None => path.to_string(),
@@ -6416,19 +6419,22 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
         );
     };
     if let Some(delimiter) = input.delimiter {
-        http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
+        // http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
+        http_request.add_param("delimiter", &delimiter);
     };
     if let Some(encoding_type) = input.encoding_type {
-        http_request.add_param(
-            "encoding-type",
-            &serde_json::to_string(&encoding_type).unwrap(),
-        );
+        // http_request.add_param(
+        //     "encoding-type",
+        //     &serde_json::to_string(&encoding_type).unwrap(),
+        // );
+        http_request.add_param("encoding-type", &encoding_type);
     };
     if let Some(max_keys) = input.max_keys {
         http_request.add_param("max-keys", &serde_json::to_string(&max_keys).unwrap());
     };
     if let Some(prefix) = input.prefix {
-        http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
+        // http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
+        http_request.add_param("prefix", &prefix);
     };
     if let Some(continuation_token) = input.continuation_token {
         http_request.add_param(
@@ -6442,6 +6448,7 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
     if let Some(start_after) = input.start_after {
         http_request.add_param("start-after", &serde_json::to_string(&start_after).unwrap());
     };
+    http_request.add_param("list-type", "2");
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {

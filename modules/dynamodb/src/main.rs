@@ -17,7 +17,7 @@ static CLIENT: Lazy<client::Client> = Lazy::new(|| {
     use std::env;
     let mut c = client::Client::new();
     c.set_credentials(
-        env::var("AWS_ACCESS_KEY_ID").unwrap(), 
+        env::var("AWS_ACCESS_KEY_ID").unwrap(),
         env::var("AWS_SECRET_ACCESS_KEY").unwrap(),
         match env::var("AWS_SESSION_TOKEN") {
             Ok(token) => Some(token),
@@ -99,9 +99,9 @@ fn __batch_execute_statement(input: BatchExecuteStatementInput) -> BoxFuture<'st
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.BatchExecuteStatement");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -114,15 +114,15 @@ fn __batch_execute_statement(input: BatchExecuteStatementInput) -> BoxFuture<'st
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: BatchExecuteStatementOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: BatchExecuteStatementOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<BatchExecuteStatementOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<BatchExecuteStatementOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -130,7 +130,7 @@ fn __batch_execute_statement(input: BatchExecuteStatementInput) -> BoxFuture<'st
                 serde_json::to_vec(&Result::<BatchExecuteStatementOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -152,9 +152,9 @@ fn __batch_get_item(input: BatchGetItemInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.BatchGetItem");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -167,15 +167,15 @@ fn __batch_get_item(input: BatchGetItemInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: BatchGetItemOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: BatchGetItemOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<BatchGetItemOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<BatchGetItemOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -183,7 +183,7 @@ fn __batch_get_item(input: BatchGetItemInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<BatchGetItemOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -205,9 +205,9 @@ fn __batch_write_item(input: BatchWriteItemInput) -> BoxFuture<'static, Vec<u8>>
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.BatchWriteItem");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -220,15 +220,15 @@ fn __batch_write_item(input: BatchWriteItemInput) -> BoxFuture<'static, Vec<u8>>
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: BatchWriteItemOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: BatchWriteItemOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<BatchWriteItemOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<BatchWriteItemOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -236,7 +236,7 @@ fn __batch_write_item(input: BatchWriteItemInput) -> BoxFuture<'static, Vec<u8>>
                 serde_json::to_vec(&Result::<BatchWriteItemOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -258,9 +258,9 @@ fn __create_backup(input: CreateBackupInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.CreateBackup");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -273,15 +273,15 @@ fn __create_backup(input: CreateBackupInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: CreateBackupOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: CreateBackupOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<CreateBackupOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<CreateBackupOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -289,7 +289,7 @@ fn __create_backup(input: CreateBackupInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<CreateBackupOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -311,9 +311,9 @@ fn __create_global_table(input: CreateGlobalTableInput) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.CreateGlobalTable");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -326,15 +326,15 @@ fn __create_global_table(input: CreateGlobalTableInput) -> BoxFuture<'static, Ve
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: CreateGlobalTableOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: CreateGlobalTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<CreateGlobalTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<CreateGlobalTableOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -342,7 +342,7 @@ fn __create_global_table(input: CreateGlobalTableInput) -> BoxFuture<'static, Ve
                 serde_json::to_vec(&Result::<CreateGlobalTableOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -364,9 +364,9 @@ fn __create_table(input: CreateTableInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.CreateTable");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -379,15 +379,15 @@ fn __create_table(input: CreateTableInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: CreateTableOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: CreateTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<CreateTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<CreateTableOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -395,7 +395,7 @@ fn __create_table(input: CreateTableInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<CreateTableOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -417,9 +417,9 @@ fn __delete_backup(input: DeleteBackupInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DeleteBackup");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -432,15 +432,15 @@ fn __delete_backup(input: DeleteBackupInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DeleteBackupOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DeleteBackupOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DeleteBackupOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DeleteBackupOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -448,7 +448,7 @@ fn __delete_backup(input: DeleteBackupInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<DeleteBackupOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -470,9 +470,9 @@ fn __delete_item(input: DeleteItemInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DeleteItem");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -485,15 +485,15 @@ fn __delete_item(input: DeleteItemInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DeleteItemOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DeleteItemOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DeleteItemOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DeleteItemOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -501,7 +501,7 @@ fn __delete_item(input: DeleteItemInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<DeleteItemOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -523,9 +523,9 @@ fn __delete_table(input: DeleteTableInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DeleteTable");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -538,15 +538,15 @@ fn __delete_table(input: DeleteTableInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DeleteTableOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DeleteTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DeleteTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DeleteTableOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -554,7 +554,7 @@ fn __delete_table(input: DeleteTableInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<DeleteTableOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -576,9 +576,9 @@ fn __describe_backup(input: DescribeBackupInput) -> BoxFuture<'static, Vec<u8>> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DescribeBackup");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -591,15 +591,15 @@ fn __describe_backup(input: DescribeBackupInput) -> BoxFuture<'static, Vec<u8>> 
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DescribeBackupOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DescribeBackupOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeBackupOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DescribeBackupOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -607,7 +607,7 @@ fn __describe_backup(input: DescribeBackupInput) -> BoxFuture<'static, Vec<u8>> 
                 serde_json::to_vec(&Result::<DescribeBackupOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -629,9 +629,9 @@ fn __describe_continuous_backups(input: DescribeContinuousBackupsInput) -> BoxFu
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DescribeContinuousBackups");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -644,15 +644,15 @@ fn __describe_continuous_backups(input: DescribeContinuousBackupsInput) -> BoxFu
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DescribeContinuousBackupsOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DescribeContinuousBackupsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeContinuousBackupsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DescribeContinuousBackupsOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -660,7 +660,7 @@ fn __describe_continuous_backups(input: DescribeContinuousBackupsInput) -> BoxFu
                 serde_json::to_vec(&Result::<DescribeContinuousBackupsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -682,9 +682,9 @@ fn __describe_contributor_insights(input: DescribeContributorInsightsInput) -> B
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DescribeContributorInsights");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -697,15 +697,15 @@ fn __describe_contributor_insights(input: DescribeContributorInsightsInput) -> B
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DescribeContributorInsightsOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DescribeContributorInsightsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeContributorInsightsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DescribeContributorInsightsOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -713,7 +713,7 @@ fn __describe_contributor_insights(input: DescribeContributorInsightsInput) -> B
                 serde_json::to_vec(&Result::<DescribeContributorInsightsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -735,9 +735,9 @@ fn __describe_endpoints(input: DescribeEndpointsRequest) -> BoxFuture<'static, V
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DescribeEndpoints");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -750,15 +750,15 @@ fn __describe_endpoints(input: DescribeEndpointsRequest) -> BoxFuture<'static, V
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DescribeEndpointsResponse = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DescribeEndpointsResponse = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeEndpointsResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DescribeEndpointsResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -766,7 +766,7 @@ fn __describe_endpoints(input: DescribeEndpointsRequest) -> BoxFuture<'static, V
                 serde_json::to_vec(&Result::<DescribeEndpointsResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -788,9 +788,9 @@ fn __describe_export(input: DescribeExportInput) -> BoxFuture<'static, Vec<u8>> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DescribeExport");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -803,15 +803,15 @@ fn __describe_export(input: DescribeExportInput) -> BoxFuture<'static, Vec<u8>> 
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DescribeExportOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DescribeExportOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeExportOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DescribeExportOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -819,7 +819,7 @@ fn __describe_export(input: DescribeExportInput) -> BoxFuture<'static, Vec<u8>> 
                 serde_json::to_vec(&Result::<DescribeExportOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -841,9 +841,9 @@ fn __describe_global_table(input: DescribeGlobalTableInput) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DescribeGlobalTable");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -856,15 +856,15 @@ fn __describe_global_table(input: DescribeGlobalTableInput) -> BoxFuture<'static
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DescribeGlobalTableOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DescribeGlobalTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeGlobalTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DescribeGlobalTableOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -872,7 +872,7 @@ fn __describe_global_table(input: DescribeGlobalTableInput) -> BoxFuture<'static
                 serde_json::to_vec(&Result::<DescribeGlobalTableOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -894,9 +894,9 @@ fn __describe_global_table_settings(input: DescribeGlobalTableSettingsInput) -> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DescribeGlobalTableSettings");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -909,15 +909,15 @@ fn __describe_global_table_settings(input: DescribeGlobalTableSettingsInput) -> 
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DescribeGlobalTableSettingsOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DescribeGlobalTableSettingsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeGlobalTableSettingsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DescribeGlobalTableSettingsOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -925,7 +925,7 @@ fn __describe_global_table_settings(input: DescribeGlobalTableSettingsInput) -> 
                 serde_json::to_vec(&Result::<DescribeGlobalTableSettingsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -947,9 +947,9 @@ fn __describe_kinesis_streaming_destination(input: DescribeKinesisStreamingDesti
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DescribeKinesisStreamingDestination");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -962,15 +962,15 @@ fn __describe_kinesis_streaming_destination(input: DescribeKinesisStreamingDesti
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DescribeKinesisStreamingDestinationOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DescribeKinesisStreamingDestinationOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeKinesisStreamingDestinationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DescribeKinesisStreamingDestinationOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -978,7 +978,7 @@ fn __describe_kinesis_streaming_destination(input: DescribeKinesisStreamingDesti
                 serde_json::to_vec(&Result::<DescribeKinesisStreamingDestinationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1000,9 +1000,9 @@ fn __describe_limits(input: DescribeLimitsInput) -> BoxFuture<'static, Vec<u8>> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DescribeLimits");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1015,15 +1015,15 @@ fn __describe_limits(input: DescribeLimitsInput) -> BoxFuture<'static, Vec<u8>> 
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DescribeLimitsOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DescribeLimitsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeLimitsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DescribeLimitsOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1031,7 +1031,7 @@ fn __describe_limits(input: DescribeLimitsInput) -> BoxFuture<'static, Vec<u8>> 
                 serde_json::to_vec(&Result::<DescribeLimitsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1053,9 +1053,9 @@ fn __describe_table(input: DescribeTableInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DescribeTable");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1068,15 +1068,15 @@ fn __describe_table(input: DescribeTableInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DescribeTableOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DescribeTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DescribeTableOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1084,7 +1084,7 @@ fn __describe_table(input: DescribeTableInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<DescribeTableOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1106,9 +1106,9 @@ fn __describe_table_replica_auto_scaling(input: DescribeTableReplicaAutoScalingI
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DescribeTableReplicaAutoScaling");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1121,15 +1121,15 @@ fn __describe_table_replica_auto_scaling(input: DescribeTableReplicaAutoScalingI
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DescribeTableReplicaAutoScalingOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DescribeTableReplicaAutoScalingOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeTableReplicaAutoScalingOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DescribeTableReplicaAutoScalingOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1137,7 +1137,7 @@ fn __describe_table_replica_auto_scaling(input: DescribeTableReplicaAutoScalingI
                 serde_json::to_vec(&Result::<DescribeTableReplicaAutoScalingOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1159,9 +1159,9 @@ fn __describe_time_to_live(input: DescribeTimeToLiveInput) -> BoxFuture<'static,
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DescribeTimeToLive");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1174,15 +1174,15 @@ fn __describe_time_to_live(input: DescribeTimeToLiveInput) -> BoxFuture<'static,
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: DescribeTimeToLiveOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: DescribeTimeToLiveOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<DescribeTimeToLiveOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<DescribeTimeToLiveOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1190,7 +1190,7 @@ fn __describe_time_to_live(input: DescribeTimeToLiveInput) -> BoxFuture<'static,
                 serde_json::to_vec(&Result::<DescribeTimeToLiveOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1212,9 +1212,9 @@ fn __disable_kinesis_streaming_destination(input: KinesisStreamingDestinationInp
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.DisableKinesisStreamingDestination");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1227,15 +1227,15 @@ fn __disable_kinesis_streaming_destination(input: KinesisStreamingDestinationInp
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: KinesisStreamingDestinationOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: KinesisStreamingDestinationOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<KinesisStreamingDestinationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<KinesisStreamingDestinationOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1243,7 +1243,7 @@ fn __disable_kinesis_streaming_destination(input: KinesisStreamingDestinationInp
                 serde_json::to_vec(&Result::<KinesisStreamingDestinationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1265,9 +1265,9 @@ fn __enable_kinesis_streaming_destination(input: KinesisStreamingDestinationInpu
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.EnableKinesisStreamingDestination");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1280,15 +1280,15 @@ fn __enable_kinesis_streaming_destination(input: KinesisStreamingDestinationInpu
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: KinesisStreamingDestinationOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: KinesisStreamingDestinationOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<KinesisStreamingDestinationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<KinesisStreamingDestinationOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1296,7 +1296,7 @@ fn __enable_kinesis_streaming_destination(input: KinesisStreamingDestinationInpu
                 serde_json::to_vec(&Result::<KinesisStreamingDestinationOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1318,9 +1318,9 @@ fn __execute_statement(input: ExecuteStatementInput) -> BoxFuture<'static, Vec<u
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.ExecuteStatement");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1333,15 +1333,15 @@ fn __execute_statement(input: ExecuteStatementInput) -> BoxFuture<'static, Vec<u
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: ExecuteStatementOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: ExecuteStatementOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ExecuteStatementOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<ExecuteStatementOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1349,7 +1349,7 @@ fn __execute_statement(input: ExecuteStatementInput) -> BoxFuture<'static, Vec<u
                 serde_json::to_vec(&Result::<ExecuteStatementOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1371,9 +1371,9 @@ fn __execute_transaction(input: ExecuteTransactionInput) -> BoxFuture<'static, V
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.ExecuteTransaction");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1386,15 +1386,15 @@ fn __execute_transaction(input: ExecuteTransactionInput) -> BoxFuture<'static, V
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: ExecuteTransactionOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: ExecuteTransactionOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ExecuteTransactionOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<ExecuteTransactionOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1402,7 +1402,7 @@ fn __execute_transaction(input: ExecuteTransactionInput) -> BoxFuture<'static, V
                 serde_json::to_vec(&Result::<ExecuteTransactionOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1424,9 +1424,9 @@ fn __export_table_to_point_in_time(input: ExportTableToPointInTimeInput) -> BoxF
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.ExportTableToPointInTime");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1439,15 +1439,15 @@ fn __export_table_to_point_in_time(input: ExportTableToPointInTimeInput) -> BoxF
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: ExportTableToPointInTimeOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: ExportTableToPointInTimeOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ExportTableToPointInTimeOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<ExportTableToPointInTimeOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1455,7 +1455,7 @@ fn __export_table_to_point_in_time(input: ExportTableToPointInTimeInput) -> BoxF
                 serde_json::to_vec(&Result::<ExportTableToPointInTimeOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1477,9 +1477,9 @@ fn __get_item(input: GetItemInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.GetItem");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1492,15 +1492,15 @@ fn __get_item(input: GetItemInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: GetItemOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: GetItemOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<GetItemOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<GetItemOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1508,7 +1508,7 @@ fn __get_item(input: GetItemInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<GetItemOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1530,9 +1530,9 @@ fn __list_backups(input: ListBackupsInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.ListBackups");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1545,15 +1545,15 @@ fn __list_backups(input: ListBackupsInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: ListBackupsOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: ListBackupsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ListBackupsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<ListBackupsOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1561,7 +1561,7 @@ fn __list_backups(input: ListBackupsInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<ListBackupsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1583,9 +1583,9 @@ fn __list_contributor_insights(input: ListContributorInsightsInput) -> BoxFuture
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.ListContributorInsights");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1598,15 +1598,15 @@ fn __list_contributor_insights(input: ListContributorInsightsInput) -> BoxFuture
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: ListContributorInsightsOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: ListContributorInsightsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ListContributorInsightsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<ListContributorInsightsOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1614,7 +1614,7 @@ fn __list_contributor_insights(input: ListContributorInsightsInput) -> BoxFuture
                 serde_json::to_vec(&Result::<ListContributorInsightsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1636,9 +1636,9 @@ fn __list_exports(input: ListExportsInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.ListExports");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1651,15 +1651,15 @@ fn __list_exports(input: ListExportsInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: ListExportsOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: ListExportsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ListExportsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<ListExportsOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1667,7 +1667,7 @@ fn __list_exports(input: ListExportsInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<ListExportsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1689,9 +1689,9 @@ fn __list_global_tables(input: ListGlobalTablesInput) -> BoxFuture<'static, Vec<
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.ListGlobalTables");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1704,15 +1704,15 @@ fn __list_global_tables(input: ListGlobalTablesInput) -> BoxFuture<'static, Vec<
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: ListGlobalTablesOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: ListGlobalTablesOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ListGlobalTablesOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<ListGlobalTablesOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1720,7 +1720,7 @@ fn __list_global_tables(input: ListGlobalTablesInput) -> BoxFuture<'static, Vec<
                 serde_json::to_vec(&Result::<ListGlobalTablesOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1742,9 +1742,9 @@ fn __list_tables(input: ListTablesInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.ListTables");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1757,15 +1757,15 @@ fn __list_tables(input: ListTablesInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: ListTablesOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: ListTablesOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ListTablesOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<ListTablesOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1773,7 +1773,7 @@ fn __list_tables(input: ListTablesInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<ListTablesOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1795,9 +1795,9 @@ fn __list_tags_of_resource(input: ListTagsOfResourceInput) -> BoxFuture<'static,
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.ListTagsOfResource");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1810,15 +1810,15 @@ fn __list_tags_of_resource(input: ListTagsOfResourceInput) -> BoxFuture<'static,
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: ListTagsOfResourceOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: ListTagsOfResourceOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ListTagsOfResourceOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<ListTagsOfResourceOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1826,7 +1826,7 @@ fn __list_tags_of_resource(input: ListTagsOfResourceInput) -> BoxFuture<'static,
                 serde_json::to_vec(&Result::<ListTagsOfResourceOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1848,9 +1848,9 @@ fn __put_item(input: PutItemInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.PutItem");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1863,15 +1863,15 @@ fn __put_item(input: PutItemInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: PutItemOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: PutItemOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<PutItemOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<PutItemOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1879,7 +1879,7 @@ fn __put_item(input: PutItemInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<PutItemOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1901,9 +1901,9 @@ fn __query(input: QueryInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.Query");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1916,15 +1916,17 @@ fn __query(input: QueryInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: QueryOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: QueryOutput = serde_json::from_slice(&*body).unwrap();
+                        println!("DYNAMODB: __query: {:?}", output);
                         serde_json::to_vec(&Result::<QueryOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
+                        println!("DYNAMODB: status: {}", status);
+                        println!("DYNAMODB: __query: {:?}", std::str::from_utf8(&*response.into_body()).unwrap());
                         serde_json::to_vec(&Result::<QueryOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
-                        }))
-                        .unwrap()
+                        })).unwrap()
                     }
                 }
             },
@@ -1932,7 +1934,7 @@ fn __query(input: QueryInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<QueryOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1954,9 +1956,9 @@ fn __restore_table_from_backup(input: RestoreTableFromBackupInput) -> BoxFuture<
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.RestoreTableFromBackup");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -1969,15 +1971,15 @@ fn __restore_table_from_backup(input: RestoreTableFromBackupInput) -> BoxFuture<
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: RestoreTableFromBackupOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: RestoreTableFromBackupOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<RestoreTableFromBackupOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<RestoreTableFromBackupOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1985,7 +1987,7 @@ fn __restore_table_from_backup(input: RestoreTableFromBackupInput) -> BoxFuture<
                 serde_json::to_vec(&Result::<RestoreTableFromBackupOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2007,9 +2009,9 @@ fn __restore_table_to_point_in_time(input: RestoreTableToPointInTimeInput) -> Bo
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.RestoreTableToPointInTime");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2022,15 +2024,15 @@ fn __restore_table_to_point_in_time(input: RestoreTableToPointInTimeInput) -> Bo
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: RestoreTableToPointInTimeOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: RestoreTableToPointInTimeOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<RestoreTableToPointInTimeOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<RestoreTableToPointInTimeOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2038,7 +2040,7 @@ fn __restore_table_to_point_in_time(input: RestoreTableToPointInTimeInput) -> Bo
                 serde_json::to_vec(&Result::<RestoreTableToPointInTimeOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2060,9 +2062,9 @@ fn __scan(input: ScanInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.Scan");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2075,15 +2077,15 @@ fn __scan(input: ScanInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: ScanOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: ScanOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<ScanOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<ScanOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2091,7 +2093,7 @@ fn __scan(input: ScanInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<ScanOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2113,9 +2115,9 @@ fn __tag_resource(input: TagResourceInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.TagResource");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2128,15 +2130,15 @@ fn __tag_resource(input: TagResourceInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: () = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: () = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2144,7 +2146,7 @@ fn __tag_resource(input: TagResourceInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2166,9 +2168,9 @@ fn __transact_get_items(input: TransactGetItemsInput) -> BoxFuture<'static, Vec<
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.TransactGetItems");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2181,15 +2183,15 @@ fn __transact_get_items(input: TransactGetItemsInput) -> BoxFuture<'static, Vec<
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: TransactGetItemsOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: TransactGetItemsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<TransactGetItemsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<TransactGetItemsOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2197,7 +2199,7 @@ fn __transact_get_items(input: TransactGetItemsInput) -> BoxFuture<'static, Vec<
                 serde_json::to_vec(&Result::<TransactGetItemsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2219,9 +2221,9 @@ fn __transact_write_items(input: TransactWriteItemsInput) -> BoxFuture<'static, 
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.TransactWriteItems");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2234,15 +2236,15 @@ fn __transact_write_items(input: TransactWriteItemsInput) -> BoxFuture<'static, 
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: TransactWriteItemsOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: TransactWriteItemsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<TransactWriteItemsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<TransactWriteItemsOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2250,7 +2252,7 @@ fn __transact_write_items(input: TransactWriteItemsInput) -> BoxFuture<'static, 
                 serde_json::to_vec(&Result::<TransactWriteItemsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2272,9 +2274,9 @@ fn __untag_resource(input: UntagResourceInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.UntagResource");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2287,15 +2289,15 @@ fn __untag_resource(input: UntagResourceInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: () = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: () = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2303,7 +2305,7 @@ fn __untag_resource(input: UntagResourceInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2325,9 +2327,9 @@ fn __update_continuous_backups(input: UpdateContinuousBackupsInput) -> BoxFuture
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.UpdateContinuousBackups");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2340,15 +2342,15 @@ fn __update_continuous_backups(input: UpdateContinuousBackupsInput) -> BoxFuture
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: UpdateContinuousBackupsOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: UpdateContinuousBackupsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateContinuousBackupsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<UpdateContinuousBackupsOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2356,7 +2358,7 @@ fn __update_continuous_backups(input: UpdateContinuousBackupsInput) -> BoxFuture
                 serde_json::to_vec(&Result::<UpdateContinuousBackupsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2378,9 +2380,9 @@ fn __update_contributor_insights(input: UpdateContributorInsightsInput) -> BoxFu
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.UpdateContributorInsights");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2393,15 +2395,15 @@ fn __update_contributor_insights(input: UpdateContributorInsightsInput) -> BoxFu
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: UpdateContributorInsightsOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: UpdateContributorInsightsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateContributorInsightsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<UpdateContributorInsightsOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2409,7 +2411,7 @@ fn __update_contributor_insights(input: UpdateContributorInsightsInput) -> BoxFu
                 serde_json::to_vec(&Result::<UpdateContributorInsightsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2431,9 +2433,9 @@ fn __update_global_table(input: UpdateGlobalTableInput) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.UpdateGlobalTable");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2446,15 +2448,15 @@ fn __update_global_table(input: UpdateGlobalTableInput) -> BoxFuture<'static, Ve
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: UpdateGlobalTableOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: UpdateGlobalTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateGlobalTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<UpdateGlobalTableOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2462,7 +2464,7 @@ fn __update_global_table(input: UpdateGlobalTableInput) -> BoxFuture<'static, Ve
                 serde_json::to_vec(&Result::<UpdateGlobalTableOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2484,9 +2486,9 @@ fn __update_global_table_settings(input: UpdateGlobalTableSettingsInput) -> BoxF
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.UpdateGlobalTableSettings");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2499,15 +2501,15 @@ fn __update_global_table_settings(input: UpdateGlobalTableSettingsInput) -> BoxF
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: UpdateGlobalTableSettingsOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: UpdateGlobalTableSettingsOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateGlobalTableSettingsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<UpdateGlobalTableSettingsOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2515,7 +2517,7 @@ fn __update_global_table_settings(input: UpdateGlobalTableSettingsInput) -> BoxF
                 serde_json::to_vec(&Result::<UpdateGlobalTableSettingsOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2537,9 +2539,9 @@ fn __update_item(input: UpdateItemInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.UpdateItem");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2552,15 +2554,15 @@ fn __update_item(input: UpdateItemInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: UpdateItemOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: UpdateItemOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateItemOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<UpdateItemOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2568,7 +2570,7 @@ fn __update_item(input: UpdateItemInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<UpdateItemOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2590,9 +2592,9 @@ fn __update_table(input: UpdateTableInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.UpdateTable");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2605,15 +2607,15 @@ fn __update_table(input: UpdateTableInput) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: UpdateTableOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: UpdateTableOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<UpdateTableOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2621,7 +2623,7 @@ fn __update_table(input: UpdateTableInput) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<UpdateTableOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2643,9 +2645,9 @@ fn __update_table_replica_auto_scaling(input: UpdateTableReplicaAutoScalingInput
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.UpdateTableReplicaAutoScaling");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2658,15 +2660,15 @@ fn __update_table_replica_auto_scaling(input: UpdateTableReplicaAutoScalingInput
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: UpdateTableReplicaAutoScalingOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: UpdateTableReplicaAutoScalingOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateTableReplicaAutoScalingOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<UpdateTableReplicaAutoScalingOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2674,7 +2676,7 @@ fn __update_table_replica_auto_scaling(input: UpdateTableReplicaAutoScalingInput
                 serde_json::to_vec(&Result::<UpdateTableReplicaAutoScalingOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2696,9 +2698,9 @@ fn __update_time_to_live(input: UpdateTimeToLiveInput) -> BoxFuture<'static, Vec
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DynamoDB_20120810.UpdateTimeToLive");
     http_request.set_content_type(String::from("application/x-amz-json-1.0"));
@@ -2711,15 +2713,15 @@ fn __update_time_to_live(input: UpdateTimeToLiveInput) -> BoxFuture<'static, Vec
 
                 match status {
                     StatusCode::OK => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let output: UpdateTimeToLiveOutput = serde_json::from_slice(body).unwrap();
+                        let body = response.into_body();
+                        let output: UpdateTimeToLiveOutput = serde_json::from_slice(&*body).unwrap();
                         serde_json::to_vec(&Result::<UpdateTimeToLiveOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<UpdateTimeToLiveOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2727,9 +2729,8 @@ fn __update_time_to_live(input: UpdateTimeToLiveInput) -> BoxFuture<'static, Vec
                 serde_json::to_vec(&Result::<UpdateTimeToLiveOutput, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
 }
-

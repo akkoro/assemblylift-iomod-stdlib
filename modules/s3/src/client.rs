@@ -62,7 +62,7 @@ impl Client {
             "{}://{}{}",
             request.scheme(),
             request.hostname(),
-            request.canonical_path()
+            request.path(),
         );
         if !request.canonical_query_string().is_empty() {
             final_uri = final_uri + &format!("?{}", request.canonical_query_string());
@@ -78,11 +78,10 @@ impl Client {
             .unwrap();
         *http_req.headers_mut() = headers;
 
-        println!("DEBUG {:?}", http_req);
         match self.client.request(http_req).await {
             Ok(resp) => Ok(resp),
             Err(err) => Err(ClientError {
-                why: err.to_string(),
+                why: format!("{:?}", err),
                 data: Default::default(),
             }),
         }

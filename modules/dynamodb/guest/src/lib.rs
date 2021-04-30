@@ -1,7 +1,7 @@
 use std::fmt;
+use std::fmt::Formatter;
 
 use assemblylift_core_iomod_guest::{call, export_iomod_guest};
-use serde::export::Formatter;
 use serde::{Deserialize, Serialize};
 
 use crate::structs::*;
