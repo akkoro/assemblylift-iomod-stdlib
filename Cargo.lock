@@ -202,6 +202,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "assemblylift-iomod-lambda-guest"
+version = "0.1.0"
+dependencies = [
+ "assemblylift-core-io-guest",
+ "assemblylift-core-iomod-guest",
+ "base64 0.12.3",
+ "bytes 0.5.6",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "assemblylift-iomod-s3"
 version = "0.1.0"
 dependencies = [
@@ -1125,6 +1137,32 @@ checksum = "7507624b29483431c0ba2d82aece8ca6cdba9382bff4ddd0f7490560c056098d"
 dependencies = [
  "winapi 0.2.8",
  "winapi-build",
+]
+
+[[package]]
+name = "lambda"
+version = "0.1.0"
+dependencies = [
+ "assemblylift-core",
+ "assemblylift-core-io",
+ "assemblylift-core-iomod 0.3.0",
+ "assemblylift-iomod-lambda-guest",
+ "capnp",
+ "capnp-rpc",
+ "crossbeam-utils",
+ "futures",
+ "futures-util",
+ "http 0.2.1",
+ "hyper",
+ "hyper-tls",
+ "once_cell",
+ "paste 1.0.1",
+ "reqwest",
+ "rusoto_signature",
+ "serde",
+ "serde_json",
+ "tokio 1.4.0",
+ "tokio-util 0.6.5",
 ]
 
 [[package]]
