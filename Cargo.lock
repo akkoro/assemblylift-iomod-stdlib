@@ -58,6 +58,8 @@ dependencies = [
 [[package]]
 name = "assemblylift-core-io-common"
 version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "43e67b7d537536872aae84cb19a69813e5e9da978bf00bb80de07a0960dad56f"
 dependencies = [
  "serde",
 ]
@@ -65,6 +67,8 @@ dependencies = [
 [[package]]
 name = "assemblylift-core-io-guest"
 version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "56b626a433f48044fa2436ad00a50bfd0c7c4598e8ef467adbe31518b3060839"
 dependencies = [
  "assemblylift-core-io-common 0.3.0",
  "futures",
@@ -122,6 +126,8 @@ dependencies = [
 [[package]]
 name = "assemblylift-core-iomod-guest"
 version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fe67bf81dc238b04f9eef535b22e80f19a928e202e56e7f2261a065bc7ca1e70"
 
 [[package]]
 name = "assemblylift-iomod-crypto"
