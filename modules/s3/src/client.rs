@@ -1,11 +1,11 @@
 use std::fmt;
+use std::fmt::Formatter;
 
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use hyper::client;
 use hyper::Response;
 use rusoto_signature::credential::AwsCredentials;
 use rusoto_signature::SignedRequest;
-use serde::export::Formatter;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
