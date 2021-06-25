@@ -1795,7 +1795,8 @@ fn __invoke(input: InvocationRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
+    println!("DEBUG: payload={}", std::str::from_utf8(&*input.payload.clone().unwrap()).unwrap());
     http_request.set_payload(input.payload);
     
     if let Some(invocation_type) = input.invocation_type {
@@ -1815,6 +1816,7 @@ fn __invoke(input: InvocationRequest) -> BoxFuture<'static, Vec<u8>> {
         http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
     };
 
+    println!("DEBUG: {:?}", http_request);
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
