@@ -110,6 +110,7 @@ impl Client {
                     .send()
                     .await;
 
+                println!("DEBUG: response={:?}", response);
                 match response {
                     Ok(res) => Ok(Response::builder()
                         .status(res.status())
