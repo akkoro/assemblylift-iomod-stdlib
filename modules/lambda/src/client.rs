@@ -112,10 +112,14 @@ impl Client {
 
                 println!("DEBUG: response={:?}", response);
                 match response {
-                    Ok(res) => Ok(Response::builder()
-                        .status(res.status())
-                        .body(res.bytes().await.unwrap())
-                        .unwrap()),
+                    Ok(res) => {
+                        let bytes = res.bytes().await.unwrap();
+                        println!("DEBUG: body={}", std::str::from_utf8(&*bytes).unwrap());
+                        Ok(Response::builder()
+                            .status(res.status())
+                            .body(bytes)
+                            .unwrap())
+                    },
                     Err(why) => Err(ClientError {
                         why: why.to_string(),
                         data: Default::default(),
