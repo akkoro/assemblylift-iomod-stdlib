@@ -113,10 +113,11 @@ impl Client {
                 println!("DEBUG: response={:?}", response);
                 match response {
                     Ok(res) => {
+                        let status = res.status();
                         let bytes = res.bytes().await.unwrap();
                         println!("DEBUG: body={}", std::str::from_utf8(&*bytes).unwrap());
                         Ok(Response::builder()
-                            .status(res.status())
+                            .status(status)
                             .body(bytes)
                             .unwrap())
                     },
