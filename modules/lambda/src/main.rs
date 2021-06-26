@@ -17,7 +17,7 @@ static CLIENT: Lazy<client::Client> = Lazy::new(|| {
     use std::env;
     let mut c = client::Client::new();
     c.set_credentials(
-        env::var("AWS_ACCESS_KEY_ID").unwrap(), 
+        env::var("AWS_ACCESS_KEY_ID").unwrap(),
         env::var("AWS_SECRET_ACCESS_KEY").unwrap(),
         match env::var("AWS_SESSION_TOKEN") {
             Ok(token) => Some(token),
@@ -115,9 +115,9 @@ fn __add_layer_version_permission(input: AddLayerVersionPermissionRequest) -> Bo
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "AddLayerVersionPermission");
     http_request.set_content_type(String::from("application/json"));
@@ -141,7 +141,7 @@ fn __add_layer_version_permission(input: AddLayerVersionPermissionRequest) -> Bo
                         serde_json::to_vec(&Result::<AddLayerVersionPermissionResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -149,7 +149,7 @@ fn __add_layer_version_permission(input: AddLayerVersionPermissionRequest) -> Bo
                 serde_json::to_vec(&Result::<AddLayerVersionPermissionResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -175,9 +175,9 @@ fn __add_permission(input: AddPermissionRequest) -> BoxFuture<'static, Vec<u8>> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "AddPermission");
     http_request.set_content_type(String::from("application/json"));
@@ -201,7 +201,7 @@ fn __add_permission(input: AddPermissionRequest) -> BoxFuture<'static, Vec<u8>> 
                         serde_json::to_vec(&Result::<AddPermissionResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -209,7 +209,7 @@ fn __add_permission(input: AddPermissionRequest) -> BoxFuture<'static, Vec<u8>> 
                 serde_json::to_vec(&Result::<AddPermissionResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -235,9 +235,9 @@ fn __create_alias(input: CreateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "CreateAlias");
     http_request.set_content_type(String::from("application/json"));
@@ -258,7 +258,7 @@ fn __create_alias(input: CreateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<AliasConfiguration, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -266,7 +266,7 @@ fn __create_alias(input: CreateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<AliasConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -288,9 +288,9 @@ fn __create_code_signing_config(input: CreateCodeSigningConfigRequest) -> BoxFut
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "CreateCodeSigningConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -311,7 +311,7 @@ fn __create_code_signing_config(input: CreateCodeSigningConfigRequest) -> BoxFut
                         serde_json::to_vec(&Result::<CreateCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -319,7 +319,7 @@ fn __create_code_signing_config(input: CreateCodeSigningConfigRequest) -> BoxFut
                 serde_json::to_vec(&Result::<CreateCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -341,9 +341,9 @@ fn __create_event_source_mapping(input: CreateEventSourceMappingRequest) -> BoxF
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "CreateEventSourceMapping");
     http_request.set_content_type(String::from("application/json"));
@@ -364,7 +364,7 @@ fn __create_event_source_mapping(input: CreateEventSourceMappingRequest) -> BoxF
                         serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -372,7 +372,7 @@ fn __create_event_source_mapping(input: CreateEventSourceMappingRequest) -> BoxF
                 serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -394,9 +394,9 @@ fn __create_function(input: CreateFunctionRequest) -> BoxFuture<'static, Vec<u8>
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "CreateFunction");
     http_request.set_content_type(String::from("application/json"));
@@ -417,7 +417,7 @@ fn __create_function(input: CreateFunctionRequest) -> BoxFuture<'static, Vec<u8>
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -425,7 +425,7 @@ fn __create_function(input: CreateFunctionRequest) -> BoxFuture<'static, Vec<u8>
                 serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -455,9 +455,9 @@ fn __delete_alias(input: DeleteAliasRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DeleteAlias");
     http_request.set_content_type(String::from("application/json"));
@@ -478,7 +478,7 @@ fn __delete_alias(input: DeleteAliasRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -486,7 +486,7 @@ fn __delete_alias(input: DeleteAliasRequest) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -512,9 +512,9 @@ fn __delete_code_signing_config(input: DeleteCodeSigningConfigRequest) -> BoxFut
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DeleteCodeSigningConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -535,7 +535,7 @@ fn __delete_code_signing_config(input: DeleteCodeSigningConfigRequest) -> BoxFut
                         serde_json::to_vec(&Result::<DeleteCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -543,7 +543,7 @@ fn __delete_code_signing_config(input: DeleteCodeSigningConfigRequest) -> BoxFut
                 serde_json::to_vec(&Result::<DeleteCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -569,9 +569,9 @@ fn __delete_event_source_mapping(input: DeleteEventSourceMappingRequest) -> BoxF
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DeleteEventSourceMapping");
     http_request.set_content_type(String::from("application/json"));
@@ -592,7 +592,7 @@ fn __delete_event_source_mapping(input: DeleteEventSourceMappingRequest) -> BoxF
                         serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -600,7 +600,7 @@ fn __delete_event_source_mapping(input: DeleteEventSourceMappingRequest) -> BoxF
                 serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -626,9 +626,9 @@ fn __delete_function(input: DeleteFunctionRequest) -> BoxFuture<'static, Vec<u8>
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DeleteFunction");
     http_request.set_content_type(String::from("application/json"));
@@ -652,7 +652,7 @@ fn __delete_function(input: DeleteFunctionRequest) -> BoxFuture<'static, Vec<u8>
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -660,7 +660,7 @@ fn __delete_function(input: DeleteFunctionRequest) -> BoxFuture<'static, Vec<u8>
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -686,9 +686,9 @@ fn __delete_function_code_signing_config(input: DeleteFunctionCodeSigningConfigR
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DeleteFunctionCodeSigningConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -709,7 +709,7 @@ fn __delete_function_code_signing_config(input: DeleteFunctionCodeSigningConfigR
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -717,7 +717,7 @@ fn __delete_function_code_signing_config(input: DeleteFunctionCodeSigningConfigR
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -743,9 +743,9 @@ fn __delete_function_concurrency(input: DeleteFunctionConcurrencyRequest) -> Box
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DeleteFunctionConcurrency");
     http_request.set_content_type(String::from("application/json"));
@@ -766,7 +766,7 @@ fn __delete_function_concurrency(input: DeleteFunctionConcurrencyRequest) -> Box
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -774,7 +774,7 @@ fn __delete_function_concurrency(input: DeleteFunctionConcurrencyRequest) -> Box
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -800,9 +800,9 @@ fn __delete_function_event_invoke_config(input: DeleteFunctionEventInvokeConfigR
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DeleteFunctionEventInvokeConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -826,7 +826,7 @@ fn __delete_function_event_invoke_config(input: DeleteFunctionEventInvokeConfigR
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -834,7 +834,7 @@ fn __delete_function_event_invoke_config(input: DeleteFunctionEventInvokeConfigR
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -864,9 +864,9 @@ fn __delete_layer_version(input: DeleteLayerVersionRequest) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DeleteLayerVersion");
     http_request.set_content_type(String::from("application/json"));
@@ -887,7 +887,7 @@ fn __delete_layer_version(input: DeleteLayerVersionRequest) -> BoxFuture<'static
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -895,7 +895,7 @@ fn __delete_layer_version(input: DeleteLayerVersionRequest) -> BoxFuture<'static
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -921,9 +921,9 @@ fn __delete_provisioned_concurrency_config(input: DeleteProvisionedConcurrencyCo
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DeleteProvisionedConcurrencyConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -945,7 +945,7 @@ fn __delete_provisioned_concurrency_config(input: DeleteProvisionedConcurrencyCo
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -953,7 +953,7 @@ fn __delete_provisioned_concurrency_config(input: DeleteProvisionedConcurrencyCo
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -975,9 +975,9 @@ fn __get_account_settings(input: GetAccountSettingsRequest) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetAccountSettings");
     http_request.set_content_type(String::from("application/json"));
@@ -998,7 +998,7 @@ fn __get_account_settings(input: GetAccountSettingsRequest) -> BoxFuture<'static
                         serde_json::to_vec(&Result::<GetAccountSettingsResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1006,7 +1006,7 @@ fn __get_account_settings(input: GetAccountSettingsRequest) -> BoxFuture<'static
                 serde_json::to_vec(&Result::<GetAccountSettingsResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1036,9 +1036,9 @@ fn __get_alias(input: GetAliasRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetAlias");
     http_request.set_content_type(String::from("application/json"));
@@ -1059,7 +1059,7 @@ fn __get_alias(input: GetAliasRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<AliasConfiguration, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1067,7 +1067,7 @@ fn __get_alias(input: GetAliasRequest) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<AliasConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1093,9 +1093,9 @@ fn __get_code_signing_config(input: GetCodeSigningConfigRequest) -> BoxFuture<'s
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetCodeSigningConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -1116,7 +1116,7 @@ fn __get_code_signing_config(input: GetCodeSigningConfigRequest) -> BoxFuture<'s
                         serde_json::to_vec(&Result::<GetCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1124,7 +1124,7 @@ fn __get_code_signing_config(input: GetCodeSigningConfigRequest) -> BoxFuture<'s
                 serde_json::to_vec(&Result::<GetCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1150,9 +1150,9 @@ fn __get_event_source_mapping(input: GetEventSourceMappingRequest) -> BoxFuture<
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetEventSourceMapping");
     http_request.set_content_type(String::from("application/json"));
@@ -1173,7 +1173,7 @@ fn __get_event_source_mapping(input: GetEventSourceMappingRequest) -> BoxFuture<
                         serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1181,7 +1181,7 @@ fn __get_event_source_mapping(input: GetEventSourceMappingRequest) -> BoxFuture<
                 serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1207,9 +1207,9 @@ fn __get_function(input: GetFunctionRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetFunction");
     http_request.set_content_type(String::from("application/json"));
@@ -1233,7 +1233,7 @@ fn __get_function(input: GetFunctionRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<GetFunctionResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1241,7 +1241,7 @@ fn __get_function(input: GetFunctionRequest) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<GetFunctionResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1267,9 +1267,9 @@ fn __get_function_code_signing_config(input: GetFunctionCodeSigningConfigRequest
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetFunctionCodeSigningConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -1290,7 +1290,7 @@ fn __get_function_code_signing_config(input: GetFunctionCodeSigningConfigRequest
                         serde_json::to_vec(&Result::<GetFunctionCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1298,7 +1298,7 @@ fn __get_function_code_signing_config(input: GetFunctionCodeSigningConfigRequest
                 serde_json::to_vec(&Result::<GetFunctionCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1324,9 +1324,9 @@ fn __get_function_concurrency(input: GetFunctionConcurrencyRequest) -> BoxFuture
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetFunctionConcurrency");
     http_request.set_content_type(String::from("application/json"));
@@ -1347,7 +1347,7 @@ fn __get_function_concurrency(input: GetFunctionConcurrencyRequest) -> BoxFuture
                         serde_json::to_vec(&Result::<GetFunctionConcurrencyResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1355,7 +1355,7 @@ fn __get_function_concurrency(input: GetFunctionConcurrencyRequest) -> BoxFuture
                 serde_json::to_vec(&Result::<GetFunctionConcurrencyResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1381,9 +1381,9 @@ fn __get_function_configuration(input: GetFunctionConfigurationRequest) -> BoxFu
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetFunctionConfiguration");
     http_request.set_content_type(String::from("application/json"));
@@ -1407,7 +1407,7 @@ fn __get_function_configuration(input: GetFunctionConfigurationRequest) -> BoxFu
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1415,7 +1415,7 @@ fn __get_function_configuration(input: GetFunctionConfigurationRequest) -> BoxFu
                 serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1441,9 +1441,9 @@ fn __get_function_event_invoke_config(input: GetFunctionEventInvokeConfigRequest
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetFunctionEventInvokeConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -1467,7 +1467,7 @@ fn __get_function_event_invoke_config(input: GetFunctionEventInvokeConfigRequest
                         serde_json::to_vec(&Result::<FunctionEventInvokeConfig, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1475,7 +1475,7 @@ fn __get_function_event_invoke_config(input: GetFunctionEventInvokeConfigRequest
                 serde_json::to_vec(&Result::<FunctionEventInvokeConfig, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1505,9 +1505,9 @@ fn __get_layer_version(input: GetLayerVersionRequest) -> BoxFuture<'static, Vec<
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetLayerVersion");
     http_request.set_content_type(String::from("application/json"));
@@ -1528,7 +1528,7 @@ fn __get_layer_version(input: GetLayerVersionRequest) -> BoxFuture<'static, Vec<
                         serde_json::to_vec(&Result::<GetLayerVersionResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1536,7 +1536,7 @@ fn __get_layer_version(input: GetLayerVersionRequest) -> BoxFuture<'static, Vec<
                 serde_json::to_vec(&Result::<GetLayerVersionResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1558,9 +1558,9 @@ fn __get_layer_version_by_arn(input: GetLayerVersionByArnRequest) -> BoxFuture<'
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetLayerVersionByArn");
     http_request.set_content_type(String::from("application/json"));
@@ -1582,7 +1582,7 @@ fn __get_layer_version_by_arn(input: GetLayerVersionByArnRequest) -> BoxFuture<'
                         serde_json::to_vec(&Result::<GetLayerVersionResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1590,7 +1590,7 @@ fn __get_layer_version_by_arn(input: GetLayerVersionByArnRequest) -> BoxFuture<'
                 serde_json::to_vec(&Result::<GetLayerVersionResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1620,9 +1620,9 @@ fn __get_layer_version_policy(input: GetLayerVersionPolicyRequest) -> BoxFuture<
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetLayerVersionPolicy");
     http_request.set_content_type(String::from("application/json"));
@@ -1643,7 +1643,7 @@ fn __get_layer_version_policy(input: GetLayerVersionPolicyRequest) -> BoxFuture<
                         serde_json::to_vec(&Result::<GetLayerVersionPolicyResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1651,7 +1651,7 @@ fn __get_layer_version_policy(input: GetLayerVersionPolicyRequest) -> BoxFuture<
                 serde_json::to_vec(&Result::<GetLayerVersionPolicyResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1677,9 +1677,9 @@ fn __get_policy(input: GetPolicyRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetPolicy");
     http_request.set_content_type(String::from("application/json"));
@@ -1703,7 +1703,7 @@ fn __get_policy(input: GetPolicyRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<GetPolicyResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1711,7 +1711,7 @@ fn __get_policy(input: GetPolicyRequest) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<GetPolicyResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1737,9 +1737,9 @@ fn __get_provisioned_concurrency_config(input: GetProvisionedConcurrencyConfigRe
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetProvisionedConcurrencyConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -1761,7 +1761,7 @@ fn __get_provisioned_concurrency_config(input: GetProvisionedConcurrencyConfigRe
                         serde_json::to_vec(&Result::<GetProvisionedConcurrencyConfigResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1769,7 +1769,7 @@ fn __get_provisioned_concurrency_config(input: GetProvisionedConcurrencyConfigRe
                 serde_json::to_vec(&Result::<GetProvisionedConcurrencyConfigResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1796,17 +1796,16 @@ fn __invoke(input: InvocationRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
-    println!("DEBUG: payload={}", std::str::from_utf8(&*input.payload.clone().unwrap()).unwrap());
     http_request.set_payload(input.payload);
-    
+
     if let Some(invocation_type) = input.invocation_type {
-        http_request.add_header("X-Amz-Invocation-Type", &serde_json::to_string(&invocation_type).unwrap());
+        http_request.add_header("X-Amz-Invocation-Type", &invocation_type);
     };
     if let Some(log_type) = input.log_type {
-        http_request.add_header("X-Amz-Log-Type", &serde_json::to_string(&log_type).unwrap());
+        http_request.add_header("X-Amz-Log-Type", &log_type);
     };
     if let Some(client_context) = input.client_context {
-        http_request.add_header("X-Amz-Client-Context", &serde_json::to_string(&client_context).unwrap());
+        http_request.add_header("X-Amz-Client-Context", &client_context);
     };
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "Invoke");
@@ -1816,7 +1815,6 @@ fn __invoke(input: InvocationRequest) -> BoxFuture<'static, Vec<u8>> {
         http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
     };
 
-    println!("DEBUG: {:?}", http_request);
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
@@ -1832,7 +1830,7 @@ fn __invoke(input: InvocationRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<InvocationResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1840,7 +1838,7 @@ fn __invoke(input: InvocationRequest) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<InvocationResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1866,9 +1864,9 @@ fn __invoke_async(input: InvokeAsyncRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(input.invoke_args));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "InvokeAsync");
     http_request.set_content_type(String::from("application/json"));
@@ -1889,7 +1887,7 @@ fn __invoke_async(input: InvokeAsyncRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<InvokeAsyncResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1897,7 +1895,7 @@ fn __invoke_async(input: InvokeAsyncRequest) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<InvokeAsyncResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1923,9 +1921,9 @@ fn __list_aliases(input: ListAliasesRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "ListAliases");
     http_request.set_content_type(String::from("application/json"));
@@ -1955,7 +1953,7 @@ fn __list_aliases(input: ListAliasesRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<ListAliasesResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -1963,7 +1961,7 @@ fn __list_aliases(input: ListAliasesRequest) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<ListAliasesResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -1985,9 +1983,9 @@ fn __list_code_signing_configs(input: ListCodeSigningConfigsRequest) -> BoxFutur
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "ListCodeSigningConfigs");
     http_request.set_content_type(String::from("application/json"));
@@ -2014,7 +2012,7 @@ fn __list_code_signing_configs(input: ListCodeSigningConfigsRequest) -> BoxFutur
                         serde_json::to_vec(&Result::<ListCodeSigningConfigsResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2022,7 +2020,7 @@ fn __list_code_signing_configs(input: ListCodeSigningConfigsRequest) -> BoxFutur
                 serde_json::to_vec(&Result::<ListCodeSigningConfigsResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2044,9 +2042,9 @@ fn __list_event_source_mappings(input: ListEventSourceMappingsRequest) -> BoxFut
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "ListEventSourceMappings");
     http_request.set_content_type(String::from("application/json"));
@@ -2079,7 +2077,7 @@ fn __list_event_source_mappings(input: ListEventSourceMappingsRequest) -> BoxFut
                         serde_json::to_vec(&Result::<ListEventSourceMappingsResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2087,7 +2085,7 @@ fn __list_event_source_mappings(input: ListEventSourceMappingsRequest) -> BoxFut
                 serde_json::to_vec(&Result::<ListEventSourceMappingsResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2113,9 +2111,9 @@ fn __list_function_event_invoke_configs(input: ListFunctionEventInvokeConfigsReq
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "ListFunctionEventInvokeConfigs");
     http_request.set_content_type(String::from("application/json"));
@@ -2142,7 +2140,7 @@ fn __list_function_event_invoke_configs(input: ListFunctionEventInvokeConfigsReq
                         serde_json::to_vec(&Result::<ListFunctionEventInvokeConfigsResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2150,7 +2148,7 @@ fn __list_function_event_invoke_configs(input: ListFunctionEventInvokeConfigsReq
                 serde_json::to_vec(&Result::<ListFunctionEventInvokeConfigsResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2172,9 +2170,9 @@ fn __list_functions(input: ListFunctionsRequest) -> BoxFuture<'static, Vec<u8>> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "ListFunctions");
     http_request.set_content_type(String::from("application/json"));
@@ -2207,7 +2205,7 @@ fn __list_functions(input: ListFunctionsRequest) -> BoxFuture<'static, Vec<u8>> 
                         serde_json::to_vec(&Result::<ListFunctionsResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2215,7 +2213,7 @@ fn __list_functions(input: ListFunctionsRequest) -> BoxFuture<'static, Vec<u8>> 
                 serde_json::to_vec(&Result::<ListFunctionsResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2241,9 +2239,9 @@ fn __list_functions_by_code_signing_config(input: ListFunctionsByCodeSigningConf
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "ListFunctionsByCodeSigningConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -2270,7 +2268,7 @@ fn __list_functions_by_code_signing_config(input: ListFunctionsByCodeSigningConf
                         serde_json::to_vec(&Result::<ListFunctionsByCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2278,7 +2276,7 @@ fn __list_functions_by_code_signing_config(input: ListFunctionsByCodeSigningConf
                 serde_json::to_vec(&Result::<ListFunctionsByCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2304,9 +2302,9 @@ fn __list_layer_versions(input: ListLayerVersionsRequest) -> BoxFuture<'static, 
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "ListLayerVersions");
     http_request.set_content_type(String::from("application/json"));
@@ -2336,7 +2334,7 @@ fn __list_layer_versions(input: ListLayerVersionsRequest) -> BoxFuture<'static, 
                         serde_json::to_vec(&Result::<ListLayerVersionsResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2344,7 +2342,7 @@ fn __list_layer_versions(input: ListLayerVersionsRequest) -> BoxFuture<'static, 
                 serde_json::to_vec(&Result::<ListLayerVersionsResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2366,9 +2364,9 @@ fn __list_layers(input: ListLayersRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "ListLayers");
     http_request.set_content_type(String::from("application/json"));
@@ -2398,7 +2396,7 @@ fn __list_layers(input: ListLayersRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<ListLayersResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2406,7 +2404,7 @@ fn __list_layers(input: ListLayersRequest) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<ListLayersResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2432,9 +2430,9 @@ fn __list_provisioned_concurrency_configs(input: ListProvisionedConcurrencyConfi
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "ListProvisionedConcurrencyConfigs");
     http_request.set_content_type(String::from("application/json"));
@@ -2461,7 +2459,7 @@ fn __list_provisioned_concurrency_configs(input: ListProvisionedConcurrencyConfi
                         serde_json::to_vec(&Result::<ListProvisionedConcurrencyConfigsResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2469,7 +2467,7 @@ fn __list_provisioned_concurrency_configs(input: ListProvisionedConcurrencyConfi
                 serde_json::to_vec(&Result::<ListProvisionedConcurrencyConfigsResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2495,9 +2493,9 @@ fn __list_tags(input: ListTagsRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "ListTags");
     http_request.set_content_type(String::from("application/json"));
@@ -2518,7 +2516,7 @@ fn __list_tags(input: ListTagsRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<ListTagsResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2526,7 +2524,7 @@ fn __list_tags(input: ListTagsRequest) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<ListTagsResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2552,9 +2550,9 @@ fn __list_versions_by_function(input: ListVersionsByFunctionRequest) -> BoxFutur
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "ListVersionsByFunction");
     http_request.set_content_type(String::from("application/json"));
@@ -2581,7 +2579,7 @@ fn __list_versions_by_function(input: ListVersionsByFunctionRequest) -> BoxFutur
                         serde_json::to_vec(&Result::<ListVersionsByFunctionResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2589,7 +2587,7 @@ fn __list_versions_by_function(input: ListVersionsByFunctionRequest) -> BoxFutur
                 serde_json::to_vec(&Result::<ListVersionsByFunctionResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2615,9 +2613,9 @@ fn __publish_layer_version(input: PublishLayerVersionRequest) -> BoxFuture<'stat
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "PublishLayerVersion");
     http_request.set_content_type(String::from("application/json"));
@@ -2638,7 +2636,7 @@ fn __publish_layer_version(input: PublishLayerVersionRequest) -> BoxFuture<'stat
                         serde_json::to_vec(&Result::<PublishLayerVersionResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2646,7 +2644,7 @@ fn __publish_layer_version(input: PublishLayerVersionRequest) -> BoxFuture<'stat
                 serde_json::to_vec(&Result::<PublishLayerVersionResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2672,9 +2670,9 @@ fn __publish_version(input: PublishVersionRequest) -> BoxFuture<'static, Vec<u8>
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "PublishVersion");
     http_request.set_content_type(String::from("application/json"));
@@ -2695,7 +2693,7 @@ fn __publish_version(input: PublishVersionRequest) -> BoxFuture<'static, Vec<u8>
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2703,7 +2701,7 @@ fn __publish_version(input: PublishVersionRequest) -> BoxFuture<'static, Vec<u8>
                 serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2729,9 +2727,9 @@ fn __put_function_code_signing_config(input: PutFunctionCodeSigningConfigRequest
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "PutFunctionCodeSigningConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -2752,7 +2750,7 @@ fn __put_function_code_signing_config(input: PutFunctionCodeSigningConfigRequest
                         serde_json::to_vec(&Result::<PutFunctionCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2760,7 +2758,7 @@ fn __put_function_code_signing_config(input: PutFunctionCodeSigningConfigRequest
                 serde_json::to_vec(&Result::<PutFunctionCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2786,9 +2784,9 @@ fn __put_function_concurrency(input: PutFunctionConcurrencyRequest) -> BoxFuture
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "PutFunctionConcurrency");
     http_request.set_content_type(String::from("application/json"));
@@ -2809,7 +2807,7 @@ fn __put_function_concurrency(input: PutFunctionConcurrencyRequest) -> BoxFuture
                         serde_json::to_vec(&Result::<Concurrency, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2817,7 +2815,7 @@ fn __put_function_concurrency(input: PutFunctionConcurrencyRequest) -> BoxFuture
                 serde_json::to_vec(&Result::<Concurrency, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2843,9 +2841,9 @@ fn __put_function_event_invoke_config(input: PutFunctionEventInvokeConfigRequest
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "PutFunctionEventInvokeConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -2869,7 +2867,7 @@ fn __put_function_event_invoke_config(input: PutFunctionEventInvokeConfigRequest
                         serde_json::to_vec(&Result::<FunctionEventInvokeConfig, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2877,7 +2875,7 @@ fn __put_function_event_invoke_config(input: PutFunctionEventInvokeConfigRequest
                 serde_json::to_vec(&Result::<FunctionEventInvokeConfig, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2903,9 +2901,9 @@ fn __put_provisioned_concurrency_config(input: PutProvisionedConcurrencyConfigRe
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "PutProvisionedConcurrencyConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -2927,7 +2925,7 @@ fn __put_provisioned_concurrency_config(input: PutProvisionedConcurrencyConfigRe
                         serde_json::to_vec(&Result::<PutProvisionedConcurrencyConfigResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -2935,7 +2933,7 @@ fn __put_provisioned_concurrency_config(input: PutProvisionedConcurrencyConfigRe
                 serde_json::to_vec(&Result::<PutProvisionedConcurrencyConfigResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -2969,9 +2967,9 @@ fn __remove_layer_version_permission(input: RemoveLayerVersionPermissionRequest)
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "RemoveLayerVersionPermission");
     http_request.set_content_type(String::from("application/json"));
@@ -2995,7 +2993,7 @@ fn __remove_layer_version_permission(input: RemoveLayerVersionPermissionRequest)
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -3003,7 +3001,7 @@ fn __remove_layer_version_permission(input: RemoveLayerVersionPermissionRequest)
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -3033,9 +3031,9 @@ fn __remove_permission(input: RemovePermissionRequest) -> BoxFuture<'static, Vec
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "RemovePermission");
     http_request.set_content_type(String::from("application/json"));
@@ -3062,7 +3060,7 @@ fn __remove_permission(input: RemovePermissionRequest) -> BoxFuture<'static, Vec
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -3070,7 +3068,7 @@ fn __remove_permission(input: RemovePermissionRequest) -> BoxFuture<'static, Vec
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -3096,9 +3094,9 @@ fn __tag_resource(input: TagResourceRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "TagResource");
     http_request.set_content_type(String::from("application/json"));
@@ -3119,7 +3117,7 @@ fn __tag_resource(input: TagResourceRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -3127,7 +3125,7 @@ fn __tag_resource(input: TagResourceRequest) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -3153,9 +3151,9 @@ fn __untag_resource(input: UntagResourceRequest) -> BoxFuture<'static, Vec<u8>> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "UntagResource");
     http_request.set_content_type(String::from("application/json"));
@@ -3177,7 +3175,7 @@ fn __untag_resource(input: UntagResourceRequest) -> BoxFuture<'static, Vec<u8>> 
                         serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -3185,7 +3183,7 @@ fn __untag_resource(input: UntagResourceRequest) -> BoxFuture<'static, Vec<u8>> 
                 serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -3215,9 +3213,9 @@ fn __update_alias(input: UpdateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "UpdateAlias");
     http_request.set_content_type(String::from("application/json"));
@@ -3238,7 +3236,7 @@ fn __update_alias(input: UpdateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<AliasConfiguration, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -3246,7 +3244,7 @@ fn __update_alias(input: UpdateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
                 serde_json::to_vec(&Result::<AliasConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -3272,9 +3270,9 @@ fn __update_code_signing_config(input: UpdateCodeSigningConfigRequest) -> BoxFut
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "UpdateCodeSigningConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -3295,7 +3293,7 @@ fn __update_code_signing_config(input: UpdateCodeSigningConfigRequest) -> BoxFut
                         serde_json::to_vec(&Result::<UpdateCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -3303,7 +3301,7 @@ fn __update_code_signing_config(input: UpdateCodeSigningConfigRequest) -> BoxFut
                 serde_json::to_vec(&Result::<UpdateCodeSigningConfigResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -3329,9 +3327,9 @@ fn __update_event_source_mapping(input: UpdateEventSourceMappingRequest) -> BoxF
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "UpdateEventSourceMapping");
     http_request.set_content_type(String::from("application/json"));
@@ -3352,7 +3350,7 @@ fn __update_event_source_mapping(input: UpdateEventSourceMappingRequest) -> BoxF
                         serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -3360,7 +3358,7 @@ fn __update_event_source_mapping(input: UpdateEventSourceMappingRequest) -> BoxF
                 serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -3386,9 +3384,9 @@ fn __update_function_code(input: UpdateFunctionCodeRequest) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "UpdateFunctionCode");
     http_request.set_content_type(String::from("application/json"));
@@ -3409,7 +3407,7 @@ fn __update_function_code(input: UpdateFunctionCodeRequest) -> BoxFuture<'static
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -3417,7 +3415,7 @@ fn __update_function_code(input: UpdateFunctionCodeRequest) -> BoxFuture<'static
                 serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -3443,9 +3441,9 @@ fn __update_function_configuration(input: UpdateFunctionConfigurationRequest) ->
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "UpdateFunctionConfiguration");
     http_request.set_content_type(String::from("application/json"));
@@ -3466,7 +3464,7 @@ fn __update_function_configuration(input: UpdateFunctionConfigurationRequest) ->
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -3474,7 +3472,7 @@ fn __update_function_configuration(input: UpdateFunctionConfigurationRequest) ->
                 serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
@@ -3500,9 +3498,9 @@ fn __update_function_event_invoke_config(input: UpdateFunctionEventInvokeConfigR
             .unwrap_or(Region::UsEast1),
         &path,
     );
-    
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
-    
+
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "UpdateFunctionEventInvokeConfig");
     http_request.set_content_type(String::from("application/json"));
@@ -3526,7 +3524,7 @@ fn __update_function_event_invoke_config(input: UpdateFunctionEventInvokeConfigR
                         serde_json::to_vec(&Result::<FunctionEventInvokeConfig, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
-                        .unwrap()
+                            .unwrap()
                     }
                 }
             },
@@ -3534,7 +3532,7 @@ fn __update_function_event_invoke_config(input: UpdateFunctionEventInvokeConfigR
                 serde_json::to_vec(&Result::<FunctionEventInvokeConfig, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
-                .unwrap()
+                    .unwrap()
             },
         }
     })
