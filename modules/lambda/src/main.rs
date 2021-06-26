@@ -133,8 +133,13 @@ fn __add_layer_version_permission(input: AddLayerVersionPermissionRequest) -> Bo
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: AddLayerVersionPermissionResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: AddLayerVersionPermissionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: AddLayerVersionPermissionResponse = serde_json::from_slice(&*body).unwrap();
+                        output.statement = body.statement;
+                        output.revision_id = body.revision_id;
+
                         serde_json::to_vec(&Result::<AddLayerVersionPermissionResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -193,8 +198,12 @@ fn __add_permission(input: AddPermissionRequest) -> BoxFuture<'static, Vec<u8>> 
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: AddPermissionResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: AddPermissionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: AddPermissionResponse = serde_json::from_slice(&*body).unwrap();
+                        output.statement = body.statement;
+
                         serde_json::to_vec(&Result::<AddPermissionResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -250,8 +259,17 @@ fn __create_alias(input: CreateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: AliasConfiguration = Default::default();
+
                         let body = response.into_body();
-                        let output: AliasConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body: AliasConfiguration = serde_json::from_slice(&*body).unwrap();
+                        output.alias_arn = body.alias_arn;
+                        output.name = body.name;
+                        output.function_version = body.function_version;
+                        output.description = body.description;
+                        output.routing_config = body.routing_config;
+                        output.revision_id = body.revision_id;
+
                         serde_json::to_vec(&Result::<AliasConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -303,8 +321,12 @@ fn __create_code_signing_config(input: CreateCodeSigningConfigRequest) -> BoxFut
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: CreateCodeSigningConfigResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: CreateCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: CreateCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        output.code_signing_config = body.code_signing_config;
+
                         serde_json::to_vec(&Result::<CreateCodeSigningConfigResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -356,8 +378,33 @@ fn __create_event_source_mapping(input: CreateEventSourceMappingRequest) -> BoxF
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: EventSourceMappingConfiguration = Default::default();
+
                         let body = response.into_body();
-                        let output: EventSourceMappingConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body: EventSourceMappingConfiguration = serde_json::from_slice(&*body).unwrap();
+                        output.uuid = body.uuid;
+                        output.starting_position = body.starting_position;
+                        output.starting_position_timestamp = body.starting_position_timestamp;
+                        output.batch_size = body.batch_size;
+                        output.maximum_batching_window_in_seconds = body.maximum_batching_window_in_seconds;
+                        output.parallelization_factor = body.parallelization_factor;
+                        output.event_source_arn = body.event_source_arn;
+                        output.function_arn = body.function_arn;
+                        output.last_modified = body.last_modified;
+                        output.last_processing_result = body.last_processing_result;
+                        output.state = body.state;
+                        output.state_transition_reason = body.state_transition_reason;
+                        output.destination_config = body.destination_config;
+                        output.topics = body.topics;
+                        output.queues = body.queues;
+                        output.source_access_configurations = body.source_access_configurations;
+                        output.self_managed_event_source = body.self_managed_event_source;
+                        output.maximum_record_age_in_seconds = body.maximum_record_age_in_seconds;
+                        output.bisect_batch_on_function_error = body.bisect_batch_on_function_error;
+                        output.maximum_retry_attempts = body.maximum_retry_attempts;
+                        output.tumbling_window_in_seconds = body.tumbling_window_in_seconds;
+                        output.function_response_types = body.function_response_types;
+
                         serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -409,8 +456,42 @@ fn __create_function(input: CreateFunctionRequest) -> BoxFuture<'static, Vec<u8>
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: FunctionConfiguration = Default::default();
+
                         let body = response.into_body();
-                        let output: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        output.function_name = body.function_name;
+                        output.function_arn = body.function_arn;
+                        output.runtime = body.runtime;
+                        output.role = body.role;
+                        output.handler = body.handler;
+                        output.code_size = body.code_size;
+                        output.description = body.description;
+                        output.timeout = body.timeout;
+                        output.memory_size = body.memory_size;
+                        output.last_modified = body.last_modified;
+                        output.code_sha256 = body.code_sha256;
+                        output.version = body.version;
+                        output.vpc_config = body.vpc_config;
+                        output.dead_letter_config = body.dead_letter_config;
+                        output.environment = body.environment;
+                        output.kms_key_arn = body.kms_key_arn;
+                        output.tracing_config = body.tracing_config;
+                        output.master_arn = body.master_arn;
+                        output.revision_id = body.revision_id;
+                        output.layers = body.layers;
+                        output.state = body.state;
+                        output.state_reason = body.state_reason;
+                        output.state_reason_code = body.state_reason_code;
+                        output.last_update_status = body.last_update_status;
+                        output.last_update_status_reason = body.last_update_status_reason;
+                        output.last_update_status_reason_code = body.last_update_status_reason_code;
+                        output.file_system_configs = body.file_system_configs;
+                        output.package_type = body.package_type;
+                        output.image_config_response = body.image_config_response;
+                        output.signing_profile_version_arn = body.signing_profile_version_arn;
+                        output.signing_job_arn = body.signing_job_arn;
+
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -470,8 +551,9 @@ fn __delete_alias(input: DeleteAliasRequest) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -527,8 +609,9 @@ fn __delete_code_signing_config(input: DeleteCodeSigningConfigRequest) -> BoxFut
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: DeleteCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let mut output: DeleteCodeSigningConfigResponse = Default::default();
+
+
                         serde_json::to_vec(&Result::<DeleteCodeSigningConfigResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -584,8 +667,33 @@ fn __delete_event_source_mapping(input: DeleteEventSourceMappingRequest) -> BoxF
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: EventSourceMappingConfiguration = Default::default();
+
                         let body = response.into_body();
-                        let output: EventSourceMappingConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body: EventSourceMappingConfiguration = serde_json::from_slice(&*body).unwrap();
+                        output.uuid = body.uuid;
+                        output.starting_position = body.starting_position;
+                        output.starting_position_timestamp = body.starting_position_timestamp;
+                        output.batch_size = body.batch_size;
+                        output.maximum_batching_window_in_seconds = body.maximum_batching_window_in_seconds;
+                        output.parallelization_factor = body.parallelization_factor;
+                        output.event_source_arn = body.event_source_arn;
+                        output.function_arn = body.function_arn;
+                        output.last_modified = body.last_modified;
+                        output.last_processing_result = body.last_processing_result;
+                        output.state = body.state;
+                        output.state_transition_reason = body.state_transition_reason;
+                        output.destination_config = body.destination_config;
+                        output.topics = body.topics;
+                        output.queues = body.queues;
+                        output.source_access_configurations = body.source_access_configurations;
+                        output.self_managed_event_source = body.self_managed_event_source;
+                        output.maximum_record_age_in_seconds = body.maximum_record_age_in_seconds;
+                        output.bisect_batch_on_function_error = body.bisect_batch_on_function_error;
+                        output.maximum_retry_attempts = body.maximum_retry_attempts;
+                        output.tumbling_window_in_seconds = body.tumbling_window_in_seconds;
+                        output.function_response_types = body.function_response_types;
+
                         serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -644,8 +752,9 @@ fn __delete_function(input: DeleteFunctionRequest) -> BoxFuture<'static, Vec<u8>
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -701,8 +810,9 @@ fn __delete_function_code_signing_config(input: DeleteFunctionCodeSigningConfigR
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -758,8 +868,9 @@ fn __delete_function_concurrency(input: DeleteFunctionConcurrencyRequest) -> Box
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -818,8 +929,9 @@ fn __delete_function_event_invoke_config(input: DeleteFunctionEventInvokeConfigR
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -879,8 +991,9 @@ fn __delete_layer_version(input: DeleteLayerVersionRequest) -> BoxFuture<'static
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -937,8 +1050,9 @@ fn __delete_provisioned_concurrency_config(input: DeleteProvisionedConcurrencyCo
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -990,8 +1104,13 @@ fn __get_account_settings(input: GetAccountSettingsRequest) -> BoxFuture<'static
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: GetAccountSettingsResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: GetAccountSettingsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: GetAccountSettingsResponse = serde_json::from_slice(&*body).unwrap();
+                        output.account_limit = body.account_limit;
+                        output.account_usage = body.account_usage;
+
                         serde_json::to_vec(&Result::<GetAccountSettingsResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1051,8 +1170,17 @@ fn __get_alias(input: GetAliasRequest) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: AliasConfiguration = Default::default();
+
                         let body = response.into_body();
-                        let output: AliasConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body: AliasConfiguration = serde_json::from_slice(&*body).unwrap();
+                        output.alias_arn = body.alias_arn;
+                        output.name = body.name;
+                        output.function_version = body.function_version;
+                        output.description = body.description;
+                        output.routing_config = body.routing_config;
+                        output.revision_id = body.revision_id;
+
                         serde_json::to_vec(&Result::<AliasConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1108,8 +1236,12 @@ fn __get_code_signing_config(input: GetCodeSigningConfigRequest) -> BoxFuture<'s
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: GetCodeSigningConfigResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: GetCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: GetCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        output.code_signing_config = body.code_signing_config;
+
                         serde_json::to_vec(&Result::<GetCodeSigningConfigResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1165,8 +1297,33 @@ fn __get_event_source_mapping(input: GetEventSourceMappingRequest) -> BoxFuture<
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: EventSourceMappingConfiguration = Default::default();
+
                         let body = response.into_body();
-                        let output: EventSourceMappingConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body: EventSourceMappingConfiguration = serde_json::from_slice(&*body).unwrap();
+                        output.uuid = body.uuid;
+                        output.starting_position = body.starting_position;
+                        output.starting_position_timestamp = body.starting_position_timestamp;
+                        output.batch_size = body.batch_size;
+                        output.maximum_batching_window_in_seconds = body.maximum_batching_window_in_seconds;
+                        output.parallelization_factor = body.parallelization_factor;
+                        output.event_source_arn = body.event_source_arn;
+                        output.function_arn = body.function_arn;
+                        output.last_modified = body.last_modified;
+                        output.last_processing_result = body.last_processing_result;
+                        output.state = body.state;
+                        output.state_transition_reason = body.state_transition_reason;
+                        output.destination_config = body.destination_config;
+                        output.topics = body.topics;
+                        output.queues = body.queues;
+                        output.source_access_configurations = body.source_access_configurations;
+                        output.self_managed_event_source = body.self_managed_event_source;
+                        output.maximum_record_age_in_seconds = body.maximum_record_age_in_seconds;
+                        output.bisect_batch_on_function_error = body.bisect_batch_on_function_error;
+                        output.maximum_retry_attempts = body.maximum_retry_attempts;
+                        output.tumbling_window_in_seconds = body.tumbling_window_in_seconds;
+                        output.function_response_types = body.function_response_types;
+
                         serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1225,8 +1382,15 @@ fn __get_function(input: GetFunctionRequest) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: GetFunctionResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: GetFunctionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: GetFunctionResponse = serde_json::from_slice(&*body).unwrap();
+                        output.configuration = body.configuration;
+                        output.code = body.code;
+                        output.tags = body.tags;
+                        output.concurrency = body.concurrency;
+
                         serde_json::to_vec(&Result::<GetFunctionResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1282,8 +1446,13 @@ fn __get_function_code_signing_config(input: GetFunctionCodeSigningConfigRequest
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: GetFunctionCodeSigningConfigResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: GetFunctionCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: GetFunctionCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        output.code_signing_config_arn = body.code_signing_config_arn;
+                        output.function_name = body.function_name;
+
                         serde_json::to_vec(&Result::<GetFunctionCodeSigningConfigResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1339,8 +1508,12 @@ fn __get_function_concurrency(input: GetFunctionConcurrencyRequest) -> BoxFuture
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: GetFunctionConcurrencyResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: GetFunctionConcurrencyResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: GetFunctionConcurrencyResponse = serde_json::from_slice(&*body).unwrap();
+                        output.reserved_concurrent_executions = body.reserved_concurrent_executions;
+
                         serde_json::to_vec(&Result::<GetFunctionConcurrencyResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1399,8 +1572,42 @@ fn __get_function_configuration(input: GetFunctionConfigurationRequest) -> BoxFu
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: FunctionConfiguration = Default::default();
+
                         let body = response.into_body();
-                        let output: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        output.function_name = body.function_name;
+                        output.function_arn = body.function_arn;
+                        output.runtime = body.runtime;
+                        output.role = body.role;
+                        output.handler = body.handler;
+                        output.code_size = body.code_size;
+                        output.description = body.description;
+                        output.timeout = body.timeout;
+                        output.memory_size = body.memory_size;
+                        output.last_modified = body.last_modified;
+                        output.code_sha256 = body.code_sha256;
+                        output.version = body.version;
+                        output.vpc_config = body.vpc_config;
+                        output.dead_letter_config = body.dead_letter_config;
+                        output.environment = body.environment;
+                        output.kms_key_arn = body.kms_key_arn;
+                        output.tracing_config = body.tracing_config;
+                        output.master_arn = body.master_arn;
+                        output.revision_id = body.revision_id;
+                        output.layers = body.layers;
+                        output.state = body.state;
+                        output.state_reason = body.state_reason;
+                        output.state_reason_code = body.state_reason_code;
+                        output.last_update_status = body.last_update_status;
+                        output.last_update_status_reason = body.last_update_status_reason;
+                        output.last_update_status_reason_code = body.last_update_status_reason_code;
+                        output.file_system_configs = body.file_system_configs;
+                        output.package_type = body.package_type;
+                        output.image_config_response = body.image_config_response;
+                        output.signing_profile_version_arn = body.signing_profile_version_arn;
+                        output.signing_job_arn = body.signing_job_arn;
+
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1459,8 +1666,16 @@ fn __get_function_event_invoke_config(input: GetFunctionEventInvokeConfigRequest
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: FunctionEventInvokeConfig = Default::default();
+
                         let body = response.into_body();
-                        let output: FunctionEventInvokeConfig = serde_json::from_slice(&*body).unwrap();
+                        let body: FunctionEventInvokeConfig = serde_json::from_slice(&*body).unwrap();
+                        output.last_modified = body.last_modified;
+                        output.function_arn = body.function_arn;
+                        output.maximum_retry_attempts = body.maximum_retry_attempts;
+                        output.maximum_event_age_in_seconds = body.maximum_event_age_in_seconds;
+                        output.destination_config = body.destination_config;
+
                         serde_json::to_vec(&Result::<FunctionEventInvokeConfig, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1520,8 +1735,19 @@ fn __get_layer_version(input: GetLayerVersionRequest) -> BoxFuture<'static, Vec<
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: GetLayerVersionResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: GetLayerVersionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: GetLayerVersionResponse = serde_json::from_slice(&*body).unwrap();
+                        output.content = body.content;
+                        output.layer_arn = body.layer_arn;
+                        output.layer_version_arn = body.layer_version_arn;
+                        output.description = body.description;
+                        output.created_date = body.created_date;
+                        output.version = body.version;
+                        output.compatible_runtimes = body.compatible_runtimes;
+                        output.license_info = body.license_info;
+
                         serde_json::to_vec(&Result::<GetLayerVersionResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1574,8 +1800,19 @@ fn __get_layer_version_by_arn(input: GetLayerVersionByArnRequest) -> BoxFuture<'
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: GetLayerVersionResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: GetLayerVersionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: GetLayerVersionResponse = serde_json::from_slice(&*body).unwrap();
+                        output.content = body.content;
+                        output.layer_arn = body.layer_arn;
+                        output.layer_version_arn = body.layer_version_arn;
+                        output.description = body.description;
+                        output.created_date = body.created_date;
+                        output.version = body.version;
+                        output.compatible_runtimes = body.compatible_runtimes;
+                        output.license_info = body.license_info;
+
                         serde_json::to_vec(&Result::<GetLayerVersionResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1635,8 +1872,13 @@ fn __get_layer_version_policy(input: GetLayerVersionPolicyRequest) -> BoxFuture<
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: GetLayerVersionPolicyResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: GetLayerVersionPolicyResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: GetLayerVersionPolicyResponse = serde_json::from_slice(&*body).unwrap();
+                        output.policy = body.policy;
+                        output.revision_id = body.revision_id;
+
                         serde_json::to_vec(&Result::<GetLayerVersionPolicyResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1695,8 +1937,13 @@ fn __get_policy(input: GetPolicyRequest) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: GetPolicyResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: GetPolicyResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: GetPolicyResponse = serde_json::from_slice(&*body).unwrap();
+                        output.policy = body.policy;
+                        output.revision_id = body.revision_id;
+
                         serde_json::to_vec(&Result::<GetPolicyResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1753,8 +2000,17 @@ fn __get_provisioned_concurrency_config(input: GetProvisionedConcurrencyConfigRe
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: GetProvisionedConcurrencyConfigResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: GetProvisionedConcurrencyConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: GetProvisionedConcurrencyConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        output.requested_provisioned_concurrent_executions = body.requested_provisioned_concurrent_executions;
+                        output.available_provisioned_concurrent_executions = body.available_provisioned_concurrent_executions;
+                        output.allocated_provisioned_concurrent_executions = body.allocated_provisioned_concurrent_executions;
+                        output.status = body.status;
+                        output.status_reason = body.status_reason;
+                        output.last_modified = body.last_modified;
+
                         serde_json::to_vec(&Result::<GetProvisionedConcurrencyConfigResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1822,8 +2078,23 @@ fn __invoke(input: InvocationRequest) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: InvocationResponse = Default::default();
+                        output.function_error = match response.headers().get("X-Amz-Function-Error") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.log_result = match response.headers().get("X-Amz-Log-Result") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+                        output.executed_version = match response.headers().get("X-Amz-Executed-Version") {
+                            Some(v) => Some(String::from_str(v.to_str().unwrap()).unwrap()),
+                            None => None,
+                        };
+
                         let body = response.into_body();
-                        let output: InvocationResponse = serde_json::from_slice(&*body).unwrap();
+                        output.payload = Some(Vec::from(&*body));
+
                         serde_json::to_vec(&Result::<InvocationResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1879,8 +2150,9 @@ fn __invoke_async(input: InvokeAsyncRequest) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: InvokeAsyncResponse = serde_json::from_slice(&*body).unwrap();
+                        let mut output: InvokeAsyncResponse = Default::default();
+
+
                         serde_json::to_vec(&Result::<InvokeAsyncResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1945,8 +2217,13 @@ fn __list_aliases(input: ListAliasesRequest) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListAliasesResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: ListAliasesResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: ListAliasesResponse = serde_json::from_slice(&*body).unwrap();
+                        output.next_marker = body.next_marker;
+                        output.aliases = body.aliases;
+
                         serde_json::to_vec(&Result::<ListAliasesResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2004,8 +2281,13 @@ fn __list_code_signing_configs(input: ListCodeSigningConfigsRequest) -> BoxFutur
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListCodeSigningConfigsResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: ListCodeSigningConfigsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: ListCodeSigningConfigsResponse = serde_json::from_slice(&*body).unwrap();
+                        output.next_marker = body.next_marker;
+                        output.code_signing_configs = body.code_signing_configs;
+
                         serde_json::to_vec(&Result::<ListCodeSigningConfigsResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2069,8 +2351,13 @@ fn __list_event_source_mappings(input: ListEventSourceMappingsRequest) -> BoxFut
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListEventSourceMappingsResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: ListEventSourceMappingsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: ListEventSourceMappingsResponse = serde_json::from_slice(&*body).unwrap();
+                        output.next_marker = body.next_marker;
+                        output.event_source_mappings = body.event_source_mappings;
+
                         serde_json::to_vec(&Result::<ListEventSourceMappingsResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2132,8 +2419,13 @@ fn __list_function_event_invoke_configs(input: ListFunctionEventInvokeConfigsReq
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListFunctionEventInvokeConfigsResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: ListFunctionEventInvokeConfigsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: ListFunctionEventInvokeConfigsResponse = serde_json::from_slice(&*body).unwrap();
+                        output.function_event_invoke_configs = body.function_event_invoke_configs;
+                        output.next_marker = body.next_marker;
+
                         serde_json::to_vec(&Result::<ListFunctionEventInvokeConfigsResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2197,8 +2489,13 @@ fn __list_functions(input: ListFunctionsRequest) -> BoxFuture<'static, Vec<u8>> 
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListFunctionsResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: ListFunctionsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: ListFunctionsResponse = serde_json::from_slice(&*body).unwrap();
+                        output.next_marker = body.next_marker;
+                        output.functions = body.functions;
+
                         serde_json::to_vec(&Result::<ListFunctionsResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2260,8 +2557,13 @@ fn __list_functions_by_code_signing_config(input: ListFunctionsByCodeSigningConf
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListFunctionsByCodeSigningConfigResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: ListFunctionsByCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: ListFunctionsByCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        output.next_marker = body.next_marker;
+                        output.function_arns = body.function_arns;
+
                         serde_json::to_vec(&Result::<ListFunctionsByCodeSigningConfigResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2326,8 +2628,13 @@ fn __list_layer_versions(input: ListLayerVersionsRequest) -> BoxFuture<'static, 
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListLayerVersionsResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: ListLayerVersionsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: ListLayerVersionsResponse = serde_json::from_slice(&*body).unwrap();
+                        output.next_marker = body.next_marker;
+                        output.layer_versions = body.layer_versions;
+
                         serde_json::to_vec(&Result::<ListLayerVersionsResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2388,8 +2695,13 @@ fn __list_layers(input: ListLayersRequest) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListLayersResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: ListLayersResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: ListLayersResponse = serde_json::from_slice(&*body).unwrap();
+                        output.next_marker = body.next_marker;
+                        output.layers = body.layers;
+
                         serde_json::to_vec(&Result::<ListLayersResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2451,8 +2763,13 @@ fn __list_provisioned_concurrency_configs(input: ListProvisionedConcurrencyConfi
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListProvisionedConcurrencyConfigsResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: ListProvisionedConcurrencyConfigsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: ListProvisionedConcurrencyConfigsResponse = serde_json::from_slice(&*body).unwrap();
+                        output.provisioned_concurrency_configs = body.provisioned_concurrency_configs;
+                        output.next_marker = body.next_marker;
+
                         serde_json::to_vec(&Result::<ListProvisionedConcurrencyConfigsResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2508,8 +2825,12 @@ fn __list_tags(input: ListTagsRequest) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListTagsResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: ListTagsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: ListTagsResponse = serde_json::from_slice(&*body).unwrap();
+                        output.tags = body.tags;
+
                         serde_json::to_vec(&Result::<ListTagsResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2571,8 +2892,13 @@ fn __list_versions_by_function(input: ListVersionsByFunctionRequest) -> BoxFutur
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListVersionsByFunctionResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: ListVersionsByFunctionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: ListVersionsByFunctionResponse = serde_json::from_slice(&*body).unwrap();
+                        output.next_marker = body.next_marker;
+                        output.versions = body.versions;
+
                         serde_json::to_vec(&Result::<ListVersionsByFunctionResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2628,8 +2954,19 @@ fn __publish_layer_version(input: PublishLayerVersionRequest) -> BoxFuture<'stat
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: PublishLayerVersionResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: PublishLayerVersionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: PublishLayerVersionResponse = serde_json::from_slice(&*body).unwrap();
+                        output.content = body.content;
+                        output.layer_arn = body.layer_arn;
+                        output.layer_version_arn = body.layer_version_arn;
+                        output.description = body.description;
+                        output.created_date = body.created_date;
+                        output.version = body.version;
+                        output.compatible_runtimes = body.compatible_runtimes;
+                        output.license_info = body.license_info;
+
                         serde_json::to_vec(&Result::<PublishLayerVersionResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2685,8 +3022,42 @@ fn __publish_version(input: PublishVersionRequest) -> BoxFuture<'static, Vec<u8>
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: FunctionConfiguration = Default::default();
+
                         let body = response.into_body();
-                        let output: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        output.function_name = body.function_name;
+                        output.function_arn = body.function_arn;
+                        output.runtime = body.runtime;
+                        output.role = body.role;
+                        output.handler = body.handler;
+                        output.code_size = body.code_size;
+                        output.description = body.description;
+                        output.timeout = body.timeout;
+                        output.memory_size = body.memory_size;
+                        output.last_modified = body.last_modified;
+                        output.code_sha256 = body.code_sha256;
+                        output.version = body.version;
+                        output.vpc_config = body.vpc_config;
+                        output.dead_letter_config = body.dead_letter_config;
+                        output.environment = body.environment;
+                        output.kms_key_arn = body.kms_key_arn;
+                        output.tracing_config = body.tracing_config;
+                        output.master_arn = body.master_arn;
+                        output.revision_id = body.revision_id;
+                        output.layers = body.layers;
+                        output.state = body.state;
+                        output.state_reason = body.state_reason;
+                        output.state_reason_code = body.state_reason_code;
+                        output.last_update_status = body.last_update_status;
+                        output.last_update_status_reason = body.last_update_status_reason;
+                        output.last_update_status_reason_code = body.last_update_status_reason_code;
+                        output.file_system_configs = body.file_system_configs;
+                        output.package_type = body.package_type;
+                        output.image_config_response = body.image_config_response;
+                        output.signing_profile_version_arn = body.signing_profile_version_arn;
+                        output.signing_job_arn = body.signing_job_arn;
+
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2742,8 +3113,13 @@ fn __put_function_code_signing_config(input: PutFunctionCodeSigningConfigRequest
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: PutFunctionCodeSigningConfigResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: PutFunctionCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: PutFunctionCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        output.code_signing_config_arn = body.code_signing_config_arn;
+                        output.function_name = body.function_name;
+
                         serde_json::to_vec(&Result::<PutFunctionCodeSigningConfigResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2799,8 +3175,12 @@ fn __put_function_concurrency(input: PutFunctionConcurrencyRequest) -> BoxFuture
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: Concurrency = Default::default();
+
                         let body = response.into_body();
-                        let output: Concurrency = serde_json::from_slice(&*body).unwrap();
+                        let body: Concurrency = serde_json::from_slice(&*body).unwrap();
+                        output.reserved_concurrent_executions = body.reserved_concurrent_executions;
+
                         serde_json::to_vec(&Result::<Concurrency, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2859,8 +3239,16 @@ fn __put_function_event_invoke_config(input: PutFunctionEventInvokeConfigRequest
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: FunctionEventInvokeConfig = Default::default();
+
                         let body = response.into_body();
-                        let output: FunctionEventInvokeConfig = serde_json::from_slice(&*body).unwrap();
+                        let body: FunctionEventInvokeConfig = serde_json::from_slice(&*body).unwrap();
+                        output.last_modified = body.last_modified;
+                        output.function_arn = body.function_arn;
+                        output.maximum_retry_attempts = body.maximum_retry_attempts;
+                        output.maximum_event_age_in_seconds = body.maximum_event_age_in_seconds;
+                        output.destination_config = body.destination_config;
+
                         serde_json::to_vec(&Result::<FunctionEventInvokeConfig, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2917,8 +3305,17 @@ fn __put_provisioned_concurrency_config(input: PutProvisionedConcurrencyConfigRe
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: PutProvisionedConcurrencyConfigResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: PutProvisionedConcurrencyConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: PutProvisionedConcurrencyConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        output.requested_provisioned_concurrent_executions = body.requested_provisioned_concurrent_executions;
+                        output.available_provisioned_concurrent_executions = body.available_provisioned_concurrent_executions;
+                        output.allocated_provisioned_concurrent_executions = body.allocated_provisioned_concurrent_executions;
+                        output.status = body.status;
+                        output.status_reason = body.status_reason;
+                        output.last_modified = body.last_modified;
+
                         serde_json::to_vec(&Result::<PutProvisionedConcurrencyConfigResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2985,8 +3382,9 @@ fn __remove_layer_version_permission(input: RemoveLayerVersionPermissionRequest)
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3052,8 +3450,9 @@ fn __remove_permission(input: RemovePermissionRequest) -> BoxFuture<'static, Vec
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3109,8 +3508,9 @@ fn __tag_resource(input: TagResourceRequest) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3167,8 +3567,9 @@ fn __untag_resource(input: UntagResourceRequest) -> BoxFuture<'static, Vec<u8>> 
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3228,8 +3629,17 @@ fn __update_alias(input: UpdateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: AliasConfiguration = Default::default();
+
                         let body = response.into_body();
-                        let output: AliasConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body: AliasConfiguration = serde_json::from_slice(&*body).unwrap();
+                        output.alias_arn = body.alias_arn;
+                        output.name = body.name;
+                        output.function_version = body.function_version;
+                        output.description = body.description;
+                        output.routing_config = body.routing_config;
+                        output.revision_id = body.revision_id;
+
                         serde_json::to_vec(&Result::<AliasConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3285,8 +3695,12 @@ fn __update_code_signing_config(input: UpdateCodeSigningConfigRequest) -> BoxFut
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: UpdateCodeSigningConfigResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: UpdateCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: UpdateCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        output.code_signing_config = body.code_signing_config;
+
                         serde_json::to_vec(&Result::<UpdateCodeSigningConfigResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3342,8 +3756,33 @@ fn __update_event_source_mapping(input: UpdateEventSourceMappingRequest) -> BoxF
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: EventSourceMappingConfiguration = Default::default();
+
                         let body = response.into_body();
-                        let output: EventSourceMappingConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body: EventSourceMappingConfiguration = serde_json::from_slice(&*body).unwrap();
+                        output.uuid = body.uuid;
+                        output.starting_position = body.starting_position;
+                        output.starting_position_timestamp = body.starting_position_timestamp;
+                        output.batch_size = body.batch_size;
+                        output.maximum_batching_window_in_seconds = body.maximum_batching_window_in_seconds;
+                        output.parallelization_factor = body.parallelization_factor;
+                        output.event_source_arn = body.event_source_arn;
+                        output.function_arn = body.function_arn;
+                        output.last_modified = body.last_modified;
+                        output.last_processing_result = body.last_processing_result;
+                        output.state = body.state;
+                        output.state_transition_reason = body.state_transition_reason;
+                        output.destination_config = body.destination_config;
+                        output.topics = body.topics;
+                        output.queues = body.queues;
+                        output.source_access_configurations = body.source_access_configurations;
+                        output.self_managed_event_source = body.self_managed_event_source;
+                        output.maximum_record_age_in_seconds = body.maximum_record_age_in_seconds;
+                        output.bisect_batch_on_function_error = body.bisect_batch_on_function_error;
+                        output.maximum_retry_attempts = body.maximum_retry_attempts;
+                        output.tumbling_window_in_seconds = body.tumbling_window_in_seconds;
+                        output.function_response_types = body.function_response_types;
+
                         serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3399,8 +3838,42 @@ fn __update_function_code(input: UpdateFunctionCodeRequest) -> BoxFuture<'static
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: FunctionConfiguration = Default::default();
+
                         let body = response.into_body();
-                        let output: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        output.function_name = body.function_name;
+                        output.function_arn = body.function_arn;
+                        output.runtime = body.runtime;
+                        output.role = body.role;
+                        output.handler = body.handler;
+                        output.code_size = body.code_size;
+                        output.description = body.description;
+                        output.timeout = body.timeout;
+                        output.memory_size = body.memory_size;
+                        output.last_modified = body.last_modified;
+                        output.code_sha256 = body.code_sha256;
+                        output.version = body.version;
+                        output.vpc_config = body.vpc_config;
+                        output.dead_letter_config = body.dead_letter_config;
+                        output.environment = body.environment;
+                        output.kms_key_arn = body.kms_key_arn;
+                        output.tracing_config = body.tracing_config;
+                        output.master_arn = body.master_arn;
+                        output.revision_id = body.revision_id;
+                        output.layers = body.layers;
+                        output.state = body.state;
+                        output.state_reason = body.state_reason;
+                        output.state_reason_code = body.state_reason_code;
+                        output.last_update_status = body.last_update_status;
+                        output.last_update_status_reason = body.last_update_status_reason;
+                        output.last_update_status_reason_code = body.last_update_status_reason_code;
+                        output.file_system_configs = body.file_system_configs;
+                        output.package_type = body.package_type;
+                        output.image_config_response = body.image_config_response;
+                        output.signing_profile_version_arn = body.signing_profile_version_arn;
+                        output.signing_job_arn = body.signing_job_arn;
+
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3456,8 +3929,42 @@ fn __update_function_configuration(input: UpdateFunctionConfigurationRequest) ->
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: FunctionConfiguration = Default::default();
+
                         let body = response.into_body();
-                        let output: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        output.function_name = body.function_name;
+                        output.function_arn = body.function_arn;
+                        output.runtime = body.runtime;
+                        output.role = body.role;
+                        output.handler = body.handler;
+                        output.code_size = body.code_size;
+                        output.description = body.description;
+                        output.timeout = body.timeout;
+                        output.memory_size = body.memory_size;
+                        output.last_modified = body.last_modified;
+                        output.code_sha256 = body.code_sha256;
+                        output.version = body.version;
+                        output.vpc_config = body.vpc_config;
+                        output.dead_letter_config = body.dead_letter_config;
+                        output.environment = body.environment;
+                        output.kms_key_arn = body.kms_key_arn;
+                        output.tracing_config = body.tracing_config;
+                        output.master_arn = body.master_arn;
+                        output.revision_id = body.revision_id;
+                        output.layers = body.layers;
+                        output.state = body.state;
+                        output.state_reason = body.state_reason;
+                        output.state_reason_code = body.state_reason_code;
+                        output.last_update_status = body.last_update_status;
+                        output.last_update_status_reason = body.last_update_status_reason;
+                        output.last_update_status_reason_code = body.last_update_status_reason_code;
+                        output.file_system_configs = body.file_system_configs;
+                        output.package_type = body.package_type;
+                        output.image_config_response = body.image_config_response;
+                        output.signing_profile_version_arn = body.signing_profile_version_arn;
+                        output.signing_job_arn = body.signing_job_arn;
+
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -3516,8 +4023,16 @@ fn __update_function_event_invoke_config(input: UpdateFunctionEventInvokeConfigR
 
                 match status {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: FunctionEventInvokeConfig = Default::default();
+
                         let body = response.into_body();
-                        let output: FunctionEventInvokeConfig = serde_json::from_slice(&*body).unwrap();
+                        let body: FunctionEventInvokeConfig = serde_json::from_slice(&*body).unwrap();
+                        output.last_modified = body.last_modified;
+                        output.function_arn = body.function_arn;
+                        output.maximum_retry_attempts = body.maximum_retry_attempts;
+                        output.maximum_event_age_in_seconds = body.maximum_event_age_in_seconds;
+                        output.destination_config = body.destination_config;
+
                         serde_json::to_vec(&Result::<FunctionEventInvokeConfig, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
