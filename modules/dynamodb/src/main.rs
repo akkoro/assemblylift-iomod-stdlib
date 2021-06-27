@@ -1918,14 +1918,9 @@ fn __query(input: QueryInput) -> BoxFuture<'static, Vec<u8>> {
                     StatusCode::OK => {
                         let body = response.into_body();
                         let output: QueryOutput = serde_json::from_slice(&*body).unwrap();
-                        let output_str = format!("Ok({})", serde_json::to_string(&output).unwrap());
-                        println!("DYNAMODB: __query: {}", output_str);
-                        // serde_json::to_vec(&Result::<QueryOutput, guest::Error>::Ok(output)).unwrap()
-                        output_str.as_bytes().to_vec()
+                        serde_json::to_vec(&Result::<QueryOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
-                        println!("DYNAMODB: status: {}", status);
-                        println!("DYNAMODB: __query: {:?}", std::str::from_utf8(&*response.into_body()).unwrap());
                         serde_json::to_vec(&Result::<QueryOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         })).unwrap()
