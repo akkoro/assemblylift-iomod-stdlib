@@ -8225,7 +8225,6 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         match crate::CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
-
                 match status {
                     StatusCode::OK => {
                         let mut output: PutObjectOutput = Default::default();
@@ -8290,12 +8289,16 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<PutObjectOutput, guest::Error>::Ok(output))
                             .unwrap()
                     }
-                    status => serde_json::to_vec(&Result::<PutObjectOutput, guest::Error>::Err(
-                        guest::Error {
-                            why: String::from(status.canonical_reason().unwrap()),
-                        },
-                    ))
-                    .unwrap(),
+                    status => {
+                        println!("DEBUG: response={}", std::str::from_utf8(&hyper::body::to_bytes(response.into_body()).await.unwrap()).unwrap());
+
+                        serde_json::to_vec(&Result::<PutObjectOutput, guest::Error>::Err(
+                            guest::Error {
+                                why: String::from(status.canonical_reason().unwrap()),
+                            },
+                        ))
+                            .unwrap()
+                    },
                 }
             }
             Err(why) => serde_json::to_vec(&Result::<PutObjectOutput, guest::Error>::Err(
