@@ -145,8 +145,8 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -158,12 +158,6 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -220,8 +214,8 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -324,8 +318,8 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -337,12 +331,6 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(acl) = input.acl {
         http_request.add_header("x-amz-acl", &acl);
@@ -629,8 +617,8 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -642,12 +630,6 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(acl) = input.acl {
         http_request.add_header("x-amz-acl", &acl);
@@ -829,12 +811,6 @@ fn __delete_bucket(input: DeleteBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -892,12 +868,6 @@ fn __delete_bucket_analytics_configuration(input: DeleteBucketAnalyticsConfigura
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -956,12 +926,6 @@ fn __delete_bucket_cors(input: DeleteBucketCorsRequest) -> BoxFuture<'static, Ve
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1019,12 +983,6 @@ fn __delete_bucket_encryption(input: DeleteBucketEncryptionRequest) -> BoxFuture
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1082,12 +1040,6 @@ fn __delete_bucket_intelligent_tiering_configuration(input: DeleteBucketIntellig
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
 
     http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
@@ -1143,12 +1095,6 @@ fn __delete_bucket_inventory_configuration(input: DeleteBucketInventoryConfigura
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1207,12 +1153,6 @@ fn __delete_bucket_lifecycle(input: DeleteBucketLifecycleRequest) -> BoxFuture<'
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1270,12 +1210,6 @@ fn __delete_bucket_metrics_configuration(input: DeleteBucketMetricsConfiguration
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1334,12 +1268,6 @@ fn __delete_bucket_ownership_controls(input: DeleteBucketOwnershipControlsReques
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1397,12 +1325,6 @@ fn __delete_bucket_policy(input: DeleteBucketPolicyRequest) -> BoxFuture<'static
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1460,12 +1382,6 @@ fn __delete_bucket_replication(input: DeleteBucketReplicationRequest) -> BoxFutu
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1523,12 +1439,6 @@ fn __delete_bucket_tagging(input: DeleteBucketTaggingRequest) -> BoxFuture<'stat
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1586,12 +1496,6 @@ fn __delete_bucket_website(input: DeleteBucketWebsiteRequest) -> BoxFuture<'stat
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1640,8 +1544,8 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -1653,12 +1557,6 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(mfa) = input.mfa {
         http_request.add_header("x-amz-mfa", &mfa);
@@ -1731,8 +1629,8 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -1744,12 +1642,6 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1897,12 +1789,6 @@ fn __delete_public_access_block(input: DeletePublicAccessBlockRequest) -> BoxFut
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1960,12 +1846,6 @@ fn __get_bucket_accelerate_configuration(input: GetBucketAccelerateConfiguration
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2034,12 +1914,6 @@ fn __get_bucket_acl(input: GetBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2109,12 +1983,6 @@ fn __get_bucket_analytics_configuration(input: GetBucketAnalyticsConfigurationRe
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2185,12 +2053,6 @@ fn __get_bucket_cors(input: GetBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2259,12 +2121,6 @@ fn __get_bucket_encryption(input: GetBucketEncryptionRequest) -> BoxFuture<'stat
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2334,12 +2190,6 @@ fn __get_bucket_intelligent_tiering_configuration(input: GetBucketIntelligentTie
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
 
     http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
@@ -2407,12 +2257,6 @@ fn __get_bucket_inventory_configuration(input: GetBucketInventoryConfigurationRe
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2483,12 +2327,6 @@ fn __get_bucket_lifecycle(input: GetBucketLifecycleRequest) -> BoxFuture<'static
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2557,12 +2395,6 @@ fn __get_bucket_lifecycle_configuration(input: GetBucketLifecycleConfigurationRe
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2631,12 +2463,6 @@ fn __get_bucket_location(input: GetBucketLocationRequest) -> BoxFuture<'static, 
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2705,12 +2531,6 @@ fn __get_bucket_logging(input: GetBucketLoggingRequest) -> BoxFuture<'static, Ve
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2779,12 +2599,6 @@ fn __get_bucket_metrics_configuration(input: GetBucketMetricsConfigurationReques
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2855,12 +2669,6 @@ fn __get_bucket_notification(input: GetBucketNotificationConfigurationRequest) -
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2931,12 +2739,6 @@ fn __get_bucket_notification_configuration(input: GetBucketNotificationConfigura
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3007,12 +2809,6 @@ fn __get_bucket_ownership_controls(input: GetBucketOwnershipControlsRequest) -> 
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3082,12 +2878,6 @@ fn __get_bucket_policy(input: GetBucketPolicyRequest) -> BoxFuture<'static, Vec<
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3147,12 +2937,6 @@ fn __get_bucket_policy_status(input: GetBucketPolicyStatusRequest) -> BoxFuture<
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3222,12 +3006,6 @@ fn __get_bucket_replication(input: GetBucketReplicationRequest) -> BoxFuture<'st
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3297,12 +3075,6 @@ fn __get_bucket_request_payment(input: GetBucketRequestPaymentRequest) -> BoxFut
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3371,12 +3143,6 @@ fn __get_bucket_tagging(input: GetBucketTaggingRequest) -> BoxFuture<'static, Ve
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3445,12 +3211,6 @@ fn __get_bucket_versioning(input: GetBucketVersioningRequest) -> BoxFuture<'stat
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3520,12 +3280,6 @@ fn __get_bucket_website(input: GetBucketWebsiteRequest) -> BoxFuture<'static, Ve
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3588,8 +3342,8 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -3601,12 +3355,6 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(if_match) = input.if_match {
         http_request.add_header("If-Match", &if_match);
@@ -3799,8 +3547,6 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<GetObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        println!("DEBUG: response={}", std::str::from_utf8(body).unwrap());
                         serde_json::to_vec(&Result::<GetObjectOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
@@ -3830,8 +3576,8 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -3843,12 +3589,6 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -3919,8 +3659,8 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -3932,12 +3672,6 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -4013,12 +3747,6 @@ fn __get_object_lock_configuration(input: GetObjectLockConfigurationRequest) -> 
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -4079,8 +3807,8 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -4092,12 +3820,6 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -4164,8 +3886,8 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -4177,12 +3899,6 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -4252,8 +3968,8 @@ fn __get_object_torrent(input: GetObjectTorrentRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -4265,12 +3981,6 @@ fn __get_object_torrent(input: GetObjectTorrentRequest) -> BoxFuture<'static, Ve
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -4337,12 +4047,6 @@ fn __get_public_access_block(input: GetPublicAccessBlockRequest) -> BoxFuture<'s
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -4412,12 +4116,6 @@ fn __head_bucket(input: HeadBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -4466,8 +4164,8 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -4479,12 +4177,6 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(if_match) = input.if_match {
         http_request.add_header("If-Match", &if_match);
@@ -4691,12 +4383,6 @@ fn __list_bucket_analytics_configurations(input: ListBucketAnalyticsConfiguratio
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -4771,12 +4457,6 @@ fn __list_bucket_intelligent_tiering_configurations(input: ListBucketIntelligent
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
 
     if let Some(continuation_token) = input.continuation_token {
@@ -4848,12 +4528,6 @@ fn __list_bucket_inventory_configurations(input: ListBucketInventoryConfiguratio
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -4928,12 +4602,6 @@ fn __list_bucket_metrics_configurations(input: ListBucketMetricsConfigurationsRe
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -5004,12 +4672,6 @@ fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
 
 
@@ -5076,12 +4738,6 @@ fn __list_multipart_uploads(input: ListMultipartUploadsRequest) -> BoxFuture<'st
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -5179,12 +4835,6 @@ fn __list_object_versions(input: ListObjectVersionsRequest) -> BoxFuture<'static
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -5283,12 +4933,6 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -5384,12 +5028,6 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -5484,8 +5122,8 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -5497,12 +5135,6 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -6821,8 +6453,8 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -7004,8 +6636,8 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -7097,8 +6729,8 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -7243,8 +6875,8 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -7321,8 +6953,8 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -7457,8 +7089,8 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -7533,8 +7165,8 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -7546,22 +7178,6 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    body.insert("Expression", serde_xml_rs::to_string(&input.expression).unwrap());
-    body.insert("ExpressionType", serde_xml_rs::to_string(&input.expression_type).unwrap());
-    if let Some(request_progress) = input.request_progress {
-        body.insert("RequestProgress", serde_json::to_string(&request_progress).unwrap());
-    };
-    body.insert("InputSerialization", serde_xml_rs::to_string(&input.input_serialization).unwrap());
-    body.insert("OutputSerialization", serde_xml_rs::to_string(&input.output_serialization).unwrap());
-    if let Some(scan_range) = input.scan_range {
-        body.insert("ScanRange", serde_json::to_string(&scan_range).unwrap());
-    };
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     if let Some(sse_customer_algorithm) = input.sse_customer_algorithm {
         http_request.add_header("x-amz-server-side-encryption-customer-algorithm", &sse_customer_algorithm);
@@ -7631,8 +7247,8 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -7741,8 +7357,8 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
         Some(_) => path.replace("{Bucket}", &input.bucket.to_string()),
         None => path.to_string(),
     };
-    path = match path.find("{Key}") {
-        Some(_) => path.replace("{Key}", &input.key.to_string()),
+    path = match path.find("{Key+}") {
+        Some(_) => path.replace("{Key+}", &input.key.to_string()),
         None => path.to_string(),
     };
 
@@ -7754,12 +7370,6 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
         &path,
     );
 
-    let mut body: std::collections::HashMap<&str, String> = Default::default();
-    if body.len() != 0 {
-        http_request.set_payload(Some(serde_xml_rs::to_string(&body).unwrap()));
-    } else {
-        http_request.set_payload(Option::<String>::None);
-    }
 
     http_request.add_header("x-amz-copy-source", &input.copy_source);
     if let Some(copy_source_if_match) = input.copy_source_if_match {
@@ -8026,4 +7636,3 @@ fn __write_get_object_response(input: WriteGetObjectResponseRequest) -> BoxFutur
         }
     })
 }
-
