@@ -3799,6 +3799,8 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<GetObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        println!("DEBUG: response={}", std::str::from_utf8(body).unwrap());
                         serde_json::to_vec(&Result::<GetObjectOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
