@@ -5166,9 +5166,6 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
                         serde_json::to_vec(&Result::<ListObjectsV2Output, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let body = String::from(std::str::from_utf8(body).unwrap());
-                        println!("DEBUG: response={}", body);
                         serde_json::to_vec(&Result::<ListObjectsV2Output, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
@@ -6705,6 +6702,9 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<PutObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body = String::from(std::str::from_utf8(body).unwrap());
+                        println!("DEBUG: response={}", body);
                         serde_json::to_vec(&Result::<PutObjectOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
