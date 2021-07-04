@@ -158,6 +158,7 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -166,7 +167,7 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
-    http_request.add_param("uploadId", &serde_json::to_string(&input.upload_id).unwrap());
+    http_request.add_param("uploadId", &input.upload_id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -229,6 +230,7 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.multipart_upload).unwrap()));
 
+
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
     };
@@ -236,7 +238,7 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
-    http_request.add_param("uploadId", &serde_json::to_string(&input.upload_id).unwrap());
+    http_request.add_param("uploadId", &input.upload_id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -331,6 +333,7 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(acl) = input.acl {
         http_request.add_header("x-amz-acl", &acl);
@@ -548,6 +551,7 @@ fn __create_bucket(input: CreateBucketRequest) -> BoxFuture<'static, Vec<u8>> {
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.create_bucket_configuration).unwrap()));
 
+
     if let Some(acl) = input.acl {
         http_request.add_header("x-amz-acl", &acl);
     };
@@ -630,6 +634,7 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(acl) = input.acl {
         http_request.add_header("x-amz-acl", &acl);
@@ -811,6 +816,7 @@ fn __delete_bucket(input: DeleteBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -868,12 +874,13 @@ fn __delete_bucket_analytics_configuration(input: DeleteBucketAnalyticsConfigura
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
-    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
+    http_request.add_param("id", &input.id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -926,6 +933,7 @@ fn __delete_bucket_cors(input: DeleteBucketCorsRequest) -> BoxFuture<'static, Ve
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -983,6 +991,7 @@ fn __delete_bucket_encryption(input: DeleteBucketEncryptionRequest) -> BoxFuture
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1040,9 +1049,10 @@ fn __delete_bucket_intelligent_tiering_configuration(input: DeleteBucketIntellig
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
 
-    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
+    http_request.add_param("id", &input.id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -1095,12 +1105,13 @@ fn __delete_bucket_inventory_configuration(input: DeleteBucketInventoryConfigura
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
-    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
+    http_request.add_param("id", &input.id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -1153,6 +1164,7 @@ fn __delete_bucket_lifecycle(input: DeleteBucketLifecycleRequest) -> BoxFuture<'
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1210,12 +1222,13 @@ fn __delete_bucket_metrics_configuration(input: DeleteBucketMetricsConfiguration
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
-    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
+    http_request.add_param("id", &input.id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -1268,6 +1281,7 @@ fn __delete_bucket_ownership_controls(input: DeleteBucketOwnershipControlsReques
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1325,6 +1339,7 @@ fn __delete_bucket_policy(input: DeleteBucketPolicyRequest) -> BoxFuture<'static
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1382,6 +1397,7 @@ fn __delete_bucket_replication(input: DeleteBucketReplicationRequest) -> BoxFutu
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1439,6 +1455,7 @@ fn __delete_bucket_tagging(input: DeleteBucketTaggingRequest) -> BoxFuture<'stat
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1496,6 +1513,7 @@ fn __delete_bucket_website(input: DeleteBucketWebsiteRequest) -> BoxFuture<'stat
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1557,6 +1575,7 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(mfa) = input.mfa {
         http_request.add_header("x-amz-mfa", &mfa);
@@ -1572,7 +1591,7 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
 
     Box::pin(async move {
@@ -1642,13 +1661,14 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
 
     Box::pin(async move {
@@ -1707,6 +1727,7 @@ fn __delete_objects(input: DeleteObjectsRequest) -> BoxFuture<'static, Vec<u8>> 
     );
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.delete).unwrap()));
+
 
     if let Some(mfa) = input.mfa {
         http_request.add_header("x-amz-mfa", &mfa);
@@ -1789,6 +1810,7 @@ fn __delete_public_access_block(input: DeletePublicAccessBlockRequest) -> BoxFut
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1846,6 +1868,7 @@ fn __get_bucket_accelerate_configuration(input: GetBucketAccelerateConfiguration
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1914,6 +1937,7 @@ fn __get_bucket_acl(input: GetBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -1983,12 +2007,13 @@ fn __get_bucket_analytics_configuration(input: GetBucketAnalyticsConfigurationRe
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
-    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
+    http_request.add_param("id", &input.id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -2053,6 +2078,7 @@ fn __get_bucket_cors(input: GetBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2121,6 +2147,7 @@ fn __get_bucket_encryption(input: GetBucketEncryptionRequest) -> BoxFuture<'stat
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2190,9 +2217,10 @@ fn __get_bucket_intelligent_tiering_configuration(input: GetBucketIntelligentTie
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
 
-    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
+    http_request.add_param("id", &input.id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -2257,12 +2285,13 @@ fn __get_bucket_inventory_configuration(input: GetBucketInventoryConfigurationRe
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
-    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
+    http_request.add_param("id", &input.id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -2327,6 +2356,7 @@ fn __get_bucket_lifecycle(input: GetBucketLifecycleRequest) -> BoxFuture<'static
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2395,6 +2425,7 @@ fn __get_bucket_lifecycle_configuration(input: GetBucketLifecycleConfigurationRe
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2463,6 +2494,7 @@ fn __get_bucket_location(input: GetBucketLocationRequest) -> BoxFuture<'static, 
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2531,6 +2563,7 @@ fn __get_bucket_logging(input: GetBucketLoggingRequest) -> BoxFuture<'static, Ve
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2599,12 +2632,13 @@ fn __get_bucket_metrics_configuration(input: GetBucketMetricsConfigurationReques
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
-    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
+    http_request.add_param("id", &input.id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -2669,6 +2703,7 @@ fn __get_bucket_notification(input: GetBucketNotificationConfigurationRequest) -
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2739,6 +2774,7 @@ fn __get_bucket_notification_configuration(input: GetBucketNotificationConfigura
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2809,6 +2845,7 @@ fn __get_bucket_ownership_controls(input: GetBucketOwnershipControlsRequest) -> 
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2878,6 +2915,7 @@ fn __get_bucket_policy(input: GetBucketPolicyRequest) -> BoxFuture<'static, Vec<
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -2937,6 +2975,7 @@ fn __get_bucket_policy_status(input: GetBucketPolicyStatusRequest) -> BoxFuture<
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3006,6 +3045,7 @@ fn __get_bucket_replication(input: GetBucketReplicationRequest) -> BoxFuture<'st
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3075,6 +3115,7 @@ fn __get_bucket_request_payment(input: GetBucketRequestPaymentRequest) -> BoxFut
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3143,6 +3184,7 @@ fn __get_bucket_tagging(input: GetBucketTaggingRequest) -> BoxFuture<'static, Ve
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3211,6 +3253,7 @@ fn __get_bucket_versioning(input: GetBucketVersioningRequest) -> BoxFuture<'stat
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3280,6 +3323,7 @@ fn __get_bucket_website(input: GetBucketWebsiteRequest) -> BoxFuture<'static, Ve
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3355,6 +3399,7 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(if_match) = input.if_match {
         http_request.add_header("If-Match", &if_match);
@@ -3388,28 +3433,28 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     if let Some(response_cache_control) = input.response_cache_control {
-        http_request.add_param("response-cache-control", &serde_json::to_string(&response_cache_control).unwrap());
+        http_request.add_param("response-cache-control", &response_cache_control);
     };
     if let Some(response_content_disposition) = input.response_content_disposition {
-        http_request.add_param("response-content-disposition", &serde_json::to_string(&response_content_disposition).unwrap());
+        http_request.add_param("response-content-disposition", &response_content_disposition);
     };
     if let Some(response_content_encoding) = input.response_content_encoding {
-        http_request.add_param("response-content-encoding", &serde_json::to_string(&response_content_encoding).unwrap());
+        http_request.add_param("response-content-encoding", &response_content_encoding);
     };
     if let Some(response_content_language) = input.response_content_language {
-        http_request.add_param("response-content-language", &serde_json::to_string(&response_content_language).unwrap());
+        http_request.add_param("response-content-language", &response_content_language);
     };
     if let Some(response_content_type) = input.response_content_type {
-        http_request.add_param("response-content-type", &serde_json::to_string(&response_content_type).unwrap());
+        http_request.add_param("response-content-type", &response_content_type);
     };
     if let Some(response_expires) = input.response_expires {
-        http_request.add_param("response-expires", &serde_json::to_string(&response_expires).unwrap());
+        http_request.add_param("response-expires", &serde_xml_rs::to_string(&response_expires).unwrap());
     };
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
     if let Some(part_number) = input.part_number {
-        http_request.add_param("partNumber", &serde_json::to_string(&part_number).unwrap());
+        http_request.add_param("partNumber", &serde_xml_rs::to_string(&part_number).unwrap());
     };
 
     Box::pin(async move {
@@ -3589,6 +3634,7 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -3598,7 +3644,7 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
 
     Box::pin(async move {
@@ -3672,6 +3718,7 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -3681,7 +3728,7 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
     };
 
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
 
     Box::pin(async move {
@@ -3747,6 +3794,7 @@ fn __get_object_lock_configuration(input: GetObjectLockConfigurationRequest) -> 
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3820,6 +3868,7 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -3829,7 +3878,7 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
     };
 
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
 
     Box::pin(async move {
@@ -3899,6 +3948,7 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -3908,7 +3958,7 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
     };
 
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
 
     Box::pin(async move {
@@ -3981,6 +4031,7 @@ fn __get_object_torrent(input: GetObjectTorrentRequest) -> BoxFuture<'static, Ve
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -4047,6 +4098,7 @@ fn __get_public_access_block(input: GetPublicAccessBlockRequest) -> BoxFuture<'s
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -4116,6 +4168,7 @@ fn __head_bucket(input: HeadBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
@@ -4177,6 +4230,7 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(if_match) = input.if_match {
         http_request.add_header("If-Match", &if_match);
@@ -4210,10 +4264,10 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
     if let Some(part_number) = input.part_number {
-        http_request.add_param("partNumber", &serde_json::to_string(&part_number).unwrap());
+        http_request.add_param("partNumber", &serde_xml_rs::to_string(&part_number).unwrap());
     };
 
     Box::pin(async move {
@@ -4383,13 +4437,14 @@ fn __list_bucket_analytics_configurations(input: ListBucketAnalyticsConfiguratio
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
     if let Some(continuation_token) = input.continuation_token {
-        http_request.add_param("continuation-token", &serde_json::to_string(&continuation_token).unwrap());
+        http_request.add_param("continuation-token", &continuation_token);
     };
 
     Box::pin(async move {
@@ -4457,10 +4512,11 @@ fn __list_bucket_intelligent_tiering_configurations(input: ListBucketIntelligent
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
 
     if let Some(continuation_token) = input.continuation_token {
-        http_request.add_param("continuation-token", &serde_json::to_string(&continuation_token).unwrap());
+        http_request.add_param("continuation-token", &continuation_token);
     };
 
     Box::pin(async move {
@@ -4528,13 +4584,14 @@ fn __list_bucket_inventory_configurations(input: ListBucketInventoryConfiguratio
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
     if let Some(continuation_token) = input.continuation_token {
-        http_request.add_param("continuation-token", &serde_json::to_string(&continuation_token).unwrap());
+        http_request.add_param("continuation-token", &continuation_token);
     };
 
     Box::pin(async move {
@@ -4602,13 +4659,14 @@ fn __list_bucket_metrics_configurations(input: ListBucketMetricsConfigurationsRe
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
     if let Some(continuation_token) = input.continuation_token {
-        http_request.add_param("continuation-token", &serde_json::to_string(&continuation_token).unwrap());
+        http_request.add_param("continuation-token", &continuation_token);
     };
 
     Box::pin(async move {
@@ -4672,6 +4730,7 @@ fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
 
 
@@ -4738,28 +4797,29 @@ fn __list_multipart_uploads(input: ListMultipartUploadsRequest) -> BoxFuture<'st
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
     if let Some(delimiter) = input.delimiter {
-        http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
+        http_request.add_param("delimiter", &delimiter);
     };
     if let Some(encoding_type) = input.encoding_type {
-        http_request.add_param("encoding-type", &serde_json::to_string(&encoding_type).unwrap());
+        http_request.add_param("encoding-type", &encoding_type);
     };
     if let Some(key_marker) = input.key_marker {
-        http_request.add_param("key-marker", &serde_json::to_string(&key_marker).unwrap());
+        http_request.add_param("key-marker", &key_marker);
     };
     if let Some(max_uploads) = input.max_uploads {
-        http_request.add_param("max-uploads", &serde_json::to_string(&max_uploads).unwrap());
+        http_request.add_param("max-uploads", &serde_xml_rs::to_string(&max_uploads).unwrap());
     };
     if let Some(prefix) = input.prefix {
-        http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
+        http_request.add_param("prefix", &prefix);
     };
     if let Some(upload_id_marker) = input.upload_id_marker {
-        http_request.add_param("upload-id-marker", &serde_json::to_string(&upload_id_marker).unwrap());
+        http_request.add_param("upload-id-marker", &upload_id_marker);
     };
 
     Box::pin(async move {
@@ -4835,28 +4895,29 @@ fn __list_object_versions(input: ListObjectVersionsRequest) -> BoxFuture<'static
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
     if let Some(delimiter) = input.delimiter {
-        http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
+        http_request.add_param("delimiter", &delimiter);
     };
     if let Some(encoding_type) = input.encoding_type {
-        http_request.add_param("encoding-type", &serde_json::to_string(&encoding_type).unwrap());
+        http_request.add_param("encoding-type", &encoding_type);
     };
     if let Some(key_marker) = input.key_marker {
-        http_request.add_param("key-marker", &serde_json::to_string(&key_marker).unwrap());
+        http_request.add_param("key-marker", &key_marker);
     };
     if let Some(max_keys) = input.max_keys {
-        http_request.add_param("max-keys", &serde_json::to_string(&max_keys).unwrap());
+        http_request.add_param("max-keys", &serde_xml_rs::to_string(&max_keys).unwrap());
     };
     if let Some(prefix) = input.prefix {
-        http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
+        http_request.add_param("prefix", &prefix);
     };
     if let Some(version_id_marker) = input.version_id_marker {
-        http_request.add_param("version-id-marker", &serde_json::to_string(&version_id_marker).unwrap());
+        http_request.add_param("version-id-marker", &version_id_marker);
     };
 
     Box::pin(async move {
@@ -4933,6 +4994,7 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -4942,19 +5004,19 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     if let Some(delimiter) = input.delimiter {
-        http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
+        http_request.add_param("delimiter", &delimiter);
     };
     if let Some(encoding_type) = input.encoding_type {
-        http_request.add_param("encoding-type", &serde_json::to_string(&encoding_type).unwrap());
+        http_request.add_param("encoding-type", &encoding_type);
     };
     if let Some(marker) = input.marker {
-        http_request.add_param("marker", &serde_json::to_string(&marker).unwrap());
+        http_request.add_param("marker", &marker);
     };
     if let Some(max_keys) = input.max_keys {
-        http_request.add_param("max-keys", &serde_json::to_string(&max_keys).unwrap());
+        http_request.add_param("max-keys", &serde_xml_rs::to_string(&max_keys).unwrap());
     };
     if let Some(prefix) = input.prefix {
-        http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
+        http_request.add_param("prefix", &prefix);
     };
 
     Box::pin(async move {
@@ -5028,6 +5090,7 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -5037,25 +5100,25 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
     };
 
     if let Some(delimiter) = input.delimiter {
-        http_request.add_param("delimiter", &serde_json::to_string(&delimiter).unwrap());
+        http_request.add_param("delimiter", &delimiter);
     };
     if let Some(encoding_type) = input.encoding_type {
-        http_request.add_param("encoding-type", &serde_json::to_string(&encoding_type).unwrap());
+        http_request.add_param("encoding-type", &encoding_type);
     };
     if let Some(max_keys) = input.max_keys {
-        http_request.add_param("max-keys", &serde_json::to_string(&max_keys).unwrap());
+        http_request.add_param("max-keys", &serde_xml_rs::to_string(&max_keys).unwrap());
     };
     if let Some(prefix) = input.prefix {
-        http_request.add_param("prefix", &serde_json::to_string(&prefix).unwrap());
+        http_request.add_param("prefix", &prefix);
     };
     if let Some(continuation_token) = input.continuation_token {
-        http_request.add_param("continuation-token", &serde_json::to_string(&continuation_token).unwrap());
+        http_request.add_param("continuation-token", &continuation_token);
     };
     if let Some(fetch_owner) = input.fetch_owner {
-        http_request.add_param("fetch-owner", &serde_json::to_string(&fetch_owner).unwrap());
+        http_request.add_param("fetch-owner", &serde_xml_rs::to_string(&fetch_owner).unwrap());
     };
     if let Some(start_after) = input.start_after {
-        http_request.add_param("start-after", &serde_json::to_string(&start_after).unwrap());
+        http_request.add_param("start-after", &start_after);
     };
 
     Box::pin(async move {
@@ -5138,6 +5201,7 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -5147,12 +5211,12 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     if let Some(max_parts) = input.max_parts {
-        http_request.add_param("max-parts", &serde_json::to_string(&max_parts).unwrap());
+        http_request.add_param("max-parts", &serde_xml_rs::to_string(&max_parts).unwrap());
     };
     if let Some(part_number_marker) = input.part_number_marker {
-        http_request.add_param("part-number-marker", &serde_json::to_string(&part_number_marker).unwrap());
+        http_request.add_param("part-number-marker", &serde_xml_rs::to_string(&part_number_marker).unwrap());
     };
-    http_request.add_param("uploadId", &serde_json::to_string(&input.upload_id).unwrap());
+    http_request.add_param("uploadId", &input.upload_id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -5240,6 +5304,7 @@ fn __put_bucket_accelerate_configuration(input: PutBucketAccelerateConfiguration
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.accelerate_configuration).unwrap()));
 
+
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
@@ -5297,6 +5362,7 @@ fn __put_bucket_acl(input: PutBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
     );
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.access_control_policy).unwrap()));
+
 
     if let Some(acl) = input.acl {
         http_request.add_header("x-amz-acl", &acl);
@@ -5377,11 +5443,12 @@ fn __put_bucket_analytics_configuration(input: PutBucketAnalyticsConfigurationRe
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.analytics_configuration).unwrap()));
 
+
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
-    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
+    http_request.add_param("id", &input.id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -5435,6 +5502,7 @@ fn __put_bucket_cors(input: PutBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
     );
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.cors_configuration).unwrap()));
+
 
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
@@ -5496,6 +5564,7 @@ fn __put_bucket_encryption(input: PutBucketEncryptionRequest) -> BoxFuture<'stat
     );
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.server_side_encryption_configuration).unwrap()));
+
 
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
@@ -5559,7 +5628,8 @@ fn __put_bucket_intelligent_tiering_configuration(input: PutBucketIntelligentTie
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.intelligent_tiering_configuration).unwrap()));
 
 
-    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
+
+    http_request.add_param("id", &input.id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -5614,11 +5684,12 @@ fn __put_bucket_inventory_configuration(input: PutBucketInventoryConfigurationRe
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.inventory_configuration).unwrap()));
 
+
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
-    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
+    http_request.add_param("id", &input.id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -5672,6 +5743,7 @@ fn __put_bucket_lifecycle(input: PutBucketLifecycleRequest) -> BoxFuture<'static
     );
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.lifecycle_configuration).unwrap()));
+
 
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
@@ -5734,6 +5806,7 @@ fn __put_bucket_lifecycle_configuration(input: PutBucketLifecycleConfigurationRe
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.lifecycle_configuration).unwrap()));
 
+
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
@@ -5791,6 +5864,7 @@ fn __put_bucket_logging(input: PutBucketLoggingRequest) -> BoxFuture<'static, Ve
     );
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.bucket_logging_status).unwrap()));
+
 
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
@@ -5853,11 +5927,12 @@ fn __put_bucket_metrics_configuration(input: PutBucketMetricsConfigurationReques
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.metrics_configuration).unwrap()));
 
+
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
-    http_request.add_param("id", &serde_json::to_string(&input.id).unwrap());
+    http_request.add_param("id", &input.id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -5911,6 +5986,7 @@ fn __put_bucket_notification(input: PutBucketNotificationRequest) -> BoxFuture<'
     );
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.notification_configuration).unwrap()));
+
 
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
@@ -5973,6 +6049,7 @@ fn __put_bucket_notification_configuration(input: PutBucketNotificationConfigura
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.notification_configuration).unwrap()));
 
+
     if let Some(expected_bucket_owner) = input.expected_bucket_owner {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
@@ -6030,6 +6107,7 @@ fn __put_bucket_ownership_controls(input: PutBucketOwnershipControlsRequest) -> 
     );
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.ownership_controls).unwrap()));
+
 
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
@@ -6091,6 +6169,7 @@ fn __put_bucket_policy(input: PutBucketPolicyRequest) -> BoxFuture<'static, Vec<
     );
 
     http_request.set_payload(Some(input.policy));
+
 
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
@@ -6156,6 +6235,7 @@ fn __put_bucket_replication(input: PutBucketReplicationRequest) -> BoxFuture<'st
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.replication_configuration).unwrap()));
 
+
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
     };
@@ -6220,6 +6300,7 @@ fn __put_bucket_request_payment(input: PutBucketRequestPaymentRequest) -> BoxFut
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.request_payment_configuration).unwrap()));
 
+
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
     };
@@ -6281,6 +6362,7 @@ fn __put_bucket_tagging(input: PutBucketTaggingRequest) -> BoxFuture<'static, Ve
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.tagging).unwrap()));
 
+
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
     };
@@ -6341,6 +6423,7 @@ fn __put_bucket_versioning(input: PutBucketVersioningRequest) -> BoxFuture<'stat
     );
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.versioning_configuration).unwrap()));
+
 
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
@@ -6406,6 +6489,7 @@ fn __put_bucket_website(input: PutBucketWebsiteRequest) -> BoxFuture<'static, Ve
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.website_configuration).unwrap()));
 
+
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
     };
@@ -6470,6 +6554,7 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
     );
 
     http_request.set_payload(input.body);
+
 
     if let Some(acl) = input.acl {
         http_request.add_header("x-amz-acl", &acl);
@@ -6654,6 +6739,7 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.access_control_policy).unwrap()));
 
+
     if let Some(acl) = input.acl {
         http_request.add_header("x-amz-acl", &acl);
     };
@@ -6683,7 +6769,7 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
     };
 
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
 
     Box::pin(async move {
@@ -6747,6 +6833,7 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.legal_hold).unwrap()));
 
+
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
     };
@@ -6758,7 +6845,7 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
     };
 
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
 
     Box::pin(async move {
@@ -6817,6 +6904,7 @@ fn __put_object_lock_configuration(input: PutObjectLockConfigurationRequest) -> 
     );
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.object_lock_configuration).unwrap()));
+
 
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
@@ -6893,6 +6981,7 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.retention).unwrap()));
 
+
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
     };
@@ -6907,7 +6996,7 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
     };
 
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
 
     Box::pin(async move {
@@ -6971,6 +7060,7 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.tagging).unwrap()));
 
+
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
     };
@@ -6982,7 +7072,7 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
     };
 
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
 
     Box::pin(async move {
@@ -7041,6 +7131,7 @@ fn __put_public_access_block(input: PutPublicAccessBlockRequest) -> BoxFuture<'s
     );
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.public_access_block_configuration).unwrap()));
+
 
     if let Some(content_md5) = input.content_md5 {
         http_request.add_header("Content-MD5", &content_md5);
@@ -7107,6 +7198,7 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.restore_request).unwrap()));
 
+
     if let Some(request_payer) = input.request_payer {
         http_request.add_header("x-amz-request-payer", &request_payer);
     };
@@ -7115,7 +7207,7 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
     };
 
     if let Some(version_id) = input.version_id {
-        http_request.add_param("versionId", &serde_json::to_string(&version_id).unwrap());
+        http_request.add_param("versionId", &version_id);
     };
 
     Box::pin(async move {
@@ -7181,6 +7273,7 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     if let Some(sse_customer_algorithm) = input.sse_customer_algorithm {
         http_request.add_header("x-amz-server-side-encryption-customer-algorithm", &sse_customer_algorithm);
@@ -7265,6 +7358,7 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
 
     http_request.set_payload(input.body);
 
+
     if let Some(content_length) = input.content_length {
         http_request.add_header("Content-Length", &serde_xml_rs::to_string(&content_length).unwrap());
     };
@@ -7287,8 +7381,8 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
         http_request.add_header("x-amz-expected-bucket-owner", &expected_bucket_owner);
     };
 
-    http_request.add_param("partNumber", &serde_json::to_string(&input.part_number).unwrap());
-    http_request.add_param("uploadId", &serde_json::to_string(&input.upload_id).unwrap());
+    http_request.add_param("partNumber", &serde_xml_rs::to_string(&input.part_number).unwrap());
+    http_request.add_param("uploadId", &input.upload_id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -7373,6 +7467,7 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
         &path,
     );
 
+    http_request.set_payload(Option::<String>::None);
 
     http_request.add_header("x-amz-copy-source", &input.copy_source);
     if let Some(copy_source_if_match) = input.copy_source_if_match {
@@ -7418,8 +7513,8 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
         http_request.add_header("x-amz-source-expected-bucket-owner", &expected_source_bucket_owner);
     };
 
-    http_request.add_param("partNumber", &serde_json::to_string(&input.part_number).unwrap());
-    http_request.add_param("uploadId", &serde_json::to_string(&input.upload_id).unwrap());
+    http_request.add_param("partNumber", &serde_xml_rs::to_string(&input.part_number).unwrap());
+    http_request.add_param("uploadId", &input.upload_id);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -7509,6 +7604,7 @@ fn __write_get_object_response(input: WriteGetObjectResponseRequest) -> BoxFutur
     );
 
     http_request.set_payload(input.body);
+
 
     http_request.add_header("x-amz-request-route", &input.request_route);
     http_request.add_header("x-amz-request-token", &input.request_token);
