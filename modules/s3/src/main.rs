@@ -150,6 +150,15 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -157,6 +166,11 @@ fn __abort_multipart_upload(input: AbortMultipartUploadRequest) -> BoxFuture<'st
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -220,6 +234,15 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "s3",
@@ -227,6 +250,11 @@ fn __complete_multipart_upload(input: CompleteMultipartUploadRequest) -> BoxFutu
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.multipart_upload).unwrap()));
 
@@ -325,6 +353,15 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -332,6 +369,11 @@ fn __copy_object(input: CopyObjectRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -541,6 +583,15 @@ fn __create_bucket(input: CreateBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -548,6 +599,11 @@ fn __create_bucket(input: CreateBucketRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.create_bucket_configuration).unwrap()));
 
@@ -626,6 +682,15 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "s3",
@@ -633,6 +698,11 @@ fn __create_multipart_upload(input: CreateMultipartUploadRequest) -> BoxFuture<'
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -808,6 +878,15 @@ fn __delete_bucket(input: DeleteBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -815,6 +894,11 @@ fn __delete_bucket(input: DeleteBucketRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -866,6 +950,15 @@ fn __delete_bucket_analytics_configuration(input: DeleteBucketAnalyticsConfigura
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -873,6 +966,11 @@ fn __delete_bucket_analytics_configuration(input: DeleteBucketAnalyticsConfigura
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -925,6 +1023,15 @@ fn __delete_bucket_cors(input: DeleteBucketCorsRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -932,6 +1039,11 @@ fn __delete_bucket_cors(input: DeleteBucketCorsRequest) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -983,6 +1095,15 @@ fn __delete_bucket_encryption(input: DeleteBucketEncryptionRequest) -> BoxFuture
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -990,6 +1111,11 @@ fn __delete_bucket_encryption(input: DeleteBucketEncryptionRequest) -> BoxFuture
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1041,6 +1167,15 @@ fn __delete_bucket_intelligent_tiering_configuration(input: DeleteBucketIntellig
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -1048,6 +1183,11 @@ fn __delete_bucket_intelligent_tiering_configuration(input: DeleteBucketIntellig
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1097,6 +1237,15 @@ fn __delete_bucket_inventory_configuration(input: DeleteBucketInventoryConfigura
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -1104,6 +1253,11 @@ fn __delete_bucket_inventory_configuration(input: DeleteBucketInventoryConfigura
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1156,6 +1310,15 @@ fn __delete_bucket_lifecycle(input: DeleteBucketLifecycleRequest) -> BoxFuture<'
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -1163,6 +1326,11 @@ fn __delete_bucket_lifecycle(input: DeleteBucketLifecycleRequest) -> BoxFuture<'
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1214,6 +1382,15 @@ fn __delete_bucket_metrics_configuration(input: DeleteBucketMetricsConfiguration
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -1221,6 +1398,11 @@ fn __delete_bucket_metrics_configuration(input: DeleteBucketMetricsConfiguration
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1273,6 +1455,15 @@ fn __delete_bucket_ownership_controls(input: DeleteBucketOwnershipControlsReques
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -1280,6 +1471,11 @@ fn __delete_bucket_ownership_controls(input: DeleteBucketOwnershipControlsReques
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1331,6 +1527,15 @@ fn __delete_bucket_policy(input: DeleteBucketPolicyRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -1338,6 +1543,11 @@ fn __delete_bucket_policy(input: DeleteBucketPolicyRequest) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1389,6 +1599,15 @@ fn __delete_bucket_replication(input: DeleteBucketReplicationRequest) -> BoxFutu
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -1396,6 +1615,11 @@ fn __delete_bucket_replication(input: DeleteBucketReplicationRequest) -> BoxFutu
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1447,6 +1671,15 @@ fn __delete_bucket_tagging(input: DeleteBucketTaggingRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -1454,6 +1687,11 @@ fn __delete_bucket_tagging(input: DeleteBucketTaggingRequest) -> BoxFuture<'stat
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1505,6 +1743,15 @@ fn __delete_bucket_website(input: DeleteBucketWebsiteRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -1512,6 +1759,11 @@ fn __delete_bucket_website(input: DeleteBucketWebsiteRequest) -> BoxFuture<'stat
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1567,6 +1819,15 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -1574,6 +1835,11 @@ fn __delete_object(input: DeleteObjectRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1653,6 +1919,15 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -1660,6 +1935,11 @@ fn __delete_object_tagging(input: DeleteObjectTaggingRequest) -> BoxFuture<'stat
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1718,6 +1998,15 @@ fn __delete_objects(input: DeleteObjectsRequest) -> BoxFuture<'static, Vec<u8>> 
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "s3",
@@ -1725,6 +2014,11 @@ fn __delete_objects(input: DeleteObjectsRequest) -> BoxFuture<'static, Vec<u8>> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.delete).unwrap()));
 
@@ -1802,6 +2096,15 @@ fn __delete_public_access_block(input: DeletePublicAccessBlockRequest) -> BoxFut
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "s3",
@@ -1809,6 +2112,11 @@ fn __delete_public_access_block(input: DeletePublicAccessBlockRequest) -> BoxFut
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1860,6 +2168,15 @@ fn __get_bucket_accelerate_configuration(input: GetBucketAccelerateConfiguration
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -1867,6 +2184,11 @@ fn __get_bucket_accelerate_configuration(input: GetBucketAccelerateConfiguration
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1929,6 +2251,15 @@ fn __get_bucket_acl(input: GetBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -1936,6 +2267,11 @@ fn __get_bucket_acl(input: GetBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -1999,6 +2335,15 @@ fn __get_bucket_analytics_configuration(input: GetBucketAnalyticsConfigurationRe
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2006,6 +2351,11 @@ fn __get_bucket_analytics_configuration(input: GetBucketAnalyticsConfigurationRe
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2070,6 +2420,15 @@ fn __get_bucket_cors(input: GetBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2077,6 +2436,11 @@ fn __get_bucket_cors(input: GetBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2139,6 +2503,15 @@ fn __get_bucket_encryption(input: GetBucketEncryptionRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2146,6 +2519,11 @@ fn __get_bucket_encryption(input: GetBucketEncryptionRequest) -> BoxFuture<'stat
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2209,6 +2587,15 @@ fn __get_bucket_intelligent_tiering_configuration(input: GetBucketIntelligentTie
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2216,6 +2603,11 @@ fn __get_bucket_intelligent_tiering_configuration(input: GetBucketIntelligentTie
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2277,6 +2669,15 @@ fn __get_bucket_inventory_configuration(input: GetBucketInventoryConfigurationRe
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2284,6 +2685,11 @@ fn __get_bucket_inventory_configuration(input: GetBucketInventoryConfigurationRe
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2348,6 +2754,15 @@ fn __get_bucket_lifecycle(input: GetBucketLifecycleRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2355,6 +2770,11 @@ fn __get_bucket_lifecycle(input: GetBucketLifecycleRequest) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2417,6 +2837,15 @@ fn __get_bucket_lifecycle_configuration(input: GetBucketLifecycleConfigurationRe
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2424,6 +2853,11 @@ fn __get_bucket_lifecycle_configuration(input: GetBucketLifecycleConfigurationRe
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2486,6 +2920,15 @@ fn __get_bucket_location(input: GetBucketLocationRequest) -> BoxFuture<'static, 
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2493,6 +2936,11 @@ fn __get_bucket_location(input: GetBucketLocationRequest) -> BoxFuture<'static, 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2555,6 +3003,15 @@ fn __get_bucket_logging(input: GetBucketLoggingRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2562,6 +3019,11 @@ fn __get_bucket_logging(input: GetBucketLoggingRequest) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2624,6 +3086,15 @@ fn __get_bucket_metrics_configuration(input: GetBucketMetricsConfigurationReques
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2631,6 +3102,11 @@ fn __get_bucket_metrics_configuration(input: GetBucketMetricsConfigurationReques
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2695,6 +3171,15 @@ fn __get_bucket_notification(input: GetBucketNotificationConfigurationRequest) -
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2702,6 +3187,11 @@ fn __get_bucket_notification(input: GetBucketNotificationConfigurationRequest) -
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2766,6 +3256,15 @@ fn __get_bucket_notification_configuration(input: GetBucketNotificationConfigura
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2773,6 +3272,11 @@ fn __get_bucket_notification_configuration(input: GetBucketNotificationConfigura
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2837,6 +3341,15 @@ fn __get_bucket_ownership_controls(input: GetBucketOwnershipControlsRequest) -> 
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2844,6 +3357,11 @@ fn __get_bucket_ownership_controls(input: GetBucketOwnershipControlsRequest) -> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2907,6 +3425,15 @@ fn __get_bucket_policy(input: GetBucketPolicyRequest) -> BoxFuture<'static, Vec<
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2914,6 +3441,11 @@ fn __get_bucket_policy(input: GetBucketPolicyRequest) -> BoxFuture<'static, Vec<
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -2967,6 +3499,15 @@ fn __get_bucket_policy_status(input: GetBucketPolicyStatusRequest) -> BoxFuture<
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -2974,6 +3515,11 @@ fn __get_bucket_policy_status(input: GetBucketPolicyStatusRequest) -> BoxFuture<
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -3037,6 +3583,15 @@ fn __get_bucket_replication(input: GetBucketReplicationRequest) -> BoxFuture<'st
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -3044,6 +3599,11 @@ fn __get_bucket_replication(input: GetBucketReplicationRequest) -> BoxFuture<'st
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -3107,6 +3667,15 @@ fn __get_bucket_request_payment(input: GetBucketRequestPaymentRequest) -> BoxFut
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -3114,6 +3683,11 @@ fn __get_bucket_request_payment(input: GetBucketRequestPaymentRequest) -> BoxFut
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -3176,6 +3750,15 @@ fn __get_bucket_tagging(input: GetBucketTaggingRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -3183,6 +3766,11 @@ fn __get_bucket_tagging(input: GetBucketTaggingRequest) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -3245,6 +3833,15 @@ fn __get_bucket_versioning(input: GetBucketVersioningRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -3252,6 +3849,11 @@ fn __get_bucket_versioning(input: GetBucketVersioningRequest) -> BoxFuture<'stat
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -3315,6 +3917,15 @@ fn __get_bucket_website(input: GetBucketWebsiteRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -3322,6 +3933,11 @@ fn __get_bucket_website(input: GetBucketWebsiteRequest) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -3391,6 +4007,15 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -3398,6 +4023,11 @@ fn __get_object(input: GetObjectRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -3626,6 +4256,15 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -3633,6 +4272,11 @@ fn __get_object_acl(input: GetObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -3710,6 +4354,15 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -3717,6 +4370,11 @@ fn __get_object_legal_hold(input: GetObjectLegalHoldRequest) -> BoxFuture<'stati
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -3786,6 +4444,15 @@ fn __get_object_lock_configuration(input: GetObjectLockConfigurationRequest) -> 
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -3793,6 +4460,11 @@ fn __get_object_lock_configuration(input: GetObjectLockConfigurationRequest) -> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -3860,6 +4532,15 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -3867,6 +4548,11 @@ fn __get_object_retention(input: GetObjectRetentionRequest) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -3940,6 +4626,15 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -3947,6 +4642,11 @@ fn __get_object_tagging(input: GetObjectTaggingRequest) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -4023,6 +4723,15 @@ fn __get_object_torrent(input: GetObjectTorrentRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -4030,6 +4739,11 @@ fn __get_object_torrent(input: GetObjectTorrentRequest) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -4090,6 +4804,15 @@ fn __get_public_access_block(input: GetPublicAccessBlockRequest) -> BoxFuture<'s
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -4097,6 +4820,11 @@ fn __get_public_access_block(input: GetPublicAccessBlockRequest) -> BoxFuture<'s
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -4160,6 +4888,15 @@ fn __head_bucket(input: HeadBucketRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "HEAD",
         "s3",
@@ -4167,6 +4904,11 @@ fn __head_bucket(input: HeadBucketRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -4222,6 +4964,15 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "HEAD",
         "s3",
@@ -4229,6 +4980,11 @@ fn __head_object(input: HeadObjectRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -4429,6 +5185,15 @@ fn __list_bucket_analytics_configurations(input: ListBucketAnalyticsConfiguratio
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -4436,6 +5201,11 @@ fn __list_bucket_analytics_configurations(input: ListBucketAnalyticsConfiguratio
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -4504,6 +5274,15 @@ fn __list_bucket_intelligent_tiering_configurations(input: ListBucketIntelligent
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -4511,6 +5290,11 @@ fn __list_bucket_intelligent_tiering_configurations(input: ListBucketIntelligent
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -4576,6 +5360,15 @@ fn __list_bucket_inventory_configurations(input: ListBucketInventoryConfiguratio
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -4583,6 +5376,11 @@ fn __list_bucket_inventory_configurations(input: ListBucketInventoryConfiguratio
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -4651,6 +5449,15 @@ fn __list_bucket_metrics_configurations(input: ListBucketMetricsConfigurationsRe
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -4658,6 +5465,11 @@ fn __list_bucket_metrics_configurations(input: ListBucketMetricsConfigurationsRe
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -4722,6 +5534,15 @@ pub fn list_buckets(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -4729,6 +5550,11 @@ fn __list_buckets(input: ()) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -4789,6 +5615,15 @@ fn __list_multipart_uploads(input: ListMultipartUploadsRequest) -> BoxFuture<'st
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -4796,6 +5631,11 @@ fn __list_multipart_uploads(input: ListMultipartUploadsRequest) -> BoxFuture<'st
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -4887,6 +5727,15 @@ fn __list_object_versions(input: ListObjectVersionsRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -4894,6 +5743,11 @@ fn __list_object_versions(input: ListObjectVersionsRequest) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -4986,6 +5840,15 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -4993,6 +5856,11 @@ fn __list_objects(input: ListObjectsRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -5090,7 +5958,6 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
             path.clone()[..idx].to_string()
         },
     };
-    println!("DEBUG: path={} path_params={}", path.clone(), path_params.clone());
 
     let mut http_request = SignedRequest::new(
         "GET",
@@ -5205,6 +6072,15 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
@@ -5212,6 +6088,11 @@ fn __list_parts(input: ListPartsRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -5306,6 +6187,15 @@ fn __put_bucket_accelerate_configuration(input: PutBucketAccelerateConfiguration
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -5313,6 +6203,11 @@ fn __put_bucket_accelerate_configuration(input: PutBucketAccelerateConfiguration
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.accelerate_configuration).unwrap()));
 
@@ -5365,6 +6260,15 @@ fn __put_bucket_acl(input: PutBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -5372,6 +6276,11 @@ fn __put_bucket_acl(input: PutBucketAclRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.access_control_policy).unwrap()));
 
@@ -5445,6 +6354,15 @@ fn __put_bucket_analytics_configuration(input: PutBucketAnalyticsConfigurationRe
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -5452,6 +6370,11 @@ fn __put_bucket_analytics_configuration(input: PutBucketAnalyticsConfigurationRe
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.analytics_configuration).unwrap()));
 
@@ -5505,6 +6428,15 @@ fn __put_bucket_cors(input: PutBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -5512,6 +6444,11 @@ fn __put_bucket_cors(input: PutBucketCorsRequest) -> BoxFuture<'static, Vec<u8>>
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.cors_configuration).unwrap()));
 
@@ -5567,6 +6504,15 @@ fn __put_bucket_encryption(input: PutBucketEncryptionRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -5574,6 +6520,11 @@ fn __put_bucket_encryption(input: PutBucketEncryptionRequest) -> BoxFuture<'stat
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.server_side_encryption_configuration).unwrap()));
 
@@ -5629,6 +6580,15 @@ fn __put_bucket_intelligent_tiering_configuration(input: PutBucketIntelligentTie
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -5636,6 +6596,11 @@ fn __put_bucket_intelligent_tiering_configuration(input: PutBucketIntelligentTie
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.intelligent_tiering_configuration).unwrap()));
 
@@ -5686,6 +6651,15 @@ fn __put_bucket_inventory_configuration(input: PutBucketInventoryConfigurationRe
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -5693,6 +6667,11 @@ fn __put_bucket_inventory_configuration(input: PutBucketInventoryConfigurationRe
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.inventory_configuration).unwrap()));
 
@@ -5746,6 +6725,15 @@ fn __put_bucket_lifecycle(input: PutBucketLifecycleRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -5753,6 +6741,11 @@ fn __put_bucket_lifecycle(input: PutBucketLifecycleRequest) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.lifecycle_configuration).unwrap()));
 
@@ -5808,6 +6801,15 @@ fn __put_bucket_lifecycle_configuration(input: PutBucketLifecycleConfigurationRe
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -5815,6 +6817,11 @@ fn __put_bucket_lifecycle_configuration(input: PutBucketLifecycleConfigurationRe
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.lifecycle_configuration).unwrap()));
 
@@ -5867,6 +6874,15 @@ fn __put_bucket_logging(input: PutBucketLoggingRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -5874,6 +6890,11 @@ fn __put_bucket_logging(input: PutBucketLoggingRequest) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.bucket_logging_status).unwrap()));
 
@@ -5929,6 +6950,15 @@ fn __put_bucket_metrics_configuration(input: PutBucketMetricsConfigurationReques
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -5936,6 +6966,11 @@ fn __put_bucket_metrics_configuration(input: PutBucketMetricsConfigurationReques
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.metrics_configuration).unwrap()));
 
@@ -5989,6 +7024,15 @@ fn __put_bucket_notification(input: PutBucketNotificationRequest) -> BoxFuture<'
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -5996,6 +7040,11 @@ fn __put_bucket_notification(input: PutBucketNotificationRequest) -> BoxFuture<'
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.notification_configuration).unwrap()));
 
@@ -6051,6 +7100,15 @@ fn __put_bucket_notification_configuration(input: PutBucketNotificationConfigura
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6058,6 +7116,11 @@ fn __put_bucket_notification_configuration(input: PutBucketNotificationConfigura
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.notification_configuration).unwrap()));
 
@@ -6110,6 +7173,15 @@ fn __put_bucket_ownership_controls(input: PutBucketOwnershipControlsRequest) -> 
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6117,6 +7189,11 @@ fn __put_bucket_ownership_controls(input: PutBucketOwnershipControlsRequest) -> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.ownership_controls).unwrap()));
 
@@ -6172,6 +7249,15 @@ fn __put_bucket_policy(input: PutBucketPolicyRequest) -> BoxFuture<'static, Vec<
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6179,6 +7265,11 @@ fn __put_bucket_policy(input: PutBucketPolicyRequest) -> BoxFuture<'static, Vec<
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(input.policy));
 
@@ -6237,6 +7328,15 @@ fn __put_bucket_replication(input: PutBucketReplicationRequest) -> BoxFuture<'st
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6244,6 +7344,11 @@ fn __put_bucket_replication(input: PutBucketReplicationRequest) -> BoxFuture<'st
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.replication_configuration).unwrap()));
 
@@ -6302,6 +7407,15 @@ fn __put_bucket_request_payment(input: PutBucketRequestPaymentRequest) -> BoxFut
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6309,6 +7423,11 @@ fn __put_bucket_request_payment(input: PutBucketRequestPaymentRequest) -> BoxFut
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.request_payment_configuration).unwrap()));
 
@@ -6364,6 +7483,15 @@ fn __put_bucket_tagging(input: PutBucketTaggingRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6371,6 +7499,11 @@ fn __put_bucket_tagging(input: PutBucketTaggingRequest) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.tagging).unwrap()));
 
@@ -6426,6 +7559,15 @@ fn __put_bucket_versioning(input: PutBucketVersioningRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6433,6 +7575,11 @@ fn __put_bucket_versioning(input: PutBucketVersioningRequest) -> BoxFuture<'stat
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.versioning_configuration).unwrap()));
 
@@ -6491,6 +7638,15 @@ fn __put_bucket_website(input: PutBucketWebsiteRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6498,6 +7654,11 @@ fn __put_bucket_website(input: PutBucketWebsiteRequest) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.website_configuration).unwrap()));
 
@@ -6557,6 +7718,15 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6564,6 +7734,11 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(input.body);
 
@@ -6741,6 +7916,15 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6748,6 +7932,11 @@ fn __put_object_acl(input: PutObjectAclRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.access_control_policy).unwrap()));
 
@@ -6835,6 +8024,15 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6842,6 +8040,11 @@ fn __put_object_legal_hold(input: PutObjectLegalHoldRequest) -> BoxFuture<'stati
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.legal_hold).unwrap()));
 
@@ -6907,6 +8110,15 @@ fn __put_object_lock_configuration(input: PutObjectLockConfigurationRequest) -> 
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6914,6 +8126,11 @@ fn __put_object_lock_configuration(input: PutObjectLockConfigurationRequest) -> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.object_lock_configuration).unwrap()));
 
@@ -6983,6 +8200,15 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -6990,6 +8216,11 @@ fn __put_object_retention(input: PutObjectRetentionRequest) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.retention).unwrap()));
 
@@ -7062,6 +8293,15 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -7069,6 +8309,11 @@ fn __put_object_tagging(input: PutObjectTaggingRequest) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.tagging).unwrap()));
 
@@ -7134,6 +8379,15 @@ fn __put_public_access_block(input: PutPublicAccessBlockRequest) -> BoxFuture<'s
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -7141,6 +8395,11 @@ fn __put_public_access_block(input: PutPublicAccessBlockRequest) -> BoxFuture<'s
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.public_access_block_configuration).unwrap()));
 
@@ -7200,6 +8459,15 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "s3",
@@ -7207,6 +8475,11 @@ fn __restore_object(input: RestoreObjectRequest) -> BoxFuture<'static, Vec<u8>> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Some(serde_xml_rs::to_string(&input.restore_request).unwrap()));
 
@@ -7277,6 +8550,15 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "s3",
@@ -7284,6 +8566,11 @@ fn __select_object_content(input: SelectObjectContentRequest) -> BoxFuture<'stat
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -7360,6 +8647,15 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -7367,6 +8663,11 @@ fn __upload_part(input: UploadPartRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(input.body);
 
@@ -7471,6 +8772,15 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "s3",
@@ -7478,6 +8788,11 @@ fn __upload_part_copy(input: UploadPartCopyRequest) -> BoxFuture<'static, Vec<u8
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -7607,6 +8922,15 @@ pub fn write_get_object_response(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> 
 fn __write_get_object_response(input: WriteGetObjectResponseRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/WriteGetObjectResponse");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "s3",
@@ -7614,6 +8938,11 @@ fn __write_get_object_response(input: WriteGetObjectResponseRequest) -> BoxFutur
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(input.body);
 
