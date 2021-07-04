@@ -5082,6 +5082,16 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[idx..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+    println!("DEBUG: path={} path_params={}", path.clone(), path_params.clone());
+
     let mut http_request = SignedRequest::new(
         "GET",
         "s3",
