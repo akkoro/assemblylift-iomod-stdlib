@@ -5086,7 +5086,7 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
     path = match path.find('?') {
         None => path.to_string(),
         Some(idx) => {
-            path_params = path.clone()[idx..path.len()].to_string();
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
             path.clone()[..idx].to_string()
         },
     };
@@ -5099,6 +5099,11 @@ fn __list_objects_v2(input: ListObjectsV2Request) -> BoxFuture<'static, Vec<u8>>
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    let pairs: Vec<&str> = path_params.split('=').collect();
+    for idx in (0..pairs.len()).step_by(2) {
+        http_request.add_param(pairs[idx], pairs[idx + 1]);
+    }
 
     http_request.set_payload(Option::<String>::None);
 
@@ -6702,9 +6707,6 @@ fn __put_object(input: PutObjectRequest) -> BoxFuture<'static, Vec<u8>> {
                         serde_json::to_vec(&Result::<PutObjectOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
-                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        let body = String::from(std::str::from_utf8(body).unwrap());
-                        println!("DEBUG: response={}", body);
                         serde_json::to_vec(&Result::<PutObjectOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
                         }))
