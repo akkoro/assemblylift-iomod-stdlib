@@ -1,12 +1,12 @@
 [package]
 name = "assemblylift-iomod-http-guest"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["xlem <xlem@akkoro.io>"]
 edition = "2018"
 
 [dependencies]
-assemblylift_core_iomod_guest = { version = "0.3.0", package = "assemblylift-core-iomod-guest" }
-assemblylift_core_io_guest = { version = "0.3.0", package = "assemblylift-core-io-guest" }
+assemblylift_core_iomod_guest = { version = "0.3", package = "assemblylift-core-iomod-guest" }
+assemblylift_core_io_guest = { version = "0.3", package = "assemblylift-core-io-guest" }
 
 serde = "1"
 serde_json = "1"

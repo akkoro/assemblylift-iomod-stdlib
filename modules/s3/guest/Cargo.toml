@@ -1,6 +1,6 @@
 [package]
 name = "assemblylift-iomod-s3-guest"
-version = "0.1.0"
+version = "0.1.1"
 description = "AssemblyLift S3 IOmod (guest)"
 authors = ["Akkoro and the AssemblyLift contributors <assemblylift@akkoro.io>"]
 edition = "2018"
@@ -9,8 +9,8 @@ repository = "https://github.com/akkoro/assemblylift-iomod-stdlib"
 readme = "README.md"
 
 [dependencies]
-assemblylift_core_io_guest = { version = "0.3.0", package = "assemblylift-core-io-guest" }
-assemblylift_core_iomod_guest = { version = "0.3.0", package = "assemblylift-core-iomod-guest" }
+assemblylift_core_io_guest = { version = "0.3", package = "assemblylift-core-io-guest" }
+assemblylift_core_iomod_guest = { version = "0.3", package = "assemblylift-core-iomod-guest" }
 
 serde = "1"
 serde_json = "1"
