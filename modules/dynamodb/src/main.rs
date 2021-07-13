@@ -92,6 +92,15 @@ pub fn batch_execute_statement(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __batch_execute_statement(input: BatchExecuteStatementInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -99,6 +108,18 @@ fn __batch_execute_statement(input: BatchExecuteStatementInput) -> BoxFuture<'st
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -113,9 +134,13 @@ fn __batch_execute_statement(input: BatchExecuteStatementInput) -> BoxFuture<'st
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: BatchExecuteStatementOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: BatchExecuteStatementOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: BatchExecuteStatementOutput = serde_json::from_slice(&*body).unwrap();
+                        output.responses = body.responses;
+
                         serde_json::to_vec(&Result::<BatchExecuteStatementOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -145,6 +170,15 @@ pub fn batch_get_item(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __batch_get_item(input: BatchGetItemInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -152,6 +186,18 @@ fn __batch_get_item(input: BatchGetItemInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -166,9 +212,15 @@ fn __batch_get_item(input: BatchGetItemInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: BatchGetItemOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: BatchGetItemOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: BatchGetItemOutput = serde_json::from_slice(&*body).unwrap();
+                        output.responses = body.responses;
+                        output.unprocessed_keys = body.unprocessed_keys;
+                        output.consumed_capacity = body.consumed_capacity;
+
                         serde_json::to_vec(&Result::<BatchGetItemOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -198,6 +250,15 @@ pub fn batch_write_item(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __batch_write_item(input: BatchWriteItemInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -205,6 +266,18 @@ fn __batch_write_item(input: BatchWriteItemInput) -> BoxFuture<'static, Vec<u8>>
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -219,9 +292,15 @@ fn __batch_write_item(input: BatchWriteItemInput) -> BoxFuture<'static, Vec<u8>>
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: BatchWriteItemOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: BatchWriteItemOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: BatchWriteItemOutput = serde_json::from_slice(&*body).unwrap();
+                        output.unprocessed_items = body.unprocessed_items;
+                        output.item_collection_metrics = body.item_collection_metrics;
+                        output.consumed_capacity = body.consumed_capacity;
+
                         serde_json::to_vec(&Result::<BatchWriteItemOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -251,6 +330,15 @@ pub fn create_backup(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __create_backup(input: CreateBackupInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -258,6 +346,18 @@ fn __create_backup(input: CreateBackupInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -272,9 +372,13 @@ fn __create_backup(input: CreateBackupInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: CreateBackupOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: CreateBackupOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: CreateBackupOutput = serde_json::from_slice(&*body).unwrap();
+                        output.backup_details = body.backup_details;
+
                         serde_json::to_vec(&Result::<CreateBackupOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -304,6 +408,15 @@ pub fn create_global_table(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __create_global_table(input: CreateGlobalTableInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -311,6 +424,18 @@ fn __create_global_table(input: CreateGlobalTableInput) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -325,9 +450,13 @@ fn __create_global_table(input: CreateGlobalTableInput) -> BoxFuture<'static, Ve
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: CreateGlobalTableOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: CreateGlobalTableOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: CreateGlobalTableOutput = serde_json::from_slice(&*body).unwrap();
+                        output.global_table_description = body.global_table_description;
+
                         serde_json::to_vec(&Result::<CreateGlobalTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -357,6 +486,15 @@ pub fn create_table(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __create_table(input: CreateTableInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -364,6 +502,18 @@ fn __create_table(input: CreateTableInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -378,9 +528,13 @@ fn __create_table(input: CreateTableInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: CreateTableOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: CreateTableOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: CreateTableOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_description = body.table_description;
+
                         serde_json::to_vec(&Result::<CreateTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -410,6 +564,15 @@ pub fn delete_backup(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __delete_backup(input: DeleteBackupInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -417,6 +580,18 @@ fn __delete_backup(input: DeleteBackupInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -431,9 +606,13 @@ fn __delete_backup(input: DeleteBackupInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DeleteBackupOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DeleteBackupOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DeleteBackupOutput = serde_json::from_slice(&*body).unwrap();
+                        output.backup_description = body.backup_description;
+
                         serde_json::to_vec(&Result::<DeleteBackupOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -463,6 +642,15 @@ pub fn delete_item(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __delete_item(input: DeleteItemInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -470,6 +658,18 @@ fn __delete_item(input: DeleteItemInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -484,9 +684,15 @@ fn __delete_item(input: DeleteItemInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DeleteItemOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DeleteItemOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DeleteItemOutput = serde_json::from_slice(&*body).unwrap();
+                        output.attributes = body.attributes;
+                        output.consumed_capacity = body.consumed_capacity;
+                        output.item_collection_metrics = body.item_collection_metrics;
+
                         serde_json::to_vec(&Result::<DeleteItemOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -516,6 +722,15 @@ pub fn delete_table(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __delete_table(input: DeleteTableInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -523,6 +738,18 @@ fn __delete_table(input: DeleteTableInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -537,9 +764,13 @@ fn __delete_table(input: DeleteTableInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DeleteTableOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DeleteTableOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DeleteTableOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_description = body.table_description;
+
                         serde_json::to_vec(&Result::<DeleteTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -569,6 +800,15 @@ pub fn describe_backup(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __describe_backup(input: DescribeBackupInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -576,6 +816,18 @@ fn __describe_backup(input: DescribeBackupInput) -> BoxFuture<'static, Vec<u8>> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -590,9 +842,13 @@ fn __describe_backup(input: DescribeBackupInput) -> BoxFuture<'static, Vec<u8>> 
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DescribeBackupOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DescribeBackupOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DescribeBackupOutput = serde_json::from_slice(&*body).unwrap();
+                        output.backup_description = body.backup_description;
+
                         serde_json::to_vec(&Result::<DescribeBackupOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -622,6 +878,15 @@ pub fn describe_continuous_backups(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>
 fn __describe_continuous_backups(input: DescribeContinuousBackupsInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -629,6 +894,18 @@ fn __describe_continuous_backups(input: DescribeContinuousBackupsInput) -> BoxFu
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -643,9 +920,13 @@ fn __describe_continuous_backups(input: DescribeContinuousBackupsInput) -> BoxFu
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DescribeContinuousBackupsOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DescribeContinuousBackupsOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DescribeContinuousBackupsOutput = serde_json::from_slice(&*body).unwrap();
+                        output.continuous_backups_description = body.continuous_backups_description;
+
                         serde_json::to_vec(&Result::<DescribeContinuousBackupsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -675,6 +956,15 @@ pub fn describe_contributor_insights(input: Vec<u8>) -> BoxFuture<'static, Vec<u
 fn __describe_contributor_insights(input: DescribeContributorInsightsInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -682,6 +972,18 @@ fn __describe_contributor_insights(input: DescribeContributorInsightsInput) -> B
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -696,9 +998,18 @@ fn __describe_contributor_insights(input: DescribeContributorInsightsInput) -> B
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DescribeContributorInsightsOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DescribeContributorInsightsOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DescribeContributorInsightsOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_name = body.table_name;
+                        output.index_name = body.index_name;
+                        output.contributor_insights_rule_list = body.contributor_insights_rule_list;
+                        output.contributor_insights_status = body.contributor_insights_status;
+                        output.last_update_date_time = body.last_update_date_time;
+                        output.failure_exception = body.failure_exception;
+
                         serde_json::to_vec(&Result::<DescribeContributorInsightsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -728,6 +1039,15 @@ pub fn describe_endpoints(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __describe_endpoints(input: DescribeEndpointsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -735,6 +1055,18 @@ fn __describe_endpoints(input: DescribeEndpointsRequest) -> BoxFuture<'static, V
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -749,9 +1081,13 @@ fn __describe_endpoints(input: DescribeEndpointsRequest) -> BoxFuture<'static, V
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DescribeEndpointsResponse = Default::default();
+
                         let body = response.into_body();
-                        let output: DescribeEndpointsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body: DescribeEndpointsResponse = serde_json::from_slice(&*body).unwrap();
+                        output.endpoints = body.endpoints;
+
                         serde_json::to_vec(&Result::<DescribeEndpointsResponse, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -781,6 +1117,15 @@ pub fn describe_export(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __describe_export(input: DescribeExportInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -788,6 +1133,18 @@ fn __describe_export(input: DescribeExportInput) -> BoxFuture<'static, Vec<u8>> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -802,9 +1159,13 @@ fn __describe_export(input: DescribeExportInput) -> BoxFuture<'static, Vec<u8>> 
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DescribeExportOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DescribeExportOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DescribeExportOutput = serde_json::from_slice(&*body).unwrap();
+                        output.export_description = body.export_description;
+
                         serde_json::to_vec(&Result::<DescribeExportOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -834,6 +1195,15 @@ pub fn describe_global_table(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __describe_global_table(input: DescribeGlobalTableInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -841,6 +1211,18 @@ fn __describe_global_table(input: DescribeGlobalTableInput) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -855,9 +1237,13 @@ fn __describe_global_table(input: DescribeGlobalTableInput) -> BoxFuture<'static
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DescribeGlobalTableOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DescribeGlobalTableOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DescribeGlobalTableOutput = serde_json::from_slice(&*body).unwrap();
+                        output.global_table_description = body.global_table_description;
+
                         serde_json::to_vec(&Result::<DescribeGlobalTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -887,6 +1273,15 @@ pub fn describe_global_table_settings(input: Vec<u8>) -> BoxFuture<'static, Vec<
 fn __describe_global_table_settings(input: DescribeGlobalTableSettingsInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -894,6 +1289,18 @@ fn __describe_global_table_settings(input: DescribeGlobalTableSettingsInput) -> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -908,9 +1315,14 @@ fn __describe_global_table_settings(input: DescribeGlobalTableSettingsInput) -> 
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DescribeGlobalTableSettingsOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DescribeGlobalTableSettingsOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DescribeGlobalTableSettingsOutput = serde_json::from_slice(&*body).unwrap();
+                        output.global_table_name = body.global_table_name;
+                        output.replica_settings = body.replica_settings;
+
                         serde_json::to_vec(&Result::<DescribeGlobalTableSettingsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -940,6 +1352,15 @@ pub fn describe_kinesis_streaming_destination(input: Vec<u8>) -> BoxFuture<'stat
 fn __describe_kinesis_streaming_destination(input: DescribeKinesisStreamingDestinationInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -947,6 +1368,18 @@ fn __describe_kinesis_streaming_destination(input: DescribeKinesisStreamingDesti
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -961,9 +1394,14 @@ fn __describe_kinesis_streaming_destination(input: DescribeKinesisStreamingDesti
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DescribeKinesisStreamingDestinationOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DescribeKinesisStreamingDestinationOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DescribeKinesisStreamingDestinationOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_name = body.table_name;
+                        output.kinesis_data_stream_destinations = body.kinesis_data_stream_destinations;
+
                         serde_json::to_vec(&Result::<DescribeKinesisStreamingDestinationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -993,6 +1431,15 @@ pub fn describe_limits(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __describe_limits(input: DescribeLimitsInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1000,6 +1447,18 @@ fn __describe_limits(input: DescribeLimitsInput) -> BoxFuture<'static, Vec<u8>> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1014,9 +1473,16 @@ fn __describe_limits(input: DescribeLimitsInput) -> BoxFuture<'static, Vec<u8>> 
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DescribeLimitsOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DescribeLimitsOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DescribeLimitsOutput = serde_json::from_slice(&*body).unwrap();
+                        output.account_max_read_capacity_units = body.account_max_read_capacity_units;
+                        output.account_max_write_capacity_units = body.account_max_write_capacity_units;
+                        output.table_max_read_capacity_units = body.table_max_read_capacity_units;
+                        output.table_max_write_capacity_units = body.table_max_write_capacity_units;
+
                         serde_json::to_vec(&Result::<DescribeLimitsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1046,6 +1512,15 @@ pub fn describe_table(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __describe_table(input: DescribeTableInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1053,6 +1528,18 @@ fn __describe_table(input: DescribeTableInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1067,9 +1554,13 @@ fn __describe_table(input: DescribeTableInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DescribeTableOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DescribeTableOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DescribeTableOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table = body.table;
+
                         serde_json::to_vec(&Result::<DescribeTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1099,6 +1590,15 @@ pub fn describe_table_replica_auto_scaling(input: Vec<u8>) -> BoxFuture<'static,
 fn __describe_table_replica_auto_scaling(input: DescribeTableReplicaAutoScalingInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1106,6 +1606,18 @@ fn __describe_table_replica_auto_scaling(input: DescribeTableReplicaAutoScalingI
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1120,9 +1632,13 @@ fn __describe_table_replica_auto_scaling(input: DescribeTableReplicaAutoScalingI
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DescribeTableReplicaAutoScalingOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DescribeTableReplicaAutoScalingOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DescribeTableReplicaAutoScalingOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_auto_scaling_description = body.table_auto_scaling_description;
+
                         serde_json::to_vec(&Result::<DescribeTableReplicaAutoScalingOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1152,6 +1668,15 @@ pub fn describe_time_to_live(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __describe_time_to_live(input: DescribeTimeToLiveInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1159,6 +1684,18 @@ fn __describe_time_to_live(input: DescribeTimeToLiveInput) -> BoxFuture<'static,
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1173,9 +1710,13 @@ fn __describe_time_to_live(input: DescribeTimeToLiveInput) -> BoxFuture<'static,
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: DescribeTimeToLiveOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: DescribeTimeToLiveOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: DescribeTimeToLiveOutput = serde_json::from_slice(&*body).unwrap();
+                        output.time_to_live_description = body.time_to_live_description;
+
                         serde_json::to_vec(&Result::<DescribeTimeToLiveOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1205,6 +1746,15 @@ pub fn disable_kinesis_streaming_destination(input: Vec<u8>) -> BoxFuture<'stati
 fn __disable_kinesis_streaming_destination(input: KinesisStreamingDestinationInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1212,6 +1762,18 @@ fn __disable_kinesis_streaming_destination(input: KinesisStreamingDestinationInp
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1226,9 +1788,15 @@ fn __disable_kinesis_streaming_destination(input: KinesisStreamingDestinationInp
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: KinesisStreamingDestinationOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: KinesisStreamingDestinationOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: KinesisStreamingDestinationOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_name = body.table_name;
+                        output.stream_arn = body.stream_arn;
+                        output.destination_status = body.destination_status;
+
                         serde_json::to_vec(&Result::<KinesisStreamingDestinationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1258,6 +1826,15 @@ pub fn enable_kinesis_streaming_destination(input: Vec<u8>) -> BoxFuture<'static
 fn __enable_kinesis_streaming_destination(input: KinesisStreamingDestinationInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1265,6 +1842,18 @@ fn __enable_kinesis_streaming_destination(input: KinesisStreamingDestinationInpu
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1279,9 +1868,15 @@ fn __enable_kinesis_streaming_destination(input: KinesisStreamingDestinationInpu
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: KinesisStreamingDestinationOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: KinesisStreamingDestinationOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: KinesisStreamingDestinationOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_name = body.table_name;
+                        output.stream_arn = body.stream_arn;
+                        output.destination_status = body.destination_status;
+
                         serde_json::to_vec(&Result::<KinesisStreamingDestinationOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1311,6 +1906,15 @@ pub fn execute_statement(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __execute_statement(input: ExecuteStatementInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1318,6 +1922,18 @@ fn __execute_statement(input: ExecuteStatementInput) -> BoxFuture<'static, Vec<u
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1332,9 +1948,14 @@ fn __execute_statement(input: ExecuteStatementInput) -> BoxFuture<'static, Vec<u
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ExecuteStatementOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: ExecuteStatementOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: ExecuteStatementOutput = serde_json::from_slice(&*body).unwrap();
+                        output.items = body.items;
+                        output.next_token = body.next_token;
+
                         serde_json::to_vec(&Result::<ExecuteStatementOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1364,6 +1985,15 @@ pub fn execute_transaction(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __execute_transaction(input: ExecuteTransactionInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1371,6 +2001,18 @@ fn __execute_transaction(input: ExecuteTransactionInput) -> BoxFuture<'static, V
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1385,9 +2027,13 @@ fn __execute_transaction(input: ExecuteTransactionInput) -> BoxFuture<'static, V
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ExecuteTransactionOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: ExecuteTransactionOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: ExecuteTransactionOutput = serde_json::from_slice(&*body).unwrap();
+                        output.responses = body.responses;
+
                         serde_json::to_vec(&Result::<ExecuteTransactionOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1417,6 +2063,15 @@ pub fn export_table_to_point_in_time(input: Vec<u8>) -> BoxFuture<'static, Vec<u
 fn __export_table_to_point_in_time(input: ExportTableToPointInTimeInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1424,6 +2079,18 @@ fn __export_table_to_point_in_time(input: ExportTableToPointInTimeInput) -> BoxF
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1438,9 +2105,13 @@ fn __export_table_to_point_in_time(input: ExportTableToPointInTimeInput) -> BoxF
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ExportTableToPointInTimeOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: ExportTableToPointInTimeOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: ExportTableToPointInTimeOutput = serde_json::from_slice(&*body).unwrap();
+                        output.export_description = body.export_description;
+
                         serde_json::to_vec(&Result::<ExportTableToPointInTimeOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1470,6 +2141,15 @@ pub fn get_item(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __get_item(input: GetItemInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1477,6 +2157,18 @@ fn __get_item(input: GetItemInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1491,9 +2183,14 @@ fn __get_item(input: GetItemInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: GetItemOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: GetItemOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: GetItemOutput = serde_json::from_slice(&*body).unwrap();
+                        output.item = body.item;
+                        output.consumed_capacity = body.consumed_capacity;
+
                         serde_json::to_vec(&Result::<GetItemOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1523,6 +2220,15 @@ pub fn list_backups(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __list_backups(input: ListBackupsInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1530,6 +2236,18 @@ fn __list_backups(input: ListBackupsInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1544,9 +2262,14 @@ fn __list_backups(input: ListBackupsInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListBackupsOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: ListBackupsOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: ListBackupsOutput = serde_json::from_slice(&*body).unwrap();
+                        output.backup_summaries = body.backup_summaries;
+                        output.last_evaluated_backup_arn = body.last_evaluated_backup_arn;
+
                         serde_json::to_vec(&Result::<ListBackupsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1576,6 +2299,15 @@ pub fn list_contributor_insights(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> 
 fn __list_contributor_insights(input: ListContributorInsightsInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1583,6 +2315,18 @@ fn __list_contributor_insights(input: ListContributorInsightsInput) -> BoxFuture
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1597,9 +2341,14 @@ fn __list_contributor_insights(input: ListContributorInsightsInput) -> BoxFuture
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListContributorInsightsOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: ListContributorInsightsOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: ListContributorInsightsOutput = serde_json::from_slice(&*body).unwrap();
+                        output.contributor_insights_summaries = body.contributor_insights_summaries;
+                        output.next_token = body.next_token;
+
                         serde_json::to_vec(&Result::<ListContributorInsightsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1629,6 +2378,15 @@ pub fn list_exports(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __list_exports(input: ListExportsInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1636,6 +2394,18 @@ fn __list_exports(input: ListExportsInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1650,9 +2420,14 @@ fn __list_exports(input: ListExportsInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListExportsOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: ListExportsOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: ListExportsOutput = serde_json::from_slice(&*body).unwrap();
+                        output.export_summaries = body.export_summaries;
+                        output.next_token = body.next_token;
+
                         serde_json::to_vec(&Result::<ListExportsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1682,6 +2457,15 @@ pub fn list_global_tables(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __list_global_tables(input: ListGlobalTablesInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1689,6 +2473,18 @@ fn __list_global_tables(input: ListGlobalTablesInput) -> BoxFuture<'static, Vec<
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1703,9 +2499,14 @@ fn __list_global_tables(input: ListGlobalTablesInput) -> BoxFuture<'static, Vec<
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListGlobalTablesOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: ListGlobalTablesOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: ListGlobalTablesOutput = serde_json::from_slice(&*body).unwrap();
+                        output.global_tables = body.global_tables;
+                        output.last_evaluated_global_table_name = body.last_evaluated_global_table_name;
+
                         serde_json::to_vec(&Result::<ListGlobalTablesOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1735,6 +2536,15 @@ pub fn list_tables(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __list_tables(input: ListTablesInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1742,6 +2552,18 @@ fn __list_tables(input: ListTablesInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1756,9 +2578,14 @@ fn __list_tables(input: ListTablesInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListTablesOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: ListTablesOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: ListTablesOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_names = body.table_names;
+                        output.last_evaluated_table_name = body.last_evaluated_table_name;
+
                         serde_json::to_vec(&Result::<ListTablesOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1788,6 +2615,15 @@ pub fn list_tags_of_resource(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __list_tags_of_resource(input: ListTagsOfResourceInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1795,6 +2631,18 @@ fn __list_tags_of_resource(input: ListTagsOfResourceInput) -> BoxFuture<'static,
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1809,9 +2657,14 @@ fn __list_tags_of_resource(input: ListTagsOfResourceInput) -> BoxFuture<'static,
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListTagsOfResourceOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: ListTagsOfResourceOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: ListTagsOfResourceOutput = serde_json::from_slice(&*body).unwrap();
+                        output.tags = body.tags;
+                        output.next_token = body.next_token;
+
                         serde_json::to_vec(&Result::<ListTagsOfResourceOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1841,6 +2694,15 @@ pub fn put_item(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __put_item(input: PutItemInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1848,6 +2710,18 @@ fn __put_item(input: PutItemInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1862,9 +2736,15 @@ fn __put_item(input: PutItemInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: PutItemOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: PutItemOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: PutItemOutput = serde_json::from_slice(&*body).unwrap();
+                        output.attributes = body.attributes;
+                        output.consumed_capacity = body.consumed_capacity;
+                        output.item_collection_metrics = body.item_collection_metrics;
+
                         serde_json::to_vec(&Result::<PutItemOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1894,6 +2774,15 @@ pub fn query(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __query(input: QueryInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1901,6 +2790,18 @@ fn __query(input: QueryInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1915,15 +2816,24 @@ fn __query(input: QueryInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: QueryOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: QueryOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: QueryOutput = serde_json::from_slice(&*body).unwrap();
+                        output.items = body.items;
+                        output.count = body.count;
+                        output.scanned_count = body.scanned_count;
+                        output.last_evaluated_key = body.last_evaluated_key;
+                        output.consumed_capacity = body.consumed_capacity;
+
                         serde_json::to_vec(&Result::<QueryOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
                         serde_json::to_vec(&Result::<QueryOutput, guest::Error>::Err(guest::Error {
                             why: String::from(status.canonical_reason().unwrap()),
-                        })).unwrap()
+                        }))
+                            .unwrap()
                     }
                 }
             },
@@ -1946,6 +2856,15 @@ pub fn restore_table_from_backup(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> 
 fn __restore_table_from_backup(input: RestoreTableFromBackupInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -1953,6 +2872,18 @@ fn __restore_table_from_backup(input: RestoreTableFromBackupInput) -> BoxFuture<
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1967,9 +2898,13 @@ fn __restore_table_from_backup(input: RestoreTableFromBackupInput) -> BoxFuture<
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: RestoreTableFromBackupOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: RestoreTableFromBackupOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: RestoreTableFromBackupOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_description = body.table_description;
+
                         serde_json::to_vec(&Result::<RestoreTableFromBackupOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -1999,6 +2934,15 @@ pub fn restore_table_to_point_in_time(input: Vec<u8>) -> BoxFuture<'static, Vec<
 fn __restore_table_to_point_in_time(input: RestoreTableToPointInTimeInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2006,6 +2950,18 @@ fn __restore_table_to_point_in_time(input: RestoreTableToPointInTimeInput) -> Bo
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2020,9 +2976,13 @@ fn __restore_table_to_point_in_time(input: RestoreTableToPointInTimeInput) -> Bo
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: RestoreTableToPointInTimeOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: RestoreTableToPointInTimeOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: RestoreTableToPointInTimeOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_description = body.table_description;
+
                         serde_json::to_vec(&Result::<RestoreTableToPointInTimeOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2052,6 +3012,15 @@ pub fn scan(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __scan(input: ScanInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2059,6 +3028,18 @@ fn __scan(input: ScanInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2073,9 +3054,17 @@ fn __scan(input: ScanInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ScanOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: ScanOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: ScanOutput = serde_json::from_slice(&*body).unwrap();
+                        output.items = body.items;
+                        output.count = body.count;
+                        output.scanned_count = body.scanned_count;
+                        output.last_evaluated_key = body.last_evaluated_key;
+                        output.consumed_capacity = body.consumed_capacity;
+
                         serde_json::to_vec(&Result::<ScanOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2105,6 +3094,15 @@ pub fn tag_resource(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __tag_resource(input: TagResourceInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2112,6 +3110,18 @@ fn __tag_resource(input: TagResourceInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2126,9 +3136,10 @@ fn __tag_resource(input: TagResourceInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2158,6 +3169,15 @@ pub fn transact_get_items(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __transact_get_items(input: TransactGetItemsInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2165,6 +3185,18 @@ fn __transact_get_items(input: TransactGetItemsInput) -> BoxFuture<'static, Vec<
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2179,9 +3211,14 @@ fn __transact_get_items(input: TransactGetItemsInput) -> BoxFuture<'static, Vec<
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: TransactGetItemsOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: TransactGetItemsOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: TransactGetItemsOutput = serde_json::from_slice(&*body).unwrap();
+                        output.consumed_capacity = body.consumed_capacity;
+                        output.responses = body.responses;
+
                         serde_json::to_vec(&Result::<TransactGetItemsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2211,6 +3248,15 @@ pub fn transact_write_items(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __transact_write_items(input: TransactWriteItemsInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2218,6 +3264,18 @@ fn __transact_write_items(input: TransactWriteItemsInput) -> BoxFuture<'static, 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2232,9 +3290,14 @@ fn __transact_write_items(input: TransactWriteItemsInput) -> BoxFuture<'static, 
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: TransactWriteItemsOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: TransactWriteItemsOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: TransactWriteItemsOutput = serde_json::from_slice(&*body).unwrap();
+                        output.consumed_capacity = body.consumed_capacity;
+                        output.item_collection_metrics = body.item_collection_metrics;
+
                         serde_json::to_vec(&Result::<TransactWriteItemsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2264,6 +3327,15 @@ pub fn untag_resource(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __untag_resource(input: UntagResourceInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2271,6 +3343,18 @@ fn __untag_resource(input: UntagResourceInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2285,9 +3369,10 @@ fn __untag_resource(input: UntagResourceInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
-                        let body = response.into_body();
-                        let output: () = serde_json::from_slice(&*body).unwrap();
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: () = Default::default();
+
+
                         serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2317,6 +3402,15 @@ pub fn update_continuous_backups(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> 
 fn __update_continuous_backups(input: UpdateContinuousBackupsInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2324,6 +3418,18 @@ fn __update_continuous_backups(input: UpdateContinuousBackupsInput) -> BoxFuture
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2338,9 +3444,13 @@ fn __update_continuous_backups(input: UpdateContinuousBackupsInput) -> BoxFuture
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: UpdateContinuousBackupsOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: UpdateContinuousBackupsOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: UpdateContinuousBackupsOutput = serde_json::from_slice(&*body).unwrap();
+                        output.continuous_backups_description = body.continuous_backups_description;
+
                         serde_json::to_vec(&Result::<UpdateContinuousBackupsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2370,6 +3480,15 @@ pub fn update_contributor_insights(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>
 fn __update_contributor_insights(input: UpdateContributorInsightsInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2377,6 +3496,18 @@ fn __update_contributor_insights(input: UpdateContributorInsightsInput) -> BoxFu
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2391,9 +3522,15 @@ fn __update_contributor_insights(input: UpdateContributorInsightsInput) -> BoxFu
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: UpdateContributorInsightsOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: UpdateContributorInsightsOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: UpdateContributorInsightsOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_name = body.table_name;
+                        output.index_name = body.index_name;
+                        output.contributor_insights_status = body.contributor_insights_status;
+
                         serde_json::to_vec(&Result::<UpdateContributorInsightsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2423,6 +3560,15 @@ pub fn update_global_table(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __update_global_table(input: UpdateGlobalTableInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2430,6 +3576,18 @@ fn __update_global_table(input: UpdateGlobalTableInput) -> BoxFuture<'static, Ve
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2444,9 +3602,13 @@ fn __update_global_table(input: UpdateGlobalTableInput) -> BoxFuture<'static, Ve
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: UpdateGlobalTableOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: UpdateGlobalTableOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: UpdateGlobalTableOutput = serde_json::from_slice(&*body).unwrap();
+                        output.global_table_description = body.global_table_description;
+
                         serde_json::to_vec(&Result::<UpdateGlobalTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2476,6 +3638,15 @@ pub fn update_global_table_settings(input: Vec<u8>) -> BoxFuture<'static, Vec<u8
 fn __update_global_table_settings(input: UpdateGlobalTableSettingsInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2483,6 +3654,18 @@ fn __update_global_table_settings(input: UpdateGlobalTableSettingsInput) -> BoxF
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2497,9 +3680,14 @@ fn __update_global_table_settings(input: UpdateGlobalTableSettingsInput) -> BoxF
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: UpdateGlobalTableSettingsOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: UpdateGlobalTableSettingsOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: UpdateGlobalTableSettingsOutput = serde_json::from_slice(&*body).unwrap();
+                        output.global_table_name = body.global_table_name;
+                        output.replica_settings = body.replica_settings;
+
                         serde_json::to_vec(&Result::<UpdateGlobalTableSettingsOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2529,6 +3717,15 @@ pub fn update_item(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __update_item(input: UpdateItemInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2536,6 +3733,18 @@ fn __update_item(input: UpdateItemInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2550,9 +3759,15 @@ fn __update_item(input: UpdateItemInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: UpdateItemOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: UpdateItemOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: UpdateItemOutput = serde_json::from_slice(&*body).unwrap();
+                        output.attributes = body.attributes;
+                        output.consumed_capacity = body.consumed_capacity;
+                        output.item_collection_metrics = body.item_collection_metrics;
+
                         serde_json::to_vec(&Result::<UpdateItemOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2582,6 +3797,15 @@ pub fn update_table(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __update_table(input: UpdateTableInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2589,6 +3813,18 @@ fn __update_table(input: UpdateTableInput) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2603,9 +3839,13 @@ fn __update_table(input: UpdateTableInput) -> BoxFuture<'static, Vec<u8>> {
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: UpdateTableOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: UpdateTableOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: UpdateTableOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_description = body.table_description;
+
                         serde_json::to_vec(&Result::<UpdateTableOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2635,6 +3875,15 @@ pub fn update_table_replica_auto_scaling(input: Vec<u8>) -> BoxFuture<'static, V
 fn __update_table_replica_auto_scaling(input: UpdateTableReplicaAutoScalingInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2642,6 +3891,18 @@ fn __update_table_replica_auto_scaling(input: UpdateTableReplicaAutoScalingInput
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2656,9 +3917,13 @@ fn __update_table_replica_auto_scaling(input: UpdateTableReplicaAutoScalingInput
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: UpdateTableReplicaAutoScalingOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: UpdateTableReplicaAutoScalingOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: UpdateTableReplicaAutoScalingOutput = serde_json::from_slice(&*body).unwrap();
+                        output.table_auto_scaling_description = body.table_auto_scaling_description;
+
                         serde_json::to_vec(&Result::<UpdateTableReplicaAutoScalingOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
@@ -2688,6 +3953,15 @@ pub fn update_time_to_live(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __update_time_to_live(input: UpdateTimeToLiveInput) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "dynamodb",
@@ -2695,6 +3969,18 @@ fn __update_time_to_live(input: UpdateTimeToLiveInput) -> BoxFuture<'static, Vec
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2709,9 +3995,13 @@ fn __update_time_to_live(input: UpdateTimeToLiveInput) -> BoxFuture<'static, Vec
                 let status = response.status();
 
                 match status {
-                    StatusCode::OK => {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: UpdateTimeToLiveOutput = Default::default();
+
                         let body = response.into_body();
-                        let output: UpdateTimeToLiveOutput = serde_json::from_slice(&*body).unwrap();
+                        let body: UpdateTimeToLiveOutput = serde_json::from_slice(&*body).unwrap();
+                        output.time_to_live_specification = body.time_to_live_specification;
+
                         serde_json::to_vec(&Result::<UpdateTimeToLiveOutput, guest::Error>::Ok(output)).unwrap()
                     }
                     status => {
