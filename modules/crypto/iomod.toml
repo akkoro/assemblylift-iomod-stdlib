@@ -1,0 +1,6 @@
+[iomod]
+coordinates = "akkoro.std.crypto"
+version = "0.1.2"
+
+[process]
+entrypoint = "bin/akkoro-std-crypto"

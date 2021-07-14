@@ -1,6 +1,6 @@
 [package]
 name = "assemblylift-iomod-http-guest"
-version = "0.1.1"
+version = "0.1.0"
 authors = ["xlem <xlem@akkoro.io>"]
 edition = "2018"
 

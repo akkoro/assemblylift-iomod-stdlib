@@ -83,8 +83,33 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fe67bf81dc238b04f9eef535b22e80f19a928e202e56e7f2261a065bc7ca1e70"
 
 [[package]]
+name = "assemblylift-iomod-aws-lambda"
+version = "0.1.0"
+dependencies = [
+ "assemblylift-core",
+ "assemblylift-core-iomod",
+ "assemblylift-iomod-lambda-guest",
+ "capnp",
+ "capnp-rpc",
+ "crossbeam-utils",
+ "futures",
+ "futures-util",
+ "http",
+ "hyper",
+ "hyper-tls",
+ "once_cell",
+ "paste",
+ "reqwest",
+ "rusoto_signature",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tokio-util",
+]
+
+[[package]]
 name = "assemblylift-iomod-crypto"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "assemblylift-core-iomod",
  "capnp",
@@ -110,7 +135,7 @@ dependencies = [
 
 [[package]]
 name = "assemblylift-iomod-dynamodb"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "assemblylift-core",
  "assemblylift-core-iomod",
@@ -120,7 +145,7 @@ dependencies = [
  "crossbeam-utils",
  "futures",
  "futures-util",
- "http 0.2.4",
+ "http",
  "hyper",
  "hyper-tls",
  "once_cell",
@@ -147,7 +172,7 @@ dependencies = [
 
 [[package]]
 name = "assemblylift-iomod-http-guest"
-version = "0.1.1"
+version = "0.1.0"
 dependencies = [
  "assemblylift-core-io-guest",
  "assemblylift-core-iomod-guest",
@@ -177,7 +202,7 @@ dependencies = [
  "capnp-rpc",
  "futures",
  "futures-util",
- "http 0.2.4",
+ "http",
  "hyper",
  "hyper-rustls",
  "once_cell",
@@ -202,6 +227,27 @@ dependencies = [
  "serde",
  "serde_json",
  "xml-rs",
+]
+
+[[package]]
+name = "assemblylift-iomod-std-http"
+version = "0.1.0"
+dependencies = [
+ "assemblylift-core-iomod",
+ "assemblylift-iomod-http-guest",
+ "capnp",
+ "capnp-rpc",
+ "futures",
+ "futures-util",
+ "http",
+ "hyper",
+ "hyper-tls",
+ "once_cell",
+ "rusoto_signature",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tokio-util",
 ]
 
 [[package]]
@@ -824,7 +870,7 @@ dependencies = [
  "futures-core",
  "futures-sink",
  "futures-util",
- "http 0.2.4",
+ "http",
  "indexmap",
  "slab",
  "tokio",
@@ -865,27 +911,6 @@ dependencies = [
 
 [[package]]
 name = "http"
-version = "0.1.0"
-dependencies = [
- "assemblylift-core-iomod",
- "assemblylift-iomod-http-guest",
- "capnp",
- "capnp-rpc",
- "futures",
- "futures-util",
- "http 0.2.4",
- "hyper",
- "hyper-tls",
- "once_cell",
- "rusoto_signature",
- "serde",
- "serde_json",
- "tokio",
- "tokio-util",
-]
-
-[[package]]
-name = "http"
 version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "527e8c9ac747e28542699a951517aa9a6945af506cd1f2e1b53a576c17b6cc11"
@@ -902,7 +927,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "60daa14be0e0786db0f03a9e57cb404c9d756eed2b6c62b9ea98ec5743ec75a9"
 dependencies = [
  "bytes 1.0.1",
- "http 0.2.4",
+ "http",
  "pin-project-lite",
 ]
 
@@ -929,7 +954,7 @@ dependencies = [
  "futures-core",
  "futures-util",
  "h2",
- "http 0.2.4",
+ "http",
  "http-body",
  "httparse",
  "httpdate",
@@ -1028,31 +1053,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "83bdfbace3a0e81a4253f73b49e960b053e396a11012cbd49b9b74d6a2b67062"
 dependencies = [
  "wasm-bindgen",
-]
-
-[[package]]
-name = "lambda"
-version = "0.1.0"
-dependencies = [
- "assemblylift-core",
- "assemblylift-core-iomod",
- "assemblylift-iomod-lambda-guest",
- "capnp",
- "capnp-rpc",
- "crossbeam-utils",
- "futures",
- "futures-util",
- "http 0.2.4",
- "hyper",
- "hyper-tls",
- "once_cell",
- "paste",
- "reqwest",
- "rusoto_signature",
- "serde",
- "serde_json",
- "tokio",
- "tokio-util",
 ]
 
 [[package]]
@@ -1552,7 +1552,7 @@ dependencies = [
  "encoding_rs",
  "futures-core",
  "futures-util",
- "http 0.2.4",
+ "http",
  "http-body",
  "hyper",
  "hyper-tls",
@@ -1619,7 +1619,7 @@ dependencies = [
  "futures",
  "hex",
  "hmac",
- "http 0.2.4",
+ "http",
  "hyper",
  "log",
  "md5",
