@@ -2,7 +2,6 @@ use std::fmt;
 use std::fmt::Formatter;
 
 use http::header::{HeaderMap, HeaderName, HeaderValue};
-use hyper::client;
 use hyper::Response;
 //use hyper;
 //use hyper::Response;

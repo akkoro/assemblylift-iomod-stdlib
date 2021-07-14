@@ -9,7 +9,9 @@ pub type Body = String;
 #[derive(Serialize, Deserialize)]
 pub struct HttpAuth {
     pub r#type: String,
+    pub service: Option<String>,
 }
+
 // TODO is_base64_encoded?
 #[derive(Serialize, Deserialize)]
 pub struct HttpRequest {

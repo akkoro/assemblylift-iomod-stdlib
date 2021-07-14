@@ -33,12 +33,18 @@ async fn main() {
 pub fn request(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: HttpRequest = serde_json::from_slice(input.as_slice()).unwrap();
 
+    let default_service = String::from("execute-api");
     let method = deserialized.method.clone();
-    // TODO only if we detect that this is really an AWS request
-    //          OR we rename this module to `apigw` or something
     let mut http_request = SignedRequest::new(
         &method.clone(),
-        "execute-api",
+        &*{
+            match deserialized.auth {
+                Some(ref auth) => {
+                    auth.service.as_ref().unwrap_or(&default_service)
+                }
+                None => &default_service
+            }
+        },
         &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
             .unwrap_or(Region::UsEast1),
         &deserialized.path.clone(),
