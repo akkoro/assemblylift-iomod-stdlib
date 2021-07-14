@@ -24,6 +24,10 @@ ADD modules/http/Cargo.* ./modules/http/
 ADD modules/http/src/* ./modules/http/src/
 ADD modules/http/guest/src/* ./modules/http/guest/src/
 ADD modules/http/guest/Cargo.* ./modules/http/guest/
+ADD modules/lambda/Cargo.* ./modules/lambda/
+ADD modules/lambda/src/* ./modules/lambda/src/
+ADD modules/lambda/guest/src/* ./modules/lambda/guest/src/
+ADD modules/lambda/guest/Cargo.* ./modules/lambda/guest/
 ADD Cargo.* ./
 
 RUN $HOME/.cargo/bin/cargo build --release

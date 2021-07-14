@@ -13,28 +13,28 @@ name = "akkoro-aws-s3"
 path = "src/main.rs"
 
 [dependencies]
-guest = { package = "assemblylift-iomod-s3-guest", version = "0.1.0", path = "guest" }
+guest = { package = "assemblylift-iomod-s3-guest", version = "0.1", path = "guest" }
 
 xml-rs = "0.8"
-http = "0.2.1"
+http = "0.2"
 hyper = "0.14"
 hyper-rustls = "0.22"
 rustls = "0.19"
 rustls-native-certs = { version = "0.5.0", optional = true }
 tokio = { version = "1.4", features = ["full"] }
 tokio-util = { version = "0.6", features = ["compat"] }
-futures = "0.3.5"
-futures-util = "0.3.5"
+futures = "0.3"
+futures-util = "0.3"
 
-rusoto_signature = "0.46.0"
+rusoto_signature = "0.46"
 
-capnp = "0.13.3"
-capnp-rpc = "0.13.1"
+capnp = "0.14"
+capnp-rpc = "0.14"
 
-assemblylift_core_iomod = { version = "0.3.0", package = "assemblylift-core-iomod" }
+assemblylift_core_iomod = { version = "0.3", package = "assemblylift-core-iomod" }
 
-once_cell = "1.4.1"
-serde = "1.0.116"
-serde_json = "1.0.58"
-serde_xml_rs = { version = "0.4.0", package = "serde-xml-rs" }
-paste = "1.0.1"
+once_cell = "1.4"
+serde = "1"
+serde_json = "1"
+serde_xml_rs = { version = "0.4", package = "serde-xml-rs" }
+paste = "1"

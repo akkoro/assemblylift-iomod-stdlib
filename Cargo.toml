@@ -3,5 +3,6 @@ members = [
     "modules/crypto", "modules/crypto/guest",
     "modules/dynamodb", "modules/dynamodb/guest",
     "modules/http", "modules/http/guest",
+    "modules/lambda", "modules/lambda/guest",
     "modules/s3", "modules/s3/guest"
 ]

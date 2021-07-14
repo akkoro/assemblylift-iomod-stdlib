@@ -1,0 +1,6 @@
+[iomod]
+coordinates = "akkoro.aws.dynamodb"
+version = "0.1.5"
+
+[process]
+entrypoint = "bin/akkoro-aws-dynamodb"
