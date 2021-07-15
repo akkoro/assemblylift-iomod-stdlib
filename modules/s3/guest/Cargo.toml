@@ -1,10 +1,10 @@
 [package]
 name = "assemblylift-iomod-s3-guest"
 version = "0.1.1"
-description = "AssemblyLift S3 IOmod (guest)"
+description = "AssemblyLift AWS S3 IOmod guest lib"
 authors = ["Akkoro and the AssemblyLift contributors <assemblylift@akkoro.io>"]
 edition = "2018"
-license-file = "../../LICENSE.md"
+license-file = "../../../LICENSE.md"
 repository = "https://github.com/akkoro/assemblylift-iomod-stdlib"
 readme = "README.md"
 
