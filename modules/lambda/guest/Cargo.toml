@@ -1,8 +1,10 @@
 [package]
 name = "assemblylift-iomod-lambda-guest"
+description = "AssemblyLift AWS Lambda IOmod guest lib"
 version = "0.1.1"
 authors = ["xlem <xlem@akkoro.io>"]
 edition = "2018"
+license-file = "../../../LICENSE.md"
 
 [dependencies]
 serde = "1"
