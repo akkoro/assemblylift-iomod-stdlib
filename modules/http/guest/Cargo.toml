@@ -1,8 +1,10 @@
 [package]
 name = "assemblylift-iomod-http-guest"
+description = "AssemblyLift HTTP IOmod guest lib"
 version = "0.1.0"
 authors = ["xlem <xlem@akkoro.io>"]
 edition = "2018"
+license-file = "../../../LICENSE.md"
 
 [dependencies]
 assemblylift_core_iomod_guest = { version = "0.3", package = "assemblylift-core-iomod-guest" }
