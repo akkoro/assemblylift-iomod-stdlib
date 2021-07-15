@@ -1,0 +1,6 @@
+[iomod]
+coordinates = "akkoro.aws.s3"
+version = "0.1.0"
+
+[process]
+entrypoint = "bin/akkoro-aws-s3"
