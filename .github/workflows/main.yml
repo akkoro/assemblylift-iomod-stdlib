@@ -2,24 +2,41 @@ name: AssemblyLift CI
 
 on:
   push:
-    branches: [ mainline, s3-module ]
+    branches: [ mainline ]
   pull_request:
     branches: [ mainline ]
 
 jobs:
 
-  build:
-    name: 'IOmod Standard Library'
+#  build:
+#    name: 'IOmod Standard Library'
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#    - uses: actions/checkout@v2
+#    - name: 'build'
+#      run: docker build . --file Dockerfile --tag assemblylift-iomod-stdlib:$GITHUB_SHA
+#    - name: 'copy iomods to HOME'
+#      run: bash ./scripts/copy.sh
+#    - name: 'upload artifact'
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: iomod-stdlib
+#        path: ~/*-*-*
+
+  build-akkoro-std-http:
+    name: 'akkoro.std.http'
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: 'build'
-      run: docker build . --file Dockerfile --tag assemblylift-iomod-stdlib:$GITHUB_SHA
-    - name: 'copy iomods to HOME'
-      run: bash ./scripts/copy.sh
-    - name: 'upload artifact'
-      uses: actions/upload-artifact@v2
-      with:
-        name: iomod-stdlib
-        path: ~/*-*-*
+      - uses: actions/checkout@v2
+      - name: 'Get Version'
+        run: echo "VERSION=$(cat ./modules/http/Cargo.toml | grep version -m 1 | awk '{print $3}' | sed 's/\"//g')" >> $GITHUB_ENV
+      - name: 'build'
+        run: docker build . --file ./modules/http/Dockerfile --tag iomod/std/http:$VERSION
+      - name: 'Add ECR Tag'
+        run: docker tag iomod/std/http:$VERSION public.ecr.aws/akkoro/iomod/std/http:$VERSION && docker tag public.ecr.aws/akkoro/iomod/std/http:$VERSION public.ecr.aws/akkoro/iomod/std/http:$VERSION
+      - name: 'ECR Login'
+        run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/akkoro
+      - name: 'Push to ECR @ akkoro-public'
+        run: docker push --all-tags public.ecr.aws/akkoro/iomod/std/http

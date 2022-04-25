@@ -6,14 +6,14 @@ pub type QueryParameters = HashMap<String, String>;
 pub type Headers = HashMap<String, String>;
 pub type Body = String;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub struct HttpAuth {
     pub r#type: String,
     pub service: Option<String>,
 }
 
 // TODO is_base64_encoded?
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Default)]
 pub struct HttpRequest {
     pub auth: Option<HttpAuth>,
     pub method: String,
@@ -25,7 +25,7 @@ pub struct HttpRequest {
     pub body: Option<Body>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Default)]
 pub struct HttpResponse {
     pub code: u16,
     pub headers: Headers,

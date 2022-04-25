@@ -9,6 +9,7 @@ use hyper_tls::HttpsConnector;
 use rusoto_signature::credential::AwsCredentials;
 use rusoto_signature::SignedRequest;
 use serde::{Deserialize, Serialize};
+use tracing::{debug, error, info, instrument, warn};
 
 use guest::structs::*;
 
@@ -27,6 +28,7 @@ impl std::error::Error for ClientError {}
 //pub type HyperClient = client::Client<hyper_rustls::HttpsConnector<client::HttpConnector>>;
 pub type HyperClient = hyper::Client<HttpsConnector<hyper::client::HttpConnector>>;
 
+#[derive(Debug)]
 pub struct Client {
     client: HyperClient,
     aws_key: Option<(String, String, Option<String>)>,
@@ -49,10 +51,11 @@ impl Client {
         self.aws_key = Some((id, key, token));
     }
 
+    #[instrument]
     pub async fn call(
         &self,
         mut request: SignedRequest,
-        auth: Option<&HttpAuth>,
+        auth: Option<HttpAuth>,
     ) -> Result<Response<hyper::Body>, ClientError> {
         match auth {
             Some(auth) => match auth.r#type.as_str() {
@@ -62,9 +65,9 @@ impl Client {
                         request.sign(&AwsCredentials::new(&key.0, &key.1, token, None));
                     }
                 }
-                _ => println!("Warning: unknown auth type"),
+                _ => warn!("unknown auth type"),
             },
-            None => {}
+            None => debug!("no http auth"),
         }
 
         let mut headers = HeaderMap::new();
@@ -97,9 +100,11 @@ impl Client {
             .unwrap();
         *http_req.headers_mut() = headers;
 
+        debug!("sending hyper http request");
         match self.client.request(http_req).await {
             Ok(resp) => Ok(resp),
             Err(err) => {
+                error!("hyper http request failed: {:?}", err.to_string());
                 Err(ClientError {
                     why: err.to_string(),
                     data: Default::default(),
