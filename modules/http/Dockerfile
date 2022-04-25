@@ -11,7 +11,7 @@ WORKDIR /usr/src
 COPY . .
 
 #RUN cargo install --debug --target x86_64-unknown-linux-musl --path .
-RUN cargo install --debug --path .
+RUN cd ./modules/http && cargo install --path .
 
 
 #FROM alpine:3.15
