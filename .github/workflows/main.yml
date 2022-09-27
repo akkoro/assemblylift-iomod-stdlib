@@ -64,4 +64,4 @@ jobs:
       - name: 'Build Image'
         run: docker build . --file ./modules/http/docker/Dockerfile-lambda --tag iomod/std/http:$VERSION
       - name: 'Copy Artifacts'
-        run: docker run --rm --entrypoint cat iomod/std/http:$VERSION /usr/src/target/release/akkoro.std.http@$(IOMOD_VERSION).iomod > $HOME/akkoro.std.http@$(IOMOD_VERSION).iomod
+        run: docker run --rm --entrypoint cat iomod/std/http:$VERSION /usr/src/akkoro.std.http@$(IOMOD_VERSION).iomod > $HOME/akkoro.std.http@$(IOMOD_VERSION).iomod
