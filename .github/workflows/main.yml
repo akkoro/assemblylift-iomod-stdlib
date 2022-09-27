@@ -64,4 +64,6 @@ jobs:
       - name: 'Build Image'
         run: docker build . --file ./modules/http/docker/Dockerfile-lambda --tag iomod/std/http:$VERSION
       - name: 'Copy Artifacts'
-        run: docker run --rm --entrypoint cat iomod/std/http:$VERSION /usr/src/akkoro.std.http@$(VERSION).iomod > $HOME/akkoro.std.http@$(VERSION).iomod
+        run: docker run --rm --entrypoint cat iomod/std/http:$VERSION /usr/src/akkoro.std.http@$VERSION.iomod > $HOME/akkoro.std.http@$VERSION.iomod
+      - name: 'Upload to S3 @ assemblylift-iomod-registry'
+        run: aws s3 cp $HOME/akkoro.std.http@$VERSION.iomod s3://assemblylift-iomod-registry/artifact/akkoro.std.http@$VERSION.iomod --acl public-read
