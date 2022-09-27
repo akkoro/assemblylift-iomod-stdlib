@@ -24,8 +24,8 @@ jobs:
 #        name: iomod-stdlib
 #        path: ~/*-*-*
 
-  build-akkoro-std-http:
-    name: 'akkoro.std.http'
+  build-akkoro-std-http-buster:
+    name: 'akkoro.std.http-buster'
     runs-on: ubuntu-latest
 
     steps:
@@ -37,12 +37,31 @@ jobs:
           aws-region: us-east-1
       - uses: actions/checkout@v2
       - name: 'Get Version'
-        run: echo "VERSION=$(cat ./modules/http/Cargo.toml | grep version -m 1 | awk '{print $3}' | sed 's/\"//g')" >> $GITHUB_ENV
-      - name: 'build'
-        run: docker build . --file ./modules/http/Dockerfile --tag iomod/std/http:$VERSION
+        run: echo "VERSION=$(cat ./modules/http/iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/\"//g')" >> $GITHUB_ENV
+      - name: 'Build Image'
+        run: docker build . --file ./modules/http/Dockerfile-buster --tag iomod/std/http:$VERSION
       - name: 'Add ECR Tag'
         run: docker tag iomod/std/http:$VERSION public.ecr.aws/akkoro/iomod/std/http:$VERSION && docker tag public.ecr.aws/akkoro/iomod/std/http:$VERSION public.ecr.aws/akkoro/iomod/std/http:$VERSION
       - name: 'ECR Login'
         run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/akkoro
       - name: 'Push to ECR @ akkoro-public'
         run: docker push --all-tags public.ecr.aws/akkoro/iomod/std/http
+
+  build-akkoro-std-http-lambda:
+    name: 'akkoro.std.http-lambda'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Configure AWS Credentials'
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - uses: actions/checkout@v2
+      - name: 'Get Version'
+        run: echo "VERSION=$(cat ./modules/http/iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/\"//g')" >> $GITHUB_ENV
+      - name: 'Build Image'
+        run: docker build . --file ./modules/http/Dockerfile-lambda --tag iomod/std/http:$VERSION
+      - name: 'Copy Artifacts'
+        run: docker run --rm --entrypoint cat iomod/std/http:$VERSION /usr/src/target/release/akkoro.std.http@$(IOMOD_VERSION).iomod > $HOME/akkoro.std.http@$(IOMOD_VERSION).iomod

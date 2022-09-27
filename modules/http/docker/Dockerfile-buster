@@ -1,5 +1,5 @@
 #FROM rust:1.59-alpine as builder
-FROM rust:1.60-buster as builder
+FROM rust:1.64-buster as builder
 #RUN rustup target add x86_64-unknown-linux-musl
 #RUN apk --no-cache add capnproto-dev musl-dev openssl-dev
 RUN apt-get update && apt-get install build-essential -y
@@ -8,7 +8,7 @@ RUN curl -O https://capnproto.org/capnproto-c++-0.8.0.tar.gz && tar zxf capnprot
 ENV USER=root
 
 WORKDIR /usr/src
-COPY . .
+COPY .. .
 
 #RUN cargo install --debug --target x86_64-unknown-linux-musl --path .
 RUN cd ./modules/http && cargo install --path .
