@@ -8,7 +8,7 @@ RUN source "$HOME/.cargo/env" && cargo install assemblylift-cli
 
 WORKDIR /usr/src
 COPY . .
-RUN source "$HOME/.cargo/env" && cargo build -p ./modules/http/Cargo.toml --release
+RUN source "$HOME/.cargo/env" && cargo build -p file:///usr/src/modules/http --release
 
 RUN mkdir ./bin && cp ./modules/http/target/release/akkoro-std-http ./bin/akkoro-std-http
 RUN export IOMOD_VERSION=$(cat ./iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/"//g')
