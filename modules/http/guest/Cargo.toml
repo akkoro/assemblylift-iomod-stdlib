@@ -7,8 +7,8 @@ edition = "2021"
 license-file = "../../../LICENSE.md"
 
 [dependencies]
-assemblylift_core_iomod_guest = { version = "0.4.0-alpha.0", package = "assemblylift-core-iomod-guest" }
-assemblylift_core_io_guest = { version = "0.4.0-alpha.0", package = "assemblylift-core-io-guest" }
+assemblylift_core_iomod_guest = { version = "0.4.0-alpha", package = "assemblylift-core-iomod-guest" }
+assemblylift_core_io_guest = { version = "0.4.0-alpha", package = "assemblylift-core-io-guest" }
 
 serde = "1"
 serde_json = "1"

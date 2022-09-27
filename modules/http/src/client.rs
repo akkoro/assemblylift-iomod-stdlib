@@ -47,7 +47,7 @@ impl Client {
         }
     }
 
-    pub fn set_credentials(&mut self, id: String, key: String, token: Option<String>) {
+    pub fn set_aws_credentials(&mut self, id: String, key: String, token: Option<String>) {
         self.aws_key = Some((id, key, token));
     }
 

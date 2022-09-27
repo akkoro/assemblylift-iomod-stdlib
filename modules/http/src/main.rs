@@ -16,7 +16,7 @@ static CLIENT: Lazy<client::Client> = Lazy::new(|| {
     use std::env;
     let mut c = client::Client::new();
     if env::var("AWS_ACCESS_KEY_ID").is_ok() {
-        c.set_credentials(
+        c.set_aws_credentials(
             env::var("AWS_ACCESS_KEY_ID").unwrap(),
             env::var("AWS_SECRET_ACCESS_KEY").unwrap(),
             match env::var("AWS_SESSION_TOKEN") {
