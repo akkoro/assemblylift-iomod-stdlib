@@ -39,7 +39,7 @@ jobs:
       - name: 'Get Version'
         run: echo "VERSION=$(cat ./modules/http/iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/\"//g')" >> $GITHUB_ENV
       - name: 'Build Image'
-        run: docker build . --file ./modules/http/Dockerfile-buster --tag iomod/std/http:$VERSION
+        run: docker build . --file ./modules/http/docker/Dockerfile-buster --tag iomod/std/http:$VERSION
       - name: 'Add ECR Tag'
         run: docker tag iomod/std/http:$VERSION public.ecr.aws/akkoro/iomod/std/http:$VERSION && docker tag public.ecr.aws/akkoro/iomod/std/http:$VERSION public.ecr.aws/akkoro/iomod/std/http:$VERSION
       - name: 'ECR Login'
@@ -62,6 +62,6 @@ jobs:
       - name: 'Get Version'
         run: echo "VERSION=$(cat ./modules/http/iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/\"//g')" >> $GITHUB_ENV
       - name: 'Build Image'
-        run: docker build . --file ./modules/http/Dockerfile-lambda --tag iomod/std/http:$VERSION
+        run: docker build . --file ./modules/http/docker/Dockerfile-lambda --tag iomod/std/http:$VERSION
       - name: 'Copy Artifacts'
         run: docker run --rm --entrypoint cat iomod/std/http:$VERSION /usr/src/target/release/akkoro.std.http@$(IOMOD_VERSION).iomod > $HOME/akkoro.std.http@$(IOMOD_VERSION).iomod
