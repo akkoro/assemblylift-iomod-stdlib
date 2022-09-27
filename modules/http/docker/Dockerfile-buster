@@ -8,7 +8,7 @@ RUN curl -O https://capnproto.org/capnproto-c++-0.8.0.tar.gz && tar zxf capnprot
 ENV USER=root
 
 WORKDIR /usr/src
-COPY .. .
+COPY . .
 
 #RUN cargo install --debug --target x86_64-unknown-linux-musl --path .
 RUN cd ./modules/http && cargo install --path .
