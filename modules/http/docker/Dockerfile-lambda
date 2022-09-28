@@ -10,8 +10,8 @@ WORKDIR /usr/src
 COPY . .
 RUN source "$HOME/.cargo/env" && cargo build --manifest-path=/usr/src/modules/http/Cargo.toml --release
 
-RUN mkdir ./bin && cp ./target/release/akkoro-std-http ./bin/akkoro-std-http
+RUN mkdir -p ./dist/bin && cp ./target/release/akkoro-std-http ./dist/bin/akkoro-std-http && cp ./modules/http/iomod.toml ./dist/iomod.toml
 RUN export IOMOD_VERSION=$(cat /usr/src/modules/http/iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/"//g')
-RUN zip -r /usr/src/akkoro.std.http@$(echo $IOMOD_VERSION).iomod ./bin/ /usr/src/modules/http/iomod.toml
+RUN source "$HOME/.cargo/env" && asml pack iomod -o /usr/src/akkoro.std.http@$(echo $IOMOD_VERSION).iomod
 
 CMD cat ./iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/"//g'
