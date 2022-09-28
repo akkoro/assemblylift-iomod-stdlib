@@ -115,6 +115,7 @@ pub fn request(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
                         let content_encoding: Option<&String> = headers.get("content-encoding");
 
                         info!("response content_type={:?}", content_type);
+                        info!("response content_type={:?}", content_encoding);
                         let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let res = HttpResponse {
                             code,
