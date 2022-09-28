@@ -1,4 +1,4 @@
-name: AssemblyLift CI
+name: AssemblyLift IOmod Standard Library
 
 on:
   push:

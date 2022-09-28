@@ -11,7 +11,6 @@ COPY . .
 RUN source "$HOME/.cargo/env" && cargo build --manifest-path=/usr/src/modules/http/Cargo.toml --release
 
 RUN mkdir -p ./dist/bin && cp ./target/release/akkoro-std-http ./dist/bin/akkoro-std-http && cp ./modules/http/iomod.toml ./dist/iomod.toml
-RUN export IOMOD_VERSION=$(cat /usr/src/modules/http/iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/"//g')
-RUN source "$HOME/.cargo/env" && cd ./dist && asml pack iomod -o /usr/src/akkoro.std.http@$IOMOD_VERSION.iomod
+RUN source "$HOME/.cargo/env" && cd ./dist && asml pack iomod -o /usr/src/akkoro.std.http@$(cat /usr/src/modules/http/iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/"//g').iomod
 
 CMD cat ./iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/"//g'
