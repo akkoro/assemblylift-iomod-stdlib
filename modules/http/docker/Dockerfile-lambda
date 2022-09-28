@@ -12,6 +12,6 @@ RUN source "$HOME/.cargo/env" && cargo build --manifest-path=/usr/src/modules/ht
 
 RUN mkdir ./bin && cp ./target/release/akkoro-std-http ./bin/akkoro-std-http
 RUN export IOMOD_VERSION=$(cat /usr/src/modules/http/iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/"//g')
-RUN zip -r akkoro.std.http@$(echo $IOMOD_VERSION).iomod ./bin/ ./iomod.toml
+RUN zip -r /usr/src/akkoro.std.http@$(echo $IOMOD_VERSION).iomod ./bin/ /usr/src/modules/http/iomod.toml
 
 CMD cat ./iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/"//g'

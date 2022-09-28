@@ -59,6 +59,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - uses: actions/checkout@v2
+        # TODO get IOmod coordinates from iomod.toml
       - name: 'Get Version'
         run: echo "VERSION=$(cat ./modules/http/iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/\"//g')" >> $GITHUB_ENV
       - name: 'Build Image'
