@@ -51,7 +51,7 @@ impl HttpRequestBuilder {
     }
 
     pub fn content_type(mut self, content_type: &str) -> HttpRequestBuilder {
-        self.req.content_type = content_type.into();
+        self.req.content_type = Some(content_type.into());
         self
     }
     

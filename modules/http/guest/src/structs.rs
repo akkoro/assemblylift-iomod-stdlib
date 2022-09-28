@@ -20,7 +20,7 @@ pub struct HttpRequest {
     pub host: String,
     pub path: String,
     pub query_parameters: Option<QueryParameters>,
-    pub content_type: String,
+    pub content_type: Option<String>,
     pub headers: Option<Headers>,
     pub body: Option<Body>,
 }

@@ -1,7 +1,9 @@
+use std::io::Read;
 use std::str::FromStr;
 
 use assemblylift_core_iomod::{iomod, registry};
 use clap::Parser;
+use flate2::read::GzDecoder;
 use futures::future::BoxFuture;
 use once_cell::sync::Lazy;
 use rusoto_signature::{Region, SignedRequest};
@@ -46,7 +48,7 @@ async fn main() {
     };
 
     let subscriber = FmtSubscriber::builder()
-        .with_max_level(Level::DEBUG)
+        .with_max_level(Level::INFO)
         .finish();
 
     tracing::subscriber::set_global_default(subscriber)
@@ -83,7 +85,9 @@ pub fn request(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     );
 
     http_request.set_hostname(Some(deserialized.host.clone()));
-    http_request.set_content_type(deserialized.content_type.clone());
+    if let Some(content_type) = deserialized.content_type {
+        http_request.set_content_type(content_type.clone());
+    }
     if !method.clone().eq("GET") {
         if let Some(body) = deserialized.body.clone() {
             http_request.set_payload(Some(body));
@@ -91,7 +95,7 @@ pub fn request(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     }
 
     Box::pin(async move {
-        match crate::CLIENT
+        match CLIENT
             .call(http_request, deserialized.auth.clone())
             .await
         {
@@ -100,20 +104,39 @@ pub fn request(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
                 match status {
                     status => {
                         let code = status.as_u16();
-                        let headers = response
+                        let headers: Headers = response
                             .headers()
                             .iter()
                             .map(|(k, v)| {
                                 (String::from(k.as_str()), String::from(v.to_str().unwrap()))
                             })
                             .collect();
+                        let content_type: Option<&String> = headers.get("content-type");
+                        let content_encoding: Option<&String> = headers.get("content-encoding");
+
+                        info!("response content_type={:?}", content_type);
                         let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
                         let res = HttpResponse {
                             code,
-                            headers,
+                            headers: headers.clone(),
                             body: match body.len() == 0 {
                                 true => None,
-                                false => Some(String::from(std::str::from_utf8(body).unwrap())),
+                                false => {
+                                    if let Some(encoding) = content_encoding {
+                                        let enc = &*encoding.clone();
+                                        match enc {
+                                            "gzip" => {
+                                                let mut out = String::new();
+                                                let mut gzd = GzDecoder::new(body);
+                                                gzd.read_to_string(&mut out).expect("could not decompress gzip-encoded body");
+                                                Some(out)
+                                            }
+                                            _ => Some(String::from(std::str::from_utf8(body.as_ref()).unwrap()))
+                                        }
+                                    } else {
+                                        Some(String::from(std::str::from_utf8(body.as_ref()).unwrap()))
+                                    }
+                                },
                             },
                         };
                         serde_json::to_vec(&Result::<HttpResponse, guest::Error>::Ok(res)).unwrap()

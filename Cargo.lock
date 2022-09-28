@@ -224,7 +224,7 @@ dependencies = [
 
 [[package]]
 name = "assemblylift-iomod-http-guest"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "assemblylift-core-io-guest 0.4.0-alpha.0",
  "assemblylift-core-iomod-guest 0.4.0-alpha.0",
@@ -283,13 +283,14 @@ dependencies = [
 
 [[package]]
 name = "assemblylift-iomod-std-http"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "assemblylift-core-iomod 0.4.0-alpha.0",
  "assemblylift-iomod-http-guest",
  "capnp",
  "capnp-rpc",
  "clap",
+ "flate2",
  "futures",
  "futures-util",
  "http",
@@ -343,7 +344,7 @@ dependencies = [
  "cc",
  "cfg-if 1.0.0",
  "libc",
- "miniz_oxide",
+ "miniz_oxide 0.4.4",
  "object 0.27.1",
  "rustc-demangle",
 ]
@@ -799,6 +800,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c3fcf0cee53519c866c09b5de1f6c56ff9d647101f81c1964fa632e148896cdf"
 dependencies = [
  "instant",
+]
+
+[[package]]
+name = "flate2"
+version = "1.0.24"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f82b0f4c27ad9f8bfd1f3208d882da2b09c301bc1c828fd3a00d0216d2fbbff6"
+dependencies = [
+ "crc32fast",
+ "miniz_oxide 0.5.4",
 ]
 
 [[package]]
@@ -1275,6 +1286,15 @@ checksum = "a92518e98c078586bc6c934028adcca4c92a53d6a958196de835170a01d84e4b"
 dependencies = [
  "adler",
  "autocfg",
+]
+
+[[package]]
+name = "miniz_oxide"
+version = "0.5.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "96590ba8f175222643a85693f33d26e9c8a015f599c216509b1a6894af675d34"
+dependencies = [
+ "adler",
 ]
 
 [[package]]

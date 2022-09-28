@@ -1,7 +1,7 @@
 [package]
 name = "assemblylift-iomod-http-guest"
 description = "AssemblyLift HTTP IOmod guest lib"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["xlem <xlem@akkoro.io>"]
 edition = "2021"
 license-file = "../../../LICENSE.md"
