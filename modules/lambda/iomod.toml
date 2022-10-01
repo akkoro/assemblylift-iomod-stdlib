@@ -1,6 +1,6 @@
 [iomod]
 coordinates = "akkoro.aws.lambda"
-version = "0.1.0"
+version = "0.2.0"
 
 [process]
 entrypoint = "bin/akkoro-aws-lambda"

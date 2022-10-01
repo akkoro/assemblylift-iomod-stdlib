@@ -11,6 +11,11 @@ pub type AdditionalVersion = String;
 pub type AdditionalVersionWeights = HashMap<AdditionalVersion, Weight>;
 pub type Alias = String;
 pub type AliasList = Vec<AliasConfiguration>;
+pub type AllowCredentials = bool;
+pub type AllowMethodsList = Vec<Method>;
+pub type AllowOriginsList = Vec<Origin>;
+pub type Architecture = String;
+pub type ArchitecturesList = Vec<Architecture>;
 pub type Arn = String;
 pub type BatchSize = i64;
 pub type BisectBatchOnFunctionError = bool;
@@ -21,6 +26,7 @@ pub type CodeSigningConfigArn = String;
 pub type CodeSigningConfigId = String;
 pub type CodeSigningConfigList = Vec<CodeSigningConfig>;
 pub type CodeSigningPolicy = String;
+pub type CompatibleArchitectures = Vec<Architecture>;
 pub type CompatibleRuntimes = Vec<Runtime>;
 pub type Date = String;
 pub type Description = String;
@@ -33,11 +39,13 @@ pub type Endpoints = HashMap<EndPointType, EndpointLists>;
 pub type EnvironmentVariableName = String;
 pub type EnvironmentVariableValue = String;
 pub type EnvironmentVariables = HashMap<EnvironmentVariableName, EnvironmentVariableValue>;
+pub type EphemeralStorageSize = i64;
 pub type EventSourceMappingsList = Vec<EventSourceMappingConfiguration>;
 pub type EventSourcePosition = String;
 pub type EventSourceToken = String;
 pub type FileSystemArn = String;
 pub type FileSystemConfigList = Vec<FileSystemConfig>;
+pub type FilterList = Vec<Filter>;
 pub type FunctionArn = String;
 pub type FunctionArnList = Vec<FunctionArn>;
 pub type FunctionEventInvokeConfigList = Vec<FunctionEventInvokeConfig>;
@@ -45,8 +53,14 @@ pub type FunctionList = Vec<FunctionConfiguration>;
 pub type FunctionName = String;
 pub type FunctionResponseType = String;
 pub type FunctionResponseTypeList = Vec<FunctionResponseType>;
+pub type FunctionUrl = String;
+pub type FunctionUrlAuthType = String;
+pub type FunctionUrlConfigList = Vec<FunctionUrlConfig>;
+pub type FunctionUrlQualifier = String;
 pub type FunctionVersion = String;
 pub type Handler = String;
+pub type Header = String;
+pub type HeadersList = Vec<Header>;
 pub type HttpStatus = i64;
 pub type Integer = i64;
 pub type InvocationType = String;
@@ -69,7 +83,9 @@ pub type LocalMountPath = String;
 pub type LogType = String;
 pub type Long = u64;
 pub type MasterRegion = String;
+pub type MaxAge = i64;
 pub type MaxFunctionEventInvokeConfigListItems = i64;
+pub type MaxItems = i64;
 pub type MaxLayerListItems = i64;
 pub type MaxListItems = i64;
 pub type MaxProvisionedConcurrencyConfigListItems = i64;
@@ -79,15 +95,19 @@ pub type MaximumRecordAgeInSeconds = i64;
 pub type MaximumRetryAttempts = i64;
 pub type MaximumRetryAttemptsEventSourceMapping = i64;
 pub type MemorySize = i64;
+pub type Method = String;
 pub type NameSpacedFunctionArn = String;
 pub type NamespacedFunctionName = String;
 pub type NamespacedStatementId = String;
 pub type NonNegativeInteger = i64;
 pub type OrganizationId = String;
+pub type Origin = String;
 pub type PackageType = String;
 pub type ParallelizationFactor = i64;
+pub type Pattern = String;
 pub type PositiveInteger = i64;
 pub type Principal = String;
+pub type PrincipalOrgID = String;
 pub type ProvisionedConcurrencyConfigList = Vec<ProvisionedConcurrencyConfigListItem>;
 pub type ProvisionedConcurrencyStatusEnum = String;
 pub type Qualifier = String;
@@ -224,6 +244,12 @@ pub struct AddPermissionRequest {
     #[serde(rename = "RevisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_id: Option<String>,
+    #[serde(rename = "PrincipalOrgID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal_org_id: Option<PrincipalOrgID>,
+    #[serde(rename = "FunctionUrlAuthType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_url_auth_type: Option<FunctionUrlAuthType>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -267,6 +293,13 @@ pub struct AllowedPublishers {
     #[serde(rename = "SigningProfileVersionArns")]
 
     pub signing_profile_version_arns: SigningProfileVersionArns,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct AmazonManagedKafkaEventSourceConfig {
+    #[serde(rename = "ConsumerGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumer_group_id: Option<URI>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -336,6 +369,28 @@ pub struct Concurrency {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
+pub struct Cors {
+    #[serde(rename = "AllowCredentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_credentials: Option<AllowCredentials>,
+    #[serde(rename = "AllowHeaders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_headers: Option<HeadersList>,
+    #[serde(rename = "AllowMethods")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_methods: Option<AllowMethodsList>,
+    #[serde(rename = "AllowOrigins")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_origins: Option<AllowOriginsList>,
+    #[serde(rename = "ExposeHeaders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expose_headers: Option<HeadersList>,
+    #[serde(rename = "MaxAge")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_age: Option<MaxAge>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct CreateAliasRequest {
     #[serde(rename = "FunctionName")]
 
@@ -388,6 +443,9 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<BatchSize>,
+    #[serde(rename = "FilterCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_criteria: Option<FilterCriteria>,
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_batching_window_in_seconds: Option<MaximumBatchingWindowInSeconds>,
@@ -430,6 +488,12 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "FunctionResponseTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_response_types: Option<FunctionResponseTypeList>,
+    #[serde(rename = "AmazonManagedKafkaEventSourceConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amazon_managed_kafka_event_source_config: Option<AmazonManagedKafkaEventSourceConfig>,
+    #[serde(rename = "SelfManagedKafkaEventSourceConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub self_managed_kafka_event_source_config: Option<SelfManagedKafkaEventSourceConfig>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -494,6 +558,47 @@ pub struct CreateFunctionRequest {
     #[serde(rename = "CodeSigningConfigArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code_signing_config_arn: Option<CodeSigningConfigArn>,
+    #[serde(rename = "Architectures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub architectures: Option<ArchitecturesList>,
+    #[serde(rename = "EphemeralStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ephemeral_storage: Option<EphemeralStorage>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct CreateFunctionUrlConfigRequest {
+    #[serde(rename = "FunctionName")]
+
+    pub function_name: FunctionName,
+    #[serde(rename = "Qualifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qualifier: Option<FunctionUrlQualifier>,
+    #[serde(rename = "AuthType")]
+
+    pub auth_type: FunctionUrlAuthType,
+    #[serde(rename = "Cors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors: Option<Cors>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct CreateFunctionUrlConfigResponse {
+    #[serde(rename = "FunctionUrl")]
+
+    pub function_url: FunctionUrl,
+    #[serde(rename = "FunctionArn")]
+
+    pub function_arn: FunctionArn,
+    #[serde(rename = "AuthType")]
+
+    pub auth_type: FunctionUrlAuthType,
+    #[serde(rename = "Cors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors: Option<Cors>,
+    #[serde(rename = "CreationTime")]
+
+    pub creation_time: Timestamp,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -563,6 +668,16 @@ pub struct DeleteFunctionRequest {
     #[serde(rename = "Qualifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qualifier: Option<Qualifier>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct DeleteFunctionUrlConfigRequest {
+    #[serde(rename = "FunctionName")]
+
+    pub function_name: FunctionName,
+    #[serde(rename = "Qualifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qualifier: Option<FunctionUrlQualifier>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -706,6 +821,13 @@ pub struct EnvironmentResponse {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
+pub struct EphemeralStorage {
+    #[serde(rename = "Size")]
+
+    pub size: EphemeralStorageSize,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct EventSourceMappingConfiguration {
     #[serde(rename = "UUID")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -728,6 +850,9 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "EventSourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_source_arn: Option<Arn>,
+    #[serde(rename = "FilterCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_criteria: Option<FilterCriteria>,
     #[serde(rename = "FunctionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_arn: Option<FunctionArn>,
@@ -773,6 +898,12 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "FunctionResponseTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_response_types: Option<FunctionResponseTypeList>,
+    #[serde(rename = "AmazonManagedKafkaEventSourceConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amazon_managed_kafka_event_source_config: Option<AmazonManagedKafkaEventSourceConfig>,
+    #[serde(rename = "SelfManagedKafkaEventSourceConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub self_managed_kafka_event_source_config: Option<SelfManagedKafkaEventSourceConfig>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -783,6 +914,20 @@ pub struct FileSystemConfig {
     #[serde(rename = "LocalMountPath")]
 
     pub local_mount_path: LocalMountPath,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct Filter {
+    #[serde(rename = "Pattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pattern: Option<Pattern>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct FilterCriteria {
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<FilterList>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -915,6 +1060,12 @@ pub struct FunctionConfiguration {
     #[serde(rename = "SigningJobArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub signing_job_arn: Option<Arn>,
+    #[serde(rename = "Architectures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub architectures: Option<ArchitecturesList>,
+    #[serde(rename = "EphemeralStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ephemeral_storage: Option<EphemeralStorage>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -934,6 +1085,28 @@ pub struct FunctionEventInvokeConfig {
     #[serde(rename = "DestinationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_config: Option<DestinationConfig>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct FunctionUrlConfig {
+    #[serde(rename = "FunctionUrl")]
+
+    pub function_url: FunctionUrl,
+    #[serde(rename = "FunctionArn")]
+
+    pub function_arn: FunctionArn,
+    #[serde(rename = "CreationTime")]
+
+    pub creation_time: Timestamp,
+    #[serde(rename = "LastModifiedTime")]
+
+    pub last_modified_time: Timestamp,
+    #[serde(rename = "Cors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors: Option<Cors>,
+    #[serde(rename = "AuthType")]
+
+    pub auth_type: FunctionUrlAuthType,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -1059,6 +1232,38 @@ pub struct GetFunctionResponse {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
+pub struct GetFunctionUrlConfigRequest {
+    #[serde(rename = "FunctionName")]
+
+    pub function_name: FunctionName,
+    #[serde(rename = "Qualifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qualifier: Option<FunctionUrlQualifier>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct GetFunctionUrlConfigResponse {
+    #[serde(rename = "FunctionUrl")]
+
+    pub function_url: FunctionUrl,
+    #[serde(rename = "FunctionArn")]
+
+    pub function_arn: FunctionArn,
+    #[serde(rename = "AuthType")]
+
+    pub auth_type: FunctionUrlAuthType,
+    #[serde(rename = "Cors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors: Option<Cors>,
+    #[serde(rename = "CreationTime")]
+
+    pub creation_time: Timestamp,
+    #[serde(rename = "LastModifiedTime")]
+
+    pub last_modified_time: Timestamp,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct GetLayerVersionByArnRequest {
     #[serde(rename = "Arn")]
 
@@ -1121,6 +1326,9 @@ pub struct GetLayerVersionResponse {
     #[serde(rename = "LicenseInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_info: Option<LicenseInfo>,
+    #[serde(rename = "CompatibleArchitectures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatible_architectures: Option<CompatibleArchitectures>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -1447,6 +1655,9 @@ pub struct LayerVersionsListItem {
     #[serde(rename = "LicenseInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_info: Option<LicenseInfo>,
+    #[serde(rename = "CompatibleArchitectures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatible_architectures: Option<CompatibleArchitectures>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -1558,6 +1769,29 @@ pub struct ListFunctionEventInvokeConfigsResponse {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
+pub struct ListFunctionUrlConfigsRequest {
+    #[serde(rename = "FunctionName")]
+
+    pub function_name: FunctionName,
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    #[serde(rename = "MaxItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_items: Option<MaxItems>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct ListFunctionUrlConfigsResponse {
+    #[serde(rename = "FunctionUrlConfigs")]
+
+    pub function_url_configs: FunctionUrlConfigList,
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ListFunctionsByCodeSigningConfigRequest {
     #[serde(rename = "CodeSigningConfigArn")]
 
@@ -1620,6 +1854,9 @@ pub struct ListLayerVersionsRequest {
     #[serde(rename = "MaxItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<MaxLayerListItems>,
+    #[serde(rename = "CompatibleArchitecture")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatible_architecture: Option<Architecture>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -1643,6 +1880,9 @@ pub struct ListLayersRequest {
     #[serde(rename = "MaxItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<MaxLayerListItems>,
+    #[serde(rename = "CompatibleArchitecture")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatible_architecture: Option<Architecture>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -1801,6 +2041,9 @@ pub struct PublishLayerVersionRequest {
     #[serde(rename = "LicenseInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_info: Option<LicenseInfo>,
+    #[serde(rename = "CompatibleArchitectures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatible_architectures: Option<CompatibleArchitectures>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -1829,6 +2072,9 @@ pub struct PublishLayerVersionResponse {
     #[serde(rename = "LicenseInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_info: Option<LicenseInfo>,
+    #[serde(rename = "CompatibleArchitectures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatible_architectures: Option<CompatibleArchitectures>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -2021,6 +2267,13 @@ pub struct SelfManagedEventSource {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
+pub struct SelfManagedKafkaEventSourceConfig {
+    #[serde(rename = "ConsumerGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumer_group_id: Option<URI>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ServiceException {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2169,6 +2422,9 @@ pub struct UpdateEventSourceMappingRequest {
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<BatchSize>,
+    #[serde(rename = "FilterCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_criteria: Option<FilterCriteria>,
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_batching_window_in_seconds: Option<MaximumBatchingWindowInSeconds>,
@@ -2227,6 +2483,9 @@ pub struct UpdateFunctionCodeRequest {
     #[serde(rename = "RevisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_id: Option<String>,
+    #[serde(rename = "Architectures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub architectures: Option<ArchitecturesList>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -2279,6 +2538,9 @@ pub struct UpdateFunctionConfigurationRequest {
     #[serde(rename = "ImageConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_config: Option<ImageConfig>,
+    #[serde(rename = "EphemeralStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ephemeral_storage: Option<EphemeralStorage>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -2298,6 +2560,44 @@ pub struct UpdateFunctionEventInvokeConfigRequest {
     #[serde(rename = "DestinationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_config: Option<DestinationConfig>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct UpdateFunctionUrlConfigRequest {
+    #[serde(rename = "FunctionName")]
+
+    pub function_name: FunctionName,
+    #[serde(rename = "Qualifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qualifier: Option<FunctionUrlQualifier>,
+    #[serde(rename = "AuthType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_type: Option<FunctionUrlAuthType>,
+    #[serde(rename = "Cors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors: Option<Cors>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct UpdateFunctionUrlConfigResponse {
+    #[serde(rename = "FunctionUrl")]
+
+    pub function_url: FunctionUrl,
+    #[serde(rename = "FunctionArn")]
+
+    pub function_arn: FunctionArn,
+    #[serde(rename = "AuthType")]
+
+    pub auth_type: FunctionUrlAuthType,
+    #[serde(rename = "Cors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors: Option<Cors>,
+    #[serde(rename = "CreationTime")]
+
+    pub creation_time: Timestamp,
+    #[serde(rename = "LastModifiedTime")]
+
+    pub last_modified_time: Timestamp,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]

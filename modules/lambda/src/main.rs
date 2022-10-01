@@ -1,17 +1,20 @@
 // This file is generated!
 // See https://github.com/akkoro/asml-aws-codegen
 
-mod client;
-
 use std::str::FromStr;
 
 use assemblylift_core_iomod::iomod;
+use clap::Parser;
 use futures::future::BoxFuture;
-use once_cell::sync::Lazy;
 use hyper::StatusCode;
+use once_cell::sync::Lazy;
 use rusoto_signature::{Region, SignedRequest};
+use tracing::Level;
+use tracing_subscriber::FmtSubscriber;
 
 use guest::structs::*;
+
+mod client;
 
 static CLIENT: Lazy<client::Client> = Lazy::new(|| {
     use std::env;
@@ -27,15 +30,38 @@ static CLIENT: Lazy<client::Client> = Lazy::new(|| {
     c
 });
 
+#[derive(Parser)]
+struct Args {
+    #[clap(long)]
+    registry_ip: Option<String>,
+}
+
 #[tokio::main]
 async fn main() {
-    iomod!(akkoro.aws.lambda => {
+    let args = Args::parse();
+    let ip: String = match args.registry_ip.as_deref() {
+        Some(ip) => ip.to_string(),
+        None => {
+            std::env::var("IOMOD_REGISTRY_ADDR")
+                .unwrap_or("127.0.0.1".to_string())
+        }
+    };
+
+    let subscriber = FmtSubscriber::builder()
+        .with_max_level(Level::INFO)
+        .finish();
+
+    tracing::subscriber::set_global_default(subscriber)
+        .expect("setting default subscriber failed");
+
+    iomod!(ip, akkoro.aws.lambda => {
       add_layer_version_permission => add_layer_version_permission,
       add_permission => add_permission,
       create_alias => create_alias,
       create_code_signing_config => create_code_signing_config,
       create_event_source_mapping => create_event_source_mapping,
       create_function => create_function,
+      create_function_url_config => create_function_url_config,
       delete_alias => delete_alias,
       delete_code_signing_config => delete_code_signing_config,
       delete_event_source_mapping => delete_event_source_mapping,
@@ -43,6 +69,7 @@ async fn main() {
       delete_function_code_signing_config => delete_function_code_signing_config,
       delete_function_concurrency => delete_function_concurrency,
       delete_function_event_invoke_config => delete_function_event_invoke_config,
+      delete_function_url_config => delete_function_url_config,
       delete_layer_version => delete_layer_version,
       delete_provisioned_concurrency_config => delete_provisioned_concurrency_config,
       get_account_settings => get_account_settings,
@@ -54,6 +81,7 @@ async fn main() {
       get_function_concurrency => get_function_concurrency,
       get_function_configuration => get_function_configuration,
       get_function_event_invoke_config => get_function_event_invoke_config,
+      get_function_url_config => get_function_url_config,
       get_layer_version => get_layer_version,
       get_layer_version_by_arn => get_layer_version_by_arn,
       get_layer_version_policy => get_layer_version_policy,
@@ -65,6 +93,7 @@ async fn main() {
       list_code_signing_configs => list_code_signing_configs,
       list_event_source_mappings => list_event_source_mappings,
       list_function_event_invoke_configs => list_function_event_invoke_configs,
+      list_function_url_configs => list_function_url_configs,
       list_functions => list_functions,
       list_functions_by_code_signing_config => list_functions_by_code_signing_config,
       list_layer_versions => list_layer_versions,
@@ -88,6 +117,7 @@ async fn main() {
       update_function_code => update_function_code,
       update_function_configuration => update_function_configuration,
       update_function_event_invoke_config => update_function_event_invoke_config,
+      update_function_url_config => update_function_url_config,
     });
 }
 
@@ -108,6 +138,15 @@ fn __add_layer_version_permission(input: AddLayerVersionPermissionRequest) -> Bo
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "lambda",
@@ -116,6 +155,18 @@ fn __add_layer_version_permission(input: AddLayerVersionPermissionRequest) -> Bo
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -123,7 +174,7 @@ fn __add_layer_version_permission(input: AddLayerVersionPermissionRequest) -> Bo
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(revision_id) = input.revision_id {
-        http_request.add_param("RevisionId", &serde_json::to_string(&revision_id).unwrap());
+        http_request.add_param("RevisionId", &revision_id);
     };
 
     Box::pin(async move {
@@ -135,8 +186,8 @@ fn __add_layer_version_permission(input: AddLayerVersionPermissionRequest) -> Bo
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: AddLayerVersionPermissionResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: AddLayerVersionPermissionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: AddLayerVersionPermissionResponse = serde_json::from_slice(body).unwrap();
                         output.statement = body.statement;
                         output.revision_id = body.revision_id;
 
@@ -173,6 +224,15 @@ fn __add_permission(input: AddPermissionRequest) -> BoxFuture<'static, Vec<u8>> 
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "lambda",
@@ -181,6 +241,18 @@ fn __add_permission(input: AddPermissionRequest) -> BoxFuture<'static, Vec<u8>> 
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -188,7 +260,7 @@ fn __add_permission(input: AddPermissionRequest) -> BoxFuture<'static, Vec<u8>> 
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(qualifier) = input.qualifier {
-        http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
+        http_request.add_param("Qualifier", &qualifier);
     };
 
     Box::pin(async move {
@@ -200,8 +272,8 @@ fn __add_permission(input: AddPermissionRequest) -> BoxFuture<'static, Vec<u8>> 
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: AddPermissionResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: AddPermissionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: AddPermissionResponse = serde_json::from_slice(body).unwrap();
                         output.statement = body.statement;
 
                         serde_json::to_vec(&Result::<AddPermissionResponse, guest::Error>::Ok(output)).unwrap()
@@ -237,6 +309,15 @@ fn __create_alias(input: CreateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "lambda",
@@ -244,6 +325,18 @@ fn __create_alias(input: CreateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -261,8 +354,8 @@ fn __create_alias(input: CreateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: AliasConfiguration = Default::default();
 
-                        let body = response.into_body();
-                        let body: AliasConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: AliasConfiguration = serde_json::from_slice(body).unwrap();
                         output.alias_arn = body.alias_arn;
                         output.name = body.name;
                         output.function_version = body.function_version;
@@ -299,6 +392,15 @@ pub fn create_code_signing_config(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>>
 fn __create_code_signing_config(input: CreateCodeSigningConfigRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/2020-04-22/code-signing-configs/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "lambda",
@@ -306,6 +408,18 @@ fn __create_code_signing_config(input: CreateCodeSigningConfigRequest) -> BoxFut
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -323,8 +437,8 @@ fn __create_code_signing_config(input: CreateCodeSigningConfigRequest) -> BoxFut
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: CreateCodeSigningConfigResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: CreateCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: CreateCodeSigningConfigResponse = serde_json::from_slice(body).unwrap();
                         output.code_signing_config = body.code_signing_config;
 
                         serde_json::to_vec(&Result::<CreateCodeSigningConfigResponse, guest::Error>::Ok(output)).unwrap()
@@ -356,6 +470,15 @@ pub fn create_event_source_mapping(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>
 fn __create_event_source_mapping(input: CreateEventSourceMappingRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/2015-03-31/event-source-mappings/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "lambda",
@@ -363,6 +486,18 @@ fn __create_event_source_mapping(input: CreateEventSourceMappingRequest) -> BoxF
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -380,8 +515,8 @@ fn __create_event_source_mapping(input: CreateEventSourceMappingRequest) -> BoxF
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: EventSourceMappingConfiguration = Default::default();
 
-                        let body = response.into_body();
-                        let body: EventSourceMappingConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: EventSourceMappingConfiguration = serde_json::from_slice(body).unwrap();
                         output.uuid = body.uuid;
                         output.starting_position = body.starting_position;
                         output.starting_position_timestamp = body.starting_position_timestamp;
@@ -389,6 +524,7 @@ fn __create_event_source_mapping(input: CreateEventSourceMappingRequest) -> BoxF
                         output.maximum_batching_window_in_seconds = body.maximum_batching_window_in_seconds;
                         output.parallelization_factor = body.parallelization_factor;
                         output.event_source_arn = body.event_source_arn;
+                        output.filter_criteria = body.filter_criteria;
                         output.function_arn = body.function_arn;
                         output.last_modified = body.last_modified;
                         output.last_processing_result = body.last_processing_result;
@@ -404,6 +540,8 @@ fn __create_event_source_mapping(input: CreateEventSourceMappingRequest) -> BoxF
                         output.maximum_retry_attempts = body.maximum_retry_attempts;
                         output.tumbling_window_in_seconds = body.tumbling_window_in_seconds;
                         output.function_response_types = body.function_response_types;
+                        output.amazon_managed_kafka_event_source_config = body.amazon_managed_kafka_event_source_config;
+                        output.self_managed_kafka_event_source_config = body.self_managed_kafka_event_source_config;
 
                         serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
@@ -434,6 +572,15 @@ pub fn create_function(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __create_function(input: CreateFunctionRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/2015-03-31/functions");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "lambda",
@@ -441,6 +588,18 @@ fn __create_function(input: CreateFunctionRequest) -> BoxFuture<'static, Vec<u8>
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -458,8 +617,8 @@ fn __create_function(input: CreateFunctionRequest) -> BoxFuture<'static, Vec<u8>
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: FunctionConfiguration = Default::default();
 
-                        let body = response.into_body();
-                        let body: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: FunctionConfiguration = serde_json::from_slice(body).unwrap();
                         output.function_name = body.function_name;
                         output.function_arn = body.function_arn;
                         output.runtime = body.runtime;
@@ -491,6 +650,8 @@ fn __create_function(input: CreateFunctionRequest) -> BoxFuture<'static, Vec<u8>
                         output.image_config_response = body.image_config_response;
                         output.signing_profile_version_arn = body.signing_profile_version_arn;
                         output.signing_job_arn = body.signing_job_arn;
+                        output.architectures = body.architectures;
+                        output.ephemeral_storage = body.ephemeral_storage;
 
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
@@ -504,6 +665,95 @@ fn __create_function(input: CreateFunctionRequest) -> BoxFuture<'static, Vec<u8>
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Err(guest::Error {
+                    why: why.to_string(),
+                }))
+                    .unwrap()
+            },
+        }
+    })
+}
+
+#[allow(dead_code)]
+pub fn create_function_url_config(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
+    let deserialized: CreateFunctionUrlConfigRequest = serde_json::from_slice(input.as_slice()).unwrap();
+    __create_function_url_config(deserialized)
+}
+#[allow(unused_assignments, unused_mut, unused_variables)]
+fn __create_function_url_config(input: CreateFunctionUrlConfigRequest) -> BoxFuture<'static, Vec<u8>> {
+    let mut path = String::from("/2021-10-31/functions/{FunctionName}/url");
+    path = match path.find("{FunctionName}") {
+        Some(_) => path.replace("{FunctionName}", &input.function_name.to_string()),
+        None => path.to_string(),
+    };
+
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
+    let mut http_request = SignedRequest::new(
+        "POST",
+        "lambda",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
+    http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
+
+    http_request.add_header("accept-encoding", "identity");
+    http_request.add_header("x-amz-target", "CreateFunctionUrlConfig");
+    http_request.set_content_type(String::from("application/json"));
+
+    if let Some(qualifier) = input.qualifier {
+        http_request.add_param("Qualifier", &qualifier);
+    };
+
+    Box::pin(async move {
+        match crate::CLIENT.call(http_request).await {
+            Ok(response) => {
+                let status = response.status();
+
+                match status {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: CreateFunctionUrlConfigResponse = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: CreateFunctionUrlConfigResponse = serde_json::from_slice(body).unwrap();
+                        output.function_url = body.function_url;
+                        output.function_arn = body.function_arn;
+                        output.auth_type = body.auth_type;
+                        output.cors = body.cors;
+                        output.creation_time = body.creation_time;
+
+                        serde_json::to_vec(&Result::<CreateFunctionUrlConfigResponse, guest::Error>::Ok(output)).unwrap()
+                    }
+                    status => {
+                        serde_json::to_vec(&Result::<CreateFunctionUrlConfigResponse, guest::Error>::Err(guest::Error {
+                            why: String::from(status.canonical_reason().unwrap()),
+                        }))
+                            .unwrap()
+                    }
+                }
+            },
+            Err(why) => {
+                serde_json::to_vec(&Result::<CreateFunctionUrlConfigResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
                     .unwrap()
@@ -529,6 +779,15 @@ fn __delete_alias(input: DeleteAliasRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "lambda",
@@ -536,6 +795,18 @@ fn __delete_alias(input: DeleteAliasRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -587,6 +858,15 @@ fn __delete_code_signing_config(input: DeleteCodeSigningConfigRequest) -> BoxFut
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "lambda",
@@ -594,6 +874,18 @@ fn __delete_code_signing_config(input: DeleteCodeSigningConfigRequest) -> BoxFut
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -645,6 +937,15 @@ fn __delete_event_source_mapping(input: DeleteEventSourceMappingRequest) -> BoxF
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "lambda",
@@ -652,6 +953,18 @@ fn __delete_event_source_mapping(input: DeleteEventSourceMappingRequest) -> BoxF
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -669,8 +982,8 @@ fn __delete_event_source_mapping(input: DeleteEventSourceMappingRequest) -> BoxF
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: EventSourceMappingConfiguration = Default::default();
 
-                        let body = response.into_body();
-                        let body: EventSourceMappingConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: EventSourceMappingConfiguration = serde_json::from_slice(body).unwrap();
                         output.uuid = body.uuid;
                         output.starting_position = body.starting_position;
                         output.starting_position_timestamp = body.starting_position_timestamp;
@@ -678,6 +991,7 @@ fn __delete_event_source_mapping(input: DeleteEventSourceMappingRequest) -> BoxF
                         output.maximum_batching_window_in_seconds = body.maximum_batching_window_in_seconds;
                         output.parallelization_factor = body.parallelization_factor;
                         output.event_source_arn = body.event_source_arn;
+                        output.filter_criteria = body.filter_criteria;
                         output.function_arn = body.function_arn;
                         output.last_modified = body.last_modified;
                         output.last_processing_result = body.last_processing_result;
@@ -693,6 +1007,8 @@ fn __delete_event_source_mapping(input: DeleteEventSourceMappingRequest) -> BoxF
                         output.maximum_retry_attempts = body.maximum_retry_attempts;
                         output.tumbling_window_in_seconds = body.tumbling_window_in_seconds;
                         output.function_response_types = body.function_response_types;
+                        output.amazon_managed_kafka_event_source_config = body.amazon_managed_kafka_event_source_config;
+                        output.self_managed_kafka_event_source_config = body.self_managed_kafka_event_source_config;
 
                         serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
@@ -727,6 +1043,15 @@ fn __delete_function(input: DeleteFunctionRequest) -> BoxFuture<'static, Vec<u8>
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "lambda",
@@ -735,6 +1060,18 @@ fn __delete_function(input: DeleteFunctionRequest) -> BoxFuture<'static, Vec<u8>
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -742,7 +1079,7 @@ fn __delete_function(input: DeleteFunctionRequest) -> BoxFuture<'static, Vec<u8>
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(qualifier) = input.qualifier {
-        http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
+        http_request.add_param("Qualifier", &qualifier);
     };
 
     Box::pin(async move {
@@ -788,6 +1125,15 @@ fn __delete_function_code_signing_config(input: DeleteFunctionCodeSigningConfigR
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "lambda",
@@ -795,6 +1141,18 @@ fn __delete_function_code_signing_config(input: DeleteFunctionCodeSigningConfigR
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -846,6 +1204,15 @@ fn __delete_function_concurrency(input: DeleteFunctionConcurrencyRequest) -> Box
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "lambda",
@@ -853,6 +1220,18 @@ fn __delete_function_concurrency(input: DeleteFunctionConcurrencyRequest) -> Box
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -904,6 +1283,15 @@ fn __delete_function_event_invoke_config(input: DeleteFunctionEventInvokeConfigR
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "lambda",
@@ -912,6 +1300,18 @@ fn __delete_function_event_invoke_config(input: DeleteFunctionEventInvokeConfigR
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -919,7 +1319,89 @@ fn __delete_function_event_invoke_config(input: DeleteFunctionEventInvokeConfigR
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(qualifier) = input.qualifier {
-        http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
+        http_request.add_param("Qualifier", &qualifier);
+    };
+
+    Box::pin(async move {
+        match crate::CLIENT.call(http_request).await {
+            Ok(response) => {
+                let status = response.status();
+
+                match status {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: () = Default::default();
+
+
+                        serde_json::to_vec(&Result::<(), guest::Error>::Ok(output)).unwrap()
+                    }
+                    status => {
+                        serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
+                            why: String::from(status.canonical_reason().unwrap()),
+                        }))
+                            .unwrap()
+                    }
+                }
+            },
+            Err(why) => {
+                serde_json::to_vec(&Result::<(), guest::Error>::Err(guest::Error {
+                    why: why.to_string(),
+                }))
+                    .unwrap()
+            },
+        }
+    })
+}
+
+#[allow(dead_code)]
+pub fn delete_function_url_config(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
+    let deserialized: DeleteFunctionUrlConfigRequest = serde_json::from_slice(input.as_slice()).unwrap();
+    __delete_function_url_config(deserialized)
+}
+#[allow(unused_assignments, unused_mut, unused_variables)]
+fn __delete_function_url_config(input: DeleteFunctionUrlConfigRequest) -> BoxFuture<'static, Vec<u8>> {
+    let mut path = String::from("/2021-10-31/functions/{FunctionName}/url");
+    path = match path.find("{FunctionName}") {
+        Some(_) => path.replace("{FunctionName}", &input.function_name.to_string()),
+        None => path.to_string(),
+    };
+
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
+    let mut http_request = SignedRequest::new(
+        "DELETE",
+        "lambda",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
+    http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
+
+    http_request.add_header("accept-encoding", "identity");
+    http_request.add_header("x-amz-target", "DeleteFunctionUrlConfig");
+    http_request.set_content_type(String::from("application/json"));
+
+    if let Some(qualifier) = input.qualifier {
+        http_request.add_param("Qualifier", &qualifier);
     };
 
     Box::pin(async move {
@@ -969,6 +1451,15 @@ fn __delete_layer_version(input: DeleteLayerVersionRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "lambda",
@@ -976,6 +1467,18 @@ fn __delete_layer_version(input: DeleteLayerVersionRequest) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1027,6 +1530,15 @@ fn __delete_provisioned_concurrency_config(input: DeleteProvisionedConcurrencyCo
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "lambda",
@@ -1035,13 +1547,25 @@ fn __delete_provisioned_concurrency_config(input: DeleteProvisionedConcurrencyCo
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "DeleteProvisionedConcurrencyConfig");
     http_request.set_content_type(String::from("application/json"));
 
-    http_request.add_param("Qualifier", &serde_json::to_string(&input.qualifier).unwrap());
+    http_request.add_param("Qualifier", &input.qualifier);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -1082,6 +1606,15 @@ pub fn get_account_settings(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __get_account_settings(input: GetAccountSettingsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/2016-08-19/account-settings/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1089,6 +1622,18 @@ fn __get_account_settings(input: GetAccountSettingsRequest) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1106,8 +1651,8 @@ fn __get_account_settings(input: GetAccountSettingsRequest) -> BoxFuture<'static
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: GetAccountSettingsResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: GetAccountSettingsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: GetAccountSettingsResponse = serde_json::from_slice(body).unwrap();
                         output.account_limit = body.account_limit;
                         output.account_usage = body.account_usage;
 
@@ -1148,6 +1693,15 @@ fn __get_alias(input: GetAliasRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1155,6 +1709,18 @@ fn __get_alias(input: GetAliasRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1172,8 +1738,8 @@ fn __get_alias(input: GetAliasRequest) -> BoxFuture<'static, Vec<u8>> {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: AliasConfiguration = Default::default();
 
-                        let body = response.into_body();
-                        let body: AliasConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: AliasConfiguration = serde_json::from_slice(body).unwrap();
                         output.alias_arn = body.alias_arn;
                         output.name = body.name;
                         output.function_version = body.function_version;
@@ -1214,6 +1780,15 @@ fn __get_code_signing_config(input: GetCodeSigningConfigRequest) -> BoxFuture<'s
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1221,6 +1796,18 @@ fn __get_code_signing_config(input: GetCodeSigningConfigRequest) -> BoxFuture<'s
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1238,8 +1825,8 @@ fn __get_code_signing_config(input: GetCodeSigningConfigRequest) -> BoxFuture<'s
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: GetCodeSigningConfigResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: GetCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: GetCodeSigningConfigResponse = serde_json::from_slice(body).unwrap();
                         output.code_signing_config = body.code_signing_config;
 
                         serde_json::to_vec(&Result::<GetCodeSigningConfigResponse, guest::Error>::Ok(output)).unwrap()
@@ -1275,6 +1862,15 @@ fn __get_event_source_mapping(input: GetEventSourceMappingRequest) -> BoxFuture<
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1282,6 +1878,18 @@ fn __get_event_source_mapping(input: GetEventSourceMappingRequest) -> BoxFuture<
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1299,8 +1907,8 @@ fn __get_event_source_mapping(input: GetEventSourceMappingRequest) -> BoxFuture<
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: EventSourceMappingConfiguration = Default::default();
 
-                        let body = response.into_body();
-                        let body: EventSourceMappingConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: EventSourceMappingConfiguration = serde_json::from_slice(body).unwrap();
                         output.uuid = body.uuid;
                         output.starting_position = body.starting_position;
                         output.starting_position_timestamp = body.starting_position_timestamp;
@@ -1308,6 +1916,7 @@ fn __get_event_source_mapping(input: GetEventSourceMappingRequest) -> BoxFuture<
                         output.maximum_batching_window_in_seconds = body.maximum_batching_window_in_seconds;
                         output.parallelization_factor = body.parallelization_factor;
                         output.event_source_arn = body.event_source_arn;
+                        output.filter_criteria = body.filter_criteria;
                         output.function_arn = body.function_arn;
                         output.last_modified = body.last_modified;
                         output.last_processing_result = body.last_processing_result;
@@ -1323,6 +1932,8 @@ fn __get_event_source_mapping(input: GetEventSourceMappingRequest) -> BoxFuture<
                         output.maximum_retry_attempts = body.maximum_retry_attempts;
                         output.tumbling_window_in_seconds = body.tumbling_window_in_seconds;
                         output.function_response_types = body.function_response_types;
+                        output.amazon_managed_kafka_event_source_config = body.amazon_managed_kafka_event_source_config;
+                        output.self_managed_kafka_event_source_config = body.self_managed_kafka_event_source_config;
 
                         serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
@@ -1357,6 +1968,15 @@ fn __get_function(input: GetFunctionRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1365,6 +1985,18 @@ fn __get_function(input: GetFunctionRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -1372,7 +2004,7 @@ fn __get_function(input: GetFunctionRequest) -> BoxFuture<'static, Vec<u8>> {
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(qualifier) = input.qualifier {
-        http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
+        http_request.add_param("Qualifier", &qualifier);
     };
 
     Box::pin(async move {
@@ -1384,8 +2016,8 @@ fn __get_function(input: GetFunctionRequest) -> BoxFuture<'static, Vec<u8>> {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: GetFunctionResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: GetFunctionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: GetFunctionResponse = serde_json::from_slice(body).unwrap();
                         output.configuration = body.configuration;
                         output.code = body.code;
                         output.tags = body.tags;
@@ -1424,6 +2056,15 @@ fn __get_function_code_signing_config(input: GetFunctionCodeSigningConfigRequest
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1431,6 +2072,18 @@ fn __get_function_code_signing_config(input: GetFunctionCodeSigningConfigRequest
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1448,8 +2101,8 @@ fn __get_function_code_signing_config(input: GetFunctionCodeSigningConfigRequest
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: GetFunctionCodeSigningConfigResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: GetFunctionCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: GetFunctionCodeSigningConfigResponse = serde_json::from_slice(body).unwrap();
                         output.code_signing_config_arn = body.code_signing_config_arn;
                         output.function_name = body.function_name;
 
@@ -1486,6 +2139,15 @@ fn __get_function_concurrency(input: GetFunctionConcurrencyRequest) -> BoxFuture
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1493,6 +2155,18 @@ fn __get_function_concurrency(input: GetFunctionConcurrencyRequest) -> BoxFuture
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1510,8 +2184,8 @@ fn __get_function_concurrency(input: GetFunctionConcurrencyRequest) -> BoxFuture
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: GetFunctionConcurrencyResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: GetFunctionConcurrencyResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: GetFunctionConcurrencyResponse = serde_json::from_slice(body).unwrap();
                         output.reserved_concurrent_executions = body.reserved_concurrent_executions;
 
                         serde_json::to_vec(&Result::<GetFunctionConcurrencyResponse, guest::Error>::Ok(output)).unwrap()
@@ -1547,6 +2221,15 @@ fn __get_function_configuration(input: GetFunctionConfigurationRequest) -> BoxFu
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1555,6 +2238,18 @@ fn __get_function_configuration(input: GetFunctionConfigurationRequest) -> BoxFu
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -1562,7 +2257,7 @@ fn __get_function_configuration(input: GetFunctionConfigurationRequest) -> BoxFu
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(qualifier) = input.qualifier {
-        http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
+        http_request.add_param("Qualifier", &qualifier);
     };
 
     Box::pin(async move {
@@ -1574,8 +2269,8 @@ fn __get_function_configuration(input: GetFunctionConfigurationRequest) -> BoxFu
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: FunctionConfiguration = Default::default();
 
-                        let body = response.into_body();
-                        let body: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: FunctionConfiguration = serde_json::from_slice(body).unwrap();
                         output.function_name = body.function_name;
                         output.function_arn = body.function_arn;
                         output.runtime = body.runtime;
@@ -1607,6 +2302,8 @@ fn __get_function_configuration(input: GetFunctionConfigurationRequest) -> BoxFu
                         output.image_config_response = body.image_config_response;
                         output.signing_profile_version_arn = body.signing_profile_version_arn;
                         output.signing_job_arn = body.signing_job_arn;
+                        output.architectures = body.architectures;
+                        output.ephemeral_storage = body.ephemeral_storage;
 
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
@@ -1641,6 +2338,15 @@ fn __get_function_event_invoke_config(input: GetFunctionEventInvokeConfigRequest
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1649,6 +2355,18 @@ fn __get_function_event_invoke_config(input: GetFunctionEventInvokeConfigRequest
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -1656,7 +2374,7 @@ fn __get_function_event_invoke_config(input: GetFunctionEventInvokeConfigRequest
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(qualifier) = input.qualifier {
-        http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
+        http_request.add_param("Qualifier", &qualifier);
     };
 
     Box::pin(async move {
@@ -1668,8 +2386,8 @@ fn __get_function_event_invoke_config(input: GetFunctionEventInvokeConfigRequest
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: FunctionEventInvokeConfig = Default::default();
 
-                        let body = response.into_body();
-                        let body: FunctionEventInvokeConfig = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: FunctionEventInvokeConfig = serde_json::from_slice(body).unwrap();
                         output.last_modified = body.last_modified;
                         output.function_arn = body.function_arn;
                         output.maximum_retry_attempts = body.maximum_retry_attempts;
@@ -1697,6 +2415,96 @@ fn __get_function_event_invoke_config(input: GetFunctionEventInvokeConfigRequest
 }
 
 #[allow(dead_code)]
+pub fn get_function_url_config(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
+    let deserialized: GetFunctionUrlConfigRequest = serde_json::from_slice(input.as_slice()).unwrap();
+    __get_function_url_config(deserialized)
+}
+#[allow(unused_assignments, unused_mut, unused_variables)]
+fn __get_function_url_config(input: GetFunctionUrlConfigRequest) -> BoxFuture<'static, Vec<u8>> {
+    let mut path = String::from("/2021-10-31/functions/{FunctionName}/url");
+    path = match path.find("{FunctionName}") {
+        Some(_) => path.replace("{FunctionName}", &input.function_name.to_string()),
+        None => path.to_string(),
+    };
+
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "lambda",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
+    http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
+
+    http_request.add_header("accept-encoding", "identity");
+    http_request.add_header("x-amz-target", "GetFunctionUrlConfig");
+    http_request.set_content_type(String::from("application/json"));
+
+    if let Some(qualifier) = input.qualifier {
+        http_request.add_param("Qualifier", &qualifier);
+    };
+
+    Box::pin(async move {
+        match crate::CLIENT.call(http_request).await {
+            Ok(response) => {
+                let status = response.status();
+
+                match status {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: GetFunctionUrlConfigResponse = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: GetFunctionUrlConfigResponse = serde_json::from_slice(body).unwrap();
+                        output.function_url = body.function_url;
+                        output.function_arn = body.function_arn;
+                        output.auth_type = body.auth_type;
+                        output.cors = body.cors;
+                        output.creation_time = body.creation_time;
+                        output.last_modified_time = body.last_modified_time;
+
+                        serde_json::to_vec(&Result::<GetFunctionUrlConfigResponse, guest::Error>::Ok(output)).unwrap()
+                    }
+                    status => {
+                        serde_json::to_vec(&Result::<GetFunctionUrlConfigResponse, guest::Error>::Err(guest::Error {
+                            why: String::from(status.canonical_reason().unwrap()),
+                        }))
+                            .unwrap()
+                    }
+                }
+            },
+            Err(why) => {
+                serde_json::to_vec(&Result::<GetFunctionUrlConfigResponse, guest::Error>::Err(guest::Error {
+                    why: why.to_string(),
+                }))
+                    .unwrap()
+            },
+        }
+    })
+}
+
+#[allow(dead_code)]
 pub fn get_layer_version(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
     let deserialized: GetLayerVersionRequest = serde_json::from_slice(input.as_slice()).unwrap();
     __get_layer_version(deserialized)
@@ -1713,6 +2521,15 @@ fn __get_layer_version(input: GetLayerVersionRequest) -> BoxFuture<'static, Vec<
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1720,6 +2537,18 @@ fn __get_layer_version(input: GetLayerVersionRequest) -> BoxFuture<'static, Vec<
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1737,8 +2566,8 @@ fn __get_layer_version(input: GetLayerVersionRequest) -> BoxFuture<'static, Vec<
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: GetLayerVersionResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: GetLayerVersionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: GetLayerVersionResponse = serde_json::from_slice(body).unwrap();
                         output.content = body.content;
                         output.layer_arn = body.layer_arn;
                         output.layer_version_arn = body.layer_version_arn;
@@ -1747,6 +2576,7 @@ fn __get_layer_version(input: GetLayerVersionRequest) -> BoxFuture<'static, Vec<
                         output.version = body.version;
                         output.compatible_runtimes = body.compatible_runtimes;
                         output.license_info = body.license_info;
+                        output.compatible_architectures = body.compatible_architectures;
 
                         serde_json::to_vec(&Result::<GetLayerVersionResponse, guest::Error>::Ok(output)).unwrap()
                     }
@@ -1777,6 +2607,15 @@ pub fn get_layer_version_by_arn(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __get_layer_version_by_arn(input: GetLayerVersionByArnRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/2018-10-31/layers?find=LayerVersion");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1785,13 +2624,25 @@ fn __get_layer_version_by_arn(input: GetLayerVersionByArnRequest) -> BoxFuture<'
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetLayerVersionByArn");
     http_request.set_content_type(String::from("application/json"));
 
-    http_request.add_param("Arn", &serde_json::to_string(&input.arn).unwrap());
+    http_request.add_param("Arn", &input.arn);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -1802,8 +2653,8 @@ fn __get_layer_version_by_arn(input: GetLayerVersionByArnRequest) -> BoxFuture<'
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: GetLayerVersionResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: GetLayerVersionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: GetLayerVersionResponse = serde_json::from_slice(body).unwrap();
                         output.content = body.content;
                         output.layer_arn = body.layer_arn;
                         output.layer_version_arn = body.layer_version_arn;
@@ -1812,6 +2663,7 @@ fn __get_layer_version_by_arn(input: GetLayerVersionByArnRequest) -> BoxFuture<'
                         output.version = body.version;
                         output.compatible_runtimes = body.compatible_runtimes;
                         output.license_info = body.license_info;
+                        output.compatible_architectures = body.compatible_architectures;
 
                         serde_json::to_vec(&Result::<GetLayerVersionResponse, guest::Error>::Ok(output)).unwrap()
                     }
@@ -1850,6 +2702,15 @@ fn __get_layer_version_policy(input: GetLayerVersionPolicyRequest) -> BoxFuture<
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1857,6 +2718,18 @@ fn __get_layer_version_policy(input: GetLayerVersionPolicyRequest) -> BoxFuture<
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -1874,8 +2747,8 @@ fn __get_layer_version_policy(input: GetLayerVersionPolicyRequest) -> BoxFuture<
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: GetLayerVersionPolicyResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: GetLayerVersionPolicyResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: GetLayerVersionPolicyResponse = serde_json::from_slice(body).unwrap();
                         output.policy = body.policy;
                         output.revision_id = body.revision_id;
 
@@ -1912,6 +2785,15 @@ fn __get_policy(input: GetPolicyRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1920,6 +2802,18 @@ fn __get_policy(input: GetPolicyRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -1927,7 +2821,7 @@ fn __get_policy(input: GetPolicyRequest) -> BoxFuture<'static, Vec<u8>> {
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(qualifier) = input.qualifier {
-        http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
+        http_request.add_param("Qualifier", &qualifier);
     };
 
     Box::pin(async move {
@@ -1939,8 +2833,8 @@ fn __get_policy(input: GetPolicyRequest) -> BoxFuture<'static, Vec<u8>> {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: GetPolicyResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: GetPolicyResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: GetPolicyResponse = serde_json::from_slice(body).unwrap();
                         output.policy = body.policy;
                         output.revision_id = body.revision_id;
 
@@ -1977,6 +2871,15 @@ fn __get_provisioned_concurrency_config(input: GetProvisionedConcurrencyConfigRe
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -1985,13 +2888,25 @@ fn __get_provisioned_concurrency_config(input: GetProvisionedConcurrencyConfigRe
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "GetProvisionedConcurrencyConfig");
     http_request.set_content_type(String::from("application/json"));
 
-    http_request.add_param("Qualifier", &serde_json::to_string(&input.qualifier).unwrap());
+    http_request.add_param("Qualifier", &input.qualifier);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -2002,8 +2917,8 @@ fn __get_provisioned_concurrency_config(input: GetProvisionedConcurrencyConfigRe
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: GetProvisionedConcurrencyConfigResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: GetProvisionedConcurrencyConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: GetProvisionedConcurrencyConfigResponse = serde_json::from_slice(body).unwrap();
                         output.requested_provisioned_concurrent_executions = body.requested_provisioned_concurrent_executions;
                         output.available_provisioned_concurrent_executions = body.available_provisioned_concurrent_executions;
                         output.allocated_provisioned_concurrent_executions = body.allocated_provisioned_concurrent_executions;
@@ -2044,6 +2959,15 @@ fn __invoke(input: InvocationRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "lambda",
@@ -2051,6 +2975,18 @@ fn __invoke(input: InvocationRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(input.payload);
 
@@ -2068,7 +3004,7 @@ fn __invoke(input: InvocationRequest) -> BoxFuture<'static, Vec<u8>> {
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(qualifier) = input.qualifier {
-        http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
+        http_request.add_param("Qualifier", &qualifier);
     };
 
     Box::pin(async move {
@@ -2092,8 +3028,8 @@ fn __invoke(input: InvocationRequest) -> BoxFuture<'static, Vec<u8>> {
                             None => None,
                         };
 
-                        let body = response.into_body();
-                        output.payload = Some(Vec::from(&*body));
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        output.payload = Some(Vec::from(body));
 
                         serde_json::to_vec(&Result::<InvocationResponse, guest::Error>::Ok(output)).unwrap()
                     }
@@ -2128,6 +3064,15 @@ fn __invoke_async(input: InvokeAsyncRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "lambda",
@@ -2135,6 +3080,18 @@ fn __invoke_async(input: InvokeAsyncRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(input.invoke_args));
 
@@ -2186,6 +3143,15 @@ fn __list_aliases(input: ListAliasesRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -2194,6 +3160,18 @@ fn __list_aliases(input: ListAliasesRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -2201,10 +3179,10 @@ fn __list_aliases(input: ListAliasesRequest) -> BoxFuture<'static, Vec<u8>> {
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(function_version) = input.function_version {
-        http_request.add_param("FunctionVersion", &serde_json::to_string(&function_version).unwrap());
+        http_request.add_param("FunctionVersion", &function_version);
     };
     if let Some(marker) = input.marker {
-        http_request.add_param("Marker", &serde_json::to_string(&marker).unwrap());
+        http_request.add_param("Marker", &marker);
     };
     if let Some(max_items) = input.max_items {
         http_request.add_param("MaxItems", &serde_json::to_string(&max_items).unwrap());
@@ -2219,8 +3197,8 @@ fn __list_aliases(input: ListAliasesRequest) -> BoxFuture<'static, Vec<u8>> {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: ListAliasesResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: ListAliasesResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: ListAliasesResponse = serde_json::from_slice(body).unwrap();
                         output.next_marker = body.next_marker;
                         output.aliases = body.aliases;
 
@@ -2253,6 +3231,15 @@ pub fn list_code_signing_configs(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> 
 fn __list_code_signing_configs(input: ListCodeSigningConfigsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/2020-04-22/code-signing-configs/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -2261,6 +3248,18 @@ fn __list_code_signing_configs(input: ListCodeSigningConfigsRequest) -> BoxFutur
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -2268,7 +3267,7 @@ fn __list_code_signing_configs(input: ListCodeSigningConfigsRequest) -> BoxFutur
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(marker) = input.marker {
-        http_request.add_param("Marker", &serde_json::to_string(&marker).unwrap());
+        http_request.add_param("Marker", &marker);
     };
     if let Some(max_items) = input.max_items {
         http_request.add_param("MaxItems", &serde_json::to_string(&max_items).unwrap());
@@ -2283,8 +3282,8 @@ fn __list_code_signing_configs(input: ListCodeSigningConfigsRequest) -> BoxFutur
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: ListCodeSigningConfigsResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: ListCodeSigningConfigsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: ListCodeSigningConfigsResponse = serde_json::from_slice(body).unwrap();
                         output.next_marker = body.next_marker;
                         output.code_signing_configs = body.code_signing_configs;
 
@@ -2317,6 +3316,15 @@ pub fn list_event_source_mappings(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>>
 fn __list_event_source_mappings(input: ListEventSourceMappingsRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/2015-03-31/event-source-mappings/");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -2325,6 +3333,18 @@ fn __list_event_source_mappings(input: ListEventSourceMappingsRequest) -> BoxFut
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -2332,13 +3352,13 @@ fn __list_event_source_mappings(input: ListEventSourceMappingsRequest) -> BoxFut
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(event_source_arn) = input.event_source_arn {
-        http_request.add_param("EventSourceArn", &serde_json::to_string(&event_source_arn).unwrap());
+        http_request.add_param("EventSourceArn", &event_source_arn);
     };
     if let Some(function_name) = input.function_name {
-        http_request.add_param("FunctionName", &serde_json::to_string(&function_name).unwrap());
+        http_request.add_param("FunctionName", &function_name);
     };
     if let Some(marker) = input.marker {
-        http_request.add_param("Marker", &serde_json::to_string(&marker).unwrap());
+        http_request.add_param("Marker", &marker);
     };
     if let Some(max_items) = input.max_items {
         http_request.add_param("MaxItems", &serde_json::to_string(&max_items).unwrap());
@@ -2353,8 +3373,8 @@ fn __list_event_source_mappings(input: ListEventSourceMappingsRequest) -> BoxFut
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: ListEventSourceMappingsResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: ListEventSourceMappingsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: ListEventSourceMappingsResponse = serde_json::from_slice(body).unwrap();
                         output.next_marker = body.next_marker;
                         output.event_source_mappings = body.event_source_mappings;
 
@@ -2391,6 +3411,15 @@ fn __list_function_event_invoke_configs(input: ListFunctionEventInvokeConfigsReq
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -2399,6 +3428,18 @@ fn __list_function_event_invoke_configs(input: ListFunctionEventInvokeConfigsReq
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -2406,7 +3447,7 @@ fn __list_function_event_invoke_configs(input: ListFunctionEventInvokeConfigsReq
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(marker) = input.marker {
-        http_request.add_param("Marker", &serde_json::to_string(&marker).unwrap());
+        http_request.add_param("Marker", &marker);
     };
     if let Some(max_items) = input.max_items {
         http_request.add_param("MaxItems", &serde_json::to_string(&max_items).unwrap());
@@ -2421,8 +3462,8 @@ fn __list_function_event_invoke_configs(input: ListFunctionEventInvokeConfigsReq
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: ListFunctionEventInvokeConfigsResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: ListFunctionEventInvokeConfigsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: ListFunctionEventInvokeConfigsResponse = serde_json::from_slice(body).unwrap();
                         output.function_event_invoke_configs = body.function_event_invoke_configs;
                         output.next_marker = body.next_marker;
 
@@ -2447,13 +3488,26 @@ fn __list_function_event_invoke_configs(input: ListFunctionEventInvokeConfigsReq
 }
 
 #[allow(dead_code)]
-pub fn list_functions(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
-    let deserialized: ListFunctionsRequest = serde_json::from_slice(input.as_slice()).unwrap();
-    __list_functions(deserialized)
+pub fn list_function_url_configs(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
+    let deserialized: ListFunctionUrlConfigsRequest = serde_json::from_slice(input.as_slice()).unwrap();
+    __list_function_url_configs(deserialized)
 }
 #[allow(unused_assignments, unused_mut, unused_variables)]
-fn __list_functions(input: ListFunctionsRequest) -> BoxFuture<'static, Vec<u8>> {
-    let mut path = String::from("/2015-03-31/functions/");
+fn __list_function_url_configs(input: ListFunctionUrlConfigsRequest) -> BoxFuture<'static, Vec<u8>> {
+    let mut path = String::from("/2021-10-31/functions/{FunctionName}/urls");
+    path = match path.find("{FunctionName}") {
+        Some(_) => path.replace("{FunctionName}", &input.function_name.to_string()),
+        None => path.to_string(),
+    };
+
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
 
     let mut http_request = SignedRequest::new(
         "GET",
@@ -2463,6 +3517,103 @@ fn __list_functions(input: ListFunctionsRequest) -> BoxFuture<'static, Vec<u8>> 
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
+    http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
+
+    http_request.add_header("accept-encoding", "identity");
+    http_request.add_header("x-amz-target", "ListFunctionUrlConfigs");
+    http_request.set_content_type(String::from("application/json"));
+
+    if let Some(marker) = input.marker {
+        http_request.add_param("Marker", &marker);
+    };
+    if let Some(max_items) = input.max_items {
+        http_request.add_param("MaxItems", &serde_json::to_string(&max_items).unwrap());
+    };
+
+    Box::pin(async move {
+        match crate::CLIENT.call(http_request).await {
+            Ok(response) => {
+                let status = response.status();
+
+                match status {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: ListFunctionUrlConfigsResponse = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: ListFunctionUrlConfigsResponse = serde_json::from_slice(body).unwrap();
+                        output.function_url_configs = body.function_url_configs;
+                        output.next_marker = body.next_marker;
+
+                        serde_json::to_vec(&Result::<ListFunctionUrlConfigsResponse, guest::Error>::Ok(output)).unwrap()
+                    }
+                    status => {
+                        serde_json::to_vec(&Result::<ListFunctionUrlConfigsResponse, guest::Error>::Err(guest::Error {
+                            why: String::from(status.canonical_reason().unwrap()),
+                        }))
+                            .unwrap()
+                    }
+                }
+            },
+            Err(why) => {
+                serde_json::to_vec(&Result::<ListFunctionUrlConfigsResponse, guest::Error>::Err(guest::Error {
+                    why: why.to_string(),
+                }))
+                    .unwrap()
+            },
+        }
+    })
+}
+
+#[allow(dead_code)]
+pub fn list_functions(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
+    let deserialized: ListFunctionsRequest = serde_json::from_slice(input.as_slice()).unwrap();
+    __list_functions(deserialized)
+}
+#[allow(unused_assignments, unused_mut, unused_variables)]
+fn __list_functions(input: ListFunctionsRequest) -> BoxFuture<'static, Vec<u8>> {
+    let mut path = String::from("/2015-03-31/functions/");
+
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
+    let mut http_request = SignedRequest::new(
+        "GET",
+        "lambda",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -2470,13 +3621,13 @@ fn __list_functions(input: ListFunctionsRequest) -> BoxFuture<'static, Vec<u8>> 
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(master_region) = input.master_region {
-        http_request.add_param("MasterRegion", &serde_json::to_string(&master_region).unwrap());
+        http_request.add_param("MasterRegion", &master_region);
     };
     if let Some(function_version) = input.function_version {
-        http_request.add_param("FunctionVersion", &serde_json::to_string(&function_version).unwrap());
+        http_request.add_param("FunctionVersion", &function_version);
     };
     if let Some(marker) = input.marker {
-        http_request.add_param("Marker", &serde_json::to_string(&marker).unwrap());
+        http_request.add_param("Marker", &marker);
     };
     if let Some(max_items) = input.max_items {
         http_request.add_param("MaxItems", &serde_json::to_string(&max_items).unwrap());
@@ -2491,8 +3642,8 @@ fn __list_functions(input: ListFunctionsRequest) -> BoxFuture<'static, Vec<u8>> 
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: ListFunctionsResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: ListFunctionsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: ListFunctionsResponse = serde_json::from_slice(body).unwrap();
                         output.next_marker = body.next_marker;
                         output.functions = body.functions;
 
@@ -2529,6 +3680,15 @@ fn __list_functions_by_code_signing_config(input: ListFunctionsByCodeSigningConf
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -2537,6 +3697,18 @@ fn __list_functions_by_code_signing_config(input: ListFunctionsByCodeSigningConf
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -2544,7 +3716,7 @@ fn __list_functions_by_code_signing_config(input: ListFunctionsByCodeSigningConf
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(marker) = input.marker {
-        http_request.add_param("Marker", &serde_json::to_string(&marker).unwrap());
+        http_request.add_param("Marker", &marker);
     };
     if let Some(max_items) = input.max_items {
         http_request.add_param("MaxItems", &serde_json::to_string(&max_items).unwrap());
@@ -2559,8 +3731,8 @@ fn __list_functions_by_code_signing_config(input: ListFunctionsByCodeSigningConf
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: ListFunctionsByCodeSigningConfigResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: ListFunctionsByCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: ListFunctionsByCodeSigningConfigResponse = serde_json::from_slice(body).unwrap();
                         output.next_marker = body.next_marker;
                         output.function_arns = body.function_arns;
 
@@ -2597,6 +3769,15 @@ fn __list_layer_versions(input: ListLayerVersionsRequest) -> BoxFuture<'static, 
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -2605,6 +3786,18 @@ fn __list_layer_versions(input: ListLayerVersionsRequest) -> BoxFuture<'static, 
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -2612,13 +3805,16 @@ fn __list_layer_versions(input: ListLayerVersionsRequest) -> BoxFuture<'static, 
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(compatible_runtime) = input.compatible_runtime {
-        http_request.add_param("CompatibleRuntime", &serde_json::to_string(&compatible_runtime).unwrap());
+        http_request.add_param("CompatibleRuntime", &compatible_runtime);
     };
     if let Some(marker) = input.marker {
-        http_request.add_param("Marker", &serde_json::to_string(&marker).unwrap());
+        http_request.add_param("Marker", &marker);
     };
     if let Some(max_items) = input.max_items {
         http_request.add_param("MaxItems", &serde_json::to_string(&max_items).unwrap());
+    };
+    if let Some(compatible_architecture) = input.compatible_architecture {
+        http_request.add_param("CompatibleArchitecture", &compatible_architecture);
     };
 
     Box::pin(async move {
@@ -2630,8 +3826,8 @@ fn __list_layer_versions(input: ListLayerVersionsRequest) -> BoxFuture<'static, 
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: ListLayerVersionsResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: ListLayerVersionsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: ListLayerVersionsResponse = serde_json::from_slice(body).unwrap();
                         output.next_marker = body.next_marker;
                         output.layer_versions = body.layer_versions;
 
@@ -2664,6 +3860,15 @@ pub fn list_layers(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
 fn __list_layers(input: ListLayersRequest) -> BoxFuture<'static, Vec<u8>> {
     let mut path = String::from("/2018-10-31/layers");
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -2672,6 +3877,18 @@ fn __list_layers(input: ListLayersRequest) -> BoxFuture<'static, Vec<u8>> {
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -2679,13 +3896,16 @@ fn __list_layers(input: ListLayersRequest) -> BoxFuture<'static, Vec<u8>> {
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(compatible_runtime) = input.compatible_runtime {
-        http_request.add_param("CompatibleRuntime", &serde_json::to_string(&compatible_runtime).unwrap());
+        http_request.add_param("CompatibleRuntime", &compatible_runtime);
     };
     if let Some(marker) = input.marker {
-        http_request.add_param("Marker", &serde_json::to_string(&marker).unwrap());
+        http_request.add_param("Marker", &marker);
     };
     if let Some(max_items) = input.max_items {
         http_request.add_param("MaxItems", &serde_json::to_string(&max_items).unwrap());
+    };
+    if let Some(compatible_architecture) = input.compatible_architecture {
+        http_request.add_param("CompatibleArchitecture", &compatible_architecture);
     };
 
     Box::pin(async move {
@@ -2697,8 +3917,8 @@ fn __list_layers(input: ListLayersRequest) -> BoxFuture<'static, Vec<u8>> {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: ListLayersResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: ListLayersResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: ListLayersResponse = serde_json::from_slice(body).unwrap();
                         output.next_marker = body.next_marker;
                         output.layers = body.layers;
 
@@ -2735,6 +3955,15 @@ fn __list_provisioned_concurrency_configs(input: ListProvisionedConcurrencyConfi
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -2743,6 +3972,18 @@ fn __list_provisioned_concurrency_configs(input: ListProvisionedConcurrencyConfi
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -2750,7 +3991,7 @@ fn __list_provisioned_concurrency_configs(input: ListProvisionedConcurrencyConfi
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(marker) = input.marker {
-        http_request.add_param("Marker", &serde_json::to_string(&marker).unwrap());
+        http_request.add_param("Marker", &marker);
     };
     if let Some(max_items) = input.max_items {
         http_request.add_param("MaxItems", &serde_json::to_string(&max_items).unwrap());
@@ -2765,8 +4006,8 @@ fn __list_provisioned_concurrency_configs(input: ListProvisionedConcurrencyConfi
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: ListProvisionedConcurrencyConfigsResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: ListProvisionedConcurrencyConfigsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: ListProvisionedConcurrencyConfigsResponse = serde_json::from_slice(body).unwrap();
                         output.provisioned_concurrency_configs = body.provisioned_concurrency_configs;
                         output.next_marker = body.next_marker;
 
@@ -2803,6 +4044,15 @@ fn __list_tags(input: ListTagsRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -2810,6 +4060,18 @@ fn __list_tags(input: ListTagsRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2827,8 +4089,8 @@ fn __list_tags(input: ListTagsRequest) -> BoxFuture<'static, Vec<u8>> {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: ListTagsResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: ListTagsResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: ListTagsResponse = serde_json::from_slice(body).unwrap();
                         output.tags = body.tags;
 
                         serde_json::to_vec(&Result::<ListTagsResponse, guest::Error>::Ok(output)).unwrap()
@@ -2864,6 +4126,15 @@ fn __list_versions_by_function(input: ListVersionsByFunctionRequest) -> BoxFutur
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "GET",
         "lambda",
@@ -2872,6 +4143,18 @@ fn __list_versions_by_function(input: ListVersionsByFunctionRequest) -> BoxFutur
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -2879,7 +4162,7 @@ fn __list_versions_by_function(input: ListVersionsByFunctionRequest) -> BoxFutur
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(marker) = input.marker {
-        http_request.add_param("Marker", &serde_json::to_string(&marker).unwrap());
+        http_request.add_param("Marker", &marker);
     };
     if let Some(max_items) = input.max_items {
         http_request.add_param("MaxItems", &serde_json::to_string(&max_items).unwrap());
@@ -2894,8 +4177,8 @@ fn __list_versions_by_function(input: ListVersionsByFunctionRequest) -> BoxFutur
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: ListVersionsByFunctionResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: ListVersionsByFunctionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: ListVersionsByFunctionResponse = serde_json::from_slice(body).unwrap();
                         output.next_marker = body.next_marker;
                         output.versions = body.versions;
 
@@ -2932,6 +4215,15 @@ fn __publish_layer_version(input: PublishLayerVersionRequest) -> BoxFuture<'stat
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "lambda",
@@ -2939,6 +4231,18 @@ fn __publish_layer_version(input: PublishLayerVersionRequest) -> BoxFuture<'stat
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -2956,8 +4260,8 @@ fn __publish_layer_version(input: PublishLayerVersionRequest) -> BoxFuture<'stat
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: PublishLayerVersionResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: PublishLayerVersionResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: PublishLayerVersionResponse = serde_json::from_slice(body).unwrap();
                         output.content = body.content;
                         output.layer_arn = body.layer_arn;
                         output.layer_version_arn = body.layer_version_arn;
@@ -2966,6 +4270,7 @@ fn __publish_layer_version(input: PublishLayerVersionRequest) -> BoxFuture<'stat
                         output.version = body.version;
                         output.compatible_runtimes = body.compatible_runtimes;
                         output.license_info = body.license_info;
+                        output.compatible_architectures = body.compatible_architectures;
 
                         serde_json::to_vec(&Result::<PublishLayerVersionResponse, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3000,6 +4305,15 @@ fn __publish_version(input: PublishVersionRequest) -> BoxFuture<'static, Vec<u8>
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "lambda",
@@ -3007,6 +4321,18 @@ fn __publish_version(input: PublishVersionRequest) -> BoxFuture<'static, Vec<u8>
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -3024,8 +4350,8 @@ fn __publish_version(input: PublishVersionRequest) -> BoxFuture<'static, Vec<u8>
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: FunctionConfiguration = Default::default();
 
-                        let body = response.into_body();
-                        let body: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: FunctionConfiguration = serde_json::from_slice(body).unwrap();
                         output.function_name = body.function_name;
                         output.function_arn = body.function_arn;
                         output.runtime = body.runtime;
@@ -3057,6 +4383,8 @@ fn __publish_version(input: PublishVersionRequest) -> BoxFuture<'static, Vec<u8>
                         output.image_config_response = body.image_config_response;
                         output.signing_profile_version_arn = body.signing_profile_version_arn;
                         output.signing_job_arn = body.signing_job_arn;
+                        output.architectures = body.architectures;
+                        output.ephemeral_storage = body.ephemeral_storage;
 
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3091,6 +4419,15 @@ fn __put_function_code_signing_config(input: PutFunctionCodeSigningConfigRequest
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "lambda",
@@ -3098,6 +4435,18 @@ fn __put_function_code_signing_config(input: PutFunctionCodeSigningConfigRequest
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -3115,8 +4464,8 @@ fn __put_function_code_signing_config(input: PutFunctionCodeSigningConfigRequest
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: PutFunctionCodeSigningConfigResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: PutFunctionCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: PutFunctionCodeSigningConfigResponse = serde_json::from_slice(body).unwrap();
                         output.code_signing_config_arn = body.code_signing_config_arn;
                         output.function_name = body.function_name;
 
@@ -3153,6 +4502,15 @@ fn __put_function_concurrency(input: PutFunctionConcurrencyRequest) -> BoxFuture
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "lambda",
@@ -3160,6 +4518,18 @@ fn __put_function_concurrency(input: PutFunctionConcurrencyRequest) -> BoxFuture
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -3177,8 +4547,8 @@ fn __put_function_concurrency(input: PutFunctionConcurrencyRequest) -> BoxFuture
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: Concurrency = Default::default();
 
-                        let body = response.into_body();
-                        let body: Concurrency = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: Concurrency = serde_json::from_slice(body).unwrap();
                         output.reserved_concurrent_executions = body.reserved_concurrent_executions;
 
                         serde_json::to_vec(&Result::<Concurrency, guest::Error>::Ok(output)).unwrap()
@@ -3214,6 +4584,15 @@ fn __put_function_event_invoke_config(input: PutFunctionEventInvokeConfigRequest
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "lambda",
@@ -3222,6 +4601,18 @@ fn __put_function_event_invoke_config(input: PutFunctionEventInvokeConfigRequest
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -3229,7 +4620,7 @@ fn __put_function_event_invoke_config(input: PutFunctionEventInvokeConfigRequest
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(qualifier) = input.qualifier {
-        http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
+        http_request.add_param("Qualifier", &qualifier);
     };
 
     Box::pin(async move {
@@ -3241,8 +4632,8 @@ fn __put_function_event_invoke_config(input: PutFunctionEventInvokeConfigRequest
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: FunctionEventInvokeConfig = Default::default();
 
-                        let body = response.into_body();
-                        let body: FunctionEventInvokeConfig = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: FunctionEventInvokeConfig = serde_json::from_slice(body).unwrap();
                         output.last_modified = body.last_modified;
                         output.function_arn = body.function_arn;
                         output.maximum_retry_attempts = body.maximum_retry_attempts;
@@ -3282,6 +4673,15 @@ fn __put_provisioned_concurrency_config(input: PutProvisionedConcurrencyConfigRe
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "lambda",
@@ -3290,13 +4690,25 @@ fn __put_provisioned_concurrency_config(input: PutProvisionedConcurrencyConfigRe
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
     http_request.add_header("x-amz-target", "PutProvisionedConcurrencyConfig");
     http_request.set_content_type(String::from("application/json"));
 
-    http_request.add_param("Qualifier", &serde_json::to_string(&input.qualifier).unwrap());
+    http_request.add_param("Qualifier", &input.qualifier);
 
     Box::pin(async move {
         match crate::CLIENT.call(http_request).await {
@@ -3307,8 +4719,8 @@ fn __put_provisioned_concurrency_config(input: PutProvisionedConcurrencyConfigRe
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: PutProvisionedConcurrencyConfigResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: PutProvisionedConcurrencyConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: PutProvisionedConcurrencyConfigResponse = serde_json::from_slice(body).unwrap();
                         output.requested_provisioned_concurrent_executions = body.requested_provisioned_concurrent_executions;
                         output.available_provisioned_concurrent_executions = body.available_provisioned_concurrent_executions;
                         output.allocated_provisioned_concurrent_executions = body.allocated_provisioned_concurrent_executions;
@@ -3357,6 +4769,15 @@ fn __remove_layer_version_permission(input: RemoveLayerVersionPermissionRequest)
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "lambda",
@@ -3365,6 +4786,18 @@ fn __remove_layer_version_permission(input: RemoveLayerVersionPermissionRequest)
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -3372,7 +4805,7 @@ fn __remove_layer_version_permission(input: RemoveLayerVersionPermissionRequest)
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(revision_id) = input.revision_id {
-        http_request.add_param("RevisionId", &serde_json::to_string(&revision_id).unwrap());
+        http_request.add_param("RevisionId", &revision_id);
     };
 
     Box::pin(async move {
@@ -3422,6 +4855,15 @@ fn __remove_permission(input: RemovePermissionRequest) -> BoxFuture<'static, Vec
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "lambda",
@@ -3430,6 +4872,18 @@ fn __remove_permission(input: RemovePermissionRequest) -> BoxFuture<'static, Vec
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -3437,10 +4891,10 @@ fn __remove_permission(input: RemovePermissionRequest) -> BoxFuture<'static, Vec
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(qualifier) = input.qualifier {
-        http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
+        http_request.add_param("Qualifier", &qualifier);
     };
     if let Some(revision_id) = input.revision_id {
-        http_request.add_param("RevisionId", &serde_json::to_string(&revision_id).unwrap());
+        http_request.add_param("RevisionId", &revision_id);
     };
 
     Box::pin(async move {
@@ -3486,6 +4940,15 @@ fn __tag_resource(input: TagResourceRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "lambda",
@@ -3493,6 +4956,18 @@ fn __tag_resource(input: TagResourceRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -3544,6 +5019,15 @@ fn __untag_resource(input: UntagResourceRequest) -> BoxFuture<'static, Vec<u8>> 
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "DELETE",
         "lambda",
@@ -3551,6 +5035,18 @@ fn __untag_resource(input: UntagResourceRequest) -> BoxFuture<'static, Vec<u8>> 
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -3607,6 +5103,15 @@ fn __update_alias(input: UpdateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "lambda",
@@ -3614,6 +5119,18 @@ fn __update_alias(input: UpdateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -3631,8 +5148,8 @@ fn __update_alias(input: UpdateAliasRequest) -> BoxFuture<'static, Vec<u8>> {
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: AliasConfiguration = Default::default();
 
-                        let body = response.into_body();
-                        let body: AliasConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: AliasConfiguration = serde_json::from_slice(body).unwrap();
                         output.alias_arn = body.alias_arn;
                         output.name = body.name;
                         output.function_version = body.function_version;
@@ -3673,6 +5190,15 @@ fn __update_code_signing_config(input: UpdateCodeSigningConfigRequest) -> BoxFut
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "lambda",
@@ -3680,6 +5206,18 @@ fn __update_code_signing_config(input: UpdateCodeSigningConfigRequest) -> BoxFut
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -3697,8 +5235,8 @@ fn __update_code_signing_config(input: UpdateCodeSigningConfigRequest) -> BoxFut
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: UpdateCodeSigningConfigResponse = Default::default();
 
-                        let body = response.into_body();
-                        let body: UpdateCodeSigningConfigResponse = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: UpdateCodeSigningConfigResponse = serde_json::from_slice(body).unwrap();
                         output.code_signing_config = body.code_signing_config;
 
                         serde_json::to_vec(&Result::<UpdateCodeSigningConfigResponse, guest::Error>::Ok(output)).unwrap()
@@ -3734,6 +5272,15 @@ fn __update_event_source_mapping(input: UpdateEventSourceMappingRequest) -> BoxF
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "lambda",
@@ -3741,6 +5288,18 @@ fn __update_event_source_mapping(input: UpdateEventSourceMappingRequest) -> BoxF
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -3758,8 +5317,8 @@ fn __update_event_source_mapping(input: UpdateEventSourceMappingRequest) -> BoxF
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: EventSourceMappingConfiguration = Default::default();
 
-                        let body = response.into_body();
-                        let body: EventSourceMappingConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: EventSourceMappingConfiguration = serde_json::from_slice(body).unwrap();
                         output.uuid = body.uuid;
                         output.starting_position = body.starting_position;
                         output.starting_position_timestamp = body.starting_position_timestamp;
@@ -3767,6 +5326,7 @@ fn __update_event_source_mapping(input: UpdateEventSourceMappingRequest) -> BoxF
                         output.maximum_batching_window_in_seconds = body.maximum_batching_window_in_seconds;
                         output.parallelization_factor = body.parallelization_factor;
                         output.event_source_arn = body.event_source_arn;
+                        output.filter_criteria = body.filter_criteria;
                         output.function_arn = body.function_arn;
                         output.last_modified = body.last_modified;
                         output.last_processing_result = body.last_processing_result;
@@ -3782,6 +5342,8 @@ fn __update_event_source_mapping(input: UpdateEventSourceMappingRequest) -> BoxF
                         output.maximum_retry_attempts = body.maximum_retry_attempts;
                         output.tumbling_window_in_seconds = body.tumbling_window_in_seconds;
                         output.function_response_types = body.function_response_types;
+                        output.amazon_managed_kafka_event_source_config = body.amazon_managed_kafka_event_source_config;
+                        output.self_managed_kafka_event_source_config = body.self_managed_kafka_event_source_config;
 
                         serde_json::to_vec(&Result::<EventSourceMappingConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3816,6 +5378,15 @@ fn __update_function_code(input: UpdateFunctionCodeRequest) -> BoxFuture<'static
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "lambda",
@@ -3823,6 +5394,18 @@ fn __update_function_code(input: UpdateFunctionCodeRequest) -> BoxFuture<'static
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -3840,8 +5423,8 @@ fn __update_function_code(input: UpdateFunctionCodeRequest) -> BoxFuture<'static
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: FunctionConfiguration = Default::default();
 
-                        let body = response.into_body();
-                        let body: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: FunctionConfiguration = serde_json::from_slice(body).unwrap();
                         output.function_name = body.function_name;
                         output.function_arn = body.function_arn;
                         output.runtime = body.runtime;
@@ -3873,6 +5456,8 @@ fn __update_function_code(input: UpdateFunctionCodeRequest) -> BoxFuture<'static
                         output.image_config_response = body.image_config_response;
                         output.signing_profile_version_arn = body.signing_profile_version_arn;
                         output.signing_job_arn = body.signing_job_arn;
+                        output.architectures = body.architectures;
+                        output.ephemeral_storage = body.ephemeral_storage;
 
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3907,6 +5492,15 @@ fn __update_function_configuration(input: UpdateFunctionConfigurationRequest) ->
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "PUT",
         "lambda",
@@ -3914,6 +5508,18 @@ fn __update_function_configuration(input: UpdateFunctionConfigurationRequest) ->
             .unwrap_or(Region::UsEast1),
         &path,
     );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
 
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
@@ -3931,8 +5537,8 @@ fn __update_function_configuration(input: UpdateFunctionConfigurationRequest) ->
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: FunctionConfiguration = Default::default();
 
-                        let body = response.into_body();
-                        let body: FunctionConfiguration = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: FunctionConfiguration = serde_json::from_slice(body).unwrap();
                         output.function_name = body.function_name;
                         output.function_arn = body.function_arn;
                         output.runtime = body.runtime;
@@ -3964,6 +5570,8 @@ fn __update_function_configuration(input: UpdateFunctionConfigurationRequest) ->
                         output.image_config_response = body.image_config_response;
                         output.signing_profile_version_arn = body.signing_profile_version_arn;
                         output.signing_job_arn = body.signing_job_arn;
+                        output.architectures = body.architectures;
+                        output.ephemeral_storage = body.ephemeral_storage;
 
                         serde_json::to_vec(&Result::<FunctionConfiguration, guest::Error>::Ok(output)).unwrap()
                     }
@@ -3998,6 +5606,15 @@ fn __update_function_event_invoke_config(input: UpdateFunctionEventInvokeConfigR
         None => path.to_string(),
     };
 
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
     let mut http_request = SignedRequest::new(
         "POST",
         "lambda",
@@ -4006,6 +5623,18 @@ fn __update_function_event_invoke_config(input: UpdateFunctionEventInvokeConfigR
         &path,
     );
 
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
     http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
 
     http_request.add_header("accept-encoding", "identity");
@@ -4013,7 +5642,7 @@ fn __update_function_event_invoke_config(input: UpdateFunctionEventInvokeConfigR
     http_request.set_content_type(String::from("application/json"));
 
     if let Some(qualifier) = input.qualifier {
-        http_request.add_param("Qualifier", &serde_json::to_string(&qualifier).unwrap());
+        http_request.add_param("Qualifier", &qualifier);
     };
 
     Box::pin(async move {
@@ -4025,8 +5654,8 @@ fn __update_function_event_invoke_config(input: UpdateFunctionEventInvokeConfigR
                     StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
                         let mut output: FunctionEventInvokeConfig = Default::default();
 
-                        let body = response.into_body();
-                        let body: FunctionEventInvokeConfig = serde_json::from_slice(&*body).unwrap();
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: FunctionEventInvokeConfig = serde_json::from_slice(body).unwrap();
                         output.last_modified = body.last_modified;
                         output.function_arn = body.function_arn;
                         output.maximum_retry_attempts = body.maximum_retry_attempts;
@@ -4045,6 +5674,96 @@ fn __update_function_event_invoke_config(input: UpdateFunctionEventInvokeConfigR
             },
             Err(why) => {
                 serde_json::to_vec(&Result::<FunctionEventInvokeConfig, guest::Error>::Err(guest::Error {
+                    why: why.to_string(),
+                }))
+                    .unwrap()
+            },
+        }
+    })
+}
+
+#[allow(dead_code)]
+pub fn update_function_url_config(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
+    let deserialized: UpdateFunctionUrlConfigRequest = serde_json::from_slice(input.as_slice()).unwrap();
+    __update_function_url_config(deserialized)
+}
+#[allow(unused_assignments, unused_mut, unused_variables)]
+fn __update_function_url_config(input: UpdateFunctionUrlConfigRequest) -> BoxFuture<'static, Vec<u8>> {
+    let mut path = String::from("/2021-10-31/functions/{FunctionName}/url");
+    path = match path.find("{FunctionName}") {
+        Some(_) => path.replace("{FunctionName}", &input.function_name.to_string()),
+        None => path.to_string(),
+    };
+
+    let mut path_params: String = Default::default();
+    path = match path.find('?') {
+        None => path.to_string(),
+        Some(idx) => {
+            path_params = path.clone()[(idx + 1)..path.len()].to_string();
+            path.clone()[..idx].to_string()
+        },
+    };
+
+    let mut http_request = SignedRequest::new(
+        "PUT",
+        "lambda",
+        &Region::from_str(&std::env::var("AWS_REGION").unwrap_or(String::from("us-east-1")))
+            .unwrap_or(Region::UsEast1),
+        &path,
+    );
+
+    if path_params.len() > 0 {
+        match path_params.find('=') {
+            None => http_request.add_param(path_params, "true".to_string()),
+            Some(_) => {
+                let pairs: Vec<&str> = path_params.split('=').collect();
+                for idx in (0..pairs.len()).step_by(2) {
+                    http_request.add_param(pairs[idx], pairs[idx + 1]);
+                }
+            }
+        }
+    }
+
+    http_request.set_payload(Some(serde_json::to_string(&input).unwrap()));
+
+    http_request.add_header("accept-encoding", "identity");
+    http_request.add_header("x-amz-target", "UpdateFunctionUrlConfig");
+    http_request.set_content_type(String::from("application/json"));
+
+    if let Some(qualifier) = input.qualifier {
+        http_request.add_param("Qualifier", &qualifier);
+    };
+
+    Box::pin(async move {
+        match crate::CLIENT.call(http_request).await {
+            Ok(response) => {
+                let status = response.status();
+
+                match status {
+                    StatusCode::OK|StatusCode::CREATED|StatusCode::ACCEPTED => {
+                        let mut output: UpdateFunctionUrlConfigResponse = Default::default();
+
+                        let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        let body: UpdateFunctionUrlConfigResponse = serde_json::from_slice(body).unwrap();
+                        output.function_url = body.function_url;
+                        output.function_arn = body.function_arn;
+                        output.auth_type = body.auth_type;
+                        output.cors = body.cors;
+                        output.creation_time = body.creation_time;
+                        output.last_modified_time = body.last_modified_time;
+
+                        serde_json::to_vec(&Result::<UpdateFunctionUrlConfigResponse, guest::Error>::Ok(output)).unwrap()
+                    }
+                    status => {
+                        serde_json::to_vec(&Result::<UpdateFunctionUrlConfigResponse, guest::Error>::Err(guest::Error {
+                            why: String::from(status.canonical_reason().unwrap()),
+                        }))
+                            .unwrap()
+                    }
+                }
+            },
+            Err(why) => {
+                serde_json::to_vec(&Result::<UpdateFunctionUrlConfigResponse, guest::Error>::Err(guest::Error {
                     why: why.to_string(),
                 }))
                     .unwrap()

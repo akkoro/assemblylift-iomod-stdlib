@@ -1,0 +1,33 @@
+#FROM rust:1.59-alpine as builder
+FROM rust:1.64-buster as builder
+#RUN rustup target add x86_64-unknown-linux-musl
+#RUN apk --no-cache add capnproto-dev musl-dev openssl-dev
+RUN apt-get update && apt-get install build-essential -y
+RUN curl -O https://capnproto.org/capnproto-c++-0.8.0.tar.gz && tar zxf capnproto-c++-0.8.0.tar.gz && \
+    cd capnproto-c++-0.8.0 && ./configure && make -j6 check && make install
+ENV USER=root
+
+WORKDIR /usr/src
+COPY . .
+
+#RUN cargo install --debug --target x86_64-unknown-linux-musl --path .
+RUN cd ./modules/lambda && cargo install --path .
+
+
+#FROM alpine:3.15
+FROM debian:buster-slim
+ARG IOMOD_REGISTRY_ADDR=127.0.0.1
+ENV IOMOD_REGISTRY_ADDR $IOMOD_REGISTRY_ADDR
+#RUN apk --no-cache add curl ca-certificates \
+#    && addgroup -S app && adduser -S -g app app
+#ENV USER=app
+RUN apt-get update && apt-get install ca-certificates openssl -y
+ENV RUST_BACKTRACE=full
+
+COPY --from=builder /usr/local/cargo/bin/akkoro-aws-akkoro /usr/bin/akkoro-aws-akkoro
+RUN chmod +x /usr/bin/akkoro-aws-akkoro
+
+# RPC
+EXPOSE 13555
+
+CMD ["akkoro-aws-akkoro"]

@@ -1,0 +1,16 @@
+FROM amazonlinux:2018.03
+
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+RUN yum install diffutils gcc72 gcc72-c++ openssl-devel pkg-config capnproto zip -y
+RUN curl -O https://capnproto.org/capnproto-c++-0.8.0.tar.gz && tar zxf capnproto-c++-0.8.0.tar.gz && \
+    cd capnproto-c++-0.8.0 && ./configure && make -j6 check && make install
+RUN source "$HOME/.cargo/env" && cargo install assemblylift-cli
+
+WORKDIR /usr/src
+COPY . .
+RUN source "$HOME/.cargo/env" && cargo build --manifest-path=/usr/src/modules/lambda/Cargo.toml --release
+
+RUN mkdir -p ./dist/bin && cp ./target/release/akkoro-aws-lambda ./dist/bin/akkoro-aws-lambda && cp ./modules/lambda/iomod.toml ./dist/iomod.toml
+RUN source "$HOME/.cargo/env" && cd ./dist && asml pack iomod -o /usr/src/akkoro.aws.lambda@$(cat /usr/src/modules/lambda/iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/"//g').iomod
+
+CMD cat ./iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/"//g'
