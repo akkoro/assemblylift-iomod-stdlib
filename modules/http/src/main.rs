@@ -84,8 +84,12 @@ pub fn request(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
         &deserialized.path.clone(),
     );
 
-    for header in deserialized.headers.unwrap_or(Headers::new()) {
+    for header in deserialized.headers.unwrap_or(Headers::default()) {
         http_request.add_header(&header.0, &header.1);
+    }
+
+    for query_param in deserialized.query_parameters.unwrap_or(QueryParameters::default()) {
+        http_request.add_param(&query_param.0, &query_param.1);
     }
 
     http_request.set_hostname(Some(deserialized.host.clone()));
