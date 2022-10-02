@@ -79,6 +79,7 @@ impl Client {
             }
         }
         headers.insert("user-agent", HeaderValue::from_str("AssemblyLift").unwrap());
+        debug!("headers={:?}", headers);
 
         let mut final_uri = format!(
             "{}://{}{}",

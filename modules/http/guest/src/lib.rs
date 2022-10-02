@@ -3,7 +3,6 @@ pub mod structs;
 use std::collections::HashMap;
 use std::fmt;
 use std::fmt::Formatter;
-use std::iter::Map;
 
 use assemblylift_core_iomod_guest::{call, iomod};
 use serde::{Deserialize, Serialize};
