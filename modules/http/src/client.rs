@@ -85,7 +85,7 @@ impl Client {
             "{}://{}{}",
             request.scheme(),
             request.hostname(),
-            request.canonical_path()
+            request.path()
         );
         if !request.canonical_query_string().is_empty() {
             final_uri = final_uri + &format!("?{}", request.canonical_query_string());
