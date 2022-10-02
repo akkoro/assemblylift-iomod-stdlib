@@ -84,6 +84,10 @@ pub fn request(input: Vec<u8>) -> BoxFuture<'static, Vec<u8>> {
         &deserialized.path.clone(),
     );
 
+    for header in deserialized.headers.unwrap_or(Headers::new()) {
+        http_request.add_header(&header.0, &header.1);
+    }
+
     http_request.set_hostname(Some(deserialized.host.clone()));
     if let Some(content_type) = deserialized.content_type {
         http_request.set_content_type(content_type.clone());

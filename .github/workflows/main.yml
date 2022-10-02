@@ -25,7 +25,7 @@ jobs:
 #        path: ~/*-*-*
 
   build-akkoro-std-http-buster:
-    name: 'akkoro.aws.lambda-buster'
+    name: 'akkoro.std.http-buster'
     runs-on: ubuntu-latest
 
     steps:
