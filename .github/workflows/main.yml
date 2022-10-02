@@ -90,3 +90,25 @@ jobs:
         run: docker run --rm --entrypoint cat iomod/aws/lambda:$VERSION /usr/src/akkoro.aws.lambda@$VERSION.iomod > $HOME/akkoro.aws.lambda@$VERSION.iomod
       - name: 'Upload to S3 @ assemblylift-iomod-registry'
         run: aws s3 cp $HOME/akkoro.aws.lambda@$VERSION.iomod s3://assemblylift-iomod-registry/artifact/akkoro.aws.lambda@$VERSION.iomod --acl public-read
+
+  build-akkoro-aws-secretsmanager-lambda:
+    name: 'akkoro.aws.secretsmanager-lambda'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Configure AWS Credentials'
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - uses: actions/checkout@v2
+        # TODO get IOmod coordinates from iomod.toml
+      - name: 'Get Version'
+        run: echo "VERSION=$(cat ./modules/secretsmanager/iomod.toml | grep version -m 1 | awk '{print $3}' | sed 's/\"//g')" >> $GITHUB_ENV
+      - name: 'Build Image'
+        run: docker build . --file ./modules/secretsmanager/docker/Dockerfile-lambda --tag iomod/aws/secretsmanager:$VERSION
+      - name: 'Copy Artifacts'
+        run: docker run --rm --entrypoint cat iomod/aws/secretsmanager:$VERSION /usr/src/akkoro.aws.secretsmanager@$VERSION.iomod > $HOME/akkoro.aws.secretsmanager@$VERSION.iomod
+      - name: 'Upload to S3 @ assemblylift-iomod-registry'
+        run: aws s3 cp $HOME/akkoro.aws.secretsmanager@$VERSION.iomod s3://assemblylift-iomod-registry/artifact/akkoro.aws.secretsmanager@$VERSION.iomod --acl public-read
