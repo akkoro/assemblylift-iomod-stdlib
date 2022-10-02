@@ -34,7 +34,7 @@ impl HttpRequestBuilder {
             req: Default::default(),
         }
     }
-    
+
     pub fn method(mut self, method: &str) -> HttpRequestBuilder {
         self.req.method = method.into();
         self
@@ -54,12 +54,16 @@ impl HttpRequestBuilder {
         self.req.content_type = Some(content_type.into());
         self
     }
-    
+
     pub fn header(mut self, name: &str, value: &str) -> HttpRequestBuilder {
         if self.req.headers.is_none() {
             self.req.headers = Some(HashMap::new());
         }
-        self.req.headers.as_mut().unwrap().insert(name.into(), value.into());
+        self.req
+            .headers
+            .as_mut()
+            .unwrap()
+            .insert(name.into(), value.into());
         self
     }
 
@@ -78,7 +82,7 @@ impl HttpRequestBuilder {
         });
         self
     }
-    
+
     pub fn build(self) -> HttpRequest {
         self.req
     }
