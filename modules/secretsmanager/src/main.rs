@@ -216,7 +216,6 @@ fn __create_secret(input: CreateSecretRequest) -> BoxFuture<'static, Vec<u8>> {
                         let mut output: CreateSecretResponse = Default::default();
 
                         let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
-                        debug!("body = {:?}", std::str::from_utf8(body).unwrap());
                         let body: CreateSecretResponse = serde_json::from_slice(body).unwrap();
                         output.arn = body.arn;
                         output.name = body.name;
@@ -709,6 +708,7 @@ fn __get_secret_value(input: GetSecretValueRequest) -> BoxFuture<'static, Vec<u8
                         let mut output: GetSecretValueResponse = Default::default();
 
                         let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        debug!("body = {:?}", std::str::from_utf8(body).unwrap());
                         let body: GetSecretValueResponse = serde_json::from_slice(body).unwrap();
                         output.arn = body.arn;
                         output.name = body.name;
