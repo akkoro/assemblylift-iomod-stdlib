@@ -9,7 +9,8 @@ use futures::future::BoxFuture;
 use hyper::StatusCode;
 use once_cell::sync::Lazy;
 use rusoto_signature::{Region, SignedRequest};
-use tracing::Level;
+use tracing::field::debug;
+use tracing::{debug, Level};
 use tracing_subscriber::FmtSubscriber;
 
 use guest::structs::*;
@@ -126,7 +127,7 @@ fn __cancel_rotate_secret(input: CancelRotateSecretRequest) -> BoxFuture<'static
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -206,7 +207,7 @@ fn __create_secret(input: CreateSecretRequest) -> BoxFuture<'static, Vec<u8>> {
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -215,6 +216,7 @@ fn __create_secret(input: CreateSecretRequest) -> BoxFuture<'static, Vec<u8>> {
                         let mut output: CreateSecretResponse = Default::default();
 
                         let body = &*hyper::body::to_bytes(response.into_body()).await.unwrap();
+                        debug!("body = {:?}", std::str::from_utf8(body).unwrap());
                         let body: CreateSecretResponse = serde_json::from_slice(body).unwrap();
                         output.arn = body.arn;
                         output.name = body.name;
@@ -287,7 +289,7 @@ fn __delete_resource_policy(input: DeleteResourcePolicyRequest) -> BoxFuture<'st
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -366,7 +368,7 @@ fn __delete_secret(input: DeleteSecretRequest) -> BoxFuture<'static, Vec<u8>> {
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -446,7 +448,7 @@ fn __describe_secret(input: DescribeSecretRequest) -> BoxFuture<'static, Vec<u8>
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -540,7 +542,7 @@ fn __get_random_password(input: GetRandomPasswordRequest) -> BoxFuture<'static, 
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -618,7 +620,7 @@ fn __get_resource_policy(input: GetResourcePolicyRequest) -> BoxFuture<'static, 
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -698,7 +700,7 @@ fn __get_secret_value(input: GetSecretValueRequest) -> BoxFuture<'static, Vec<u8
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -782,7 +784,7 @@ fn __list_secret_version_ids(input: ListSecretVersionIdsRequest) -> BoxFuture<'s
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -863,7 +865,7 @@ fn __list_secrets(input: ListSecretsRequest) -> BoxFuture<'static, Vec<u8>> {
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -942,7 +944,7 @@ fn __put_resource_policy(input: PutResourcePolicyRequest) -> BoxFuture<'static, 
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -1021,7 +1023,7 @@ fn __put_secret_value(input: PutSecretValueRequest) -> BoxFuture<'static, Vec<u8
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -1102,7 +1104,7 @@ fn __remove_regions_from_replication(input: RemoveRegionsFromReplicationRequest)
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -1181,7 +1183,7 @@ fn __replicate_secret_to_regions(input: ReplicateSecretToRegionsRequest) -> BoxF
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -1260,7 +1262,7 @@ fn __restore_secret(input: RestoreSecretRequest) -> BoxFuture<'static, Vec<u8>> 
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -1339,7 +1341,7 @@ fn __rotate_secret(input: RotateSecretRequest) -> BoxFuture<'static, Vec<u8>> {
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -1419,7 +1421,7 @@ fn __stop_replication_to_replica(input: StopReplicationToReplicaRequest) -> BoxF
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -1497,7 +1499,7 @@ fn __tag_resource(input: TagResourceRequest) -> BoxFuture<'static, Vec<u8>> {
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -1572,7 +1574,7 @@ fn __untag_resource(input: UntagResourceRequest) -> BoxFuture<'static, Vec<u8>> 
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -1647,7 +1649,7 @@ fn __update_secret(input: UpdateSecretRequest) -> BoxFuture<'static, Vec<u8>> {
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -1727,7 +1729,7 @@ fn __update_secret_version_stage(input: UpdateSecretVersionStageRequest) -> BoxF
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
@@ -1806,7 +1808,7 @@ fn __validate_resource_policy(input: ValidateResourcePolicyRequest) -> BoxFuture
 
 
     Box::pin(async move {
-        match crate::CLIENT.call(http_request).await {
+        match CLIENT.call(http_request).await {
             Ok(response) => {
                 let status = response.status();
 
